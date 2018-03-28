@@ -9,43 +9,8 @@
 		root["Pano"] = factory();
 })(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// install a JSONP callback for chunk loading
-/******/ 	var parentJsonpFunction = window["webpackJsonpPano"];
-/******/ 	window["webpackJsonpPano"] = function webpackJsonpCallback(chunkIds, moreModules, executeModules) {
-/******/ 		// add "moreModules" to the modules object,
-/******/ 		// then flag all "chunkIds" as loaded and fire callback
-/******/ 		var moduleId, chunkId, i = 0, resolves = [], result;
-/******/ 		for(;i < chunkIds.length; i++) {
-/******/ 			chunkId = chunkIds[i];
-/******/ 			if(installedChunks[chunkId]) {
-/******/ 				resolves.push(installedChunks[chunkId][0]);
-/******/ 			}
-/******/ 			installedChunks[chunkId] = 0;
-/******/ 		}
-/******/ 		for(moduleId in moreModules) {
-/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
-/******/ 				modules[moduleId] = moreModules[moduleId];
-/******/ 			}
-/******/ 		}
-/******/ 		if(parentJsonpFunction) parentJsonpFunction(chunkIds, moreModules, executeModules);
-/******/ 		while(resolves.length) {
-/******/ 			resolves.shift()();
-/******/ 		}
-/******/ 		if(executeModules) {
-/******/ 			for(i=0; i < executeModules.length; i++) {
-/******/ 				result = __webpack_require__(__webpack_require__.s = executeModules[i]);
-/******/ 			}
-/******/ 		}
-/******/ 		return result;
-/******/ 	};
-/******/
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-/******/
-/******/ 	// objects to store loaded and loading chunks
-/******/ 	var installedChunks = {
-/******/ 		2: 0
-/******/ 	};
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -104,40 +69,931 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
-/******/ 	// on error function for async loading
-/******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
-/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 43);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(13);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(5);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
+/* 1 */,
+/* 2 */
+/***/ (function(module, exports) {
 
-/***/ 13:
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 3 */,
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(14);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+ * jQuery MiniColors: A tiny color picker built on jQuery
+ *
+ * Copyright: Cory LaViska for A Beautiful Site, LLC: http://www.abeautifulsite.net/
+ *
+ * Contribute: https://github.com/claviska/jquery-minicolors
+ *
+ * @license: http://opensource.org/licenses/MIT
+ *
+ */
+(function (factory) {
+    /* jshint ignore:start */
+    if (true) {
+        // AMD. Register as an anonymous module.
+        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else if (typeof exports === 'object') {
+        // Node/CommonJS
+        module.exports = factory(require('jquery'));
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+    /* jshint ignore:end */
+}(function ($) {
+
+    // Defaults
+    $.minicolors = {
+        defaults: {
+            animationSpeed: 50,
+            animationEasing: 'swing',
+            change: null,
+            changeDelay: 0,
+            control: 'hue',
+            dataUris: true,
+            defaultValue: '',
+            hide: null,
+            hideSpeed: 100,
+            inline: false,
+            letterCase: 'lowercase',
+            opacity: false,
+            position: 'bottom left',
+            show: null,
+            showSpeed: 100,
+            theme: 'default'
+        }
+    };
+
+    // Public methods
+    $.extend($.fn, {
+        minicolors: function(method, data) {
+
+            switch(method) {
+
+                // Destroy the control
+                case 'destroy':
+                    $(this).each( function() {
+                        destroy($(this));
+                    });
+                    return $(this);
+
+                // Hide the color picker
+                case 'hide':
+                    hide();
+                    return $(this);
+
+                // Get/set opacity
+                case 'opacity':
+                    // Getter
+                    if( data === undefined ) {
+                        // Getter
+                        return $(this).attr('data-opacity');
+                    } else {
+                        // Setter
+                        $(this).each( function() {
+                            updateFromInput($(this).attr('data-opacity', data));
+                        });
+                    }
+                    return $(this);
+
+                // Get an RGB(A) object based on the current color/opacity
+                case 'rgbObject':
+                    return rgbObject($(this), method === 'rgbaObject');
+
+                // Get an RGB(A) string based on the current color/opacity
+                case 'rgbString':
+                case 'rgbaString':
+                    return rgbString($(this), method === 'rgbaString');
+
+                // Get/set settings on the fly
+                case 'settings':
+                    if( data === undefined ) {
+                        return $(this).data('minicolors-settings');
+                    } else {
+                        // Setter
+                        $(this).each( function() {
+                            var settings = $(this).data('minicolors-settings') || {};
+                            destroy($(this));
+                            $(this).minicolors($.extend(true, settings, data));
+                        });
+                    }
+                    return $(this);
+
+                // Show the color picker
+                case 'show':
+                    show( $(this).eq(0) );
+                    return $(this);
+
+                // Get/set the hex color value
+                case 'value':
+                    if( data === undefined ) {
+                        // Getter
+                        return $(this).val();
+                    } else {
+                        // Setter
+                        $(this).each( function() {
+                            updateFromInput($(this).val(data));
+                        });
+                    }
+                    return $(this);
+
+                // Initializes the control
+                default:
+                    if( method !== 'create' ) data = method;
+                    $(this).each( function() {
+                        init($(this), data);
+                    });
+                    return $(this);
+
+            }
+
+        }
+    });
+
+    // Initialize input elements
+    function init(input, settings) {
+
+        var minicolors = $('<div class="minicolors" />'),
+            defaults = $.minicolors.defaults;
+
+        // Do nothing if already initialized
+        if( input.data('minicolors-initialized') ) return;
+
+        // Handle settings
+        settings = $.extend(true, {}, defaults, settings);
+
+        // The wrapper
+        minicolors
+            .addClass('minicolors-theme-' + settings.theme)
+            .toggleClass('minicolors-with-opacity', settings.opacity)
+            .toggleClass('minicolors-no-data-uris', settings.dataUris !== true);
+
+        // Custom positioning
+        if( settings.position !== undefined ) {
+            $.each(settings.position.split(' '), function() {
+                minicolors.addClass('minicolors-position-' + this);
+            });
+        }
+
+        // The input
+        input
+            .addClass('minicolors-input')
+            .data('minicolors-initialized', false)
+            .data('minicolors-settings', settings)
+            .prop('size', 7)
+            .wrap(minicolors)
+            .after(
+                '<div class="minicolors-panel minicolors-slider-' + settings.control + '">' +
+                    '<div class="minicolors-slider minicolors-sprite">' +
+                        '<div class="minicolors-picker"></div>' +
+                    '</div>' +
+                    '<div class="minicolors-opacity-slider minicolors-sprite">' +
+                        '<div class="minicolors-picker"></div>' +
+                    '</div>' +
+                    '<div class="minicolors-grid minicolors-sprite">' +
+                        '<div class="minicolors-grid-inner"></div>' +
+                        '<div class="minicolors-picker"><div></div></div>' +
+                    '</div>' +
+                '</div>'
+            );
+
+        // The swatch
+        if( !settings.inline ) {
+            input.after('<span class="minicolors-swatch minicolors-sprite"><span class="minicolors-swatch-color"></span></span>');
+            input.next('.minicolors-swatch').on('click', function(event) {
+                event.preventDefault();
+                input.focus();
+            });
+        }
+
+        // Prevent text selection in IE
+        input.parent().find('.minicolors-panel').on('selectstart', function() { return false; }).end();
+
+        // Inline controls
+        if( settings.inline ) input.parent().addClass('minicolors-inline');
+
+        updateFromInput(input, false);
+
+        input.data('minicolors-initialized', true);
+
+    }
+
+    // Returns the input back to its original state
+    function destroy(input) {
+
+        var minicolors = input.parent();
+
+        // Revert the input element
+        input
+            .removeData('minicolors-initialized')
+            .removeData('minicolors-settings')
+            .removeProp('size')
+            .removeClass('minicolors-input');
+
+        // Remove the wrap and destroy whatever remains
+        minicolors.before(input).remove();
+
+    }
+
+    // Shows the specified dropdown panel
+    function show(input) {
+
+        var minicolors = input.parent(),
+            panel = minicolors.find('.minicolors-panel'),
+            settings = input.data('minicolors-settings');
+
+        // Do nothing if uninitialized, disabled, inline, or already open
+        if( !input.data('minicolors-initialized') ||
+            input.prop('disabled') ||
+            minicolors.hasClass('minicolors-inline') ||
+            minicolors.hasClass('minicolors-focus')
+        ) return;
+
+        hide();
+
+        minicolors.addClass('minicolors-focus');
+        panel
+            .stop(true, true)
+            .fadeIn(settings.showSpeed, function() {
+                if( settings.show ) settings.show.call(input.get(0));
+            });
+
+    }
+
+    // Hides all dropdown panels
+    function hide() {
+
+        $('.minicolors-focus').each( function() {
+
+            var minicolors = $(this),
+                input = minicolors.find('.minicolors-input'),
+                panel = minicolors.find('.minicolors-panel'),
+                settings = input.data('minicolors-settings');
+
+            panel.fadeOut(settings.hideSpeed, function() {
+                if( settings.hide ) settings.hide.call(input.get(0));
+                minicolors.removeClass('minicolors-focus');
+            });
+
+        });
+    }
+
+    // Moves the selected picker
+    function move(target, event, animate) {
+
+        var input = target.parents('.minicolors').find('.minicolors-input'),
+            settings = input.data('minicolors-settings'),
+            picker = target.find('[class$=-picker]'),
+            offsetX = target.offset().left,
+            offsetY = target.offset().top,
+            x = Math.round(event.pageX - offsetX),
+            y = Math.round(event.pageY - offsetY),
+            duration = animate ? settings.animationSpeed : 0,
+            wx, wy, r, phi;
+
+        // Touch support
+        if( event.originalEvent.changedTouches ) {
+            x = event.originalEvent.changedTouches[0].pageX - offsetX;
+            y = event.originalEvent.changedTouches[0].pageY - offsetY;
+        }
+
+        // Constrain picker to its container
+        if( x < 0 ) x = 0;
+        if( y < 0 ) y = 0;
+        if( x > target.width() ) x = target.width();
+        if( y > target.height() ) y = target.height();
+
+        // Constrain color wheel values to the wheel
+        if( target.parent().is('.minicolors-slider-wheel') && picker.parent().is('.minicolors-grid') ) {
+            wx = 75 - x;
+            wy = 75 - y;
+            r = Math.sqrt(wx * wx + wy * wy);
+            phi = Math.atan2(wy, wx);
+            if( phi < 0 ) phi += Math.PI * 2;
+            if( r > 75 ) {
+                r = 75;
+                x = 75 - (75 * Math.cos(phi));
+                y = 75 - (75 * Math.sin(phi));
+            }
+            x = Math.round(x);
+            y = Math.round(y);
+        }
+
+        // Move the picker
+        if( target.is('.minicolors-grid') ) {
+            picker
+                .stop(true)
+                .animate({
+                    top: y + 'px',
+                    left: x + 'px'
+                }, duration, settings.animationEasing, function() {
+                    updateFromControl(input, target);
+                });
+        } else {
+            picker
+                .stop(true)
+                .animate({
+                    top: y + 'px'
+                }, duration, settings.animationEasing, function() {
+                    updateFromControl(input, target);
+                });
+        }
+
+    }
+
+    // Sets the input based on the color picker values
+    function updateFromControl(input, target) {
+
+        function getCoords(picker, container) {
+
+            var left, top;
+            if( !picker.length || !container ) return null;
+            left = picker.offset().left;
+            top = picker.offset().top;
+
+            return {
+                x: left - container.offset().left + (picker.outerWidth() / 2),
+                y: top - container.offset().top + (picker.outerHeight() / 2)
+            };
+
+        }
+
+        var hue, saturation, brightness, x, y, r, phi,
+
+            hex = input.val(),
+            opacity = input.attr('data-opacity'),
+
+            // Helpful references
+            minicolors = input.parent(),
+            settings = input.data('minicolors-settings'),
+            swatch = minicolors.find('.minicolors-swatch'),
+
+            // Panel objects
+            grid = minicolors.find('.minicolors-grid'),
+            slider = minicolors.find('.minicolors-slider'),
+            opacitySlider = minicolors.find('.minicolors-opacity-slider'),
+
+            // Picker objects
+            gridPicker = grid.find('[class$=-picker]'),
+            sliderPicker = slider.find('[class$=-picker]'),
+            opacityPicker = opacitySlider.find('[class$=-picker]'),
+
+            // Picker positions
+            gridPos = getCoords(gridPicker, grid),
+            sliderPos = getCoords(sliderPicker, slider),
+            opacityPos = getCoords(opacityPicker, opacitySlider);
+
+        // Handle colors
+        if( target.is('.minicolors-grid, .minicolors-slider') ) {
+
+            // Determine HSB values
+            switch(settings.control) {
+
+                case 'wheel':
+                    // Calculate hue, saturation, and brightness
+                    x = (grid.width() / 2) - gridPos.x;
+                    y = (grid.height() / 2) - gridPos.y;
+                    r = Math.sqrt(x * x + y * y);
+                    phi = Math.atan2(y, x);
+                    if( phi < 0 ) phi += Math.PI * 2;
+                    if( r > 75 ) {
+                        r = 75;
+                        gridPos.x = 69 - (75 * Math.cos(phi));
+                        gridPos.y = 69 - (75 * Math.sin(phi));
+                    }
+                    saturation = keepWithin(r / 0.75, 0, 100);
+                    hue = keepWithin(phi * 180 / Math.PI, 0, 360);
+                    brightness = keepWithin(100 - Math.floor(sliderPos.y * (100 / slider.height())), 0, 100);
+                    hex = hsb2hex({
+                        h: hue,
+                        s: saturation,
+                        b: brightness
+                    });
+
+                    // Update UI
+                    slider.css('backgroundColor', hsb2hex({ h: hue, s: saturation, b: 100 }));
+                    break;
+
+                case 'saturation':
+                    // Calculate hue, saturation, and brightness
+                    hue = keepWithin(parseInt(gridPos.x * (360 / grid.width()), 10), 0, 360);
+                    saturation = keepWithin(100 - Math.floor(sliderPos.y * (100 / slider.height())), 0, 100);
+                    brightness = keepWithin(100 - Math.floor(gridPos.y * (100 / grid.height())), 0, 100);
+                    hex = hsb2hex({
+                        h: hue,
+                        s: saturation,
+                        b: brightness
+                    });
+
+                    // Update UI
+                    slider.css('backgroundColor', hsb2hex({ h: hue, s: 100, b: brightness }));
+                    minicolors.find('.minicolors-grid-inner').css('opacity', saturation / 100);
+                    break;
+
+                case 'brightness':
+                    // Calculate hue, saturation, and brightness
+                    hue = keepWithin(parseInt(gridPos.x * (360 / grid.width()), 10), 0, 360);
+                    saturation = keepWithin(100 - Math.floor(gridPos.y * (100 / grid.height())), 0, 100);
+                    brightness = keepWithin(100 - Math.floor(sliderPos.y * (100 / slider.height())), 0, 100);
+                    hex = hsb2hex({
+                        h: hue,
+                        s: saturation,
+                        b: brightness
+                    });
+
+                    // Update UI
+                    slider.css('backgroundColor', hsb2hex({ h: hue, s: saturation, b: 100 }));
+                    minicolors.find('.minicolors-grid-inner').css('opacity', 1 - (brightness / 100));
+                    break;
+
+                default:
+                    // Calculate hue, saturation, and brightness
+                    hue = keepWithin(360 - parseInt(sliderPos.y * (360 / slider.height()), 10), 0, 360);
+                    saturation = keepWithin(Math.floor(gridPos.x * (100 / grid.width())), 0, 100);
+                    brightness = keepWithin(100 - Math.floor(gridPos.y * (100 / grid.height())), 0, 100);
+                    hex = hsb2hex({
+                        h: hue,
+                        s: saturation,
+                        b: brightness
+                    });
+
+                    // Update UI
+                    grid.css('backgroundColor', hsb2hex({ h: hue, s: 100, b: 100 }));
+                    break;
+
+            }
+
+            // Adjust case
+            input.val( convertCase(hex, settings.letterCase) );
+
+        }
+
+        // Handle opacity
+        if( target.is('.minicolors-opacity-slider') ) {
+            if( settings.opacity ) {
+                opacity = parseFloat(1 - (opacityPos.y / opacitySlider.height())).toFixed(2);
+            } else {
+                opacity = 1;
+            }
+            if( settings.opacity ) input.attr('data-opacity', opacity);
+        }
+
+        // Set swatch color
+        swatch.find('SPAN').css({
+            backgroundColor: hex,
+            opacity: opacity
+        });
+
+        // Handle change event
+        doChange(input, hex, opacity);
+
+    }
+
+    // Sets the color picker values from the input
+    function updateFromInput(input, preserveInputValue) {
+
+        var hex,
+            hsb,
+            opacity,
+            x, y, r, phi,
+
+            // Helpful references
+            minicolors = input.parent(),
+            settings = input.data('minicolors-settings'),
+            swatch = minicolors.find('.minicolors-swatch'),
+
+            // Panel objects
+            grid = minicolors.find('.minicolors-grid'),
+            slider = minicolors.find('.minicolors-slider'),
+            opacitySlider = minicolors.find('.minicolors-opacity-slider'),
+
+            // Picker objects
+            gridPicker = grid.find('[class$=-picker]'),
+            sliderPicker = slider.find('[class$=-picker]'),
+            opacityPicker = opacitySlider.find('[class$=-picker]');
+
+        // Determine hex/HSB values
+        hex = convertCase(parseHex(input.val(), true), settings.letterCase);
+        if( !hex ){
+            hex = convertCase(parseHex(settings.defaultValue, true), settings.letterCase);
+        }
+        hsb = hex2hsb(hex);
+
+        // Update input value
+        if( !preserveInputValue ) input.val(hex);
+
+        // Determine opacity value
+        if( settings.opacity ) {
+            // Get from data-opacity attribute and keep within 0-1 range
+            opacity = input.attr('data-opacity') === '' ? 1 : keepWithin(parseFloat(input.attr('data-opacity')).toFixed(2), 0, 1);
+            if( isNaN(opacity) ) opacity = 1;
+            input.attr('data-opacity', opacity);
+            swatch.find('SPAN').css('opacity', opacity);
+
+            // Set opacity picker position
+            y = keepWithin(opacitySlider.height() - (opacitySlider.height() * opacity), 0, opacitySlider.height());
+            opacityPicker.css('top', y + 'px');
+        }
+
+        // Update swatch
+        swatch.find('SPAN').css('backgroundColor', hex);
+
+        // Determine picker locations
+        switch(settings.control) {
+
+            case 'wheel':
+                // Set grid position
+                r = keepWithin(Math.ceil(hsb.s * 0.75), 0, grid.height() / 2);
+                phi = hsb.h * Math.PI / 180;
+                x = keepWithin(75 - Math.cos(phi) * r, 0, grid.width());
+                y = keepWithin(75 - Math.sin(phi) * r, 0, grid.height());
+                gridPicker.css({
+                    top: y + 'px',
+                    left: x + 'px'
+                });
+
+                // Set slider position
+                y = 150 - (hsb.b / (100 / grid.height()));
+                if( hex === '' ) y = 0;
+                sliderPicker.css('top', y + 'px');
+
+                // Update panel color
+                slider.css('backgroundColor', hsb2hex({ h: hsb.h, s: hsb.s, b: 100 }));
+                break;
+
+            case 'saturation':
+                // Set grid position
+                x = keepWithin((5 * hsb.h) / 12, 0, 150);
+                y = keepWithin(grid.height() - Math.ceil(hsb.b / (100 / grid.height())), 0, grid.height());
+                gridPicker.css({
+                    top: y + 'px',
+                    left: x + 'px'
+                });
+
+                // Set slider position
+                y = keepWithin(slider.height() - (hsb.s * (slider.height() / 100)), 0, slider.height());
+                sliderPicker.css('top', y + 'px');
+
+                // Update UI
+                slider.css('backgroundColor', hsb2hex({ h: hsb.h, s: 100, b: hsb.b }));
+                minicolors.find('.minicolors-grid-inner').css('opacity', hsb.s / 100);
+                break;
+
+            case 'brightness':
+                // Set grid position
+                x = keepWithin((5 * hsb.h) / 12, 0, 150);
+                y = keepWithin(grid.height() - Math.ceil(hsb.s / (100 / grid.height())), 0, grid.height());
+                gridPicker.css({
+                    top: y + 'px',
+                    left: x + 'px'
+                });
+
+                // Set slider position
+                y = keepWithin(slider.height() - (hsb.b * (slider.height() / 100)), 0, slider.height());
+                sliderPicker.css('top', y + 'px');
+
+                // Update UI
+                slider.css('backgroundColor', hsb2hex({ h: hsb.h, s: hsb.s, b: 100 }));
+                minicolors.find('.minicolors-grid-inner').css('opacity', 1 - (hsb.b / 100));
+                break;
+
+            default:
+                // Set grid position
+                x = keepWithin(Math.ceil(hsb.s / (100 / grid.width())), 0, grid.width());
+                y = keepWithin(grid.height() - Math.ceil(hsb.b / (100 / grid.height())), 0, grid.height());
+                gridPicker.css({
+                    top: y + 'px',
+                    left: x + 'px'
+                });
+
+                // Set slider position
+                y = keepWithin(slider.height() - (hsb.h / (360 / slider.height())), 0, slider.height());
+                sliderPicker.css('top', y + 'px');
+
+                // Update panel color
+                grid.css('backgroundColor', hsb2hex({ h: hsb.h, s: 100, b: 100 }));
+                break;
+
+        }
+
+        // Fire change event, but only if minicolors is fully initialized
+        if( input.data('minicolors-initialized') ) {
+            doChange(input, hex, opacity);
+        }
+
+    }
+
+    // Runs the change and changeDelay callbacks
+    function doChange(input, hex, opacity) {
+
+        var settings = input.data('minicolors-settings'),
+            lastChange = input.data('minicolors-lastChange');
+
+        // Only run if it actually changed
+        if( !lastChange || lastChange.hex !== hex || lastChange.opacity !== opacity ) {
+
+            // Remember last-changed value
+            input.data('minicolors-lastChange', {
+                hex: hex,
+                opacity: opacity
+            });
+
+            // Fire change event
+            if( settings.change ) {
+                if( settings.changeDelay ) {
+                    // Call after a delay
+                    clearTimeout(input.data('minicolors-changeTimeout'));
+                    input.data('minicolors-changeTimeout', setTimeout( function() {
+                        settings.change.call(input.get(0), hex, opacity);
+                    }, settings.changeDelay));
+                } else {
+                    // Call immediately
+                    settings.change.call(input.get(0), hex, opacity);
+                }
+            }
+            input.trigger('change').trigger('input');
+        }
+
+    }
+
+    // Generates an RGB(A) object based on the input's value
+    function rgbObject(input) {
+        var hex = parseHex($(input).val(), true),
+            rgb = hex2rgb(hex),
+            opacity = $(input).attr('data-opacity');
+        if( !rgb ) return null;
+        if( opacity !== undefined ) $.extend(rgb, { a: parseFloat(opacity) });
+        return rgb;
+    }
+
+    // Genearates an RGB(A) string based on the input's value
+    function rgbString(input, alpha) {
+        var hex = parseHex($(input).val(), true),
+            rgb = hex2rgb(hex),
+            opacity = $(input).attr('data-opacity');
+        if( !rgb ) return null;
+        if( opacity === undefined ) opacity = 1;
+        if( alpha ) {
+            return 'rgba(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', ' + parseFloat(opacity) + ')';
+        } else {
+            return 'rgb(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ')';
+        }
+    }
+
+    // Converts to the letter case specified in settings
+    function convertCase(string, letterCase) {
+        return letterCase === 'uppercase' ? string.toUpperCase() : string.toLowerCase();
+    }
+
+    // Parses a string and returns a valid hex string when possible
+    function parseHex(string, expand) {
+        string = string.replace(/[^A-F0-9]/ig, '');
+        if( string.length !== 3 && string.length !== 6 ) return '';
+        if( string.length === 3 && expand ) {
+            string = string[0] + string[0] + string[1] + string[1] + string[2] + string[2];
+        }
+        return '#' + string;
+    }
+
+    // Keeps value within min and max
+    function keepWithin(value, min, max) {
+        if( value < min ) value = min;
+        if( value > max ) value = max;
+        return value;
+    }
+
+    // Converts an HSB object to an RGB object
+    function hsb2rgb(hsb) {
+        var rgb = {};
+        var h = Math.round(hsb.h);
+        var s = Math.round(hsb.s * 255 / 100);
+        var v = Math.round(hsb.b * 255 / 100);
+        if(s === 0) {
+            rgb.r = rgb.g = rgb.b = v;
+        } else {
+            var t1 = v;
+            var t2 = (255 - s) * v / 255;
+            var t3 = (t1 - t2) * (h % 60) / 60;
+            if( h === 360 ) h = 0;
+            if( h < 60 ) { rgb.r = t1; rgb.b = t2; rgb.g = t2 + t3; }
+            else if( h < 120 ) {rgb.g = t1; rgb.b = t2; rgb.r = t1 - t3; }
+            else if( h < 180 ) {rgb.g = t1; rgb.r = t2; rgb.b = t2 + t3; }
+            else if( h < 240 ) {rgb.b = t1; rgb.r = t2; rgb.g = t1 - t3; }
+            else if( h < 300 ) {rgb.b = t1; rgb.g = t2; rgb.r = t2 + t3; }
+            else if( h < 360 ) {rgb.r = t1; rgb.g = t2; rgb.b = t1 - t3; }
+            else { rgb.r = 0; rgb.g = 0; rgb.b = 0; }
+        }
+        return {
+            r: Math.round(rgb.r),
+            g: Math.round(rgb.g),
+            b: Math.round(rgb.b)
+        };
+    }
+
+    // Converts an RGB object to a hex string
+    function rgb2hex(rgb) {
+        var hex = [
+            rgb.r.toString(16),
+            rgb.g.toString(16),
+            rgb.b.toString(16)
+        ];
+        $.each(hex, function(nr, val) {
+            if (val.length === 1) hex[nr] = '0' + val;
+        });
+        return '#' + hex.join('');
+    }
+
+    // Converts an HSB object to a hex string
+    function hsb2hex(hsb) {
+        return rgb2hex(hsb2rgb(hsb));
+    }
+
+    // Converts a hex string to an HSB object
+    function hex2hsb(hex) {
+        var hsb = rgb2hsb(hex2rgb(hex));
+        if( hsb.s === 0 ) hsb.h = 360;
+        return hsb;
+    }
+
+    // Converts an RGB object to an HSB object
+    function rgb2hsb(rgb) {
+        var hsb = { h: 0, s: 0, b: 0 };
+        var min = Math.min(rgb.r, rgb.g, rgb.b);
+        var max = Math.max(rgb.r, rgb.g, rgb.b);
+        var delta = max - min;
+        hsb.b = max;
+        hsb.s = max !== 0 ? 255 * delta / max : 0;
+        if( hsb.s !== 0 ) {
+            if( rgb.r === max ) {
+                hsb.h = (rgb.g - rgb.b) / delta;
+            } else if( rgb.g === max ) {
+                hsb.h = 2 + (rgb.b - rgb.r) / delta;
+            } else {
+                hsb.h = 4 + (rgb.r - rgb.g) / delta;
+            }
+        } else {
+            hsb.h = -1;
+        }
+        hsb.h *= 60;
+        if( hsb.h < 0 ) {
+            hsb.h += 360;
+        }
+        hsb.s *= 100/255;
+        hsb.b *= 100/255;
+        return hsb;
+    }
+
+    // Converts a hex string to an RGB object
+    function hex2rgb(hex) {
+        hex = parseInt(((hex.indexOf('#') > -1) ? hex.substring(1) : hex), 16);
+        return {
+            /* jshint ignore:start */
+            r: hex >> 16,
+            g: (hex & 0x00FF00) >> 8,
+            b: (hex & 0x0000FF)
+            /* jshint ignore:end */
+        };
+    }
+
+    // Handle events
+    $(document)
+        // Hide on clicks outside of the control
+        .on('mousedown.minicolors touchstart.minicolors', function(event) {
+            if( !$(event.target).parents().add(event.target).hasClass('minicolors') ) {
+                hide();
+            }
+        })
+        // Start moving
+        .on('mousedown.minicolors touchstart.minicolors', '.minicolors-grid, .minicolors-slider, .minicolors-opacity-slider', function(event) {
+            var target = $(this);
+            event.preventDefault();
+            $(document).data('minicolors-target', target);
+            move(target, event, true);
+        })
+        // Move pickers
+        .on('mousemove.minicolors touchmove.minicolors', function(event) {
+            var target = $(document).data('minicolors-target');
+            if( target ) move(target, event);
+        })
+        // Stop moving
+        .on('mouseup.minicolors touchend.minicolors', function() {
+            $(this).removeData('minicolors-target');
+        })
+        // Show panel when swatch is clicked
+        .on('mousedown.minicolors touchstart.minicolors', '.minicolors-swatch', function(event) {
+            var input = $(this).parent().find('.minicolors-input');
+            event.preventDefault();
+            show(input);
+        })
+        // Show on focus
+        .on('focus.minicolors', '.minicolors-input', function() {
+            var input = $(this);
+            if( !input.data('minicolors-initialized') ) return;
+            show(input);
+        })
+        // Fix hex on blur
+        .on('blur.minicolors', '.minicolors-input', function() {
+            var input = $(this),
+                settings = input.data('minicolors-settings');
+            if( !input.data('minicolors-initialized') ) return;
+
+            // Parse Hex
+            input.val(parseHex(input.val(), true));
+
+            // Is it blank?
+            if( input.val() === '' ) input.val(parseHex(settings.defaultValue, true));
+
+            // Adjust case
+            input.val( convertCase(input.val(), settings.letterCase) );
+
+        })
+        // Handle keypresses
+        .on('keydown.minicolors', '.minicolors-input', function(event) {
+            var input = $(this);
+            if( !input.data('minicolors-initialized') ) return;
+            switch(event.keyCode) {
+                case 9: // tab
+                    hide();
+                    break;
+                case 13: // enter
+                case 27: // esc
+                    hide();
+                    input.blur();
+                    break;
+            }
+        })
+        // Update on keyup
+        .on('keyup.minicolors', '.minicolors-input', function() {
+            var input = $(this);
+            if( !input.data('minicolors-initialized') ) return;
+            updateFromInput(input, true);
+        })
+        // Update on paste
+        .on('paste.minicolors', '.minicolors-input', function() {
+            var input = $(this);
+            if( !input.data('minicolors-initialized') ) return;
+            setTimeout( function() {
+                updateFromInput(input, true);
+            }, 1);
+        });
+
+}));
 
 /***/ }),
-
-/***/ 14:
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jquery"] = __webpack_require__(15);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(6);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/***/ 15:
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jquery"] = __webpack_require__(7);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10508,50 +11364,19 @@ return jQuery;
 
 
 /***/ }),
-
-/***/ 3:
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
-/***/ 43:
+/* 8 */,
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(0);
-__webpack_require__(44);
-__webpack_require__(45);
-__webpack_require__(9);
-__webpack_require__(7);
-__webpack_require__(8);
-module.exports = __webpack_require__(46);
-
+__webpack_require__(10)
+__webpack_require__(11)
+__webpack_require__(12)
+__webpack_require__(4)
+__webpack_require__(13)
+__webpack_require__(14)
 
 /***/ }),
-
-/***/ 44:
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {(function($, undefined) {
@@ -11113,8 +11938,7 @@ module.exports = __webpack_require__(46);
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-
-/***/ 45:
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/*
@@ -11267,8 +12091,2980 @@ if (jQuery) (function ($) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/***/ 46:
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ PowerTip v1.3.0 (2017-01-15)
+ https://stevenbenner.github.io/jquery-powertip/
+ Copyright (c) 2017 Steven Benner (http://stevenbenner.com/).
+ Released under MIT license.
+ https://raw.github.com/stevenbenner/jquery-powertip/master/LICENSE.txt
+*/
+(function(root, factory) {
+	// support loading the plugin via common patterns
+	if (true) {
+		// load the plugin as an amd module
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else if (typeof module === 'object' && module.exports) {
+		// load the plugin as a commonjs module
+		module.exports = factory(require('jquery'));
+	} else {
+		// load the plugin as a global
+		factory(root.jQuery);
+	}
+}(this, function($) {
+
+	// useful private variables
+	var $document = $(document),
+		$window = $(window),
+		$body = $('body');
+
+	// constants
+	var DATA_DISPLAYCONTROLLER = 'displayController',
+		DATA_HASACTIVEHOVER = 'hasActiveHover',
+		DATA_FORCEDOPEN = 'forcedOpen',
+		DATA_HASMOUSEMOVE = 'hasMouseMove',
+		DATA_MOUSEONTOTIP = 'mouseOnToPopup',
+		DATA_ORIGINALTITLE = 'originalTitle',
+		DATA_POWERTIP = 'powertip',
+		DATA_POWERTIPJQ = 'powertipjq',
+		DATA_POWERTIPTARGET = 'powertiptarget',
+		EVENT_NAMESPACE = '.powertip',
+		RAD2DEG = 180 / Math.PI;
+
+	/**
+	 * Session data
+	 * Private properties global to all powerTip instances
+	 */
+	var session = {
+		elements: null,
+		tooltips: null,
+		isTipOpen: false,
+		isFixedTipOpen: false,
+		isClosing: false,
+		tipOpenImminent: false,
+		activeHover: null,
+		currentX: 0,
+		currentY: 0,
+		previousX: 0,
+		previousY: 0,
+		desyncTimeout: null,
+		closeDelayTimeout: null,
+		mouseTrackingActive: false,
+		delayInProgress: false,
+		windowWidth: 0,
+		windowHeight: 0,
+		scrollTop: 0,
+		scrollLeft: 0
+	};
+
+	/**
+	 * Collision enumeration
+	 * @enum {number}
+	 */
+	var Collision = {
+		none: 0,
+		top: 1,
+		bottom: 2,
+		left: 4,
+		right: 8
+	};
+
+	/**
+	 * Display hover tooltips on the matched elements.
+	 * @param {(Object|string)=} opts The options object to use for the plugin, or
+	 *     the name of a method to invoke on the first matched element.
+	 * @param {*=} [arg] Argument for an invoked method (optional).
+	 * @return {jQuery} jQuery object for the matched selectors.
+	 */
+	$.fn.powerTip = function(opts, arg) {
+		var targetElements = this,
+			options,
+			tipController;
+
+		// don't do any work if there were no matched elements
+		if (!targetElements.length) {
+			return targetElements;
+		}
+
+		// handle api method calls on the plugin, e.g. powerTip('hide')
+		if ($.type(opts) === 'string' && $.powerTip[opts]) {
+			return $.powerTip[opts].call(targetElements, targetElements, arg);
+		}
+
+		// extend options and instantiate TooltipController
+		options = $.extend({}, $.fn.powerTip.defaults, opts);
+		tipController = new TooltipController(options);
+
+		// hook mouse and viewport dimension tracking
+		initTracking();
+
+		// setup the elements
+		targetElements.each(function elementSetup() {
+			var $this = $(this),
+				dataPowertip = $this.data(DATA_POWERTIP),
+				dataElem = $this.data(DATA_POWERTIPJQ),
+				dataTarget = $this.data(DATA_POWERTIPTARGET),
+				title;
+
+			// handle repeated powerTip calls on the same element by destroying the
+			// original instance hooked to it and replacing it with this call
+			if ($this.data(DATA_DISPLAYCONTROLLER)) {
+				$.powerTip.destroy($this);
+			}
+
+			// attempt to use title attribute text if there is no data-powertip,
+			// data-powertipjq or data-powertiptarget. If we do use the title
+			// attribute, delete the attribute so the browser will not show it
+			title = $this.attr('title');
+			if (!dataPowertip && !dataTarget && !dataElem && title) {
+				$this.data(DATA_POWERTIP, title);
+				$this.data(DATA_ORIGINALTITLE, title);
+				$this.removeAttr('title');
+			}
+
+			// create hover controllers for each element
+			$this.data(
+				DATA_DISPLAYCONTROLLER,
+				new DisplayController($this, options, tipController)
+			);
+		});
+
+		// attach events to matched elements if the manual option is not enabled
+		if (!options.manual) {
+			// attach open events
+			$.each(options.openEvents, function(idx, evt) {
+				if ($.inArray(evt, options.closeEvents) > -1) {
+					// event is in both openEvents and closeEvents, so toggle it
+					targetElements.on(evt + EVENT_NAMESPACE, function elementToggle(event) {
+						$.powerTip.toggle(this, event);
+					});
+				} else {
+					targetElements.on(evt + EVENT_NAMESPACE, function elementOpen(event) {
+						$.powerTip.show(this, event);
+					});
+				}
+			});
+
+			// attach close events
+			$.each(options.closeEvents, function(idx, evt) {
+				if ($.inArray(evt, options.openEvents) < 0) {
+					targetElements.on(evt + EVENT_NAMESPACE, function elementClose(event) {
+						// set immediate to true for any event without mouse info
+						$.powerTip.hide(this, !isMouseEvent(event));
+					});
+				}
+			});
+
+			// attach escape key close event
+			targetElements.on('keydown' + EVENT_NAMESPACE, function elementKeyDown(event) {
+				// always close tooltip when the escape key is pressed
+				if (event.keyCode === 27) {
+					$.powerTip.hide(this, true);
+				}
+			});
+		}
+
+		// remember elements that the plugin is attached to
+		session.elements = session.elements ? session.elements.add(targetElements) : targetElements;
+
+		return targetElements;
+	};
+
+	/**
+	 * Default options for the powerTip plugin.
+	 */
+	$.fn.powerTip.defaults = {
+		fadeInTime: 200,
+		fadeOutTime: 100,
+		followMouse: false,
+		popupId: 'powerTip',
+		popupClass: null,
+		intentSensitivity: 7,
+		intentPollInterval: 100,
+		closeDelay: 100,
+		placement: 'n',
+		smartPlacement: false,
+		offset: 10,
+		mouseOnToPopup: false,
+		manual: false,
+		openEvents: [ 'mouseenter', 'focus' ],
+		closeEvents: [ 'mouseleave', 'blur' ]
+	};
+
+	/**
+	 * Default smart placement priority lists.
+	 * The first item in the array is the highest priority, the last is the lowest.
+	 * The last item is also the default, which will be used if all previous options
+	 * do not fit.
+	 */
+	$.fn.powerTip.smartPlacementLists = {
+		n: [ 'n', 'ne', 'nw', 's' ],
+		e: [ 'e', 'ne', 'se', 'w', 'nw', 'sw', 'n', 's', 'e' ],
+		s: [ 's', 'se', 'sw', 'n' ],
+		w: [ 'w', 'nw', 'sw', 'e', 'ne', 'se', 'n', 's', 'w' ],
+		nw: [ 'nw', 'w', 'sw', 'n', 's', 'se', 'nw' ],
+		ne: [ 'ne', 'e', 'se', 'n', 's', 'sw', 'ne' ],
+		sw: [ 'sw', 'w', 'nw', 's', 'n', 'ne', 'sw' ],
+		se: [ 'se', 'e', 'ne', 's', 'n', 'nw', 'se' ],
+		'nw-alt': [ 'nw-alt', 'n', 'ne-alt', 'sw-alt', 's', 'se-alt', 'w', 'e' ],
+		'ne-alt': [ 'ne-alt', 'n', 'nw-alt', 'se-alt', 's', 'sw-alt', 'e', 'w' ],
+		'sw-alt': [ 'sw-alt', 's', 'se-alt', 'nw-alt', 'n', 'ne-alt', 'w', 'e' ],
+		'se-alt': [ 'se-alt', 's', 'sw-alt', 'ne-alt', 'n', 'nw-alt', 'e', 'w' ]
+	};
+
+	/**
+	 * Public API
+	 */
+	$.powerTip = {
+		/**
+		 * Attempts to show the tooltip for the specified element.
+		 * @param {jQuery|Element} element The element to open the tooltip for.
+		 * @param {jQuery.Event=} event jQuery event for hover intent and mouse
+		 *     tracking (optional).
+		 * @return {jQuery|Element} The original jQuery object or DOM Element.
+		 */
+		show: function apiShowTip(element, event) {
+			// if we were given a mouse event then run the hover intent testing,
+			// otherwise, simply show the tooltip asap
+			if (isMouseEvent(event)) {
+				trackMouse(event);
+				session.previousX = event.pageX;
+				session.previousY = event.pageY;
+				$(element).data(DATA_DISPLAYCONTROLLER).show();
+			} else {
+				$(element).first().data(DATA_DISPLAYCONTROLLER).show(true, true);
+			}
+			return element;
+		},
+
+		/**
+		 * Repositions the tooltip on the element.
+		 * @param {jQuery|Element} element The element the tooltip is shown for.
+		 * @return {jQuery|Element} The original jQuery object or DOM Element.
+		 */
+		reposition: function apiResetPosition(element) {
+			$(element).first().data(DATA_DISPLAYCONTROLLER).resetPosition();
+			return element;
+		},
+
+		/**
+		 * Attempts to close any open tooltips.
+		 * @param {(jQuery|Element)=} element The element with the tooltip that
+		 *     should be closed (optional).
+		 * @param {boolean=} immediate Disable close delay (optional).
+		 * @return {jQuery|Element|undefined} The original jQuery object or DOM
+		 *     Element, if one was specified.
+		 */
+		hide: function apiCloseTip(element, immediate) {
+			var displayController;
+
+			// set immediate to true when no element is specified
+			immediate = element ? immediate : true;
+
+			// find the relevant display controller
+			if (element) {
+				displayController = $(element).first().data(DATA_DISPLAYCONTROLLER);
+			} else if (session.activeHover) {
+				displayController = session.activeHover.data(DATA_DISPLAYCONTROLLER);
+			}
+
+			// if found, hide the tip
+			if (displayController) {
+				displayController.hide(immediate);
+			}
+
+			return element;
+		},
+
+		/**
+		 * Toggles the tooltip for the specified element. This will open a closed
+		 * tooltip, or close an open tooltip.
+		 * @param {jQuery|Element} element The element with the tooltip that
+		 *     should be toggled.
+		 * @param {jQuery.Event=} event jQuery event for hover intent and mouse
+		 *     tracking (optional).
+		 * @return {jQuery|Element} The original jQuery object or DOM Element.
+		 */
+		toggle: function apiToggle(element, event) {
+			if (session.activeHover && session.activeHover.is(element)) {
+				// tooltip for element is active, so close it
+				$.powerTip.hide(element, !isMouseEvent(event));
+			} else {
+				// tooltip for element is not active, so open it
+				$.powerTip.show(element, event);
+			}
+			return element;
+		},
+
+		/**
+		 * Destroy and roll back any powerTip() instance on the specified elements.
+		 * If no elements are specified then all elements that the plugin is
+		 * currently attached to will be rolled back.
+		 * @param {(jQuery|Element)=} element The element with the powerTip instance.
+		 * @return {jQuery|Element|undefined} The original jQuery object or DOM
+		 *     Element, if one was specified.
+		 */
+		destroy: function apiDestroy(element) {
+			var $element = element ? $(element) : session.elements;
+
+			// if the plugin is not hooked to any elements then there is no point
+			// trying to destroy anything, or dealing with the possible errors
+			if (!session.elements || session.elements.length === 0) {
+				return element;
+			}
+
+			// unhook events and destroy plugin changes to each element
+			$element.off(EVENT_NAMESPACE).each(function destroy() {
+				var $this = $(this),
+					dataAttributes = [
+						DATA_ORIGINALTITLE,
+						DATA_DISPLAYCONTROLLER,
+						DATA_HASACTIVEHOVER,
+						DATA_FORCEDOPEN
+					];
+
+				// revert title attribute
+				if ($this.data(DATA_ORIGINALTITLE)) {
+					$this.attr('title', $this.data(DATA_ORIGINALTITLE));
+					dataAttributes.push(DATA_POWERTIP);
+				}
+
+				// remove data attributes
+				$this.removeData(dataAttributes);
+			});
+
+			// remove destroyed element from active elements collection
+			session.elements = session.elements.not($element);
+
+			// if there are no active elements left then we will unhook all of the
+			// events that we've bound code to and remove the tooltip elements
+			if (session.elements.length === 0) {
+				$window.off(EVENT_NAMESPACE);
+				$document.off(EVENT_NAMESPACE);
+				session.mouseTrackingActive = false;
+				session.tooltips.remove();
+				session.tooltips = null;
+			}
+
+			return element;
+		}
+	};
+
+	// API aliasing
+	$.powerTip.showTip = $.powerTip.show;
+	$.powerTip.closeTip = $.powerTip.hide;
+
+	/**
+	 * Creates a new CSSCoordinates object.
+	 * @private
+	 * @constructor
+	 */
+	function CSSCoordinates() {
+		var me = this;
+
+		// initialize object properties
+		me.top = 'auto';
+		me.left = 'auto';
+		me.right = 'auto';
+		me.bottom = 'auto';
+
+		/**
+		 * Set a property to a value.
+		 * @private
+		 * @param {string} property The name of the property.
+		 * @param {number} value The value of the property.
+		 */
+		me.set = function(property, value) {
+			if ($.isNumeric(value)) {
+				me[property] = Math.round(value);
+			}
+		};
+	}
+
+	/**
+	 * Creates a new tooltip display controller.
+	 * @private
+	 * @constructor
+	 * @param {jQuery} element The element that this controller will handle.
+	 * @param {Object} options Options object containing settings.
+	 * @param {TooltipController} tipController The TooltipController object for
+	 *     this instance.
+	 */
+	function DisplayController(element, options, tipController) {
+		var hoverTimer = null,
+			myCloseDelay = null;
+
+		/**
+		 * Begins the process of showing a tooltip.
+		 * @private
+		 * @param {boolean=} immediate Skip intent testing (optional).
+		 * @param {boolean=} forceOpen Ignore cursor position and force tooltip to
+		 *     open (optional).
+		 */
+		function openTooltip(immediate, forceOpen) {
+			cancelTimer();
+			if (!element.data(DATA_HASACTIVEHOVER)) {
+				if (!immediate) {
+					session.tipOpenImminent = true;
+					hoverTimer = setTimeout(
+						function intentDelay() {
+							hoverTimer = null;
+							checkForIntent();
+						},
+						options.intentPollInterval
+					);
+				} else {
+					if (forceOpen) {
+						element.data(DATA_FORCEDOPEN, true);
+					}
+					closeAnyDelayed();
+					tipController.showTip(element);
+				}
+			} else {
+				// cursor left and returned to this element, cancel close
+				cancelClose();
+			}
+		}
+
+		/**
+		 * Begins the process of closing a tooltip.
+		 * @private
+		 * @param {boolean=} disableDelay Disable close delay (optional).
+		 */
+		function closeTooltip(disableDelay) {
+			// if this instance already has a close delay in progress then halt it
+			if (myCloseDelay) {
+				myCloseDelay = session.closeDelayTimeout = clearTimeout(myCloseDelay);
+				session.delayInProgress = false;
+			}
+			cancelTimer();
+			session.tipOpenImminent = false;
+			if (element.data(DATA_HASACTIVEHOVER)) {
+				element.data(DATA_FORCEDOPEN, false);
+				if (!disableDelay) {
+					session.delayInProgress = true;
+					session.closeDelayTimeout = setTimeout(
+						function closeDelay() {
+							session.closeDelayTimeout = null;
+							tipController.hideTip(element);
+							session.delayInProgress = false;
+							myCloseDelay = null;
+						},
+						options.closeDelay
+					);
+					// save internal reference close delay id so we can check if the
+					// active close delay belongs to this instance
+					myCloseDelay = session.closeDelayTimeout;
+				} else {
+					tipController.hideTip(element);
+				}
+			}
+		}
+
+		/**
+		 * Checks mouse position to make sure that the user intended to hover on the
+		 * specified element before showing the tooltip.
+		 * @private
+		 */
+		function checkForIntent() {
+			// calculate mouse position difference
+			var xDifference = Math.abs(session.previousX - session.currentX),
+				yDifference = Math.abs(session.previousY - session.currentY),
+				totalDifference = xDifference + yDifference;
+
+			// check if difference has passed the sensitivity threshold
+			if (totalDifference < options.intentSensitivity) {
+				cancelClose();
+				closeAnyDelayed();
+				tipController.showTip(element);
+			} else {
+				// try again
+				session.previousX = session.currentX;
+				session.previousY = session.currentY;
+				openTooltip();
+			}
+		}
+
+		/**
+		 * Cancels active hover timer.
+		 * @private
+		 * @param {boolean=} stopClose Cancel any active close delay timer.
+		 */
+		function cancelTimer(stopClose) {
+			hoverTimer = clearTimeout(hoverTimer);
+			// cancel the current close delay if the active close delay is for this
+			// element or the stopClose argument is true
+			if (session.closeDelayTimeout && myCloseDelay === session.closeDelayTimeout || stopClose) {
+				cancelClose();
+			}
+		}
+
+		/**
+		 * Cancels any active close delay timer.
+		 * @private
+		 */
+		function cancelClose() {
+			session.closeDelayTimeout = clearTimeout(session.closeDelayTimeout);
+			session.delayInProgress = false;
+		}
+
+		/**
+		 * Asks any tooltips waiting on their close delay to close now.
+		 * @private
+		 */
+		function closeAnyDelayed() {
+			// if another element is waiting for its close delay then we should ask
+			// it to close immediately so we can proceed without unexpected timeout
+			// code being run during this tooltip's lifecycle
+			if (session.delayInProgress && session.activeHover && !session.activeHover.is(element)) {
+				session.activeHover.data(DATA_DISPLAYCONTROLLER).hide(true);
+			}
+		}
+
+		/**
+		 * Repositions the tooltip on this element.
+		 * @private
+		 */
+		function repositionTooltip() {
+			tipController.resetPosition(element);
+		}
+
+		// expose the methods
+		this.show = openTooltip;
+		this.hide = closeTooltip;
+		this.cancel = cancelTimer;
+		this.resetPosition = repositionTooltip;
+	}
+
+	/**
+	 * Creates a new Placement Calculator.
+	 * @private
+	 * @constructor
+	 */
+	function PlacementCalculator() {
+		/**
+		 * Compute the CSS position to display a tooltip at the specified placement
+		 * relative to the specified element.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 * @param {string} placement The placement for the tooltip.
+		 * @param {number} tipWidth Width of the tooltip element in pixels.
+		 * @param {number} tipHeight Height of the tooltip element in pixels.
+		 * @param {number} offset Distance to offset tooltips in pixels.
+		 * @return {CSSCoordinates} A CSSCoordinates object with the position.
+		 */
+		function computePlacementCoords(element, placement, tipWidth, tipHeight, offset) {
+			var placementBase = placement.split('-')[0], // ignore 'alt' for corners
+				coords = new CSSCoordinates(),
+				position;
+
+			if (isSvgElement(element)) {
+				position = getSvgPlacement(element, placementBase);
+			} else {
+				position = getHtmlPlacement(element, placementBase);
+			}
+
+			// calculate the appropriate x and y position in the document
+			switch (placement) {
+				case 'n':
+					coords.set('left', position.left - (tipWidth / 2));
+					coords.set('bottom', session.windowHeight - position.top + offset);
+					break;
+				case 'e':
+					coords.set('left', position.left + offset);
+					coords.set('top', position.top - (tipHeight / 2));
+					break;
+				case 's':
+					coords.set('left', position.left - (tipWidth / 2));
+					coords.set('top', position.top + offset);
+					break;
+				case 'w':
+					coords.set('top', position.top - (tipHeight / 2));
+					coords.set('right', session.windowWidth - position.left + offset);
+					break;
+				case 'nw':
+					coords.set('bottom', session.windowHeight - position.top + offset);
+					coords.set('right', session.windowWidth - position.left - 20);
+					break;
+				case 'nw-alt':
+					coords.set('left', position.left);
+					coords.set('bottom', session.windowHeight - position.top + offset);
+					break;
+				case 'ne':
+					coords.set('left', position.left - 20);
+					coords.set('bottom', session.windowHeight - position.top + offset);
+					break;
+				case 'ne-alt':
+					coords.set('bottom', session.windowHeight - position.top + offset);
+					coords.set('right', session.windowWidth - position.left);
+					break;
+				case 'sw':
+					coords.set('top', position.top + offset);
+					coords.set('right', session.windowWidth - position.left - 20);
+					break;
+				case 'sw-alt':
+					coords.set('left', position.left);
+					coords.set('top', position.top + offset);
+					break;
+				case 'se':
+					coords.set('left', position.left - 20);
+					coords.set('top', position.top + offset);
+					break;
+				case 'se-alt':
+					coords.set('top', position.top + offset);
+					coords.set('right', session.windowWidth - position.left);
+					break;
+			}
+
+			return coords;
+		}
+
+		/**
+		 * Finds the tooltip attachment point in the document for a HTML DOM element
+		 * for the specified placement.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 * @param {string} placement The placement for the tooltip.
+		 * @return {Object} An object with the top,left position values.
+		 */
+		function getHtmlPlacement(element, placement) {
+			var objectOffset = element.offset(),
+				objectWidth = element.outerWidth(),
+				objectHeight = element.outerHeight(),
+				left,
+				top;
+
+			// calculate the appropriate x and y position in the document
+			switch (placement) {
+				case 'n':
+					left = objectOffset.left + objectWidth / 2;
+					top = objectOffset.top;
+					break;
+				case 'e':
+					left = objectOffset.left + objectWidth;
+					top = objectOffset.top + objectHeight / 2;
+					break;
+				case 's':
+					left = objectOffset.left + objectWidth / 2;
+					top = objectOffset.top + objectHeight;
+					break;
+				case 'w':
+					left = objectOffset.left;
+					top = objectOffset.top + objectHeight / 2;
+					break;
+				case 'nw':
+					left = objectOffset.left;
+					top = objectOffset.top;
+					break;
+				case 'ne':
+					left = objectOffset.left + objectWidth;
+					top = objectOffset.top;
+					break;
+				case 'sw':
+					left = objectOffset.left;
+					top = objectOffset.top + objectHeight;
+					break;
+				case 'se':
+					left = objectOffset.left + objectWidth;
+					top = objectOffset.top + objectHeight;
+					break;
+			}
+
+			return {
+				top: top,
+				left: left
+			};
+		}
+
+		/**
+		 * Finds the tooltip attachment point in the document for a SVG element for
+		 * the specified placement.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 * @param {string} placement The placement for the tooltip.
+		 * @return {Object} An object with the top,left position values.
+		 */
+		function getSvgPlacement(element, placement) {
+			var svgElement = element.closest('svg')[0],
+				domElement = element[0],
+				point = svgElement.createSVGPoint(),
+				boundingBox = domElement.getBBox(),
+				matrix = domElement.getScreenCTM(),
+				halfWidth = boundingBox.width / 2,
+				halfHeight = boundingBox.height / 2,
+				placements = [],
+				placementKeys = [ 'nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w' ],
+				coords,
+				rotation,
+				steps,
+				x;
+
+			function pushPlacement() {
+				placements.push(point.matrixTransform(matrix));
+			}
+
+			// get bounding box corners and midpoints
+			point.x = boundingBox.x;
+			point.y = boundingBox.y;
+			pushPlacement();
+			point.x += halfWidth;
+			pushPlacement();
+			point.x += halfWidth;
+			pushPlacement();
+			point.y += halfHeight;
+			pushPlacement();
+			point.y += halfHeight;
+			pushPlacement();
+			point.x -= halfWidth;
+			pushPlacement();
+			point.x -= halfWidth;
+			pushPlacement();
+			point.y -= halfHeight;
+			pushPlacement();
+
+			// determine rotation
+			if (placements[0].y !== placements[1].y || placements[0].x !== placements[7].x) {
+				rotation = Math.atan2(matrix.b, matrix.a) * RAD2DEG;
+				steps = Math.ceil(((rotation % 360) - 22.5) / 45);
+				if (steps < 1) {
+					steps += 8;
+				}
+				while (steps--) {
+					placementKeys.push(placementKeys.shift());
+				}
+			}
+
+			// find placement
+			for (x = 0; x < placements.length; x++) {
+				if (placementKeys[x] === placement) {
+					coords = placements[x];
+					break;
+				}
+			}
+
+			return {
+				top: coords.y + session.scrollTop,
+				left: coords.x + session.scrollLeft
+			};
+		}
+
+		// expose methods
+		this.compute = computePlacementCoords;
+	}
+
+	/**
+	 * Creates a new tooltip controller.
+	 * @private
+	 * @constructor
+	 * @param {Object} options Options object containing settings.
+	 */
+	function TooltipController(options) {
+		var placementCalculator = new PlacementCalculator(),
+			tipElement = $('#' + options.popupId);
+
+		// build and append tooltip div if it does not already exist
+		if (tipElement.length === 0) {
+			tipElement = $('<div/>', { id: options.popupId });
+			// grab body element if it was not populated when the script loaded
+			// note: this hack exists solely for jsfiddle support
+			if ($body.length === 0) {
+				$body = $('body');
+			}
+			$body.append(tipElement);
+			// remember the tooltip elements that the plugin has created
+			session.tooltips = session.tooltips ? session.tooltips.add(tipElement) : tipElement;
+		}
+
+		// hook mousemove for cursor follow tooltips
+		if (options.followMouse) {
+			// only one positionTipOnCursor hook per tooltip element, please
+			if (!tipElement.data(DATA_HASMOUSEMOVE)) {
+				$document.on('mousemove' + EVENT_NAMESPACE, positionTipOnCursor);
+				$window.on('scroll' + EVENT_NAMESPACE, positionTipOnCursor);
+				tipElement.data(DATA_HASMOUSEMOVE, true);
+			}
+		}
+
+		/**
+		 * Gives the specified element the active-hover state and queues up the
+		 * showTip function.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 */
+		function beginShowTip(element) {
+			element.data(DATA_HASACTIVEHOVER, true);
+			// show tooltip, asap
+			tipElement.queue(function queueTipInit(next) {
+				showTip(element);
+				next();
+			});
+		}
+
+		/**
+		 * Shows the tooltip, as soon as possible.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 */
+		function showTip(element) {
+			var tipContent;
+
+			// it is possible, especially with keyboard navigation, to move on to
+			// another element with a tooltip during the queue to get to this point
+			// in the code. if that happens then we need to not proceed or we may
+			// have the fadeout callback for the last tooltip execute immediately
+			// after this code runs, causing bugs.
+			if (!element.data(DATA_HASACTIVEHOVER)) {
+				return;
+			}
+
+			// if the tooltip is open and we got asked to open another one then the
+			// old one is still in its fadeOut cycle, so wait and try again
+			if (session.isTipOpen) {
+				if (!session.isClosing) {
+					hideTip(session.activeHover);
+				}
+				tipElement.delay(100).queue(function queueTipAgain(next) {
+					showTip(element);
+					next();
+				});
+				return;
+			}
+
+			// trigger powerTipPreRender event
+			element.trigger('powerTipPreRender');
+
+			// set tooltip content
+			tipContent = getTooltipContent(element);
+			if (tipContent) {
+				tipElement.empty().append(tipContent);
+			} else {
+				// we have no content to display, give up
+				return;
+			}
+
+			// trigger powerTipRender event
+			element.trigger('powerTipRender');
+
+			session.activeHover = element;
+			session.isTipOpen = true;
+
+			tipElement.data(DATA_MOUSEONTOTIP, options.mouseOnToPopup);
+
+			// set tooltip position
+			if (!options.followMouse) {
+				positionTipOnElement(element);
+				session.isFixedTipOpen = true;
+			} else {
+				positionTipOnCursor();
+			}
+
+			// add custom class to tooltip element
+			tipElement.addClass(options.popupClass);
+
+			// close tooltip when clicking anywhere on the page, with the exception
+			// of the tooltip's trigger element and any elements that are within a
+			// tooltip that has 'mouseOnToPopup' option enabled
+			if (!element.data(DATA_FORCEDOPEN)) {
+				$document.on('click' + EVENT_NAMESPACE, function documentClick(event) {
+					var target = event.target;
+					if (target !== element[0]) {
+						if (options.mouseOnToPopup) {
+							if (target !== tipElement[0] && !$.contains(tipElement[0], target)) {
+								$.powerTip.hide();
+							}
+						} else {
+							$.powerTip.hide();
+						}
+					}
+				});
+			}
+
+			// if we want to be able to mouse on to the tooltip then we need to
+			// attach hover events to the tooltip that will cancel a close request
+			// on mouseenter and start a new close request on mouseleave
+			// only hook these listeners if we're not in manual mode
+			if (options.mouseOnToPopup && !options.manual) {
+				tipElement.on('mouseenter' + EVENT_NAMESPACE, function tipMouseEnter() {
+					// check activeHover in case the mouse cursor entered the
+					// tooltip during the fadeOut and close cycle
+					if (session.activeHover) {
+						session.activeHover.data(DATA_DISPLAYCONTROLLER).cancel();
+					}
+				});
+				tipElement.on('mouseleave' + EVENT_NAMESPACE, function tipMouseLeave() {
+					// check activeHover in case the mouse cursor left the tooltip
+					// during the fadeOut and close cycle
+					if (session.activeHover) {
+						session.activeHover.data(DATA_DISPLAYCONTROLLER).hide();
+					}
+				});
+			}
+
+			// fadein
+			tipElement.fadeIn(options.fadeInTime, function fadeInCallback() {
+				// start desync polling
+				if (!session.desyncTimeout) {
+					session.desyncTimeout = setInterval(closeDesyncedTip, 500);
+				}
+
+				// trigger powerTipOpen event
+				element.trigger('powerTipOpen');
+			});
+		}
+
+		/**
+		 * Hides the tooltip.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 */
+		function hideTip(element) {
+			// reset session
+			session.isClosing = true;
+			session.isTipOpen = false;
+
+			// stop desync polling
+			session.desyncTimeout = clearInterval(session.desyncTimeout);
+
+			// reset element state
+			element.data(DATA_HASACTIVEHOVER, false);
+			element.data(DATA_FORCEDOPEN, false);
+
+			// remove document click handler
+			$document.off('click' + EVENT_NAMESPACE);
+
+			// unbind the mouseOnToPopup events if they were set
+			tipElement.off(EVENT_NAMESPACE);
+
+			// fade out
+			tipElement.fadeOut(options.fadeOutTime, function fadeOutCallback() {
+				var coords = new CSSCoordinates();
+
+				// reset session and tooltip element
+				session.activeHover = null;
+				session.isClosing = false;
+				session.isFixedTipOpen = false;
+				tipElement.removeClass();
+
+				// support mouse-follow and fixed position tips at the same time by
+				// moving the tooltip to the last cursor location after it is hidden
+				coords.set('top', session.currentY + options.offset);
+				coords.set('left', session.currentX + options.offset);
+				tipElement.css(coords);
+
+				// trigger powerTipClose event
+				element.trigger('powerTipClose');
+			});
+		}
+
+		/**
+		 * Moves the tooltip to the users mouse cursor.
+		 * @private
+		 */
+		function positionTipOnCursor() {
+			// to support having fixed tooltips on the same page as cursor tooltips,
+			// where both instances are referencing the same tooltip element, we
+			// need to keep track of the mouse position constantly, but we should
+			// only set the tip location if a fixed tip is not currently open, a tip
+			// open is imminent or active, and the tooltip element in question does
+			// have a mouse-follow using it.
+			if (!session.isFixedTipOpen && (session.isTipOpen || (session.tipOpenImminent && tipElement.data(DATA_HASMOUSEMOVE)))) {
+				// grab measurements
+				var tipWidth = tipElement.outerWidth(),
+					tipHeight = tipElement.outerHeight(),
+					coords = new CSSCoordinates(),
+					collisions,
+					collisionCount;
+
+				// grab collisions
+				coords.set('top', session.currentY + options.offset);
+				coords.set('left', session.currentX + options.offset);
+				collisions = getViewportCollisions(
+					coords,
+					tipWidth,
+					tipHeight
+				);
+
+				// handle tooltip view port collisions
+				if (collisions !== Collision.none) {
+					collisionCount = countFlags(collisions);
+					if (collisionCount === 1) {
+						// if there is only one collision (bottom or right) then
+						// simply constrain the tooltip to the view port
+						if (collisions === Collision.right) {
+							coords.set('left', session.windowWidth - tipWidth);
+						} else if (collisions === Collision.bottom) {
+							coords.set('top', session.scrollTop + session.windowHeight - tipHeight);
+						}
+					} else {
+						// if the tooltip has more than one collision then it is
+						// trapped in the corner and should be flipped to get it out
+						// of the users way
+						coords.set('left', session.currentX - tipWidth - options.offset);
+						coords.set('top', session.currentY - tipHeight - options.offset);
+					}
+				}
+
+				// position the tooltip
+				tipElement.css(coords);
+			}
+		}
+
+		/**
+		 * Sets the tooltip to the correct position relative to the specified target
+		 * element. Based on options settings.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 */
+		function positionTipOnElement(element) {
+			var priorityList,
+				finalPlacement;
+
+			if (options.smartPlacement) {
+				priorityList = $.fn.powerTip.smartPlacementLists[options.placement];
+
+				// iterate over the priority list and use the first placement option
+				// that does not collide with the view port. if they all collide
+				// then the last placement in the list will be used.
+				$.each(priorityList, function(idx, pos) {
+					// place tooltip and find collisions
+					var collisions = getViewportCollisions(
+						placeTooltip(element, pos),
+						tipElement.outerWidth(),
+						tipElement.outerHeight()
+					);
+
+					// update the final placement variable
+					finalPlacement = pos;
+
+					// break if there were no collisions
+					if (collisions === Collision.none) {
+						return false;
+					}
+				});
+			} else {
+				// if we're not going to use the smart placement feature then just
+				// compute the coordinates and do it
+				placeTooltip(element, options.placement);
+				finalPlacement = options.placement;
+			}
+
+			// add placement as class for CSS arrows
+			tipElement.removeClass('w nw sw e ne se n s w se-alt sw-alt ne-alt nw-alt');
+			tipElement.addClass(finalPlacement);
+		}
+
+		/**
+		 * Sets the tooltip position to the appropriate values to show the tip at
+		 * the specified placement. This function will iterate and test the tooltip
+		 * to support elastic tooltips.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 * @param {string} placement The placement for the tooltip.
+		 * @return {CSSCoordinates} A CSSCoordinates object with the top, left, and
+		 *     right position values.
+		 */
+		function placeTooltip(element, placement) {
+			var iterationCount = 0,
+				tipWidth,
+				tipHeight,
+				coords = new CSSCoordinates();
+
+			// set the tip to 0,0 to get the full expanded width
+			coords.set('top', 0);
+			coords.set('left', 0);
+			tipElement.css(coords);
+
+			// to support elastic tooltips we need to check for a change in the
+			// rendered dimensions after the tooltip has been positioned
+			do {
+				// grab the current tip dimensions
+				tipWidth = tipElement.outerWidth();
+				tipHeight = tipElement.outerHeight();
+
+				// get placement coordinates
+				coords = placementCalculator.compute(
+					element,
+					placement,
+					tipWidth,
+					tipHeight,
+					options.offset
+				);
+
+				// place the tooltip
+				tipElement.css(coords);
+			} while (
+				// sanity check: limit to 5 iterations, and...
+				++iterationCount <= 5 &&
+				// try again if the dimensions changed after placement
+				(tipWidth !== tipElement.outerWidth() || tipHeight !== tipElement.outerHeight())
+			);
+
+			return coords;
+		}
+
+		/**
+		 * Checks for a tooltip desync and closes the tooltip if one occurs.
+		 * @private
+		 */
+		function closeDesyncedTip() {
+			var isDesynced = false;
+			// It is possible for the mouse cursor to leave an element without
+			// firing the mouseleave or blur event. This most commonly happens when
+			// the element is disabled under mouse cursor. If this happens it will
+			// result in a desynced tooltip because the tooltip was never asked to
+			// close. So we should periodically check for a desync situation and
+			// close the tip if such a situation arises.
+			if (session.isTipOpen && !session.isClosing && !session.delayInProgress && ($.inArray('mouseleave', options.closeEvents) > -1 || $.inArray('mouseout', options.closeEvents) > -1 || $.inArray('blur', options.closeEvents) > -1 || $.inArray('focusout', options.closeEvents) > -1)) {
+				// user moused onto another tip or active hover is disabled
+				if (session.activeHover.data(DATA_HASACTIVEHOVER) === false || session.activeHover.is(':disabled')) {
+					isDesynced = true;
+				} else {
+					// hanging tip - have to test if mouse position is not over the
+					// active hover and not over a tooltip set to let the user
+					// interact with it.
+					// for keyboard navigation: this only counts if the element does
+					// not have focus.
+					// for tooltips opened via the api: we need to check if it has
+					// the forcedOpen flag.
+					if (!isMouseOver(session.activeHover) && !session.activeHover.is(':focus') && !session.activeHover.data(DATA_FORCEDOPEN)) {
+						if (tipElement.data(DATA_MOUSEONTOTIP)) {
+							if (!isMouseOver(tipElement)) {
+								isDesynced = true;
+							}
+						} else {
+							isDesynced = true;
+						}
+					}
+				}
+
+				if (isDesynced) {
+					// close the desynced tip
+					hideTip(session.activeHover);
+				}
+			}
+		}
+
+		// expose methods
+		this.showTip = beginShowTip;
+		this.hideTip = hideTip;
+		this.resetPosition = positionTipOnElement;
+	}
+
+	/**
+	 * Determine whether a jQuery object is an SVG element
+	 * @private
+	 * @param {jQuery} element The element to check
+	 * @return {boolean} Whether this is an SVG element
+	 */
+	function isSvgElement(element) {
+		return Boolean(window.SVGElement && element[0] instanceof SVGElement);
+	}
+
+	/**
+	 * Determines if the specified jQuery.Event object has mouse data.
+	 * @private
+	 * @param {jQuery.Event=} event The jQuery.Event object to test.
+	 * @return {boolean} True if there is mouse data, otherwise false.
+	 */
+	function isMouseEvent(event) {
+		return Boolean(event && typeof event.pageX === 'number');
+	}
+
+	/**
+	 * Initializes the viewport dimension cache and hooks up the mouse position
+	 * tracking and viewport dimension tracking events.
+	 * Prevents attaching the events more than once.
+	 * @private
+	 */
+	function initTracking() {
+		if (!session.mouseTrackingActive) {
+			session.mouseTrackingActive = true;
+
+			// grab the current viewport dimensions on load
+			getViewportDimensions();
+			$(getViewportDimensions);
+
+			// hook mouse move tracking
+			$document.on('mousemove' + EVENT_NAMESPACE, trackMouse);
+
+			// hook viewport dimensions tracking
+			$window.on('resize' + EVENT_NAMESPACE, trackResize);
+			$window.on('scroll' + EVENT_NAMESPACE, trackScroll);
+		}
+	}
+
+	/**
+	 * Updates the viewport dimensions cache.
+	 * @private
+	 */
+	function getViewportDimensions() {
+		session.scrollLeft = $window.scrollLeft();
+		session.scrollTop = $window.scrollTop();
+		session.windowWidth = $window.width();
+		session.windowHeight = $window.height();
+	}
+
+	/**
+	 * Updates the window size info in the viewport dimensions cache.
+	 * @private
+	 */
+	function trackResize() {
+		session.windowWidth = $window.width();
+		session.windowHeight = $window.height();
+	}
+
+	/**
+	 * Updates the scroll offset info in the viewport dimensions cache.
+	 * @private
+	 */
+	function trackScroll() {
+		var x = $window.scrollLeft(),
+			y = $window.scrollTop();
+		if (x !== session.scrollLeft) {
+			session.currentX += x - session.scrollLeft;
+			session.scrollLeft = x;
+		}
+		if (y !== session.scrollTop) {
+			session.currentY += y - session.scrollTop;
+			session.scrollTop = y;
+		}
+	}
+
+	/**
+	 * Saves the current mouse coordinates to the session object.
+	 * @private
+	 * @param {jQuery.Event} event The mousemove event for the document.
+	 */
+	function trackMouse(event) {
+		session.currentX = event.pageX;
+		session.currentY = event.pageY;
+	}
+
+	/**
+	 * Tests if the mouse is currently over the specified element.
+	 * @private
+	 * @param {jQuery} element The element to check for hover.
+	 * @return {boolean}
+	 */
+	function isMouseOver(element) {
+		// use getBoundingClientRect() because jQuery's width() and height()
+		// methods do not work with SVG elements
+		// compute width/height because those properties do not exist on the object
+		// returned by getBoundingClientRect() in older versions of IE
+		var elementPosition = element.offset(),
+			elementBox = element[0].getBoundingClientRect(),
+			elementWidth = elementBox.right - elementBox.left,
+			elementHeight = elementBox.bottom - elementBox.top;
+
+		return session.currentX >= elementPosition.left &&
+			session.currentX <= elementPosition.left + elementWidth &&
+			session.currentY >= elementPosition.top &&
+			session.currentY <= elementPosition.top + elementHeight;
+	}
+
+	/**
+	 * Fetches the tooltip content from the specified element's data attributes.
+	 * @private
+	 * @param {jQuery} element The element to get the tooltip content for.
+	 * @return {(string|jQuery|undefined)} The text/HTML string, jQuery object, or
+	 *     undefined if there was no tooltip content for the element.
+	 */
+	function getTooltipContent(element) {
+		var tipText = element.data(DATA_POWERTIP),
+			tipObject = element.data(DATA_POWERTIPJQ),
+			tipTarget = element.data(DATA_POWERTIPTARGET),
+			targetElement,
+			content;
+
+		if (tipText) {
+			if ($.isFunction(tipText)) {
+				tipText = tipText.call(element[0]);
+			}
+			content = tipText;
+		} else if (tipObject) {
+			if ($.isFunction(tipObject)) {
+				tipObject = tipObject.call(element[0]);
+			}
+			if (tipObject.length > 0) {
+				content = tipObject.clone(true, true);
+			}
+		} else if (tipTarget) {
+			targetElement = $('#' + tipTarget);
+			if (targetElement.length > 0) {
+				content = targetElement.html();
+			}
+		}
+
+		return content;
+	}
+
+	/**
+	 * Finds any viewport collisions that an element (the tooltip) would have if it
+	 * were absolutely positioned at the specified coordinates.
+	 * @private
+	 * @param {CSSCoordinates} coords Coordinates for the element.
+	 * @param {number} elementWidth Width of the element in pixels.
+	 * @param {number} elementHeight Height of the element in pixels.
+	 * @return {number} Value with the collision flags.
+	 */
+	function getViewportCollisions(coords, elementWidth, elementHeight) {
+		var viewportTop = session.scrollTop,
+			viewportLeft =  session.scrollLeft,
+			viewportBottom = viewportTop + session.windowHeight,
+			viewportRight = viewportLeft + session.windowWidth,
+			collisions = Collision.none;
+
+		if (coords.top < viewportTop || Math.abs(coords.bottom - session.windowHeight) - elementHeight < viewportTop) {
+			collisions |= Collision.top;
+		}
+		if (coords.top + elementHeight > viewportBottom || Math.abs(coords.bottom - session.windowHeight) > viewportBottom) {
+			collisions |= Collision.bottom;
+		}
+		if (coords.left < viewportLeft || coords.right + elementWidth > viewportRight) {
+			collisions |= Collision.left;
+		}
+		if (coords.left + elementWidth > viewportRight || coords.right < viewportLeft) {
+			collisions |= Collision.right;
+		}
+
+		return collisions;
+	}
+
+	/**
+	 * Counts the number of bits set on a flags value.
+	 * @param {number} value The flags value.
+	 * @return {number} The number of bits that have been set.
+	 */
+	function countFlags(value) {
+		var count = 0;
+		while (value) {
+			value &= value - 1;
+			count++;
+		}
+		return count;
+	}
+
+// return api for commonjs and amd environments
+	return $.powerTip;
+}));
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * jQuery Validation Plugin v1.17.0
+ *
+ * https://jqueryvalidation.org/
+ *
+ * Copyright (c) 2017 Jörn Zaefferer
+ * Released under the MIT license
+ */
+(function( factory ) {
+	if ( true ) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else if (typeof module === "object" && module.exports) {
+		module.exports = factory( require( "jquery" ) );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
+$.extend( $.fn, {
+
+	// https://jqueryvalidation.org/validate/
+	validate: function( options ) {
+
+		// If nothing is selected, return nothing; can't chain anyway
+		if ( !this.length ) {
+			if ( options && options.debug && window.console ) {
+				console.warn( "Nothing selected, can't validate, returning nothing." );
+			}
+			return;
+		}
+
+		// Check if a validator for this form was already created
+		var validator = $.data( this[ 0 ], "validator" );
+		if ( validator ) {
+			return validator;
+		}
+
+		// Add novalidate tag if HTML5.
+		this.attr( "novalidate", "novalidate" );
+
+		validator = new $.validator( options, this[ 0 ] );
+		$.data( this[ 0 ], "validator", validator );
+
+		if ( validator.settings.onsubmit ) {
+
+			this.on( "click.validate", ":submit", function( event ) {
+
+				// Track the used submit button to properly handle scripted
+				// submits later.
+				validator.submitButton = event.currentTarget;
+
+				// Allow suppressing validation by adding a cancel class to the submit button
+				if ( $( this ).hasClass( "cancel" ) ) {
+					validator.cancelSubmit = true;
+				}
+
+				// Allow suppressing validation by adding the html5 formnovalidate attribute to the submit button
+				if ( $( this ).attr( "formnovalidate" ) !== undefined ) {
+					validator.cancelSubmit = true;
+				}
+			} );
+
+			// Validate the form on submit
+			this.on( "submit.validate", function( event ) {
+				if ( validator.settings.debug ) {
+
+					// Prevent form submit to be able to see console output
+					event.preventDefault();
+				}
+				function handle() {
+					var hidden, result;
+
+					// Insert a hidden input as a replacement for the missing submit button
+					// The hidden input is inserted in two cases:
+					//   - A user defined a `submitHandler`
+					//   - There was a pending request due to `remote` method and `stopRequest()`
+					//     was called to submit the form in case it's valid
+					if ( validator.submitButton && ( validator.settings.submitHandler || validator.formSubmitted ) ) {
+						hidden = $( "<input type='hidden'/>" )
+							.attr( "name", validator.submitButton.name )
+							.val( $( validator.submitButton ).val() )
+							.appendTo( validator.currentForm );
+					}
+
+					if ( validator.settings.submitHandler ) {
+						result = validator.settings.submitHandler.call( validator, validator.currentForm, event );
+						if ( hidden ) {
+
+							// And clean up afterwards; thanks to no-block-scope, hidden can be referenced
+							hidden.remove();
+						}
+						if ( result !== undefined ) {
+							return result;
+						}
+						return false;
+					}
+					return true;
+				}
+
+				// Prevent submit for invalid forms or custom submit handlers
+				if ( validator.cancelSubmit ) {
+					validator.cancelSubmit = false;
+					return handle();
+				}
+				if ( validator.form() ) {
+					if ( validator.pendingRequest ) {
+						validator.formSubmitted = true;
+						return false;
+					}
+					return handle();
+				} else {
+					validator.focusInvalid();
+					return false;
+				}
+			} );
+		}
+
+		return validator;
+	},
+
+	// https://jqueryvalidation.org/valid/
+	valid: function() {
+		var valid, validator, errorList;
+
+		if ( $( this[ 0 ] ).is( "form" ) ) {
+			valid = this.validate().form();
+		} else {
+			errorList = [];
+			valid = true;
+			validator = $( this[ 0 ].form ).validate();
+			this.each( function() {
+				valid = validator.element( this ) && valid;
+				if ( !valid ) {
+					errorList = errorList.concat( validator.errorList );
+				}
+			} );
+			validator.errorList = errorList;
+		}
+		return valid;
+	},
+
+	// https://jqueryvalidation.org/rules/
+	rules: function( command, argument ) {
+		var element = this[ 0 ],
+			settings, staticRules, existingRules, data, param, filtered;
+
+		// If nothing is selected, return empty object; can't chain anyway
+		if ( element == null ) {
+			return;
+		}
+
+		if ( !element.form && element.hasAttribute( "contenteditable" ) ) {
+			element.form = this.closest( "form" )[ 0 ];
+			element.name = this.attr( "name" );
+		}
+
+		if ( element.form == null ) {
+			return;
+		}
+
+		if ( command ) {
+			settings = $.data( element.form, "validator" ).settings;
+			staticRules = settings.rules;
+			existingRules = $.validator.staticRules( element );
+			switch ( command ) {
+			case "add":
+				$.extend( existingRules, $.validator.normalizeRule( argument ) );
+
+				// Remove messages from rules, but allow them to be set separately
+				delete existingRules.messages;
+				staticRules[ element.name ] = existingRules;
+				if ( argument.messages ) {
+					settings.messages[ element.name ] = $.extend( settings.messages[ element.name ], argument.messages );
+				}
+				break;
+			case "remove":
+				if ( !argument ) {
+					delete staticRules[ element.name ];
+					return existingRules;
+				}
+				filtered = {};
+				$.each( argument.split( /\s/ ), function( index, method ) {
+					filtered[ method ] = existingRules[ method ];
+					delete existingRules[ method ];
+				} );
+				return filtered;
+			}
+		}
+
+		data = $.validator.normalizeRules(
+		$.extend(
+			{},
+			$.validator.classRules( element ),
+			$.validator.attributeRules( element ),
+			$.validator.dataRules( element ),
+			$.validator.staticRules( element )
+		), element );
+
+		// Make sure required is at front
+		if ( data.required ) {
+			param = data.required;
+			delete data.required;
+			data = $.extend( { required: param }, data );
+		}
+
+		// Make sure remote is at back
+		if ( data.remote ) {
+			param = data.remote;
+			delete data.remote;
+			data = $.extend( data, { remote: param } );
+		}
+
+		return data;
+	}
+} );
+
+// Custom selectors
+$.extend( $.expr.pseudos || $.expr[ ":" ], {		// '|| $.expr[ ":" ]' here enables backwards compatibility to jQuery 1.7. Can be removed when dropping jQ 1.7.x support
+
+	// https://jqueryvalidation.org/blank-selector/
+	blank: function( a ) {
+		return !$.trim( "" + $( a ).val() );
+	},
+
+	// https://jqueryvalidation.org/filled-selector/
+	filled: function( a ) {
+		var val = $( a ).val();
+		return val !== null && !!$.trim( "" + val );
+	},
+
+	// https://jqueryvalidation.org/unchecked-selector/
+	unchecked: function( a ) {
+		return !$( a ).prop( "checked" );
+	}
+} );
+
+// Constructor for validator
+$.validator = function( options, form ) {
+	this.settings = $.extend( true, {}, $.validator.defaults, options );
+	this.currentForm = form;
+	this.init();
+};
+
+// https://jqueryvalidation.org/jQuery.validator.format/
+$.validator.format = function( source, params ) {
+	if ( arguments.length === 1 ) {
+		return function() {
+			var args = $.makeArray( arguments );
+			args.unshift( source );
+			return $.validator.format.apply( this, args );
+		};
+	}
+	if ( params === undefined ) {
+		return source;
+	}
+	if ( arguments.length > 2 && params.constructor !== Array  ) {
+		params = $.makeArray( arguments ).slice( 1 );
+	}
+	if ( params.constructor !== Array ) {
+		params = [ params ];
+	}
+	$.each( params, function( i, n ) {
+		source = source.replace( new RegExp( "\\{" + i + "\\}", "g" ), function() {
+			return n;
+		} );
+	} );
+	return source;
+};
+
+$.extend( $.validator, {
+
+	defaults: {
+		messages: {},
+		groups: {},
+		rules: {},
+		errorClass: "error",
+		pendingClass: "pending",
+		validClass: "valid",
+		errorElement: "label",
+		focusCleanup: false,
+		focusInvalid: true,
+		errorContainer: $( [] ),
+		errorLabelContainer: $( [] ),
+		onsubmit: true,
+		ignore: ":hidden",
+		ignoreTitle: false,
+		onfocusin: function( element ) {
+			this.lastActive = element;
+
+			// Hide error label and remove error class on focus if enabled
+			if ( this.settings.focusCleanup ) {
+				if ( this.settings.unhighlight ) {
+					this.settings.unhighlight.call( this, element, this.settings.errorClass, this.settings.validClass );
+				}
+				this.hideThese( this.errorsFor( element ) );
+			}
+		},
+		onfocusout: function( element ) {
+			if ( !this.checkable( element ) && ( element.name in this.submitted || !this.optional( element ) ) ) {
+				this.element( element );
+			}
+		},
+		onkeyup: function( element, event ) {
+
+			// Avoid revalidate the field when pressing one of the following keys
+			// Shift       => 16
+			// Ctrl        => 17
+			// Alt         => 18
+			// Caps lock   => 20
+			// End         => 35
+			// Home        => 36
+			// Left arrow  => 37
+			// Up arrow    => 38
+			// Right arrow => 39
+			// Down arrow  => 40
+			// Insert      => 45
+			// Num lock    => 144
+			// AltGr key   => 225
+			var excludedKeys = [
+				16, 17, 18, 20, 35, 36, 37,
+				38, 39, 40, 45, 144, 225
+			];
+
+			if ( event.which === 9 && this.elementValue( element ) === "" || $.inArray( event.keyCode, excludedKeys ) !== -1 ) {
+				return;
+			} else if ( element.name in this.submitted || element.name in this.invalid ) {
+				this.element( element );
+			}
+		},
+		onclick: function( element ) {
+
+			// Click on selects, radiobuttons and checkboxes
+			if ( element.name in this.submitted ) {
+				this.element( element );
+
+			// Or option elements, check parent select in that case
+			} else if ( element.parentNode.name in this.submitted ) {
+				this.element( element.parentNode );
+			}
+		},
+		highlight: function( element, errorClass, validClass ) {
+			if ( element.type === "radio" ) {
+				this.findByName( element.name ).addClass( errorClass ).removeClass( validClass );
+			} else {
+				$( element ).addClass( errorClass ).removeClass( validClass );
+			}
+		},
+		unhighlight: function( element, errorClass, validClass ) {
+			if ( element.type === "radio" ) {
+				this.findByName( element.name ).removeClass( errorClass ).addClass( validClass );
+			} else {
+				$( element ).removeClass( errorClass ).addClass( validClass );
+			}
+		}
+	},
+
+	// https://jqueryvalidation.org/jQuery.validator.setDefaults/
+	setDefaults: function( settings ) {
+		$.extend( $.validator.defaults, settings );
+	},
+
+	messages: {
+		required: "This field is required.",
+		remote: "Please fix this field.",
+		email: "Please enter a valid email address.",
+		url: "Please enter a valid URL.",
+		date: "Please enter a valid date.",
+		dateISO: "Please enter a valid date (ISO).",
+		number: "Please enter a valid number.",
+		digits: "Please enter only digits.",
+		equalTo: "Please enter the same value again.",
+		maxlength: $.validator.format( "Please enter no more than {0} characters." ),
+		minlength: $.validator.format( "Please enter at least {0} characters." ),
+		rangelength: $.validator.format( "Please enter a value between {0} and {1} characters long." ),
+		range: $.validator.format( "Please enter a value between {0} and {1}." ),
+		max: $.validator.format( "Please enter a value less than or equal to {0}." ),
+		min: $.validator.format( "Please enter a value greater than or equal to {0}." ),
+		step: $.validator.format( "Please enter a multiple of {0}." )
+	},
+
+	autoCreateRanges: false,
+
+	prototype: {
+
+		init: function() {
+			this.labelContainer = $( this.settings.errorLabelContainer );
+			this.errorContext = this.labelContainer.length && this.labelContainer || $( this.currentForm );
+			this.containers = $( this.settings.errorContainer ).add( this.settings.errorLabelContainer );
+			this.submitted = {};
+			this.valueCache = {};
+			this.pendingRequest = 0;
+			this.pending = {};
+			this.invalid = {};
+			this.reset();
+
+			var groups = ( this.groups = {} ),
+				rules;
+			$.each( this.settings.groups, function( key, value ) {
+				if ( typeof value === "string" ) {
+					value = value.split( /\s/ );
+				}
+				$.each( value, function( index, name ) {
+					groups[ name ] = key;
+				} );
+			} );
+			rules = this.settings.rules;
+			$.each( rules, function( key, value ) {
+				rules[ key ] = $.validator.normalizeRule( value );
+			} );
+
+			function delegate( event ) {
+
+				// Set form expando on contenteditable
+				if ( !this.form && this.hasAttribute( "contenteditable" ) ) {
+					this.form = $( this ).closest( "form" )[ 0 ];
+					this.name = $( this ).attr( "name" );
+				}
+
+				var validator = $.data( this.form, "validator" ),
+					eventType = "on" + event.type.replace( /^validate/, "" ),
+					settings = validator.settings;
+				if ( settings[ eventType ] && !$( this ).is( settings.ignore ) ) {
+					settings[ eventType ].call( validator, this, event );
+				}
+			}
+
+			$( this.currentForm )
+				.on( "focusin.validate focusout.validate keyup.validate",
+					":text, [type='password'], [type='file'], select, textarea, [type='number'], [type='search'], " +
+					"[type='tel'], [type='url'], [type='email'], [type='datetime'], [type='date'], [type='month'], " +
+					"[type='week'], [type='time'], [type='datetime-local'], [type='range'], [type='color'], " +
+					"[type='radio'], [type='checkbox'], [contenteditable], [type='button']", delegate )
+
+				// Support: Chrome, oldIE
+				// "select" is provided as event.target when clicking a option
+				.on( "click.validate", "select, option, [type='radio'], [type='checkbox']", delegate );
+
+			if ( this.settings.invalidHandler ) {
+				$( this.currentForm ).on( "invalid-form.validate", this.settings.invalidHandler );
+			}
+		},
+
+		// https://jqueryvalidation.org/Validator.form/
+		form: function() {
+			this.checkForm();
+			$.extend( this.submitted, this.errorMap );
+			this.invalid = $.extend( {}, this.errorMap );
+			if ( !this.valid() ) {
+				$( this.currentForm ).triggerHandler( "invalid-form", [ this ] );
+			}
+			this.showErrors();
+			return this.valid();
+		},
+
+		checkForm: function() {
+			this.prepareForm();
+			for ( var i = 0, elements = ( this.currentElements = this.elements() ); elements[ i ]; i++ ) {
+				this.check( elements[ i ] );
+			}
+			return this.valid();
+		},
+
+		// https://jqueryvalidation.org/Validator.element/
+		element: function( element ) {
+			var cleanElement = this.clean( element ),
+				checkElement = this.validationTargetFor( cleanElement ),
+				v = this,
+				result = true,
+				rs, group;
+
+			if ( checkElement === undefined ) {
+				delete this.invalid[ cleanElement.name ];
+			} else {
+				this.prepareElement( checkElement );
+				this.currentElements = $( checkElement );
+
+				// If this element is grouped, then validate all group elements already
+				// containing a value
+				group = this.groups[ checkElement.name ];
+				if ( group ) {
+					$.each( this.groups, function( name, testgroup ) {
+						if ( testgroup === group && name !== checkElement.name ) {
+							cleanElement = v.validationTargetFor( v.clean( v.findByName( name ) ) );
+							if ( cleanElement && cleanElement.name in v.invalid ) {
+								v.currentElements.push( cleanElement );
+								result = v.check( cleanElement ) && result;
+							}
+						}
+					} );
+				}
+
+				rs = this.check( checkElement ) !== false;
+				result = result && rs;
+				if ( rs ) {
+					this.invalid[ checkElement.name ] = false;
+				} else {
+					this.invalid[ checkElement.name ] = true;
+				}
+
+				if ( !this.numberOfInvalids() ) {
+
+					// Hide error containers on last error
+					this.toHide = this.toHide.add( this.containers );
+				}
+				this.showErrors();
+
+				// Add aria-invalid status for screen readers
+				$( element ).attr( "aria-invalid", !rs );
+			}
+
+			return result;
+		},
+
+		// https://jqueryvalidation.org/Validator.showErrors/
+		showErrors: function( errors ) {
+			if ( errors ) {
+				var validator = this;
+
+				// Add items to error list and map
+				$.extend( this.errorMap, errors );
+				this.errorList = $.map( this.errorMap, function( message, name ) {
+					return {
+						message: message,
+						element: validator.findByName( name )[ 0 ]
+					};
+				} );
+
+				// Remove items from success list
+				this.successList = $.grep( this.successList, function( element ) {
+					return !( element.name in errors );
+				} );
+			}
+			if ( this.settings.showErrors ) {
+				this.settings.showErrors.call( this, this.errorMap, this.errorList );
+			} else {
+				this.defaultShowErrors();
+			}
+		},
+
+		// https://jqueryvalidation.org/Validator.resetForm/
+		resetForm: function() {
+			if ( $.fn.resetForm ) {
+				$( this.currentForm ).resetForm();
+			}
+			this.invalid = {};
+			this.submitted = {};
+			this.prepareForm();
+			this.hideErrors();
+			var elements = this.elements()
+				.removeData( "previousValue" )
+				.removeAttr( "aria-invalid" );
+
+			this.resetElements( elements );
+		},
+
+		resetElements: function( elements ) {
+			var i;
+
+			if ( this.settings.unhighlight ) {
+				for ( i = 0; elements[ i ]; i++ ) {
+					this.settings.unhighlight.call( this, elements[ i ],
+						this.settings.errorClass, "" );
+					this.findByName( elements[ i ].name ).removeClass( this.settings.validClass );
+				}
+			} else {
+				elements
+					.removeClass( this.settings.errorClass )
+					.removeClass( this.settings.validClass );
+			}
+		},
+
+		numberOfInvalids: function() {
+			return this.objectLength( this.invalid );
+		},
+
+		objectLength: function( obj ) {
+			/* jshint unused: false */
+			var count = 0,
+				i;
+			for ( i in obj ) {
+
+				// This check allows counting elements with empty error
+				// message as invalid elements
+				if ( obj[ i ] !== undefined && obj[ i ] !== null && obj[ i ] !== false ) {
+					count++;
+				}
+			}
+			return count;
+		},
+
+		hideErrors: function() {
+			this.hideThese( this.toHide );
+		},
+
+		hideThese: function( errors ) {
+			errors.not( this.containers ).text( "" );
+			this.addWrapper( errors ).hide();
+		},
+
+		valid: function() {
+			return this.size() === 0;
+		},
+
+		size: function() {
+			return this.errorList.length;
+		},
+
+		focusInvalid: function() {
+			if ( this.settings.focusInvalid ) {
+				try {
+					$( this.findLastActive() || this.errorList.length && this.errorList[ 0 ].element || [] )
+					.filter( ":visible" )
+					.focus()
+
+					// Manually trigger focusin event; without it, focusin handler isn't called, findLastActive won't have anything to find
+					.trigger( "focusin" );
+				} catch ( e ) {
+
+					// Ignore IE throwing errors when focusing hidden elements
+				}
+			}
+		},
+
+		findLastActive: function() {
+			var lastActive = this.lastActive;
+			return lastActive && $.grep( this.errorList, function( n ) {
+				return n.element.name === lastActive.name;
+			} ).length === 1 && lastActive;
+		},
+
+		elements: function() {
+			var validator = this,
+				rulesCache = {};
+
+			// Select all valid inputs inside the form (no submit or reset buttons)
+			return $( this.currentForm )
+			.find( "input, select, textarea, [contenteditable]" )
+			.not( ":submit, :reset, :image, :disabled" )
+			.not( this.settings.ignore )
+			.filter( function() {
+				var name = this.name || $( this ).attr( "name" ); // For contenteditable
+				if ( !name && validator.settings.debug && window.console ) {
+					console.error( "%o has no name assigned", this );
+				}
+
+				// Set form expando on contenteditable
+				if ( this.hasAttribute( "contenteditable" ) ) {
+					this.form = $( this ).closest( "form" )[ 0 ];
+					this.name = name;
+				}
+
+				// Select only the first element for each name, and only those with rules specified
+				if ( name in rulesCache || !validator.objectLength( $( this ).rules() ) ) {
+					return false;
+				}
+
+				rulesCache[ name ] = true;
+				return true;
+			} );
+		},
+
+		clean: function( selector ) {
+			return $( selector )[ 0 ];
+		},
+
+		errors: function() {
+			var errorClass = this.settings.errorClass.split( " " ).join( "." );
+			return $( this.settings.errorElement + "." + errorClass, this.errorContext );
+		},
+
+		resetInternals: function() {
+			this.successList = [];
+			this.errorList = [];
+			this.errorMap = {};
+			this.toShow = $( [] );
+			this.toHide = $( [] );
+		},
+
+		reset: function() {
+			this.resetInternals();
+			this.currentElements = $( [] );
+		},
+
+		prepareForm: function() {
+			this.reset();
+			this.toHide = this.errors().add( this.containers );
+		},
+
+		prepareElement: function( element ) {
+			this.reset();
+			this.toHide = this.errorsFor( element );
+		},
+
+		elementValue: function( element ) {
+			var $element = $( element ),
+				type = element.type,
+				val, idx;
+
+			if ( type === "radio" || type === "checkbox" ) {
+				return this.findByName( element.name ).filter( ":checked" ).val();
+			} else if ( type === "number" && typeof element.validity !== "undefined" ) {
+				return element.validity.badInput ? "NaN" : $element.val();
+			}
+
+			if ( element.hasAttribute( "contenteditable" ) ) {
+				val = $element.text();
+			} else {
+				val = $element.val();
+			}
+
+			if ( type === "file" ) {
+
+				// Modern browser (chrome & safari)
+				if ( val.substr( 0, 12 ) === "C:\\fakepath\\" ) {
+					return val.substr( 12 );
+				}
+
+				// Legacy browsers
+				// Unix-based path
+				idx = val.lastIndexOf( "/" );
+				if ( idx >= 0 ) {
+					return val.substr( idx + 1 );
+				}
+
+				// Windows-based path
+				idx = val.lastIndexOf( "\\" );
+				if ( idx >= 0 ) {
+					return val.substr( idx + 1 );
+				}
+
+				// Just the file name
+				return val;
+			}
+
+			if ( typeof val === "string" ) {
+				return val.replace( /\r/g, "" );
+			}
+			return val;
+		},
+
+		check: function( element ) {
+			element = this.validationTargetFor( this.clean( element ) );
+
+			var rules = $( element ).rules(),
+				rulesCount = $.map( rules, function( n, i ) {
+					return i;
+				} ).length,
+				dependencyMismatch = false,
+				val = this.elementValue( element ),
+				result, method, rule, normalizer;
+
+			// Prioritize the local normalizer defined for this element over the global one
+			// if the former exists, otherwise user the global one in case it exists.
+			if ( typeof rules.normalizer === "function" ) {
+				normalizer = rules.normalizer;
+			} else if (	typeof this.settings.normalizer === "function" ) {
+				normalizer = this.settings.normalizer;
+			}
+
+			// If normalizer is defined, then call it to retreive the changed value instead
+			// of using the real one.
+			// Note that `this` in the normalizer is `element`.
+			if ( normalizer ) {
+				val = normalizer.call( element, val );
+
+				if ( typeof val !== "string" ) {
+					throw new TypeError( "The normalizer should return a string value." );
+				}
+
+				// Delete the normalizer from rules to avoid treating it as a pre-defined method.
+				delete rules.normalizer;
+			}
+
+			for ( method in rules ) {
+				rule = { method: method, parameters: rules[ method ] };
+				try {
+					result = $.validator.methods[ method ].call( this, val, element, rule.parameters );
+
+					// If a method indicates that the field is optional and therefore valid,
+					// don't mark it as valid when there are no other rules
+					if ( result === "dependency-mismatch" && rulesCount === 1 ) {
+						dependencyMismatch = true;
+						continue;
+					}
+					dependencyMismatch = false;
+
+					if ( result === "pending" ) {
+						this.toHide = this.toHide.not( this.errorsFor( element ) );
+						return;
+					}
+
+					if ( !result ) {
+						this.formatAndAdd( element, rule );
+						return false;
+					}
+				} catch ( e ) {
+					if ( this.settings.debug && window.console ) {
+						console.log( "Exception occurred when checking element " + element.id + ", check the '" + rule.method + "' method.", e );
+					}
+					if ( e instanceof TypeError ) {
+						e.message += ".  Exception occurred when checking element " + element.id + ", check the '" + rule.method + "' method.";
+					}
+
+					throw e;
+				}
+			}
+			if ( dependencyMismatch ) {
+				return;
+			}
+			if ( this.objectLength( rules ) ) {
+				this.successList.push( element );
+			}
+			return true;
+		},
+
+		// Return the custom message for the given element and validation method
+		// specified in the element's HTML5 data attribute
+		// return the generic message if present and no method specific message is present
+		customDataMessage: function( element, method ) {
+			return $( element ).data( "msg" + method.charAt( 0 ).toUpperCase() +
+				method.substring( 1 ).toLowerCase() ) || $( element ).data( "msg" );
+		},
+
+		// Return the custom message for the given element name and validation method
+		customMessage: function( name, method ) {
+			var m = this.settings.messages[ name ];
+			return m && ( m.constructor === String ? m : m[ method ] );
+		},
+
+		// Return the first defined argument, allowing empty strings
+		findDefined: function() {
+			for ( var i = 0; i < arguments.length; i++ ) {
+				if ( arguments[ i ] !== undefined ) {
+					return arguments[ i ];
+				}
+			}
+			return undefined;
+		},
+
+		// The second parameter 'rule' used to be a string, and extended to an object literal
+		// of the following form:
+		// rule = {
+		//     method: "method name",
+		//     parameters: "the given method parameters"
+		// }
+		//
+		// The old behavior still supported, kept to maintain backward compatibility with
+		// old code, and will be removed in the next major release.
+		defaultMessage: function( element, rule ) {
+			if ( typeof rule === "string" ) {
+				rule = { method: rule };
+			}
+
+			var message = this.findDefined(
+					this.customMessage( element.name, rule.method ),
+					this.customDataMessage( element, rule.method ),
+
+					// 'title' is never undefined, so handle empty string as undefined
+					!this.settings.ignoreTitle && element.title || undefined,
+					$.validator.messages[ rule.method ],
+					"<strong>Warning: No message defined for " + element.name + "</strong>"
+				),
+				theregex = /\$?\{(\d+)\}/g;
+			if ( typeof message === "function" ) {
+				message = message.call( this, rule.parameters, element );
+			} else if ( theregex.test( message ) ) {
+				message = $.validator.format( message.replace( theregex, "{$1}" ), rule.parameters );
+			}
+
+			return message;
+		},
+
+		formatAndAdd: function( element, rule ) {
+			var message = this.defaultMessage( element, rule );
+
+			this.errorList.push( {
+				message: message,
+				element: element,
+				method: rule.method
+			} );
+
+			this.errorMap[ element.name ] = message;
+			this.submitted[ element.name ] = message;
+		},
+
+		addWrapper: function( toToggle ) {
+			if ( this.settings.wrapper ) {
+				toToggle = toToggle.add( toToggle.parent( this.settings.wrapper ) );
+			}
+			return toToggle;
+		},
+
+		defaultShowErrors: function() {
+			var i, elements, error;
+			for ( i = 0; this.errorList[ i ]; i++ ) {
+				error = this.errorList[ i ];
+				if ( this.settings.highlight ) {
+					this.settings.highlight.call( this, error.element, this.settings.errorClass, this.settings.validClass );
+				}
+				this.showLabel( error.element, error.message );
+			}
+			if ( this.errorList.length ) {
+				this.toShow = this.toShow.add( this.containers );
+			}
+			if ( this.settings.success ) {
+				for ( i = 0; this.successList[ i ]; i++ ) {
+					this.showLabel( this.successList[ i ] );
+				}
+			}
+			if ( this.settings.unhighlight ) {
+				for ( i = 0, elements = this.validElements(); elements[ i ]; i++ ) {
+					this.settings.unhighlight.call( this, elements[ i ], this.settings.errorClass, this.settings.validClass );
+				}
+			}
+			this.toHide = this.toHide.not( this.toShow );
+			this.hideErrors();
+			this.addWrapper( this.toShow ).show();
+		},
+
+		validElements: function() {
+			return this.currentElements.not( this.invalidElements() );
+		},
+
+		invalidElements: function() {
+			return $( this.errorList ).map( function() {
+				return this.element;
+			} );
+		},
+
+		showLabel: function( element, message ) {
+			var place, group, errorID, v,
+				error = this.errorsFor( element ),
+				elementID = this.idOrName( element ),
+				describedBy = $( element ).attr( "aria-describedby" );
+
+			if ( error.length ) {
+
+				// Refresh error/success class
+				error.removeClass( this.settings.validClass ).addClass( this.settings.errorClass );
+
+				// Replace message on existing label
+				error.html( message );
+			} else {
+
+				// Create error element
+				error = $( "<" + this.settings.errorElement + ">" )
+					.attr( "id", elementID + "-error" )
+					.addClass( this.settings.errorClass )
+					.html( message || "" );
+
+				// Maintain reference to the element to be placed into the DOM
+				place = error;
+				if ( this.settings.wrapper ) {
+
+					// Make sure the element is visible, even in IE
+					// actually showing the wrapped element is handled elsewhere
+					place = error.hide().show().wrap( "<" + this.settings.wrapper + "/>" ).parent();
+				}
+				if ( this.labelContainer.length ) {
+					this.labelContainer.append( place );
+				} else if ( this.settings.errorPlacement ) {
+					this.settings.errorPlacement.call( this, place, $( element ) );
+				} else {
+					place.insertAfter( element );
+				}
+
+				// Link error back to the element
+				if ( error.is( "label" ) ) {
+
+					// If the error is a label, then associate using 'for'
+					error.attr( "for", elementID );
+
+					// If the element is not a child of an associated label, then it's necessary
+					// to explicitly apply aria-describedby
+				} else if ( error.parents( "label[for='" + this.escapeCssMeta( elementID ) + "']" ).length === 0 ) {
+					errorID = error.attr( "id" );
+
+					// Respect existing non-error aria-describedby
+					if ( !describedBy ) {
+						describedBy = errorID;
+					} else if ( !describedBy.match( new RegExp( "\\b" + this.escapeCssMeta( errorID ) + "\\b" ) ) ) {
+
+						// Add to end of list if not already present
+						describedBy += " " + errorID;
+					}
+					$( element ).attr( "aria-describedby", describedBy );
+
+					// If this element is grouped, then assign to all elements in the same group
+					group = this.groups[ element.name ];
+					if ( group ) {
+						v = this;
+						$.each( v.groups, function( name, testgroup ) {
+							if ( testgroup === group ) {
+								$( "[name='" + v.escapeCssMeta( name ) + "']", v.currentForm )
+									.attr( "aria-describedby", error.attr( "id" ) );
+							}
+						} );
+					}
+				}
+			}
+			if ( !message && this.settings.success ) {
+				error.text( "" );
+				if ( typeof this.settings.success === "string" ) {
+					error.addClass( this.settings.success );
+				} else {
+					this.settings.success( error, element );
+				}
+			}
+			this.toShow = this.toShow.add( error );
+		},
+
+		errorsFor: function( element ) {
+			var name = this.escapeCssMeta( this.idOrName( element ) ),
+				describer = $( element ).attr( "aria-describedby" ),
+				selector = "label[for='" + name + "'], label[for='" + name + "'] *";
+
+			// 'aria-describedby' should directly reference the error element
+			if ( describer ) {
+				selector = selector + ", #" + this.escapeCssMeta( describer )
+					.replace( /\s+/g, ", #" );
+			}
+
+			return this
+				.errors()
+				.filter( selector );
+		},
+
+		// See https://api.jquery.com/category/selectors/, for CSS
+		// meta-characters that should be escaped in order to be used with JQuery
+		// as a literal part of a name/id or any selector.
+		escapeCssMeta: function( string ) {
+			return string.replace( /([\\!"#$%&'()*+,./:;<=>?@\[\]^`{|}~])/g, "\\$1" );
+		},
+
+		idOrName: function( element ) {
+			return this.groups[ element.name ] || ( this.checkable( element ) ? element.name : element.id || element.name );
+		},
+
+		validationTargetFor: function( element ) {
+
+			// If radio/checkbox, validate first element in group instead
+			if ( this.checkable( element ) ) {
+				element = this.findByName( element.name );
+			}
+
+			// Always apply ignore filter
+			return $( element ).not( this.settings.ignore )[ 0 ];
+		},
+
+		checkable: function( element ) {
+			return ( /radio|checkbox/i ).test( element.type );
+		},
+
+		findByName: function( name ) {
+			return $( this.currentForm ).find( "[name='" + this.escapeCssMeta( name ) + "']" );
+		},
+
+		getLength: function( value, element ) {
+			switch ( element.nodeName.toLowerCase() ) {
+			case "select":
+				return $( "option:selected", element ).length;
+			case "input":
+				if ( this.checkable( element ) ) {
+					return this.findByName( element.name ).filter( ":checked" ).length;
+				}
+			}
+			return value.length;
+		},
+
+		depend: function( param, element ) {
+			return this.dependTypes[ typeof param ] ? this.dependTypes[ typeof param ]( param, element ) : true;
+		},
+
+		dependTypes: {
+			"boolean": function( param ) {
+				return param;
+			},
+			"string": function( param, element ) {
+				return !!$( param, element.form ).length;
+			},
+			"function": function( param, element ) {
+				return param( element );
+			}
+		},
+
+		optional: function( element ) {
+			var val = this.elementValue( element );
+			return !$.validator.methods.required.call( this, val, element ) && "dependency-mismatch";
+		},
+
+		startRequest: function( element ) {
+			if ( !this.pending[ element.name ] ) {
+				this.pendingRequest++;
+				$( element ).addClass( this.settings.pendingClass );
+				this.pending[ element.name ] = true;
+			}
+		},
+
+		stopRequest: function( element, valid ) {
+			this.pendingRequest--;
+
+			// Sometimes synchronization fails, make sure pendingRequest is never < 0
+			if ( this.pendingRequest < 0 ) {
+				this.pendingRequest = 0;
+			}
+			delete this.pending[ element.name ];
+			$( element ).removeClass( this.settings.pendingClass );
+			if ( valid && this.pendingRequest === 0 && this.formSubmitted && this.form() ) {
+				$( this.currentForm ).submit();
+
+				// Remove the hidden input that was used as a replacement for the
+				// missing submit button. The hidden input is added by `handle()`
+				// to ensure that the value of the used submit button is passed on
+				// for scripted submits triggered by this method
+				if ( this.submitButton ) {
+					$( "input:hidden[name='" + this.submitButton.name + "']", this.currentForm ).remove();
+				}
+
+				this.formSubmitted = false;
+			} else if ( !valid && this.pendingRequest === 0 && this.formSubmitted ) {
+				$( this.currentForm ).triggerHandler( "invalid-form", [ this ] );
+				this.formSubmitted = false;
+			}
+		},
+
+		previousValue: function( element, method ) {
+			method = typeof method === "string" && method || "remote";
+
+			return $.data( element, "previousValue" ) || $.data( element, "previousValue", {
+				old: null,
+				valid: true,
+				message: this.defaultMessage( element, { method: method } )
+			} );
+		},
+
+		// Cleans up all forms and elements, removes validator-specific events
+		destroy: function() {
+			this.resetForm();
+
+			$( this.currentForm )
+				.off( ".validate" )
+				.removeData( "validator" )
+				.find( ".validate-equalTo-blur" )
+					.off( ".validate-equalTo" )
+					.removeClass( "validate-equalTo-blur" );
+		}
+
+	},
+
+	classRuleSettings: {
+		required: { required: true },
+		email: { email: true },
+		url: { url: true },
+		date: { date: true },
+		dateISO: { dateISO: true },
+		number: { number: true },
+		digits: { digits: true },
+		creditcard: { creditcard: true }
+	},
+
+	addClassRules: function( className, rules ) {
+		if ( className.constructor === String ) {
+			this.classRuleSettings[ className ] = rules;
+		} else {
+			$.extend( this.classRuleSettings, className );
+		}
+	},
+
+	classRules: function( element ) {
+		var rules = {},
+			classes = $( element ).attr( "class" );
+
+		if ( classes ) {
+			$.each( classes.split( " " ), function() {
+				if ( this in $.validator.classRuleSettings ) {
+					$.extend( rules, $.validator.classRuleSettings[ this ] );
+				}
+			} );
+		}
+		return rules;
+	},
+
+	normalizeAttributeRule: function( rules, type, method, value ) {
+
+		// Convert the value to a number for number inputs, and for text for backwards compability
+		// allows type="date" and others to be compared as strings
+		if ( /min|max|step/.test( method ) && ( type === null || /number|range|text/.test( type ) ) ) {
+			value = Number( value );
+
+			// Support Opera Mini, which returns NaN for undefined minlength
+			if ( isNaN( value ) ) {
+				value = undefined;
+			}
+		}
+
+		if ( value || value === 0 ) {
+			rules[ method ] = value;
+		} else if ( type === method && type !== "range" ) {
+
+			// Exception: the jquery validate 'range' method
+			// does not test for the html5 'range' type
+			rules[ method ] = true;
+		}
+	},
+
+	attributeRules: function( element ) {
+		var rules = {},
+			$element = $( element ),
+			type = element.getAttribute( "type" ),
+			method, value;
+
+		for ( method in $.validator.methods ) {
+
+			// Support for <input required> in both html5 and older browsers
+			if ( method === "required" ) {
+				value = element.getAttribute( method );
+
+				// Some browsers return an empty string for the required attribute
+				// and non-HTML5 browsers might have required="" markup
+				if ( value === "" ) {
+					value = true;
+				}
+
+				// Force non-HTML5 browsers to return bool
+				value = !!value;
+			} else {
+				value = $element.attr( method );
+			}
+
+			this.normalizeAttributeRule( rules, type, method, value );
+		}
+
+		// 'maxlength' may be returned as -1, 2147483647 ( IE ) and 524288 ( safari ) for text inputs
+		if ( rules.maxlength && /-1|2147483647|524288/.test( rules.maxlength ) ) {
+			delete rules.maxlength;
+		}
+
+		return rules;
+	},
+
+	dataRules: function( element ) {
+		var rules = {},
+			$element = $( element ),
+			type = element.getAttribute( "type" ),
+			method, value;
+
+		for ( method in $.validator.methods ) {
+			value = $element.data( "rule" + method.charAt( 0 ).toUpperCase() + method.substring( 1 ).toLowerCase() );
+			this.normalizeAttributeRule( rules, type, method, value );
+		}
+		return rules;
+	},
+
+	staticRules: function( element ) {
+		var rules = {},
+			validator = $.data( element.form, "validator" );
+
+		if ( validator.settings.rules ) {
+			rules = $.validator.normalizeRule( validator.settings.rules[ element.name ] ) || {};
+		}
+		return rules;
+	},
+
+	normalizeRules: function( rules, element ) {
+
+		// Handle dependency check
+		$.each( rules, function( prop, val ) {
+
+			// Ignore rule when param is explicitly false, eg. required:false
+			if ( val === false ) {
+				delete rules[ prop ];
+				return;
+			}
+			if ( val.param || val.depends ) {
+				var keepRule = true;
+				switch ( typeof val.depends ) {
+				case "string":
+					keepRule = !!$( val.depends, element.form ).length;
+					break;
+				case "function":
+					keepRule = val.depends.call( element, element );
+					break;
+				}
+				if ( keepRule ) {
+					rules[ prop ] = val.param !== undefined ? val.param : true;
+				} else {
+					$.data( element.form, "validator" ).resetElements( $( element ) );
+					delete rules[ prop ];
+				}
+			}
+		} );
+
+		// Evaluate parameters
+		$.each( rules, function( rule, parameter ) {
+			rules[ rule ] = $.isFunction( parameter ) && rule !== "normalizer" ? parameter( element ) : parameter;
+		} );
+
+		// Clean number parameters
+		$.each( [ "minlength", "maxlength" ], function() {
+			if ( rules[ this ] ) {
+				rules[ this ] = Number( rules[ this ] );
+			}
+		} );
+		$.each( [ "rangelength", "range" ], function() {
+			var parts;
+			if ( rules[ this ] ) {
+				if ( $.isArray( rules[ this ] ) ) {
+					rules[ this ] = [ Number( rules[ this ][ 0 ] ), Number( rules[ this ][ 1 ] ) ];
+				} else if ( typeof rules[ this ] === "string" ) {
+					parts = rules[ this ].replace( /[\[\]]/g, "" ).split( /[\s,]+/ );
+					rules[ this ] = [ Number( parts[ 0 ] ), Number( parts[ 1 ] ) ];
+				}
+			}
+		} );
+
+		if ( $.validator.autoCreateRanges ) {
+
+			// Auto-create ranges
+			if ( rules.min != null && rules.max != null ) {
+				rules.range = [ rules.min, rules.max ];
+				delete rules.min;
+				delete rules.max;
+			}
+			if ( rules.minlength != null && rules.maxlength != null ) {
+				rules.rangelength = [ rules.minlength, rules.maxlength ];
+				delete rules.minlength;
+				delete rules.maxlength;
+			}
+		}
+
+		return rules;
+	},
+
+	// Converts a simple string to a {string: true} rule, e.g., "required" to {required:true}
+	normalizeRule: function( data ) {
+		if ( typeof data === "string" ) {
+			var transformed = {};
+			$.each( data.split( /\s/ ), function() {
+				transformed[ this ] = true;
+			} );
+			data = transformed;
+		}
+		return data;
+	},
+
+	// https://jqueryvalidation.org/jQuery.validator.addMethod/
+	addMethod: function( name, method, message ) {
+		$.validator.methods[ name ] = method;
+		$.validator.messages[ name ] = message !== undefined ? message : $.validator.messages[ name ];
+		if ( method.length < 3 ) {
+			$.validator.addClassRules( name, $.validator.normalizeRule( name ) );
+		}
+	},
+
+	// https://jqueryvalidation.org/jQuery.validator.methods/
+	methods: {
+
+		// https://jqueryvalidation.org/required-method/
+		required: function( value, element, param ) {
+
+			// Check if dependency is met
+			if ( !this.depend( param, element ) ) {
+				return "dependency-mismatch";
+			}
+			if ( element.nodeName.toLowerCase() === "select" ) {
+
+				// Could be an array for select-multiple or a string, both are fine this way
+				var val = $( element ).val();
+				return val && val.length > 0;
+			}
+			if ( this.checkable( element ) ) {
+				return this.getLength( value, element ) > 0;
+			}
+			return value.length > 0;
+		},
+
+		// https://jqueryvalidation.org/email-method/
+		email: function( value, element ) {
+
+			// From https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
+			// Retrieved 2014-01-14
+			// If you have a problem with this implementation, report a bug against the above spec
+			// Or use custom methods to implement your own email validation
+			return this.optional( element ) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test( value );
+		},
+
+		// https://jqueryvalidation.org/url-method/
+		url: function( value, element ) {
+
+			// Copyright (c) 2010-2013 Diego Perini, MIT licensed
+			// https://gist.github.com/dperini/729294
+			// see also https://mathiasbynens.be/demo/url-regex
+			// modified to allow protocol-relative URLs
+			return this.optional( element ) || /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test( value );
+		},
+
+		// https://jqueryvalidation.org/date-method/
+		date: function( value, element ) {
+			return this.optional( element ) || !/Invalid|NaN/.test( new Date( value ).toString() );
+		},
+
+		// https://jqueryvalidation.org/dateISO-method/
+		dateISO: function( value, element ) {
+			return this.optional( element ) || /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test( value );
+		},
+
+		// https://jqueryvalidation.org/number-method/
+		number: function( value, element ) {
+			return this.optional( element ) || /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test( value );
+		},
+
+		// https://jqueryvalidation.org/digits-method/
+		digits: function( value, element ) {
+			return this.optional( element ) || /^\d+$/.test( value );
+		},
+
+		// https://jqueryvalidation.org/minlength-method/
+		minlength: function( value, element, param ) {
+			var length = $.isArray( value ) ? value.length : this.getLength( value, element );
+			return this.optional( element ) || length >= param;
+		},
+
+		// https://jqueryvalidation.org/maxlength-method/
+		maxlength: function( value, element, param ) {
+			var length = $.isArray( value ) ? value.length : this.getLength( value, element );
+			return this.optional( element ) || length <= param;
+		},
+
+		// https://jqueryvalidation.org/rangelength-method/
+		rangelength: function( value, element, param ) {
+			var length = $.isArray( value ) ? value.length : this.getLength( value, element );
+			return this.optional( element ) || ( length >= param[ 0 ] && length <= param[ 1 ] );
+		},
+
+		// https://jqueryvalidation.org/min-method/
+		min: function( value, element, param ) {
+			return this.optional( element ) || value >= param;
+		},
+
+		// https://jqueryvalidation.org/max-method/
+		max: function( value, element, param ) {
+			return this.optional( element ) || value <= param;
+		},
+
+		// https://jqueryvalidation.org/range-method/
+		range: function( value, element, param ) {
+			return this.optional( element ) || ( value >= param[ 0 ] && value <= param[ 1 ] );
+		},
+
+		// https://jqueryvalidation.org/step-method/
+		step: function( value, element, param ) {
+			var type = $( element ).attr( "type" ),
+				errorMessage = "Step attribute on input type " + type + " is not supported.",
+				supportedTypes = [ "text", "number", "range" ],
+				re = new RegExp( "\\b" + type + "\\b" ),
+				notSupported = type && !re.test( supportedTypes.join() ),
+				decimalPlaces = function( num ) {
+					var match = ( "" + num ).match( /(?:\.(\d+))?$/ );
+					if ( !match ) {
+						return 0;
+					}
+
+					// Number of digits right of decimal point.
+					return match[ 1 ] ? match[ 1 ].length : 0;
+				},
+				toInt = function( num ) {
+					return Math.round( num * Math.pow( 10, decimals ) );
+				},
+				valid = true,
+				decimals;
+
+			// Works only for text, number and range input types
+			// TODO find a way to support input types date, datetime, datetime-local, month, time and week
+			if ( notSupported ) {
+				throw new Error( errorMessage );
+			}
+
+			decimals = decimalPlaces( param );
+
+			// Value can't have too many decimals
+			if ( decimalPlaces( value ) > decimals || toInt( value ) % toInt( param ) !== 0 ) {
+				valid = false;
+			}
+
+			return this.optional( element ) || valid;
+		},
+
+		// https://jqueryvalidation.org/equalTo-method/
+		equalTo: function( value, element, param ) {
+
+			// Bind to the blur event of the target in order to revalidate whenever the target field is updated
+			var target = $( param );
+			if ( this.settings.onfocusout && target.not( ".validate-equalTo-blur" ).length ) {
+				target.addClass( "validate-equalTo-blur" ).on( "blur.validate-equalTo", function() {
+					$( element ).valid();
+				} );
+			}
+			return value === target.val();
+		},
+
+		// https://jqueryvalidation.org/remote-method/
+		remote: function( value, element, param, method ) {
+			if ( this.optional( element ) ) {
+				return "dependency-mismatch";
+			}
+
+			method = typeof method === "string" && method || "remote";
+
+			var previous = this.previousValue( element, method ),
+				validator, data, optionDataString;
+
+			if ( !this.settings.messages[ element.name ] ) {
+				this.settings.messages[ element.name ] = {};
+			}
+			previous.originalMessage = previous.originalMessage || this.settings.messages[ element.name ][ method ];
+			this.settings.messages[ element.name ][ method ] = previous.message;
+
+			param = typeof param === "string" && { url: param } || param;
+			optionDataString = $.param( $.extend( { data: value }, param.data ) );
+			if ( previous.old === optionDataString ) {
+				return previous.valid;
+			}
+
+			previous.old = optionDataString;
+			validator = this;
+			this.startRequest( element );
+			data = {};
+			data[ element.name ] = value;
+			$.ajax( $.extend( true, {
+				mode: "abort",
+				port: "validate" + element.name,
+				dataType: "json",
+				data: data,
+				context: validator.currentForm,
+				success: function( response ) {
+					var valid = response === true || response === "true",
+						errors, message, submitted;
+
+					validator.settings.messages[ element.name ][ method ] = previous.originalMessage;
+					if ( valid ) {
+						submitted = validator.formSubmitted;
+						validator.resetInternals();
+						validator.toHide = validator.errorsFor( element );
+						validator.formSubmitted = submitted;
+						validator.successList.push( element );
+						validator.invalid[ element.name ] = false;
+						validator.showErrors();
+					} else {
+						errors = {};
+						message = response || validator.defaultMessage( element, { method: method, parameters: value } );
+						errors[ element.name ] = previous.message = message;
+						validator.invalid[ element.name ] = true;
+						validator.showErrors( errors );
+					}
+					previous.valid = valid;
+					validator.stopRequest( element, valid );
+				}
+			}, param ) );
+			return "pending";
+		}
+	}
+
+} );
+
+// Ajax mode: abort
+// usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
+// if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort()
+
+var pendingRequests = {},
+	ajax;
+
+// Use a prefilter if available (1.5+)
+if ( $.ajaxPrefilter ) {
+	$.ajaxPrefilter( function( settings, _, xhr ) {
+		var port = settings.port;
+		if ( settings.mode === "abort" ) {
+			if ( pendingRequests[ port ] ) {
+				pendingRequests[ port ].abort();
+			}
+			pendingRequests[ port ] = xhr;
+		}
+	} );
+} else {
+
+	// Proxy ajax
+	ajax = $.ajax;
+	$.ajax = function( settings ) {
+		var mode = ( "mode" in settings ? settings : $.ajaxSettings ).mode,
+			port = ( "port" in settings ? settings : $.ajaxSettings ).port;
+		if ( mode === "abort" ) {
+			if ( pendingRequests[ port ] ) {
+				pendingRequests[ port ].abort();
+			}
+			pendingRequests[ port ] = ajax.apply( this, arguments );
+			return pendingRequests[ port ];
+		}
+		return ajax.apply( this, arguments );
+	};
+}
+return $;
+}));
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -14187,3852 +17983,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 });
 
 
-/***/ }),
-
-/***/ 7:
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
- * jQuery MiniColors: A tiny color picker built on jQuery
- *
- * Copyright: Cory LaViska for A Beautiful Site, LLC: http://www.abeautifulsite.net/
- *
- * Contribute: https://github.com/claviska/jquery-minicolors
- *
- * @license: http://opensource.org/licenses/MIT
- *
- */
-(function (factory) {
-    /* jshint ignore:start */
-    if (true) {
-        // AMD. Register as an anonymous module.
-        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-    } else if (typeof exports === 'object') {
-        // Node/CommonJS
-        module.exports = factory(require('jquery'));
-    } else {
-        // Browser globals
-        factory(jQuery);
-    }
-    /* jshint ignore:end */
-}(function ($) {
-
-    // Defaults
-    $.minicolors = {
-        defaults: {
-            animationSpeed: 50,
-            animationEasing: 'swing',
-            change: null,
-            changeDelay: 0,
-            control: 'hue',
-            dataUris: true,
-            defaultValue: '',
-            hide: null,
-            hideSpeed: 100,
-            inline: false,
-            letterCase: 'lowercase',
-            opacity: false,
-            position: 'bottom left',
-            show: null,
-            showSpeed: 100,
-            theme: 'default'
-        }
-    };
-
-    // Public methods
-    $.extend($.fn, {
-        minicolors: function(method, data) {
-
-            switch(method) {
-
-                // Destroy the control
-                case 'destroy':
-                    $(this).each( function() {
-                        destroy($(this));
-                    });
-                    return $(this);
-
-                // Hide the color picker
-                case 'hide':
-                    hide();
-                    return $(this);
-
-                // Get/set opacity
-                case 'opacity':
-                    // Getter
-                    if( data === undefined ) {
-                        // Getter
-                        return $(this).attr('data-opacity');
-                    } else {
-                        // Setter
-                        $(this).each( function() {
-                            updateFromInput($(this).attr('data-opacity', data));
-                        });
-                    }
-                    return $(this);
-
-                // Get an RGB(A) object based on the current color/opacity
-                case 'rgbObject':
-                    return rgbObject($(this), method === 'rgbaObject');
-
-                // Get an RGB(A) string based on the current color/opacity
-                case 'rgbString':
-                case 'rgbaString':
-                    return rgbString($(this), method === 'rgbaString');
-
-                // Get/set settings on the fly
-                case 'settings':
-                    if( data === undefined ) {
-                        return $(this).data('minicolors-settings');
-                    } else {
-                        // Setter
-                        $(this).each( function() {
-                            var settings = $(this).data('minicolors-settings') || {};
-                            destroy($(this));
-                            $(this).minicolors($.extend(true, settings, data));
-                        });
-                    }
-                    return $(this);
-
-                // Show the color picker
-                case 'show':
-                    show( $(this).eq(0) );
-                    return $(this);
-
-                // Get/set the hex color value
-                case 'value':
-                    if( data === undefined ) {
-                        // Getter
-                        return $(this).val();
-                    } else {
-                        // Setter
-                        $(this).each( function() {
-                            updateFromInput($(this).val(data));
-                        });
-                    }
-                    return $(this);
-
-                // Initializes the control
-                default:
-                    if( method !== 'create' ) data = method;
-                    $(this).each( function() {
-                        init($(this), data);
-                    });
-                    return $(this);
-
-            }
-
-        }
-    });
-
-    // Initialize input elements
-    function init(input, settings) {
-
-        var minicolors = $('<div class="minicolors" />'),
-            defaults = $.minicolors.defaults;
-
-        // Do nothing if already initialized
-        if( input.data('minicolors-initialized') ) return;
-
-        // Handle settings
-        settings = $.extend(true, {}, defaults, settings);
-
-        // The wrapper
-        minicolors
-            .addClass('minicolors-theme-' + settings.theme)
-            .toggleClass('minicolors-with-opacity', settings.opacity)
-            .toggleClass('minicolors-no-data-uris', settings.dataUris !== true);
-
-        // Custom positioning
-        if( settings.position !== undefined ) {
-            $.each(settings.position.split(' '), function() {
-                minicolors.addClass('minicolors-position-' + this);
-            });
-        }
-
-        // The input
-        input
-            .addClass('minicolors-input')
-            .data('minicolors-initialized', false)
-            .data('minicolors-settings', settings)
-            .prop('size', 7)
-            .wrap(minicolors)
-            .after(
-                '<div class="minicolors-panel minicolors-slider-' + settings.control + '">' +
-                    '<div class="minicolors-slider minicolors-sprite">' +
-                        '<div class="minicolors-picker"></div>' +
-                    '</div>' +
-                    '<div class="minicolors-opacity-slider minicolors-sprite">' +
-                        '<div class="minicolors-picker"></div>' +
-                    '</div>' +
-                    '<div class="minicolors-grid minicolors-sprite">' +
-                        '<div class="minicolors-grid-inner"></div>' +
-                        '<div class="minicolors-picker"><div></div></div>' +
-                    '</div>' +
-                '</div>'
-            );
-
-        // The swatch
-        if( !settings.inline ) {
-            input.after('<span class="minicolors-swatch minicolors-sprite"><span class="minicolors-swatch-color"></span></span>');
-            input.next('.minicolors-swatch').on('click', function(event) {
-                event.preventDefault();
-                input.focus();
-            });
-        }
-
-        // Prevent text selection in IE
-        input.parent().find('.minicolors-panel').on('selectstart', function() { return false; }).end();
-
-        // Inline controls
-        if( settings.inline ) input.parent().addClass('minicolors-inline');
-
-        updateFromInput(input, false);
-
-        input.data('minicolors-initialized', true);
-
-    }
-
-    // Returns the input back to its original state
-    function destroy(input) {
-
-        var minicolors = input.parent();
-
-        // Revert the input element
-        input
-            .removeData('minicolors-initialized')
-            .removeData('minicolors-settings')
-            .removeProp('size')
-            .removeClass('minicolors-input');
-
-        // Remove the wrap and destroy whatever remains
-        minicolors.before(input).remove();
-
-    }
-
-    // Shows the specified dropdown panel
-    function show(input) {
-
-        var minicolors = input.parent(),
-            panel = minicolors.find('.minicolors-panel'),
-            settings = input.data('minicolors-settings');
-
-        // Do nothing if uninitialized, disabled, inline, or already open
-        if( !input.data('minicolors-initialized') ||
-            input.prop('disabled') ||
-            minicolors.hasClass('minicolors-inline') ||
-            minicolors.hasClass('minicolors-focus')
-        ) return;
-
-        hide();
-
-        minicolors.addClass('minicolors-focus');
-        panel
-            .stop(true, true)
-            .fadeIn(settings.showSpeed, function() {
-                if( settings.show ) settings.show.call(input.get(0));
-            });
-
-    }
-
-    // Hides all dropdown panels
-    function hide() {
-
-        $('.minicolors-focus').each( function() {
-
-            var minicolors = $(this),
-                input = minicolors.find('.minicolors-input'),
-                panel = minicolors.find('.minicolors-panel'),
-                settings = input.data('minicolors-settings');
-
-            panel.fadeOut(settings.hideSpeed, function() {
-                if( settings.hide ) settings.hide.call(input.get(0));
-                minicolors.removeClass('minicolors-focus');
-            });
-
-        });
-    }
-
-    // Moves the selected picker
-    function move(target, event, animate) {
-
-        var input = target.parents('.minicolors').find('.minicolors-input'),
-            settings = input.data('minicolors-settings'),
-            picker = target.find('[class$=-picker]'),
-            offsetX = target.offset().left,
-            offsetY = target.offset().top,
-            x = Math.round(event.pageX - offsetX),
-            y = Math.round(event.pageY - offsetY),
-            duration = animate ? settings.animationSpeed : 0,
-            wx, wy, r, phi;
-
-        // Touch support
-        if( event.originalEvent.changedTouches ) {
-            x = event.originalEvent.changedTouches[0].pageX - offsetX;
-            y = event.originalEvent.changedTouches[0].pageY - offsetY;
-        }
-
-        // Constrain picker to its container
-        if( x < 0 ) x = 0;
-        if( y < 0 ) y = 0;
-        if( x > target.width() ) x = target.width();
-        if( y > target.height() ) y = target.height();
-
-        // Constrain color wheel values to the wheel
-        if( target.parent().is('.minicolors-slider-wheel') && picker.parent().is('.minicolors-grid') ) {
-            wx = 75 - x;
-            wy = 75 - y;
-            r = Math.sqrt(wx * wx + wy * wy);
-            phi = Math.atan2(wy, wx);
-            if( phi < 0 ) phi += Math.PI * 2;
-            if( r > 75 ) {
-                r = 75;
-                x = 75 - (75 * Math.cos(phi));
-                y = 75 - (75 * Math.sin(phi));
-            }
-            x = Math.round(x);
-            y = Math.round(y);
-        }
-
-        // Move the picker
-        if( target.is('.minicolors-grid') ) {
-            picker
-                .stop(true)
-                .animate({
-                    top: y + 'px',
-                    left: x + 'px'
-                }, duration, settings.animationEasing, function() {
-                    updateFromControl(input, target);
-                });
-        } else {
-            picker
-                .stop(true)
-                .animate({
-                    top: y + 'px'
-                }, duration, settings.animationEasing, function() {
-                    updateFromControl(input, target);
-                });
-        }
-
-    }
-
-    // Sets the input based on the color picker values
-    function updateFromControl(input, target) {
-
-        function getCoords(picker, container) {
-
-            var left, top;
-            if( !picker.length || !container ) return null;
-            left = picker.offset().left;
-            top = picker.offset().top;
-
-            return {
-                x: left - container.offset().left + (picker.outerWidth() / 2),
-                y: top - container.offset().top + (picker.outerHeight() / 2)
-            };
-
-        }
-
-        var hue, saturation, brightness, x, y, r, phi,
-
-            hex = input.val(),
-            opacity = input.attr('data-opacity'),
-
-            // Helpful references
-            minicolors = input.parent(),
-            settings = input.data('minicolors-settings'),
-            swatch = minicolors.find('.minicolors-swatch'),
-
-            // Panel objects
-            grid = minicolors.find('.minicolors-grid'),
-            slider = minicolors.find('.minicolors-slider'),
-            opacitySlider = minicolors.find('.minicolors-opacity-slider'),
-
-            // Picker objects
-            gridPicker = grid.find('[class$=-picker]'),
-            sliderPicker = slider.find('[class$=-picker]'),
-            opacityPicker = opacitySlider.find('[class$=-picker]'),
-
-            // Picker positions
-            gridPos = getCoords(gridPicker, grid),
-            sliderPos = getCoords(sliderPicker, slider),
-            opacityPos = getCoords(opacityPicker, opacitySlider);
-
-        // Handle colors
-        if( target.is('.minicolors-grid, .minicolors-slider') ) {
-
-            // Determine HSB values
-            switch(settings.control) {
-
-                case 'wheel':
-                    // Calculate hue, saturation, and brightness
-                    x = (grid.width() / 2) - gridPos.x;
-                    y = (grid.height() / 2) - gridPos.y;
-                    r = Math.sqrt(x * x + y * y);
-                    phi = Math.atan2(y, x);
-                    if( phi < 0 ) phi += Math.PI * 2;
-                    if( r > 75 ) {
-                        r = 75;
-                        gridPos.x = 69 - (75 * Math.cos(phi));
-                        gridPos.y = 69 - (75 * Math.sin(phi));
-                    }
-                    saturation = keepWithin(r / 0.75, 0, 100);
-                    hue = keepWithin(phi * 180 / Math.PI, 0, 360);
-                    brightness = keepWithin(100 - Math.floor(sliderPos.y * (100 / slider.height())), 0, 100);
-                    hex = hsb2hex({
-                        h: hue,
-                        s: saturation,
-                        b: brightness
-                    });
-
-                    // Update UI
-                    slider.css('backgroundColor', hsb2hex({ h: hue, s: saturation, b: 100 }));
-                    break;
-
-                case 'saturation':
-                    // Calculate hue, saturation, and brightness
-                    hue = keepWithin(parseInt(gridPos.x * (360 / grid.width()), 10), 0, 360);
-                    saturation = keepWithin(100 - Math.floor(sliderPos.y * (100 / slider.height())), 0, 100);
-                    brightness = keepWithin(100 - Math.floor(gridPos.y * (100 / grid.height())), 0, 100);
-                    hex = hsb2hex({
-                        h: hue,
-                        s: saturation,
-                        b: brightness
-                    });
-
-                    // Update UI
-                    slider.css('backgroundColor', hsb2hex({ h: hue, s: 100, b: brightness }));
-                    minicolors.find('.minicolors-grid-inner').css('opacity', saturation / 100);
-                    break;
-
-                case 'brightness':
-                    // Calculate hue, saturation, and brightness
-                    hue = keepWithin(parseInt(gridPos.x * (360 / grid.width()), 10), 0, 360);
-                    saturation = keepWithin(100 - Math.floor(gridPos.y * (100 / grid.height())), 0, 100);
-                    brightness = keepWithin(100 - Math.floor(sliderPos.y * (100 / slider.height())), 0, 100);
-                    hex = hsb2hex({
-                        h: hue,
-                        s: saturation,
-                        b: brightness
-                    });
-
-                    // Update UI
-                    slider.css('backgroundColor', hsb2hex({ h: hue, s: saturation, b: 100 }));
-                    minicolors.find('.minicolors-grid-inner').css('opacity', 1 - (brightness / 100));
-                    break;
-
-                default:
-                    // Calculate hue, saturation, and brightness
-                    hue = keepWithin(360 - parseInt(sliderPos.y * (360 / slider.height()), 10), 0, 360);
-                    saturation = keepWithin(Math.floor(gridPos.x * (100 / grid.width())), 0, 100);
-                    brightness = keepWithin(100 - Math.floor(gridPos.y * (100 / grid.height())), 0, 100);
-                    hex = hsb2hex({
-                        h: hue,
-                        s: saturation,
-                        b: brightness
-                    });
-
-                    // Update UI
-                    grid.css('backgroundColor', hsb2hex({ h: hue, s: 100, b: 100 }));
-                    break;
-
-            }
-
-            // Adjust case
-            input.val( convertCase(hex, settings.letterCase) );
-
-        }
-
-        // Handle opacity
-        if( target.is('.minicolors-opacity-slider') ) {
-            if( settings.opacity ) {
-                opacity = parseFloat(1 - (opacityPos.y / opacitySlider.height())).toFixed(2);
-            } else {
-                opacity = 1;
-            }
-            if( settings.opacity ) input.attr('data-opacity', opacity);
-        }
-
-        // Set swatch color
-        swatch.find('SPAN').css({
-            backgroundColor: hex,
-            opacity: opacity
-        });
-
-        // Handle change event
-        doChange(input, hex, opacity);
-
-    }
-
-    // Sets the color picker values from the input
-    function updateFromInput(input, preserveInputValue) {
-
-        var hex,
-            hsb,
-            opacity,
-            x, y, r, phi,
-
-            // Helpful references
-            minicolors = input.parent(),
-            settings = input.data('minicolors-settings'),
-            swatch = minicolors.find('.minicolors-swatch'),
-
-            // Panel objects
-            grid = minicolors.find('.minicolors-grid'),
-            slider = minicolors.find('.minicolors-slider'),
-            opacitySlider = minicolors.find('.minicolors-opacity-slider'),
-
-            // Picker objects
-            gridPicker = grid.find('[class$=-picker]'),
-            sliderPicker = slider.find('[class$=-picker]'),
-            opacityPicker = opacitySlider.find('[class$=-picker]');
-
-        // Determine hex/HSB values
-        hex = convertCase(parseHex(input.val(), true), settings.letterCase);
-        if( !hex ){
-            hex = convertCase(parseHex(settings.defaultValue, true), settings.letterCase);
-        }
-        hsb = hex2hsb(hex);
-
-        // Update input value
-        if( !preserveInputValue ) input.val(hex);
-
-        // Determine opacity value
-        if( settings.opacity ) {
-            // Get from data-opacity attribute and keep within 0-1 range
-            opacity = input.attr('data-opacity') === '' ? 1 : keepWithin(parseFloat(input.attr('data-opacity')).toFixed(2), 0, 1);
-            if( isNaN(opacity) ) opacity = 1;
-            input.attr('data-opacity', opacity);
-            swatch.find('SPAN').css('opacity', opacity);
-
-            // Set opacity picker position
-            y = keepWithin(opacitySlider.height() - (opacitySlider.height() * opacity), 0, opacitySlider.height());
-            opacityPicker.css('top', y + 'px');
-        }
-
-        // Update swatch
-        swatch.find('SPAN').css('backgroundColor', hex);
-
-        // Determine picker locations
-        switch(settings.control) {
-
-            case 'wheel':
-                // Set grid position
-                r = keepWithin(Math.ceil(hsb.s * 0.75), 0, grid.height() / 2);
-                phi = hsb.h * Math.PI / 180;
-                x = keepWithin(75 - Math.cos(phi) * r, 0, grid.width());
-                y = keepWithin(75 - Math.sin(phi) * r, 0, grid.height());
-                gridPicker.css({
-                    top: y + 'px',
-                    left: x + 'px'
-                });
-
-                // Set slider position
-                y = 150 - (hsb.b / (100 / grid.height()));
-                if( hex === '' ) y = 0;
-                sliderPicker.css('top', y + 'px');
-
-                // Update panel color
-                slider.css('backgroundColor', hsb2hex({ h: hsb.h, s: hsb.s, b: 100 }));
-                break;
-
-            case 'saturation':
-                // Set grid position
-                x = keepWithin((5 * hsb.h) / 12, 0, 150);
-                y = keepWithin(grid.height() - Math.ceil(hsb.b / (100 / grid.height())), 0, grid.height());
-                gridPicker.css({
-                    top: y + 'px',
-                    left: x + 'px'
-                });
-
-                // Set slider position
-                y = keepWithin(slider.height() - (hsb.s * (slider.height() / 100)), 0, slider.height());
-                sliderPicker.css('top', y + 'px');
-
-                // Update UI
-                slider.css('backgroundColor', hsb2hex({ h: hsb.h, s: 100, b: hsb.b }));
-                minicolors.find('.minicolors-grid-inner').css('opacity', hsb.s / 100);
-                break;
-
-            case 'brightness':
-                // Set grid position
-                x = keepWithin((5 * hsb.h) / 12, 0, 150);
-                y = keepWithin(grid.height() - Math.ceil(hsb.s / (100 / grid.height())), 0, grid.height());
-                gridPicker.css({
-                    top: y + 'px',
-                    left: x + 'px'
-                });
-
-                // Set slider position
-                y = keepWithin(slider.height() - (hsb.b * (slider.height() / 100)), 0, slider.height());
-                sliderPicker.css('top', y + 'px');
-
-                // Update UI
-                slider.css('backgroundColor', hsb2hex({ h: hsb.h, s: hsb.s, b: 100 }));
-                minicolors.find('.minicolors-grid-inner').css('opacity', 1 - (hsb.b / 100));
-                break;
-
-            default:
-                // Set grid position
-                x = keepWithin(Math.ceil(hsb.s / (100 / grid.width())), 0, grid.width());
-                y = keepWithin(grid.height() - Math.ceil(hsb.b / (100 / grid.height())), 0, grid.height());
-                gridPicker.css({
-                    top: y + 'px',
-                    left: x + 'px'
-                });
-
-                // Set slider position
-                y = keepWithin(slider.height() - (hsb.h / (360 / slider.height())), 0, slider.height());
-                sliderPicker.css('top', y + 'px');
-
-                // Update panel color
-                grid.css('backgroundColor', hsb2hex({ h: hsb.h, s: 100, b: 100 }));
-                break;
-
-        }
-
-        // Fire change event, but only if minicolors is fully initialized
-        if( input.data('minicolors-initialized') ) {
-            doChange(input, hex, opacity);
-        }
-
-    }
-
-    // Runs the change and changeDelay callbacks
-    function doChange(input, hex, opacity) {
-
-        var settings = input.data('minicolors-settings'),
-            lastChange = input.data('minicolors-lastChange');
-
-        // Only run if it actually changed
-        if( !lastChange || lastChange.hex !== hex || lastChange.opacity !== opacity ) {
-
-            // Remember last-changed value
-            input.data('minicolors-lastChange', {
-                hex: hex,
-                opacity: opacity
-            });
-
-            // Fire change event
-            if( settings.change ) {
-                if( settings.changeDelay ) {
-                    // Call after a delay
-                    clearTimeout(input.data('minicolors-changeTimeout'));
-                    input.data('minicolors-changeTimeout', setTimeout( function() {
-                        settings.change.call(input.get(0), hex, opacity);
-                    }, settings.changeDelay));
-                } else {
-                    // Call immediately
-                    settings.change.call(input.get(0), hex, opacity);
-                }
-            }
-            input.trigger('change').trigger('input');
-        }
-
-    }
-
-    // Generates an RGB(A) object based on the input's value
-    function rgbObject(input) {
-        var hex = parseHex($(input).val(), true),
-            rgb = hex2rgb(hex),
-            opacity = $(input).attr('data-opacity');
-        if( !rgb ) return null;
-        if( opacity !== undefined ) $.extend(rgb, { a: parseFloat(opacity) });
-        return rgb;
-    }
-
-    // Genearates an RGB(A) string based on the input's value
-    function rgbString(input, alpha) {
-        var hex = parseHex($(input).val(), true),
-            rgb = hex2rgb(hex),
-            opacity = $(input).attr('data-opacity');
-        if( !rgb ) return null;
-        if( opacity === undefined ) opacity = 1;
-        if( alpha ) {
-            return 'rgba(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', ' + parseFloat(opacity) + ')';
-        } else {
-            return 'rgb(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ')';
-        }
-    }
-
-    // Converts to the letter case specified in settings
-    function convertCase(string, letterCase) {
-        return letterCase === 'uppercase' ? string.toUpperCase() : string.toLowerCase();
-    }
-
-    // Parses a string and returns a valid hex string when possible
-    function parseHex(string, expand) {
-        string = string.replace(/[^A-F0-9]/ig, '');
-        if( string.length !== 3 && string.length !== 6 ) return '';
-        if( string.length === 3 && expand ) {
-            string = string[0] + string[0] + string[1] + string[1] + string[2] + string[2];
-        }
-        return '#' + string;
-    }
-
-    // Keeps value within min and max
-    function keepWithin(value, min, max) {
-        if( value < min ) value = min;
-        if( value > max ) value = max;
-        return value;
-    }
-
-    // Converts an HSB object to an RGB object
-    function hsb2rgb(hsb) {
-        var rgb = {};
-        var h = Math.round(hsb.h);
-        var s = Math.round(hsb.s * 255 / 100);
-        var v = Math.round(hsb.b * 255 / 100);
-        if(s === 0) {
-            rgb.r = rgb.g = rgb.b = v;
-        } else {
-            var t1 = v;
-            var t2 = (255 - s) * v / 255;
-            var t3 = (t1 - t2) * (h % 60) / 60;
-            if( h === 360 ) h = 0;
-            if( h < 60 ) { rgb.r = t1; rgb.b = t2; rgb.g = t2 + t3; }
-            else if( h < 120 ) {rgb.g = t1; rgb.b = t2; rgb.r = t1 - t3; }
-            else if( h < 180 ) {rgb.g = t1; rgb.r = t2; rgb.b = t2 + t3; }
-            else if( h < 240 ) {rgb.b = t1; rgb.r = t2; rgb.g = t1 - t3; }
-            else if( h < 300 ) {rgb.b = t1; rgb.g = t2; rgb.r = t2 + t3; }
-            else if( h < 360 ) {rgb.r = t1; rgb.g = t2; rgb.b = t1 - t3; }
-            else { rgb.r = 0; rgb.g = 0; rgb.b = 0; }
-        }
-        return {
-            r: Math.round(rgb.r),
-            g: Math.round(rgb.g),
-            b: Math.round(rgb.b)
-        };
-    }
-
-    // Converts an RGB object to a hex string
-    function rgb2hex(rgb) {
-        var hex = [
-            rgb.r.toString(16),
-            rgb.g.toString(16),
-            rgb.b.toString(16)
-        ];
-        $.each(hex, function(nr, val) {
-            if (val.length === 1) hex[nr] = '0' + val;
-        });
-        return '#' + hex.join('');
-    }
-
-    // Converts an HSB object to a hex string
-    function hsb2hex(hsb) {
-        return rgb2hex(hsb2rgb(hsb));
-    }
-
-    // Converts a hex string to an HSB object
-    function hex2hsb(hex) {
-        var hsb = rgb2hsb(hex2rgb(hex));
-        if( hsb.s === 0 ) hsb.h = 360;
-        return hsb;
-    }
-
-    // Converts an RGB object to an HSB object
-    function rgb2hsb(rgb) {
-        var hsb = { h: 0, s: 0, b: 0 };
-        var min = Math.min(rgb.r, rgb.g, rgb.b);
-        var max = Math.max(rgb.r, rgb.g, rgb.b);
-        var delta = max - min;
-        hsb.b = max;
-        hsb.s = max !== 0 ? 255 * delta / max : 0;
-        if( hsb.s !== 0 ) {
-            if( rgb.r === max ) {
-                hsb.h = (rgb.g - rgb.b) / delta;
-            } else if( rgb.g === max ) {
-                hsb.h = 2 + (rgb.b - rgb.r) / delta;
-            } else {
-                hsb.h = 4 + (rgb.r - rgb.g) / delta;
-            }
-        } else {
-            hsb.h = -1;
-        }
-        hsb.h *= 60;
-        if( hsb.h < 0 ) {
-            hsb.h += 360;
-        }
-        hsb.s *= 100/255;
-        hsb.b *= 100/255;
-        return hsb;
-    }
-
-    // Converts a hex string to an RGB object
-    function hex2rgb(hex) {
-        hex = parseInt(((hex.indexOf('#') > -1) ? hex.substring(1) : hex), 16);
-        return {
-            /* jshint ignore:start */
-            r: hex >> 16,
-            g: (hex & 0x00FF00) >> 8,
-            b: (hex & 0x0000FF)
-            /* jshint ignore:end */
-        };
-    }
-
-    // Handle events
-    $(document)
-        // Hide on clicks outside of the control
-        .on('mousedown.minicolors touchstart.minicolors', function(event) {
-            if( !$(event.target).parents().add(event.target).hasClass('minicolors') ) {
-                hide();
-            }
-        })
-        // Start moving
-        .on('mousedown.minicolors touchstart.minicolors', '.minicolors-grid, .minicolors-slider, .minicolors-opacity-slider', function(event) {
-            var target = $(this);
-            event.preventDefault();
-            $(document).data('minicolors-target', target);
-            move(target, event, true);
-        })
-        // Move pickers
-        .on('mousemove.minicolors touchmove.minicolors', function(event) {
-            var target = $(document).data('minicolors-target');
-            if( target ) move(target, event);
-        })
-        // Stop moving
-        .on('mouseup.minicolors touchend.minicolors', function() {
-            $(this).removeData('minicolors-target');
-        })
-        // Show panel when swatch is clicked
-        .on('mousedown.minicolors touchstart.minicolors', '.minicolors-swatch', function(event) {
-            var input = $(this).parent().find('.minicolors-input');
-            event.preventDefault();
-            show(input);
-        })
-        // Show on focus
-        .on('focus.minicolors', '.minicolors-input', function() {
-            var input = $(this);
-            if( !input.data('minicolors-initialized') ) return;
-            show(input);
-        })
-        // Fix hex on blur
-        .on('blur.minicolors', '.minicolors-input', function() {
-            var input = $(this),
-                settings = input.data('minicolors-settings');
-            if( !input.data('minicolors-initialized') ) return;
-
-            // Parse Hex
-            input.val(parseHex(input.val(), true));
-
-            // Is it blank?
-            if( input.val() === '' ) input.val(parseHex(settings.defaultValue, true));
-
-            // Adjust case
-            input.val( convertCase(input.val(), settings.letterCase) );
-
-        })
-        // Handle keypresses
-        .on('keydown.minicolors', '.minicolors-input', function(event) {
-            var input = $(this);
-            if( !input.data('minicolors-initialized') ) return;
-            switch(event.keyCode) {
-                case 9: // tab
-                    hide();
-                    break;
-                case 13: // enter
-                case 27: // esc
-                    hide();
-                    input.blur();
-                    break;
-            }
-        })
-        // Update on keyup
-        .on('keyup.minicolors', '.minicolors-input', function() {
-            var input = $(this);
-            if( !input.data('minicolors-initialized') ) return;
-            updateFromInput(input, true);
-        })
-        // Update on paste
-        .on('paste.minicolors', '.minicolors-input', function() {
-            var input = $(this);
-            if( !input.data('minicolors-initialized') ) return;
-            setTimeout( function() {
-                updateFromInput(input, true);
-            }, 1);
-        });
-
-}));
-
-/***/ }),
-
-/***/ 8:
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * jQuery Validation Plugin v1.17.0
- *
- * https://jqueryvalidation.org/
- *
- * Copyright (c) 2017 Jörn Zaefferer
- * Released under the MIT license
- */
-(function( factory ) {
-	if ( true ) {
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else if (typeof module === "object" && module.exports) {
-		module.exports = factory( require( "jquery" ) );
-	} else {
-		factory( jQuery );
-	}
-}(function( $ ) {
-
-$.extend( $.fn, {
-
-	// https://jqueryvalidation.org/validate/
-	validate: function( options ) {
-
-		// If nothing is selected, return nothing; can't chain anyway
-		if ( !this.length ) {
-			if ( options && options.debug && window.console ) {
-				console.warn( "Nothing selected, can't validate, returning nothing." );
-			}
-			return;
-		}
-
-		// Check if a validator for this form was already created
-		var validator = $.data( this[ 0 ], "validator" );
-		if ( validator ) {
-			return validator;
-		}
-
-		// Add novalidate tag if HTML5.
-		this.attr( "novalidate", "novalidate" );
-
-		validator = new $.validator( options, this[ 0 ] );
-		$.data( this[ 0 ], "validator", validator );
-
-		if ( validator.settings.onsubmit ) {
-
-			this.on( "click.validate", ":submit", function( event ) {
-
-				// Track the used submit button to properly handle scripted
-				// submits later.
-				validator.submitButton = event.currentTarget;
-
-				// Allow suppressing validation by adding a cancel class to the submit button
-				if ( $( this ).hasClass( "cancel" ) ) {
-					validator.cancelSubmit = true;
-				}
-
-				// Allow suppressing validation by adding the html5 formnovalidate attribute to the submit button
-				if ( $( this ).attr( "formnovalidate" ) !== undefined ) {
-					validator.cancelSubmit = true;
-				}
-			} );
-
-			// Validate the form on submit
-			this.on( "submit.validate", function( event ) {
-				if ( validator.settings.debug ) {
-
-					// Prevent form submit to be able to see console output
-					event.preventDefault();
-				}
-				function handle() {
-					var hidden, result;
-
-					// Insert a hidden input as a replacement for the missing submit button
-					// The hidden input is inserted in two cases:
-					//   - A user defined a `submitHandler`
-					//   - There was a pending request due to `remote` method and `stopRequest()`
-					//     was called to submit the form in case it's valid
-					if ( validator.submitButton && ( validator.settings.submitHandler || validator.formSubmitted ) ) {
-						hidden = $( "<input type='hidden'/>" )
-							.attr( "name", validator.submitButton.name )
-							.val( $( validator.submitButton ).val() )
-							.appendTo( validator.currentForm );
-					}
-
-					if ( validator.settings.submitHandler ) {
-						result = validator.settings.submitHandler.call( validator, validator.currentForm, event );
-						if ( hidden ) {
-
-							// And clean up afterwards; thanks to no-block-scope, hidden can be referenced
-							hidden.remove();
-						}
-						if ( result !== undefined ) {
-							return result;
-						}
-						return false;
-					}
-					return true;
-				}
-
-				// Prevent submit for invalid forms or custom submit handlers
-				if ( validator.cancelSubmit ) {
-					validator.cancelSubmit = false;
-					return handle();
-				}
-				if ( validator.form() ) {
-					if ( validator.pendingRequest ) {
-						validator.formSubmitted = true;
-						return false;
-					}
-					return handle();
-				} else {
-					validator.focusInvalid();
-					return false;
-				}
-			} );
-		}
-
-		return validator;
-	},
-
-	// https://jqueryvalidation.org/valid/
-	valid: function() {
-		var valid, validator, errorList;
-
-		if ( $( this[ 0 ] ).is( "form" ) ) {
-			valid = this.validate().form();
-		} else {
-			errorList = [];
-			valid = true;
-			validator = $( this[ 0 ].form ).validate();
-			this.each( function() {
-				valid = validator.element( this ) && valid;
-				if ( !valid ) {
-					errorList = errorList.concat( validator.errorList );
-				}
-			} );
-			validator.errorList = errorList;
-		}
-		return valid;
-	},
-
-	// https://jqueryvalidation.org/rules/
-	rules: function( command, argument ) {
-		var element = this[ 0 ],
-			settings, staticRules, existingRules, data, param, filtered;
-
-		// If nothing is selected, return empty object; can't chain anyway
-		if ( element == null ) {
-			return;
-		}
-
-		if ( !element.form && element.hasAttribute( "contenteditable" ) ) {
-			element.form = this.closest( "form" )[ 0 ];
-			element.name = this.attr( "name" );
-		}
-
-		if ( element.form == null ) {
-			return;
-		}
-
-		if ( command ) {
-			settings = $.data( element.form, "validator" ).settings;
-			staticRules = settings.rules;
-			existingRules = $.validator.staticRules( element );
-			switch ( command ) {
-			case "add":
-				$.extend( existingRules, $.validator.normalizeRule( argument ) );
-
-				// Remove messages from rules, but allow them to be set separately
-				delete existingRules.messages;
-				staticRules[ element.name ] = existingRules;
-				if ( argument.messages ) {
-					settings.messages[ element.name ] = $.extend( settings.messages[ element.name ], argument.messages );
-				}
-				break;
-			case "remove":
-				if ( !argument ) {
-					delete staticRules[ element.name ];
-					return existingRules;
-				}
-				filtered = {};
-				$.each( argument.split( /\s/ ), function( index, method ) {
-					filtered[ method ] = existingRules[ method ];
-					delete existingRules[ method ];
-				} );
-				return filtered;
-			}
-		}
-
-		data = $.validator.normalizeRules(
-		$.extend(
-			{},
-			$.validator.classRules( element ),
-			$.validator.attributeRules( element ),
-			$.validator.dataRules( element ),
-			$.validator.staticRules( element )
-		), element );
-
-		// Make sure required is at front
-		if ( data.required ) {
-			param = data.required;
-			delete data.required;
-			data = $.extend( { required: param }, data );
-		}
-
-		// Make sure remote is at back
-		if ( data.remote ) {
-			param = data.remote;
-			delete data.remote;
-			data = $.extend( data, { remote: param } );
-		}
-
-		return data;
-	}
-} );
-
-// Custom selectors
-$.extend( $.expr.pseudos || $.expr[ ":" ], {		// '|| $.expr[ ":" ]' here enables backwards compatibility to jQuery 1.7. Can be removed when dropping jQ 1.7.x support
-
-	// https://jqueryvalidation.org/blank-selector/
-	blank: function( a ) {
-		return !$.trim( "" + $( a ).val() );
-	},
-
-	// https://jqueryvalidation.org/filled-selector/
-	filled: function( a ) {
-		var val = $( a ).val();
-		return val !== null && !!$.trim( "" + val );
-	},
-
-	// https://jqueryvalidation.org/unchecked-selector/
-	unchecked: function( a ) {
-		return !$( a ).prop( "checked" );
-	}
-} );
-
-// Constructor for validator
-$.validator = function( options, form ) {
-	this.settings = $.extend( true, {}, $.validator.defaults, options );
-	this.currentForm = form;
-	this.init();
-};
-
-// https://jqueryvalidation.org/jQuery.validator.format/
-$.validator.format = function( source, params ) {
-	if ( arguments.length === 1 ) {
-		return function() {
-			var args = $.makeArray( arguments );
-			args.unshift( source );
-			return $.validator.format.apply( this, args );
-		};
-	}
-	if ( params === undefined ) {
-		return source;
-	}
-	if ( arguments.length > 2 && params.constructor !== Array  ) {
-		params = $.makeArray( arguments ).slice( 1 );
-	}
-	if ( params.constructor !== Array ) {
-		params = [ params ];
-	}
-	$.each( params, function( i, n ) {
-		source = source.replace( new RegExp( "\\{" + i + "\\}", "g" ), function() {
-			return n;
-		} );
-	} );
-	return source;
-};
-
-$.extend( $.validator, {
-
-	defaults: {
-		messages: {},
-		groups: {},
-		rules: {},
-		errorClass: "error",
-		pendingClass: "pending",
-		validClass: "valid",
-		errorElement: "label",
-		focusCleanup: false,
-		focusInvalid: true,
-		errorContainer: $( [] ),
-		errorLabelContainer: $( [] ),
-		onsubmit: true,
-		ignore: ":hidden",
-		ignoreTitle: false,
-		onfocusin: function( element ) {
-			this.lastActive = element;
-
-			// Hide error label and remove error class on focus if enabled
-			if ( this.settings.focusCleanup ) {
-				if ( this.settings.unhighlight ) {
-					this.settings.unhighlight.call( this, element, this.settings.errorClass, this.settings.validClass );
-				}
-				this.hideThese( this.errorsFor( element ) );
-			}
-		},
-		onfocusout: function( element ) {
-			if ( !this.checkable( element ) && ( element.name in this.submitted || !this.optional( element ) ) ) {
-				this.element( element );
-			}
-		},
-		onkeyup: function( element, event ) {
-
-			// Avoid revalidate the field when pressing one of the following keys
-			// Shift       => 16
-			// Ctrl        => 17
-			// Alt         => 18
-			// Caps lock   => 20
-			// End         => 35
-			// Home        => 36
-			// Left arrow  => 37
-			// Up arrow    => 38
-			// Right arrow => 39
-			// Down arrow  => 40
-			// Insert      => 45
-			// Num lock    => 144
-			// AltGr key   => 225
-			var excludedKeys = [
-				16, 17, 18, 20, 35, 36, 37,
-				38, 39, 40, 45, 144, 225
-			];
-
-			if ( event.which === 9 && this.elementValue( element ) === "" || $.inArray( event.keyCode, excludedKeys ) !== -1 ) {
-				return;
-			} else if ( element.name in this.submitted || element.name in this.invalid ) {
-				this.element( element );
-			}
-		},
-		onclick: function( element ) {
-
-			// Click on selects, radiobuttons and checkboxes
-			if ( element.name in this.submitted ) {
-				this.element( element );
-
-			// Or option elements, check parent select in that case
-			} else if ( element.parentNode.name in this.submitted ) {
-				this.element( element.parentNode );
-			}
-		},
-		highlight: function( element, errorClass, validClass ) {
-			if ( element.type === "radio" ) {
-				this.findByName( element.name ).addClass( errorClass ).removeClass( validClass );
-			} else {
-				$( element ).addClass( errorClass ).removeClass( validClass );
-			}
-		},
-		unhighlight: function( element, errorClass, validClass ) {
-			if ( element.type === "radio" ) {
-				this.findByName( element.name ).removeClass( errorClass ).addClass( validClass );
-			} else {
-				$( element ).removeClass( errorClass ).addClass( validClass );
-			}
-		}
-	},
-
-	// https://jqueryvalidation.org/jQuery.validator.setDefaults/
-	setDefaults: function( settings ) {
-		$.extend( $.validator.defaults, settings );
-	},
-
-	messages: {
-		required: "This field is required.",
-		remote: "Please fix this field.",
-		email: "Please enter a valid email address.",
-		url: "Please enter a valid URL.",
-		date: "Please enter a valid date.",
-		dateISO: "Please enter a valid date (ISO).",
-		number: "Please enter a valid number.",
-		digits: "Please enter only digits.",
-		equalTo: "Please enter the same value again.",
-		maxlength: $.validator.format( "Please enter no more than {0} characters." ),
-		minlength: $.validator.format( "Please enter at least {0} characters." ),
-		rangelength: $.validator.format( "Please enter a value between {0} and {1} characters long." ),
-		range: $.validator.format( "Please enter a value between {0} and {1}." ),
-		max: $.validator.format( "Please enter a value less than or equal to {0}." ),
-		min: $.validator.format( "Please enter a value greater than or equal to {0}." ),
-		step: $.validator.format( "Please enter a multiple of {0}." )
-	},
-
-	autoCreateRanges: false,
-
-	prototype: {
-
-		init: function() {
-			this.labelContainer = $( this.settings.errorLabelContainer );
-			this.errorContext = this.labelContainer.length && this.labelContainer || $( this.currentForm );
-			this.containers = $( this.settings.errorContainer ).add( this.settings.errorLabelContainer );
-			this.submitted = {};
-			this.valueCache = {};
-			this.pendingRequest = 0;
-			this.pending = {};
-			this.invalid = {};
-			this.reset();
-
-			var groups = ( this.groups = {} ),
-				rules;
-			$.each( this.settings.groups, function( key, value ) {
-				if ( typeof value === "string" ) {
-					value = value.split( /\s/ );
-				}
-				$.each( value, function( index, name ) {
-					groups[ name ] = key;
-				} );
-			} );
-			rules = this.settings.rules;
-			$.each( rules, function( key, value ) {
-				rules[ key ] = $.validator.normalizeRule( value );
-			} );
-
-			function delegate( event ) {
-
-				// Set form expando on contenteditable
-				if ( !this.form && this.hasAttribute( "contenteditable" ) ) {
-					this.form = $( this ).closest( "form" )[ 0 ];
-					this.name = $( this ).attr( "name" );
-				}
-
-				var validator = $.data( this.form, "validator" ),
-					eventType = "on" + event.type.replace( /^validate/, "" ),
-					settings = validator.settings;
-				if ( settings[ eventType ] && !$( this ).is( settings.ignore ) ) {
-					settings[ eventType ].call( validator, this, event );
-				}
-			}
-
-			$( this.currentForm )
-				.on( "focusin.validate focusout.validate keyup.validate",
-					":text, [type='password'], [type='file'], select, textarea, [type='number'], [type='search'], " +
-					"[type='tel'], [type='url'], [type='email'], [type='datetime'], [type='date'], [type='month'], " +
-					"[type='week'], [type='time'], [type='datetime-local'], [type='range'], [type='color'], " +
-					"[type='radio'], [type='checkbox'], [contenteditable], [type='button']", delegate )
-
-				// Support: Chrome, oldIE
-				// "select" is provided as event.target when clicking a option
-				.on( "click.validate", "select, option, [type='radio'], [type='checkbox']", delegate );
-
-			if ( this.settings.invalidHandler ) {
-				$( this.currentForm ).on( "invalid-form.validate", this.settings.invalidHandler );
-			}
-		},
-
-		// https://jqueryvalidation.org/Validator.form/
-		form: function() {
-			this.checkForm();
-			$.extend( this.submitted, this.errorMap );
-			this.invalid = $.extend( {}, this.errorMap );
-			if ( !this.valid() ) {
-				$( this.currentForm ).triggerHandler( "invalid-form", [ this ] );
-			}
-			this.showErrors();
-			return this.valid();
-		},
-
-		checkForm: function() {
-			this.prepareForm();
-			for ( var i = 0, elements = ( this.currentElements = this.elements() ); elements[ i ]; i++ ) {
-				this.check( elements[ i ] );
-			}
-			return this.valid();
-		},
-
-		// https://jqueryvalidation.org/Validator.element/
-		element: function( element ) {
-			var cleanElement = this.clean( element ),
-				checkElement = this.validationTargetFor( cleanElement ),
-				v = this,
-				result = true,
-				rs, group;
-
-			if ( checkElement === undefined ) {
-				delete this.invalid[ cleanElement.name ];
-			} else {
-				this.prepareElement( checkElement );
-				this.currentElements = $( checkElement );
-
-				// If this element is grouped, then validate all group elements already
-				// containing a value
-				group = this.groups[ checkElement.name ];
-				if ( group ) {
-					$.each( this.groups, function( name, testgroup ) {
-						if ( testgroup === group && name !== checkElement.name ) {
-							cleanElement = v.validationTargetFor( v.clean( v.findByName( name ) ) );
-							if ( cleanElement && cleanElement.name in v.invalid ) {
-								v.currentElements.push( cleanElement );
-								result = v.check( cleanElement ) && result;
-							}
-						}
-					} );
-				}
-
-				rs = this.check( checkElement ) !== false;
-				result = result && rs;
-				if ( rs ) {
-					this.invalid[ checkElement.name ] = false;
-				} else {
-					this.invalid[ checkElement.name ] = true;
-				}
-
-				if ( !this.numberOfInvalids() ) {
-
-					// Hide error containers on last error
-					this.toHide = this.toHide.add( this.containers );
-				}
-				this.showErrors();
-
-				// Add aria-invalid status for screen readers
-				$( element ).attr( "aria-invalid", !rs );
-			}
-
-			return result;
-		},
-
-		// https://jqueryvalidation.org/Validator.showErrors/
-		showErrors: function( errors ) {
-			if ( errors ) {
-				var validator = this;
-
-				// Add items to error list and map
-				$.extend( this.errorMap, errors );
-				this.errorList = $.map( this.errorMap, function( message, name ) {
-					return {
-						message: message,
-						element: validator.findByName( name )[ 0 ]
-					};
-				} );
-
-				// Remove items from success list
-				this.successList = $.grep( this.successList, function( element ) {
-					return !( element.name in errors );
-				} );
-			}
-			if ( this.settings.showErrors ) {
-				this.settings.showErrors.call( this, this.errorMap, this.errorList );
-			} else {
-				this.defaultShowErrors();
-			}
-		},
-
-		// https://jqueryvalidation.org/Validator.resetForm/
-		resetForm: function() {
-			if ( $.fn.resetForm ) {
-				$( this.currentForm ).resetForm();
-			}
-			this.invalid = {};
-			this.submitted = {};
-			this.prepareForm();
-			this.hideErrors();
-			var elements = this.elements()
-				.removeData( "previousValue" )
-				.removeAttr( "aria-invalid" );
-
-			this.resetElements( elements );
-		},
-
-		resetElements: function( elements ) {
-			var i;
-
-			if ( this.settings.unhighlight ) {
-				for ( i = 0; elements[ i ]; i++ ) {
-					this.settings.unhighlight.call( this, elements[ i ],
-						this.settings.errorClass, "" );
-					this.findByName( elements[ i ].name ).removeClass( this.settings.validClass );
-				}
-			} else {
-				elements
-					.removeClass( this.settings.errorClass )
-					.removeClass( this.settings.validClass );
-			}
-		},
-
-		numberOfInvalids: function() {
-			return this.objectLength( this.invalid );
-		},
-
-		objectLength: function( obj ) {
-			/* jshint unused: false */
-			var count = 0,
-				i;
-			for ( i in obj ) {
-
-				// This check allows counting elements with empty error
-				// message as invalid elements
-				if ( obj[ i ] !== undefined && obj[ i ] !== null && obj[ i ] !== false ) {
-					count++;
-				}
-			}
-			return count;
-		},
-
-		hideErrors: function() {
-			this.hideThese( this.toHide );
-		},
-
-		hideThese: function( errors ) {
-			errors.not( this.containers ).text( "" );
-			this.addWrapper( errors ).hide();
-		},
-
-		valid: function() {
-			return this.size() === 0;
-		},
-
-		size: function() {
-			return this.errorList.length;
-		},
-
-		focusInvalid: function() {
-			if ( this.settings.focusInvalid ) {
-				try {
-					$( this.findLastActive() || this.errorList.length && this.errorList[ 0 ].element || [] )
-					.filter( ":visible" )
-					.focus()
-
-					// Manually trigger focusin event; without it, focusin handler isn't called, findLastActive won't have anything to find
-					.trigger( "focusin" );
-				} catch ( e ) {
-
-					// Ignore IE throwing errors when focusing hidden elements
-				}
-			}
-		},
-
-		findLastActive: function() {
-			var lastActive = this.lastActive;
-			return lastActive && $.grep( this.errorList, function( n ) {
-				return n.element.name === lastActive.name;
-			} ).length === 1 && lastActive;
-		},
-
-		elements: function() {
-			var validator = this,
-				rulesCache = {};
-
-			// Select all valid inputs inside the form (no submit or reset buttons)
-			return $( this.currentForm )
-			.find( "input, select, textarea, [contenteditable]" )
-			.not( ":submit, :reset, :image, :disabled" )
-			.not( this.settings.ignore )
-			.filter( function() {
-				var name = this.name || $( this ).attr( "name" ); // For contenteditable
-				if ( !name && validator.settings.debug && window.console ) {
-					console.error( "%o has no name assigned", this );
-				}
-
-				// Set form expando on contenteditable
-				if ( this.hasAttribute( "contenteditable" ) ) {
-					this.form = $( this ).closest( "form" )[ 0 ];
-					this.name = name;
-				}
-
-				// Select only the first element for each name, and only those with rules specified
-				if ( name in rulesCache || !validator.objectLength( $( this ).rules() ) ) {
-					return false;
-				}
-
-				rulesCache[ name ] = true;
-				return true;
-			} );
-		},
-
-		clean: function( selector ) {
-			return $( selector )[ 0 ];
-		},
-
-		errors: function() {
-			var errorClass = this.settings.errorClass.split( " " ).join( "." );
-			return $( this.settings.errorElement + "." + errorClass, this.errorContext );
-		},
-
-		resetInternals: function() {
-			this.successList = [];
-			this.errorList = [];
-			this.errorMap = {};
-			this.toShow = $( [] );
-			this.toHide = $( [] );
-		},
-
-		reset: function() {
-			this.resetInternals();
-			this.currentElements = $( [] );
-		},
-
-		prepareForm: function() {
-			this.reset();
-			this.toHide = this.errors().add( this.containers );
-		},
-
-		prepareElement: function( element ) {
-			this.reset();
-			this.toHide = this.errorsFor( element );
-		},
-
-		elementValue: function( element ) {
-			var $element = $( element ),
-				type = element.type,
-				val, idx;
-
-			if ( type === "radio" || type === "checkbox" ) {
-				return this.findByName( element.name ).filter( ":checked" ).val();
-			} else if ( type === "number" && typeof element.validity !== "undefined" ) {
-				return element.validity.badInput ? "NaN" : $element.val();
-			}
-
-			if ( element.hasAttribute( "contenteditable" ) ) {
-				val = $element.text();
-			} else {
-				val = $element.val();
-			}
-
-			if ( type === "file" ) {
-
-				// Modern browser (chrome & safari)
-				if ( val.substr( 0, 12 ) === "C:\\fakepath\\" ) {
-					return val.substr( 12 );
-				}
-
-				// Legacy browsers
-				// Unix-based path
-				idx = val.lastIndexOf( "/" );
-				if ( idx >= 0 ) {
-					return val.substr( idx + 1 );
-				}
-
-				// Windows-based path
-				idx = val.lastIndexOf( "\\" );
-				if ( idx >= 0 ) {
-					return val.substr( idx + 1 );
-				}
-
-				// Just the file name
-				return val;
-			}
-
-			if ( typeof val === "string" ) {
-				return val.replace( /\r/g, "" );
-			}
-			return val;
-		},
-
-		check: function( element ) {
-			element = this.validationTargetFor( this.clean( element ) );
-
-			var rules = $( element ).rules(),
-				rulesCount = $.map( rules, function( n, i ) {
-					return i;
-				} ).length,
-				dependencyMismatch = false,
-				val = this.elementValue( element ),
-				result, method, rule, normalizer;
-
-			// Prioritize the local normalizer defined for this element over the global one
-			// if the former exists, otherwise user the global one in case it exists.
-			if ( typeof rules.normalizer === "function" ) {
-				normalizer = rules.normalizer;
-			} else if (	typeof this.settings.normalizer === "function" ) {
-				normalizer = this.settings.normalizer;
-			}
-
-			// If normalizer is defined, then call it to retreive the changed value instead
-			// of using the real one.
-			// Note that `this` in the normalizer is `element`.
-			if ( normalizer ) {
-				val = normalizer.call( element, val );
-
-				if ( typeof val !== "string" ) {
-					throw new TypeError( "The normalizer should return a string value." );
-				}
-
-				// Delete the normalizer from rules to avoid treating it as a pre-defined method.
-				delete rules.normalizer;
-			}
-
-			for ( method in rules ) {
-				rule = { method: method, parameters: rules[ method ] };
-				try {
-					result = $.validator.methods[ method ].call( this, val, element, rule.parameters );
-
-					// If a method indicates that the field is optional and therefore valid,
-					// don't mark it as valid when there are no other rules
-					if ( result === "dependency-mismatch" && rulesCount === 1 ) {
-						dependencyMismatch = true;
-						continue;
-					}
-					dependencyMismatch = false;
-
-					if ( result === "pending" ) {
-						this.toHide = this.toHide.not( this.errorsFor( element ) );
-						return;
-					}
-
-					if ( !result ) {
-						this.formatAndAdd( element, rule );
-						return false;
-					}
-				} catch ( e ) {
-					if ( this.settings.debug && window.console ) {
-						console.log( "Exception occurred when checking element " + element.id + ", check the '" + rule.method + "' method.", e );
-					}
-					if ( e instanceof TypeError ) {
-						e.message += ".  Exception occurred when checking element " + element.id + ", check the '" + rule.method + "' method.";
-					}
-
-					throw e;
-				}
-			}
-			if ( dependencyMismatch ) {
-				return;
-			}
-			if ( this.objectLength( rules ) ) {
-				this.successList.push( element );
-			}
-			return true;
-		},
-
-		// Return the custom message for the given element and validation method
-		// specified in the element's HTML5 data attribute
-		// return the generic message if present and no method specific message is present
-		customDataMessage: function( element, method ) {
-			return $( element ).data( "msg" + method.charAt( 0 ).toUpperCase() +
-				method.substring( 1 ).toLowerCase() ) || $( element ).data( "msg" );
-		},
-
-		// Return the custom message for the given element name and validation method
-		customMessage: function( name, method ) {
-			var m = this.settings.messages[ name ];
-			return m && ( m.constructor === String ? m : m[ method ] );
-		},
-
-		// Return the first defined argument, allowing empty strings
-		findDefined: function() {
-			for ( var i = 0; i < arguments.length; i++ ) {
-				if ( arguments[ i ] !== undefined ) {
-					return arguments[ i ];
-				}
-			}
-			return undefined;
-		},
-
-		// The second parameter 'rule' used to be a string, and extended to an object literal
-		// of the following form:
-		// rule = {
-		//     method: "method name",
-		//     parameters: "the given method parameters"
-		// }
-		//
-		// The old behavior still supported, kept to maintain backward compatibility with
-		// old code, and will be removed in the next major release.
-		defaultMessage: function( element, rule ) {
-			if ( typeof rule === "string" ) {
-				rule = { method: rule };
-			}
-
-			var message = this.findDefined(
-					this.customMessage( element.name, rule.method ),
-					this.customDataMessage( element, rule.method ),
-
-					// 'title' is never undefined, so handle empty string as undefined
-					!this.settings.ignoreTitle && element.title || undefined,
-					$.validator.messages[ rule.method ],
-					"<strong>Warning: No message defined for " + element.name + "</strong>"
-				),
-				theregex = /\$?\{(\d+)\}/g;
-			if ( typeof message === "function" ) {
-				message = message.call( this, rule.parameters, element );
-			} else if ( theregex.test( message ) ) {
-				message = $.validator.format( message.replace( theregex, "{$1}" ), rule.parameters );
-			}
-
-			return message;
-		},
-
-		formatAndAdd: function( element, rule ) {
-			var message = this.defaultMessage( element, rule );
-
-			this.errorList.push( {
-				message: message,
-				element: element,
-				method: rule.method
-			} );
-
-			this.errorMap[ element.name ] = message;
-			this.submitted[ element.name ] = message;
-		},
-
-		addWrapper: function( toToggle ) {
-			if ( this.settings.wrapper ) {
-				toToggle = toToggle.add( toToggle.parent( this.settings.wrapper ) );
-			}
-			return toToggle;
-		},
-
-		defaultShowErrors: function() {
-			var i, elements, error;
-			for ( i = 0; this.errorList[ i ]; i++ ) {
-				error = this.errorList[ i ];
-				if ( this.settings.highlight ) {
-					this.settings.highlight.call( this, error.element, this.settings.errorClass, this.settings.validClass );
-				}
-				this.showLabel( error.element, error.message );
-			}
-			if ( this.errorList.length ) {
-				this.toShow = this.toShow.add( this.containers );
-			}
-			if ( this.settings.success ) {
-				for ( i = 0; this.successList[ i ]; i++ ) {
-					this.showLabel( this.successList[ i ] );
-				}
-			}
-			if ( this.settings.unhighlight ) {
-				for ( i = 0, elements = this.validElements(); elements[ i ]; i++ ) {
-					this.settings.unhighlight.call( this, elements[ i ], this.settings.errorClass, this.settings.validClass );
-				}
-			}
-			this.toHide = this.toHide.not( this.toShow );
-			this.hideErrors();
-			this.addWrapper( this.toShow ).show();
-		},
-
-		validElements: function() {
-			return this.currentElements.not( this.invalidElements() );
-		},
-
-		invalidElements: function() {
-			return $( this.errorList ).map( function() {
-				return this.element;
-			} );
-		},
-
-		showLabel: function( element, message ) {
-			var place, group, errorID, v,
-				error = this.errorsFor( element ),
-				elementID = this.idOrName( element ),
-				describedBy = $( element ).attr( "aria-describedby" );
-
-			if ( error.length ) {
-
-				// Refresh error/success class
-				error.removeClass( this.settings.validClass ).addClass( this.settings.errorClass );
-
-				// Replace message on existing label
-				error.html( message );
-			} else {
-
-				// Create error element
-				error = $( "<" + this.settings.errorElement + ">" )
-					.attr( "id", elementID + "-error" )
-					.addClass( this.settings.errorClass )
-					.html( message || "" );
-
-				// Maintain reference to the element to be placed into the DOM
-				place = error;
-				if ( this.settings.wrapper ) {
-
-					// Make sure the element is visible, even in IE
-					// actually showing the wrapped element is handled elsewhere
-					place = error.hide().show().wrap( "<" + this.settings.wrapper + "/>" ).parent();
-				}
-				if ( this.labelContainer.length ) {
-					this.labelContainer.append( place );
-				} else if ( this.settings.errorPlacement ) {
-					this.settings.errorPlacement.call( this, place, $( element ) );
-				} else {
-					place.insertAfter( element );
-				}
-
-				// Link error back to the element
-				if ( error.is( "label" ) ) {
-
-					// If the error is a label, then associate using 'for'
-					error.attr( "for", elementID );
-
-					// If the element is not a child of an associated label, then it's necessary
-					// to explicitly apply aria-describedby
-				} else if ( error.parents( "label[for='" + this.escapeCssMeta( elementID ) + "']" ).length === 0 ) {
-					errorID = error.attr( "id" );
-
-					// Respect existing non-error aria-describedby
-					if ( !describedBy ) {
-						describedBy = errorID;
-					} else if ( !describedBy.match( new RegExp( "\\b" + this.escapeCssMeta( errorID ) + "\\b" ) ) ) {
-
-						// Add to end of list if not already present
-						describedBy += " " + errorID;
-					}
-					$( element ).attr( "aria-describedby", describedBy );
-
-					// If this element is grouped, then assign to all elements in the same group
-					group = this.groups[ element.name ];
-					if ( group ) {
-						v = this;
-						$.each( v.groups, function( name, testgroup ) {
-							if ( testgroup === group ) {
-								$( "[name='" + v.escapeCssMeta( name ) + "']", v.currentForm )
-									.attr( "aria-describedby", error.attr( "id" ) );
-							}
-						} );
-					}
-				}
-			}
-			if ( !message && this.settings.success ) {
-				error.text( "" );
-				if ( typeof this.settings.success === "string" ) {
-					error.addClass( this.settings.success );
-				} else {
-					this.settings.success( error, element );
-				}
-			}
-			this.toShow = this.toShow.add( error );
-		},
-
-		errorsFor: function( element ) {
-			var name = this.escapeCssMeta( this.idOrName( element ) ),
-				describer = $( element ).attr( "aria-describedby" ),
-				selector = "label[for='" + name + "'], label[for='" + name + "'] *";
-
-			// 'aria-describedby' should directly reference the error element
-			if ( describer ) {
-				selector = selector + ", #" + this.escapeCssMeta( describer )
-					.replace( /\s+/g, ", #" );
-			}
-
-			return this
-				.errors()
-				.filter( selector );
-		},
-
-		// See https://api.jquery.com/category/selectors/, for CSS
-		// meta-characters that should be escaped in order to be used with JQuery
-		// as a literal part of a name/id or any selector.
-		escapeCssMeta: function( string ) {
-			return string.replace( /([\\!"#$%&'()*+,./:;<=>?@\[\]^`{|}~])/g, "\\$1" );
-		},
-
-		idOrName: function( element ) {
-			return this.groups[ element.name ] || ( this.checkable( element ) ? element.name : element.id || element.name );
-		},
-
-		validationTargetFor: function( element ) {
-
-			// If radio/checkbox, validate first element in group instead
-			if ( this.checkable( element ) ) {
-				element = this.findByName( element.name );
-			}
-
-			// Always apply ignore filter
-			return $( element ).not( this.settings.ignore )[ 0 ];
-		},
-
-		checkable: function( element ) {
-			return ( /radio|checkbox/i ).test( element.type );
-		},
-
-		findByName: function( name ) {
-			return $( this.currentForm ).find( "[name='" + this.escapeCssMeta( name ) + "']" );
-		},
-
-		getLength: function( value, element ) {
-			switch ( element.nodeName.toLowerCase() ) {
-			case "select":
-				return $( "option:selected", element ).length;
-			case "input":
-				if ( this.checkable( element ) ) {
-					return this.findByName( element.name ).filter( ":checked" ).length;
-				}
-			}
-			return value.length;
-		},
-
-		depend: function( param, element ) {
-			return this.dependTypes[ typeof param ] ? this.dependTypes[ typeof param ]( param, element ) : true;
-		},
-
-		dependTypes: {
-			"boolean": function( param ) {
-				return param;
-			},
-			"string": function( param, element ) {
-				return !!$( param, element.form ).length;
-			},
-			"function": function( param, element ) {
-				return param( element );
-			}
-		},
-
-		optional: function( element ) {
-			var val = this.elementValue( element );
-			return !$.validator.methods.required.call( this, val, element ) && "dependency-mismatch";
-		},
-
-		startRequest: function( element ) {
-			if ( !this.pending[ element.name ] ) {
-				this.pendingRequest++;
-				$( element ).addClass( this.settings.pendingClass );
-				this.pending[ element.name ] = true;
-			}
-		},
-
-		stopRequest: function( element, valid ) {
-			this.pendingRequest--;
-
-			// Sometimes synchronization fails, make sure pendingRequest is never < 0
-			if ( this.pendingRequest < 0 ) {
-				this.pendingRequest = 0;
-			}
-			delete this.pending[ element.name ];
-			$( element ).removeClass( this.settings.pendingClass );
-			if ( valid && this.pendingRequest === 0 && this.formSubmitted && this.form() ) {
-				$( this.currentForm ).submit();
-
-				// Remove the hidden input that was used as a replacement for the
-				// missing submit button. The hidden input is added by `handle()`
-				// to ensure that the value of the used submit button is passed on
-				// for scripted submits triggered by this method
-				if ( this.submitButton ) {
-					$( "input:hidden[name='" + this.submitButton.name + "']", this.currentForm ).remove();
-				}
-
-				this.formSubmitted = false;
-			} else if ( !valid && this.pendingRequest === 0 && this.formSubmitted ) {
-				$( this.currentForm ).triggerHandler( "invalid-form", [ this ] );
-				this.formSubmitted = false;
-			}
-		},
-
-		previousValue: function( element, method ) {
-			method = typeof method === "string" && method || "remote";
-
-			return $.data( element, "previousValue" ) || $.data( element, "previousValue", {
-				old: null,
-				valid: true,
-				message: this.defaultMessage( element, { method: method } )
-			} );
-		},
-
-		// Cleans up all forms and elements, removes validator-specific events
-		destroy: function() {
-			this.resetForm();
-
-			$( this.currentForm )
-				.off( ".validate" )
-				.removeData( "validator" )
-				.find( ".validate-equalTo-blur" )
-					.off( ".validate-equalTo" )
-					.removeClass( "validate-equalTo-blur" );
-		}
-
-	},
-
-	classRuleSettings: {
-		required: { required: true },
-		email: { email: true },
-		url: { url: true },
-		date: { date: true },
-		dateISO: { dateISO: true },
-		number: { number: true },
-		digits: { digits: true },
-		creditcard: { creditcard: true }
-	},
-
-	addClassRules: function( className, rules ) {
-		if ( className.constructor === String ) {
-			this.classRuleSettings[ className ] = rules;
-		} else {
-			$.extend( this.classRuleSettings, className );
-		}
-	},
-
-	classRules: function( element ) {
-		var rules = {},
-			classes = $( element ).attr( "class" );
-
-		if ( classes ) {
-			$.each( classes.split( " " ), function() {
-				if ( this in $.validator.classRuleSettings ) {
-					$.extend( rules, $.validator.classRuleSettings[ this ] );
-				}
-			} );
-		}
-		return rules;
-	},
-
-	normalizeAttributeRule: function( rules, type, method, value ) {
-
-		// Convert the value to a number for number inputs, and for text for backwards compability
-		// allows type="date" and others to be compared as strings
-		if ( /min|max|step/.test( method ) && ( type === null || /number|range|text/.test( type ) ) ) {
-			value = Number( value );
-
-			// Support Opera Mini, which returns NaN for undefined minlength
-			if ( isNaN( value ) ) {
-				value = undefined;
-			}
-		}
-
-		if ( value || value === 0 ) {
-			rules[ method ] = value;
-		} else if ( type === method && type !== "range" ) {
-
-			// Exception: the jquery validate 'range' method
-			// does not test for the html5 'range' type
-			rules[ method ] = true;
-		}
-	},
-
-	attributeRules: function( element ) {
-		var rules = {},
-			$element = $( element ),
-			type = element.getAttribute( "type" ),
-			method, value;
-
-		for ( method in $.validator.methods ) {
-
-			// Support for <input required> in both html5 and older browsers
-			if ( method === "required" ) {
-				value = element.getAttribute( method );
-
-				// Some browsers return an empty string for the required attribute
-				// and non-HTML5 browsers might have required="" markup
-				if ( value === "" ) {
-					value = true;
-				}
-
-				// Force non-HTML5 browsers to return bool
-				value = !!value;
-			} else {
-				value = $element.attr( method );
-			}
-
-			this.normalizeAttributeRule( rules, type, method, value );
-		}
-
-		// 'maxlength' may be returned as -1, 2147483647 ( IE ) and 524288 ( safari ) for text inputs
-		if ( rules.maxlength && /-1|2147483647|524288/.test( rules.maxlength ) ) {
-			delete rules.maxlength;
-		}
-
-		return rules;
-	},
-
-	dataRules: function( element ) {
-		var rules = {},
-			$element = $( element ),
-			type = element.getAttribute( "type" ),
-			method, value;
-
-		for ( method in $.validator.methods ) {
-			value = $element.data( "rule" + method.charAt( 0 ).toUpperCase() + method.substring( 1 ).toLowerCase() );
-			this.normalizeAttributeRule( rules, type, method, value );
-		}
-		return rules;
-	},
-
-	staticRules: function( element ) {
-		var rules = {},
-			validator = $.data( element.form, "validator" );
-
-		if ( validator.settings.rules ) {
-			rules = $.validator.normalizeRule( validator.settings.rules[ element.name ] ) || {};
-		}
-		return rules;
-	},
-
-	normalizeRules: function( rules, element ) {
-
-		// Handle dependency check
-		$.each( rules, function( prop, val ) {
-
-			// Ignore rule when param is explicitly false, eg. required:false
-			if ( val === false ) {
-				delete rules[ prop ];
-				return;
-			}
-			if ( val.param || val.depends ) {
-				var keepRule = true;
-				switch ( typeof val.depends ) {
-				case "string":
-					keepRule = !!$( val.depends, element.form ).length;
-					break;
-				case "function":
-					keepRule = val.depends.call( element, element );
-					break;
-				}
-				if ( keepRule ) {
-					rules[ prop ] = val.param !== undefined ? val.param : true;
-				} else {
-					$.data( element.form, "validator" ).resetElements( $( element ) );
-					delete rules[ prop ];
-				}
-			}
-		} );
-
-		// Evaluate parameters
-		$.each( rules, function( rule, parameter ) {
-			rules[ rule ] = $.isFunction( parameter ) && rule !== "normalizer" ? parameter( element ) : parameter;
-		} );
-
-		// Clean number parameters
-		$.each( [ "minlength", "maxlength" ], function() {
-			if ( rules[ this ] ) {
-				rules[ this ] = Number( rules[ this ] );
-			}
-		} );
-		$.each( [ "rangelength", "range" ], function() {
-			var parts;
-			if ( rules[ this ] ) {
-				if ( $.isArray( rules[ this ] ) ) {
-					rules[ this ] = [ Number( rules[ this ][ 0 ] ), Number( rules[ this ][ 1 ] ) ];
-				} else if ( typeof rules[ this ] === "string" ) {
-					parts = rules[ this ].replace( /[\[\]]/g, "" ).split( /[\s,]+/ );
-					rules[ this ] = [ Number( parts[ 0 ] ), Number( parts[ 1 ] ) ];
-				}
-			}
-		} );
-
-		if ( $.validator.autoCreateRanges ) {
-
-			// Auto-create ranges
-			if ( rules.min != null && rules.max != null ) {
-				rules.range = [ rules.min, rules.max ];
-				delete rules.min;
-				delete rules.max;
-			}
-			if ( rules.minlength != null && rules.maxlength != null ) {
-				rules.rangelength = [ rules.minlength, rules.maxlength ];
-				delete rules.minlength;
-				delete rules.maxlength;
-			}
-		}
-
-		return rules;
-	},
-
-	// Converts a simple string to a {string: true} rule, e.g., "required" to {required:true}
-	normalizeRule: function( data ) {
-		if ( typeof data === "string" ) {
-			var transformed = {};
-			$.each( data.split( /\s/ ), function() {
-				transformed[ this ] = true;
-			} );
-			data = transformed;
-		}
-		return data;
-	},
-
-	// https://jqueryvalidation.org/jQuery.validator.addMethod/
-	addMethod: function( name, method, message ) {
-		$.validator.methods[ name ] = method;
-		$.validator.messages[ name ] = message !== undefined ? message : $.validator.messages[ name ];
-		if ( method.length < 3 ) {
-			$.validator.addClassRules( name, $.validator.normalizeRule( name ) );
-		}
-	},
-
-	// https://jqueryvalidation.org/jQuery.validator.methods/
-	methods: {
-
-		// https://jqueryvalidation.org/required-method/
-		required: function( value, element, param ) {
-
-			// Check if dependency is met
-			if ( !this.depend( param, element ) ) {
-				return "dependency-mismatch";
-			}
-			if ( element.nodeName.toLowerCase() === "select" ) {
-
-				// Could be an array for select-multiple or a string, both are fine this way
-				var val = $( element ).val();
-				return val && val.length > 0;
-			}
-			if ( this.checkable( element ) ) {
-				return this.getLength( value, element ) > 0;
-			}
-			return value.length > 0;
-		},
-
-		// https://jqueryvalidation.org/email-method/
-		email: function( value, element ) {
-
-			// From https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
-			// Retrieved 2014-01-14
-			// If you have a problem with this implementation, report a bug against the above spec
-			// Or use custom methods to implement your own email validation
-			return this.optional( element ) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test( value );
-		},
-
-		// https://jqueryvalidation.org/url-method/
-		url: function( value, element ) {
-
-			// Copyright (c) 2010-2013 Diego Perini, MIT licensed
-			// https://gist.github.com/dperini/729294
-			// see also https://mathiasbynens.be/demo/url-regex
-			// modified to allow protocol-relative URLs
-			return this.optional( element ) || /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test( value );
-		},
-
-		// https://jqueryvalidation.org/date-method/
-		date: function( value, element ) {
-			return this.optional( element ) || !/Invalid|NaN/.test( new Date( value ).toString() );
-		},
-
-		// https://jqueryvalidation.org/dateISO-method/
-		dateISO: function( value, element ) {
-			return this.optional( element ) || /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test( value );
-		},
-
-		// https://jqueryvalidation.org/number-method/
-		number: function( value, element ) {
-			return this.optional( element ) || /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test( value );
-		},
-
-		// https://jqueryvalidation.org/digits-method/
-		digits: function( value, element ) {
-			return this.optional( element ) || /^\d+$/.test( value );
-		},
-
-		// https://jqueryvalidation.org/minlength-method/
-		minlength: function( value, element, param ) {
-			var length = $.isArray( value ) ? value.length : this.getLength( value, element );
-			return this.optional( element ) || length >= param;
-		},
-
-		// https://jqueryvalidation.org/maxlength-method/
-		maxlength: function( value, element, param ) {
-			var length = $.isArray( value ) ? value.length : this.getLength( value, element );
-			return this.optional( element ) || length <= param;
-		},
-
-		// https://jqueryvalidation.org/rangelength-method/
-		rangelength: function( value, element, param ) {
-			var length = $.isArray( value ) ? value.length : this.getLength( value, element );
-			return this.optional( element ) || ( length >= param[ 0 ] && length <= param[ 1 ] );
-		},
-
-		// https://jqueryvalidation.org/min-method/
-		min: function( value, element, param ) {
-			return this.optional( element ) || value >= param;
-		},
-
-		// https://jqueryvalidation.org/max-method/
-		max: function( value, element, param ) {
-			return this.optional( element ) || value <= param;
-		},
-
-		// https://jqueryvalidation.org/range-method/
-		range: function( value, element, param ) {
-			return this.optional( element ) || ( value >= param[ 0 ] && value <= param[ 1 ] );
-		},
-
-		// https://jqueryvalidation.org/step-method/
-		step: function( value, element, param ) {
-			var type = $( element ).attr( "type" ),
-				errorMessage = "Step attribute on input type " + type + " is not supported.",
-				supportedTypes = [ "text", "number", "range" ],
-				re = new RegExp( "\\b" + type + "\\b" ),
-				notSupported = type && !re.test( supportedTypes.join() ),
-				decimalPlaces = function( num ) {
-					var match = ( "" + num ).match( /(?:\.(\d+))?$/ );
-					if ( !match ) {
-						return 0;
-					}
-
-					// Number of digits right of decimal point.
-					return match[ 1 ] ? match[ 1 ].length : 0;
-				},
-				toInt = function( num ) {
-					return Math.round( num * Math.pow( 10, decimals ) );
-				},
-				valid = true,
-				decimals;
-
-			// Works only for text, number and range input types
-			// TODO find a way to support input types date, datetime, datetime-local, month, time and week
-			if ( notSupported ) {
-				throw new Error( errorMessage );
-			}
-
-			decimals = decimalPlaces( param );
-
-			// Value can't have too many decimals
-			if ( decimalPlaces( value ) > decimals || toInt( value ) % toInt( param ) !== 0 ) {
-				valid = false;
-			}
-
-			return this.optional( element ) || valid;
-		},
-
-		// https://jqueryvalidation.org/equalTo-method/
-		equalTo: function( value, element, param ) {
-
-			// Bind to the blur event of the target in order to revalidate whenever the target field is updated
-			var target = $( param );
-			if ( this.settings.onfocusout && target.not( ".validate-equalTo-blur" ).length ) {
-				target.addClass( "validate-equalTo-blur" ).on( "blur.validate-equalTo", function() {
-					$( element ).valid();
-				} );
-			}
-			return value === target.val();
-		},
-
-		// https://jqueryvalidation.org/remote-method/
-		remote: function( value, element, param, method ) {
-			if ( this.optional( element ) ) {
-				return "dependency-mismatch";
-			}
-
-			method = typeof method === "string" && method || "remote";
-
-			var previous = this.previousValue( element, method ),
-				validator, data, optionDataString;
-
-			if ( !this.settings.messages[ element.name ] ) {
-				this.settings.messages[ element.name ] = {};
-			}
-			previous.originalMessage = previous.originalMessage || this.settings.messages[ element.name ][ method ];
-			this.settings.messages[ element.name ][ method ] = previous.message;
-
-			param = typeof param === "string" && { url: param } || param;
-			optionDataString = $.param( $.extend( { data: value }, param.data ) );
-			if ( previous.old === optionDataString ) {
-				return previous.valid;
-			}
-
-			previous.old = optionDataString;
-			validator = this;
-			this.startRequest( element );
-			data = {};
-			data[ element.name ] = value;
-			$.ajax( $.extend( true, {
-				mode: "abort",
-				port: "validate" + element.name,
-				dataType: "json",
-				data: data,
-				context: validator.currentForm,
-				success: function( response ) {
-					var valid = response === true || response === "true",
-						errors, message, submitted;
-
-					validator.settings.messages[ element.name ][ method ] = previous.originalMessage;
-					if ( valid ) {
-						submitted = validator.formSubmitted;
-						validator.resetInternals();
-						validator.toHide = validator.errorsFor( element );
-						validator.formSubmitted = submitted;
-						validator.successList.push( element );
-						validator.invalid[ element.name ] = false;
-						validator.showErrors();
-					} else {
-						errors = {};
-						message = response || validator.defaultMessage( element, { method: method, parameters: value } );
-						errors[ element.name ] = previous.message = message;
-						validator.invalid[ element.name ] = true;
-						validator.showErrors( errors );
-					}
-					previous.valid = valid;
-					validator.stopRequest( element, valid );
-				}
-			}, param ) );
-			return "pending";
-		}
-	}
-
-} );
-
-// Ajax mode: abort
-// usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
-// if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort()
-
-var pendingRequests = {},
-	ajax;
-
-// Use a prefilter if available (1.5+)
-if ( $.ajaxPrefilter ) {
-	$.ajaxPrefilter( function( settings, _, xhr ) {
-		var port = settings.port;
-		if ( settings.mode === "abort" ) {
-			if ( pendingRequests[ port ] ) {
-				pendingRequests[ port ].abort();
-			}
-			pendingRequests[ port ] = xhr;
-		}
-	} );
-} else {
-
-	// Proxy ajax
-	ajax = $.ajax;
-	$.ajax = function( settings ) {
-		var mode = ( "mode" in settings ? settings : $.ajaxSettings ).mode,
-			port = ( "port" in settings ? settings : $.ajaxSettings ).port;
-		if ( mode === "abort" ) {
-			if ( pendingRequests[ port ] ) {
-				pendingRequests[ port ].abort();
-			}
-			pendingRequests[ port ] = ajax.apply( this, arguments );
-			return pendingRequests[ port ];
-		}
-		return ajax.apply( this, arguments );
-	};
-}
-return $;
-}));
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- PowerTip v1.3.0 (2017-01-15)
- https://stevenbenner.github.io/jquery-powertip/
- Copyright (c) 2017 Steven Benner (http://stevenbenner.com/).
- Released under MIT license.
- https://raw.github.com/stevenbenner/jquery-powertip/master/LICENSE.txt
-*/
-(function(root, factory) {
-	// support loading the plugin via common patterns
-	if (true) {
-		// load the plugin as an amd module
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(0) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else if (typeof module === 'object' && module.exports) {
-		// load the plugin as a commonjs module
-		module.exports = factory(require('jquery'));
-	} else {
-		// load the plugin as a global
-		factory(root.jQuery);
-	}
-}(this, function($) {
-
-	// useful private variables
-	var $document = $(document),
-		$window = $(window),
-		$body = $('body');
-
-	// constants
-	var DATA_DISPLAYCONTROLLER = 'displayController',
-		DATA_HASACTIVEHOVER = 'hasActiveHover',
-		DATA_FORCEDOPEN = 'forcedOpen',
-		DATA_HASMOUSEMOVE = 'hasMouseMove',
-		DATA_MOUSEONTOTIP = 'mouseOnToPopup',
-		DATA_ORIGINALTITLE = 'originalTitle',
-		DATA_POWERTIP = 'powertip',
-		DATA_POWERTIPJQ = 'powertipjq',
-		DATA_POWERTIPTARGET = 'powertiptarget',
-		EVENT_NAMESPACE = '.powertip',
-		RAD2DEG = 180 / Math.PI;
-
-	/**
-	 * Session data
-	 * Private properties global to all powerTip instances
-	 */
-	var session = {
-		elements: null,
-		tooltips: null,
-		isTipOpen: false,
-		isFixedTipOpen: false,
-		isClosing: false,
-		tipOpenImminent: false,
-		activeHover: null,
-		currentX: 0,
-		currentY: 0,
-		previousX: 0,
-		previousY: 0,
-		desyncTimeout: null,
-		closeDelayTimeout: null,
-		mouseTrackingActive: false,
-		delayInProgress: false,
-		windowWidth: 0,
-		windowHeight: 0,
-		scrollTop: 0,
-		scrollLeft: 0
-	};
-
-	/**
-	 * Collision enumeration
-	 * @enum {number}
-	 */
-	var Collision = {
-		none: 0,
-		top: 1,
-		bottom: 2,
-		left: 4,
-		right: 8
-	};
-
-	/**
-	 * Display hover tooltips on the matched elements.
-	 * @param {(Object|string)=} opts The options object to use for the plugin, or
-	 *     the name of a method to invoke on the first matched element.
-	 * @param {*=} [arg] Argument for an invoked method (optional).
-	 * @return {jQuery} jQuery object for the matched selectors.
-	 */
-	$.fn.powerTip = function(opts, arg) {
-		var targetElements = this,
-			options,
-			tipController;
-
-		// don't do any work if there were no matched elements
-		if (!targetElements.length) {
-			return targetElements;
-		}
-
-		// handle api method calls on the plugin, e.g. powerTip('hide')
-		if ($.type(opts) === 'string' && $.powerTip[opts]) {
-			return $.powerTip[opts].call(targetElements, targetElements, arg);
-		}
-
-		// extend options and instantiate TooltipController
-		options = $.extend({}, $.fn.powerTip.defaults, opts);
-		tipController = new TooltipController(options);
-
-		// hook mouse and viewport dimension tracking
-		initTracking();
-
-		// setup the elements
-		targetElements.each(function elementSetup() {
-			var $this = $(this),
-				dataPowertip = $this.data(DATA_POWERTIP),
-				dataElem = $this.data(DATA_POWERTIPJQ),
-				dataTarget = $this.data(DATA_POWERTIPTARGET),
-				title;
-
-			// handle repeated powerTip calls on the same element by destroying the
-			// original instance hooked to it and replacing it with this call
-			if ($this.data(DATA_DISPLAYCONTROLLER)) {
-				$.powerTip.destroy($this);
-			}
-
-			// attempt to use title attribute text if there is no data-powertip,
-			// data-powertipjq or data-powertiptarget. If we do use the title
-			// attribute, delete the attribute so the browser will not show it
-			title = $this.attr('title');
-			if (!dataPowertip && !dataTarget && !dataElem && title) {
-				$this.data(DATA_POWERTIP, title);
-				$this.data(DATA_ORIGINALTITLE, title);
-				$this.removeAttr('title');
-			}
-
-			// create hover controllers for each element
-			$this.data(
-				DATA_DISPLAYCONTROLLER,
-				new DisplayController($this, options, tipController)
-			);
-		});
-
-		// attach events to matched elements if the manual option is not enabled
-		if (!options.manual) {
-			// attach open events
-			$.each(options.openEvents, function(idx, evt) {
-				if ($.inArray(evt, options.closeEvents) > -1) {
-					// event is in both openEvents and closeEvents, so toggle it
-					targetElements.on(evt + EVENT_NAMESPACE, function elementToggle(event) {
-						$.powerTip.toggle(this, event);
-					});
-				} else {
-					targetElements.on(evt + EVENT_NAMESPACE, function elementOpen(event) {
-						$.powerTip.show(this, event);
-					});
-				}
-			});
-
-			// attach close events
-			$.each(options.closeEvents, function(idx, evt) {
-				if ($.inArray(evt, options.openEvents) < 0) {
-					targetElements.on(evt + EVENT_NAMESPACE, function elementClose(event) {
-						// set immediate to true for any event without mouse info
-						$.powerTip.hide(this, !isMouseEvent(event));
-					});
-				}
-			});
-
-			// attach escape key close event
-			targetElements.on('keydown' + EVENT_NAMESPACE, function elementKeyDown(event) {
-				// always close tooltip when the escape key is pressed
-				if (event.keyCode === 27) {
-					$.powerTip.hide(this, true);
-				}
-			});
-		}
-
-		// remember elements that the plugin is attached to
-		session.elements = session.elements ? session.elements.add(targetElements) : targetElements;
-
-		return targetElements;
-	};
-
-	/**
-	 * Default options for the powerTip plugin.
-	 */
-	$.fn.powerTip.defaults = {
-		fadeInTime: 200,
-		fadeOutTime: 100,
-		followMouse: false,
-		popupId: 'powerTip',
-		popupClass: null,
-		intentSensitivity: 7,
-		intentPollInterval: 100,
-		closeDelay: 100,
-		placement: 'n',
-		smartPlacement: false,
-		offset: 10,
-		mouseOnToPopup: false,
-		manual: false,
-		openEvents: [ 'mouseenter', 'focus' ],
-		closeEvents: [ 'mouseleave', 'blur' ]
-	};
-
-	/**
-	 * Default smart placement priority lists.
-	 * The first item in the array is the highest priority, the last is the lowest.
-	 * The last item is also the default, which will be used if all previous options
-	 * do not fit.
-	 */
-	$.fn.powerTip.smartPlacementLists = {
-		n: [ 'n', 'ne', 'nw', 's' ],
-		e: [ 'e', 'ne', 'se', 'w', 'nw', 'sw', 'n', 's', 'e' ],
-		s: [ 's', 'se', 'sw', 'n' ],
-		w: [ 'w', 'nw', 'sw', 'e', 'ne', 'se', 'n', 's', 'w' ],
-		nw: [ 'nw', 'w', 'sw', 'n', 's', 'se', 'nw' ],
-		ne: [ 'ne', 'e', 'se', 'n', 's', 'sw', 'ne' ],
-		sw: [ 'sw', 'w', 'nw', 's', 'n', 'ne', 'sw' ],
-		se: [ 'se', 'e', 'ne', 's', 'n', 'nw', 'se' ],
-		'nw-alt': [ 'nw-alt', 'n', 'ne-alt', 'sw-alt', 's', 'se-alt', 'w', 'e' ],
-		'ne-alt': [ 'ne-alt', 'n', 'nw-alt', 'se-alt', 's', 'sw-alt', 'e', 'w' ],
-		'sw-alt': [ 'sw-alt', 's', 'se-alt', 'nw-alt', 'n', 'ne-alt', 'w', 'e' ],
-		'se-alt': [ 'se-alt', 's', 'sw-alt', 'ne-alt', 'n', 'nw-alt', 'e', 'w' ]
-	};
-
-	/**
-	 * Public API
-	 */
-	$.powerTip = {
-		/**
-		 * Attempts to show the tooltip for the specified element.
-		 * @param {jQuery|Element} element The element to open the tooltip for.
-		 * @param {jQuery.Event=} event jQuery event for hover intent and mouse
-		 *     tracking (optional).
-		 * @return {jQuery|Element} The original jQuery object or DOM Element.
-		 */
-		show: function apiShowTip(element, event) {
-			// if we were given a mouse event then run the hover intent testing,
-			// otherwise, simply show the tooltip asap
-			if (isMouseEvent(event)) {
-				trackMouse(event);
-				session.previousX = event.pageX;
-				session.previousY = event.pageY;
-				$(element).data(DATA_DISPLAYCONTROLLER).show();
-			} else {
-				$(element).first().data(DATA_DISPLAYCONTROLLER).show(true, true);
-			}
-			return element;
-		},
-
-		/**
-		 * Repositions the tooltip on the element.
-		 * @param {jQuery|Element} element The element the tooltip is shown for.
-		 * @return {jQuery|Element} The original jQuery object or DOM Element.
-		 */
-		reposition: function apiResetPosition(element) {
-			$(element).first().data(DATA_DISPLAYCONTROLLER).resetPosition();
-			return element;
-		},
-
-		/**
-		 * Attempts to close any open tooltips.
-		 * @param {(jQuery|Element)=} element The element with the tooltip that
-		 *     should be closed (optional).
-		 * @param {boolean=} immediate Disable close delay (optional).
-		 * @return {jQuery|Element|undefined} The original jQuery object or DOM
-		 *     Element, if one was specified.
-		 */
-		hide: function apiCloseTip(element, immediate) {
-			var displayController;
-
-			// set immediate to true when no element is specified
-			immediate = element ? immediate : true;
-
-			// find the relevant display controller
-			if (element) {
-				displayController = $(element).first().data(DATA_DISPLAYCONTROLLER);
-			} else if (session.activeHover) {
-				displayController = session.activeHover.data(DATA_DISPLAYCONTROLLER);
-			}
-
-			// if found, hide the tip
-			if (displayController) {
-				displayController.hide(immediate);
-			}
-
-			return element;
-		},
-
-		/**
-		 * Toggles the tooltip for the specified element. This will open a closed
-		 * tooltip, or close an open tooltip.
-		 * @param {jQuery|Element} element The element with the tooltip that
-		 *     should be toggled.
-		 * @param {jQuery.Event=} event jQuery event for hover intent and mouse
-		 *     tracking (optional).
-		 * @return {jQuery|Element} The original jQuery object or DOM Element.
-		 */
-		toggle: function apiToggle(element, event) {
-			if (session.activeHover && session.activeHover.is(element)) {
-				// tooltip for element is active, so close it
-				$.powerTip.hide(element, !isMouseEvent(event));
-			} else {
-				// tooltip for element is not active, so open it
-				$.powerTip.show(element, event);
-			}
-			return element;
-		},
-
-		/**
-		 * Destroy and roll back any powerTip() instance on the specified elements.
-		 * If no elements are specified then all elements that the plugin is
-		 * currently attached to will be rolled back.
-		 * @param {(jQuery|Element)=} element The element with the powerTip instance.
-		 * @return {jQuery|Element|undefined} The original jQuery object or DOM
-		 *     Element, if one was specified.
-		 */
-		destroy: function apiDestroy(element) {
-			var $element = element ? $(element) : session.elements;
-
-			// if the plugin is not hooked to any elements then there is no point
-			// trying to destroy anything, or dealing with the possible errors
-			if (!session.elements || session.elements.length === 0) {
-				return element;
-			}
-
-			// unhook events and destroy plugin changes to each element
-			$element.off(EVENT_NAMESPACE).each(function destroy() {
-				var $this = $(this),
-					dataAttributes = [
-						DATA_ORIGINALTITLE,
-						DATA_DISPLAYCONTROLLER,
-						DATA_HASACTIVEHOVER,
-						DATA_FORCEDOPEN
-					];
-
-				// revert title attribute
-				if ($this.data(DATA_ORIGINALTITLE)) {
-					$this.attr('title', $this.data(DATA_ORIGINALTITLE));
-					dataAttributes.push(DATA_POWERTIP);
-				}
-
-				// remove data attributes
-				$this.removeData(dataAttributes);
-			});
-
-			// remove destroyed element from active elements collection
-			session.elements = session.elements.not($element);
-
-			// if there are no active elements left then we will unhook all of the
-			// events that we've bound code to and remove the tooltip elements
-			if (session.elements.length === 0) {
-				$window.off(EVENT_NAMESPACE);
-				$document.off(EVENT_NAMESPACE);
-				session.mouseTrackingActive = false;
-				session.tooltips.remove();
-				session.tooltips = null;
-			}
-
-			return element;
-		}
-	};
-
-	// API aliasing
-	$.powerTip.showTip = $.powerTip.show;
-	$.powerTip.closeTip = $.powerTip.hide;
-
-	/**
-	 * Creates a new CSSCoordinates object.
-	 * @private
-	 * @constructor
-	 */
-	function CSSCoordinates() {
-		var me = this;
-
-		// initialize object properties
-		me.top = 'auto';
-		me.left = 'auto';
-		me.right = 'auto';
-		me.bottom = 'auto';
-
-		/**
-		 * Set a property to a value.
-		 * @private
-		 * @param {string} property The name of the property.
-		 * @param {number} value The value of the property.
-		 */
-		me.set = function(property, value) {
-			if ($.isNumeric(value)) {
-				me[property] = Math.round(value);
-			}
-		};
-	}
-
-	/**
-	 * Creates a new tooltip display controller.
-	 * @private
-	 * @constructor
-	 * @param {jQuery} element The element that this controller will handle.
-	 * @param {Object} options Options object containing settings.
-	 * @param {TooltipController} tipController The TooltipController object for
-	 *     this instance.
-	 */
-	function DisplayController(element, options, tipController) {
-		var hoverTimer = null,
-			myCloseDelay = null;
-
-		/**
-		 * Begins the process of showing a tooltip.
-		 * @private
-		 * @param {boolean=} immediate Skip intent testing (optional).
-		 * @param {boolean=} forceOpen Ignore cursor position and force tooltip to
-		 *     open (optional).
-		 */
-		function openTooltip(immediate, forceOpen) {
-			cancelTimer();
-			if (!element.data(DATA_HASACTIVEHOVER)) {
-				if (!immediate) {
-					session.tipOpenImminent = true;
-					hoverTimer = setTimeout(
-						function intentDelay() {
-							hoverTimer = null;
-							checkForIntent();
-						},
-						options.intentPollInterval
-					);
-				} else {
-					if (forceOpen) {
-						element.data(DATA_FORCEDOPEN, true);
-					}
-					closeAnyDelayed();
-					tipController.showTip(element);
-				}
-			} else {
-				// cursor left and returned to this element, cancel close
-				cancelClose();
-			}
-		}
-
-		/**
-		 * Begins the process of closing a tooltip.
-		 * @private
-		 * @param {boolean=} disableDelay Disable close delay (optional).
-		 */
-		function closeTooltip(disableDelay) {
-			// if this instance already has a close delay in progress then halt it
-			if (myCloseDelay) {
-				myCloseDelay = session.closeDelayTimeout = clearTimeout(myCloseDelay);
-				session.delayInProgress = false;
-			}
-			cancelTimer();
-			session.tipOpenImminent = false;
-			if (element.data(DATA_HASACTIVEHOVER)) {
-				element.data(DATA_FORCEDOPEN, false);
-				if (!disableDelay) {
-					session.delayInProgress = true;
-					session.closeDelayTimeout = setTimeout(
-						function closeDelay() {
-							session.closeDelayTimeout = null;
-							tipController.hideTip(element);
-							session.delayInProgress = false;
-							myCloseDelay = null;
-						},
-						options.closeDelay
-					);
-					// save internal reference close delay id so we can check if the
-					// active close delay belongs to this instance
-					myCloseDelay = session.closeDelayTimeout;
-				} else {
-					tipController.hideTip(element);
-				}
-			}
-		}
-
-		/**
-		 * Checks mouse position to make sure that the user intended to hover on the
-		 * specified element before showing the tooltip.
-		 * @private
-		 */
-		function checkForIntent() {
-			// calculate mouse position difference
-			var xDifference = Math.abs(session.previousX - session.currentX),
-				yDifference = Math.abs(session.previousY - session.currentY),
-				totalDifference = xDifference + yDifference;
-
-			// check if difference has passed the sensitivity threshold
-			if (totalDifference < options.intentSensitivity) {
-				cancelClose();
-				closeAnyDelayed();
-				tipController.showTip(element);
-			} else {
-				// try again
-				session.previousX = session.currentX;
-				session.previousY = session.currentY;
-				openTooltip();
-			}
-		}
-
-		/**
-		 * Cancels active hover timer.
-		 * @private
-		 * @param {boolean=} stopClose Cancel any active close delay timer.
-		 */
-		function cancelTimer(stopClose) {
-			hoverTimer = clearTimeout(hoverTimer);
-			// cancel the current close delay if the active close delay is for this
-			// element or the stopClose argument is true
-			if (session.closeDelayTimeout && myCloseDelay === session.closeDelayTimeout || stopClose) {
-				cancelClose();
-			}
-		}
-
-		/**
-		 * Cancels any active close delay timer.
-		 * @private
-		 */
-		function cancelClose() {
-			session.closeDelayTimeout = clearTimeout(session.closeDelayTimeout);
-			session.delayInProgress = false;
-		}
-
-		/**
-		 * Asks any tooltips waiting on their close delay to close now.
-		 * @private
-		 */
-		function closeAnyDelayed() {
-			// if another element is waiting for its close delay then we should ask
-			// it to close immediately so we can proceed without unexpected timeout
-			// code being run during this tooltip's lifecycle
-			if (session.delayInProgress && session.activeHover && !session.activeHover.is(element)) {
-				session.activeHover.data(DATA_DISPLAYCONTROLLER).hide(true);
-			}
-		}
-
-		/**
-		 * Repositions the tooltip on this element.
-		 * @private
-		 */
-		function repositionTooltip() {
-			tipController.resetPosition(element);
-		}
-
-		// expose the methods
-		this.show = openTooltip;
-		this.hide = closeTooltip;
-		this.cancel = cancelTimer;
-		this.resetPosition = repositionTooltip;
-	}
-
-	/**
-	 * Creates a new Placement Calculator.
-	 * @private
-	 * @constructor
-	 */
-	function PlacementCalculator() {
-		/**
-		 * Compute the CSS position to display a tooltip at the specified placement
-		 * relative to the specified element.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 * @param {string} placement The placement for the tooltip.
-		 * @param {number} tipWidth Width of the tooltip element in pixels.
-		 * @param {number} tipHeight Height of the tooltip element in pixels.
-		 * @param {number} offset Distance to offset tooltips in pixels.
-		 * @return {CSSCoordinates} A CSSCoordinates object with the position.
-		 */
-		function computePlacementCoords(element, placement, tipWidth, tipHeight, offset) {
-			var placementBase = placement.split('-')[0], // ignore 'alt' for corners
-				coords = new CSSCoordinates(),
-				position;
-
-			if (isSvgElement(element)) {
-				position = getSvgPlacement(element, placementBase);
-			} else {
-				position = getHtmlPlacement(element, placementBase);
-			}
-
-			// calculate the appropriate x and y position in the document
-			switch (placement) {
-				case 'n':
-					coords.set('left', position.left - (tipWidth / 2));
-					coords.set('bottom', session.windowHeight - position.top + offset);
-					break;
-				case 'e':
-					coords.set('left', position.left + offset);
-					coords.set('top', position.top - (tipHeight / 2));
-					break;
-				case 's':
-					coords.set('left', position.left - (tipWidth / 2));
-					coords.set('top', position.top + offset);
-					break;
-				case 'w':
-					coords.set('top', position.top - (tipHeight / 2));
-					coords.set('right', session.windowWidth - position.left + offset);
-					break;
-				case 'nw':
-					coords.set('bottom', session.windowHeight - position.top + offset);
-					coords.set('right', session.windowWidth - position.left - 20);
-					break;
-				case 'nw-alt':
-					coords.set('left', position.left);
-					coords.set('bottom', session.windowHeight - position.top + offset);
-					break;
-				case 'ne':
-					coords.set('left', position.left - 20);
-					coords.set('bottom', session.windowHeight - position.top + offset);
-					break;
-				case 'ne-alt':
-					coords.set('bottom', session.windowHeight - position.top + offset);
-					coords.set('right', session.windowWidth - position.left);
-					break;
-				case 'sw':
-					coords.set('top', position.top + offset);
-					coords.set('right', session.windowWidth - position.left - 20);
-					break;
-				case 'sw-alt':
-					coords.set('left', position.left);
-					coords.set('top', position.top + offset);
-					break;
-				case 'se':
-					coords.set('left', position.left - 20);
-					coords.set('top', position.top + offset);
-					break;
-				case 'se-alt':
-					coords.set('top', position.top + offset);
-					coords.set('right', session.windowWidth - position.left);
-					break;
-			}
-
-			return coords;
-		}
-
-		/**
-		 * Finds the tooltip attachment point in the document for a HTML DOM element
-		 * for the specified placement.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 * @param {string} placement The placement for the tooltip.
-		 * @return {Object} An object with the top,left position values.
-		 */
-		function getHtmlPlacement(element, placement) {
-			var objectOffset = element.offset(),
-				objectWidth = element.outerWidth(),
-				objectHeight = element.outerHeight(),
-				left,
-				top;
-
-			// calculate the appropriate x and y position in the document
-			switch (placement) {
-				case 'n':
-					left = objectOffset.left + objectWidth / 2;
-					top = objectOffset.top;
-					break;
-				case 'e':
-					left = objectOffset.left + objectWidth;
-					top = objectOffset.top + objectHeight / 2;
-					break;
-				case 's':
-					left = objectOffset.left + objectWidth / 2;
-					top = objectOffset.top + objectHeight;
-					break;
-				case 'w':
-					left = objectOffset.left;
-					top = objectOffset.top + objectHeight / 2;
-					break;
-				case 'nw':
-					left = objectOffset.left;
-					top = objectOffset.top;
-					break;
-				case 'ne':
-					left = objectOffset.left + objectWidth;
-					top = objectOffset.top;
-					break;
-				case 'sw':
-					left = objectOffset.left;
-					top = objectOffset.top + objectHeight;
-					break;
-				case 'se':
-					left = objectOffset.left + objectWidth;
-					top = objectOffset.top + objectHeight;
-					break;
-			}
-
-			return {
-				top: top,
-				left: left
-			};
-		}
-
-		/**
-		 * Finds the tooltip attachment point in the document for a SVG element for
-		 * the specified placement.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 * @param {string} placement The placement for the tooltip.
-		 * @return {Object} An object with the top,left position values.
-		 */
-		function getSvgPlacement(element, placement) {
-			var svgElement = element.closest('svg')[0],
-				domElement = element[0],
-				point = svgElement.createSVGPoint(),
-				boundingBox = domElement.getBBox(),
-				matrix = domElement.getScreenCTM(),
-				halfWidth = boundingBox.width / 2,
-				halfHeight = boundingBox.height / 2,
-				placements = [],
-				placementKeys = [ 'nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w' ],
-				coords,
-				rotation,
-				steps,
-				x;
-
-			function pushPlacement() {
-				placements.push(point.matrixTransform(matrix));
-			}
-
-			// get bounding box corners and midpoints
-			point.x = boundingBox.x;
-			point.y = boundingBox.y;
-			pushPlacement();
-			point.x += halfWidth;
-			pushPlacement();
-			point.x += halfWidth;
-			pushPlacement();
-			point.y += halfHeight;
-			pushPlacement();
-			point.y += halfHeight;
-			pushPlacement();
-			point.x -= halfWidth;
-			pushPlacement();
-			point.x -= halfWidth;
-			pushPlacement();
-			point.y -= halfHeight;
-			pushPlacement();
-
-			// determine rotation
-			if (placements[0].y !== placements[1].y || placements[0].x !== placements[7].x) {
-				rotation = Math.atan2(matrix.b, matrix.a) * RAD2DEG;
-				steps = Math.ceil(((rotation % 360) - 22.5) / 45);
-				if (steps < 1) {
-					steps += 8;
-				}
-				while (steps--) {
-					placementKeys.push(placementKeys.shift());
-				}
-			}
-
-			// find placement
-			for (x = 0; x < placements.length; x++) {
-				if (placementKeys[x] === placement) {
-					coords = placements[x];
-					break;
-				}
-			}
-
-			return {
-				top: coords.y + session.scrollTop,
-				left: coords.x + session.scrollLeft
-			};
-		}
-
-		// expose methods
-		this.compute = computePlacementCoords;
-	}
-
-	/**
-	 * Creates a new tooltip controller.
-	 * @private
-	 * @constructor
-	 * @param {Object} options Options object containing settings.
-	 */
-	function TooltipController(options) {
-		var placementCalculator = new PlacementCalculator(),
-			tipElement = $('#' + options.popupId);
-
-		// build and append tooltip div if it does not already exist
-		if (tipElement.length === 0) {
-			tipElement = $('<div/>', { id: options.popupId });
-			// grab body element if it was not populated when the script loaded
-			// note: this hack exists solely for jsfiddle support
-			if ($body.length === 0) {
-				$body = $('body');
-			}
-			$body.append(tipElement);
-			// remember the tooltip elements that the plugin has created
-			session.tooltips = session.tooltips ? session.tooltips.add(tipElement) : tipElement;
-		}
-
-		// hook mousemove for cursor follow tooltips
-		if (options.followMouse) {
-			// only one positionTipOnCursor hook per tooltip element, please
-			if (!tipElement.data(DATA_HASMOUSEMOVE)) {
-				$document.on('mousemove' + EVENT_NAMESPACE, positionTipOnCursor);
-				$window.on('scroll' + EVENT_NAMESPACE, positionTipOnCursor);
-				tipElement.data(DATA_HASMOUSEMOVE, true);
-			}
-		}
-
-		/**
-		 * Gives the specified element the active-hover state and queues up the
-		 * showTip function.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 */
-		function beginShowTip(element) {
-			element.data(DATA_HASACTIVEHOVER, true);
-			// show tooltip, asap
-			tipElement.queue(function queueTipInit(next) {
-				showTip(element);
-				next();
-			});
-		}
-
-		/**
-		 * Shows the tooltip, as soon as possible.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 */
-		function showTip(element) {
-			var tipContent;
-
-			// it is possible, especially with keyboard navigation, to move on to
-			// another element with a tooltip during the queue to get to this point
-			// in the code. if that happens then we need to not proceed or we may
-			// have the fadeout callback for the last tooltip execute immediately
-			// after this code runs, causing bugs.
-			if (!element.data(DATA_HASACTIVEHOVER)) {
-				return;
-			}
-
-			// if the tooltip is open and we got asked to open another one then the
-			// old one is still in its fadeOut cycle, so wait and try again
-			if (session.isTipOpen) {
-				if (!session.isClosing) {
-					hideTip(session.activeHover);
-				}
-				tipElement.delay(100).queue(function queueTipAgain(next) {
-					showTip(element);
-					next();
-				});
-				return;
-			}
-
-			// trigger powerTipPreRender event
-			element.trigger('powerTipPreRender');
-
-			// set tooltip content
-			tipContent = getTooltipContent(element);
-			if (tipContent) {
-				tipElement.empty().append(tipContent);
-			} else {
-				// we have no content to display, give up
-				return;
-			}
-
-			// trigger powerTipRender event
-			element.trigger('powerTipRender');
-
-			session.activeHover = element;
-			session.isTipOpen = true;
-
-			tipElement.data(DATA_MOUSEONTOTIP, options.mouseOnToPopup);
-
-			// set tooltip position
-			if (!options.followMouse) {
-				positionTipOnElement(element);
-				session.isFixedTipOpen = true;
-			} else {
-				positionTipOnCursor();
-			}
-
-			// add custom class to tooltip element
-			tipElement.addClass(options.popupClass);
-
-			// close tooltip when clicking anywhere on the page, with the exception
-			// of the tooltip's trigger element and any elements that are within a
-			// tooltip that has 'mouseOnToPopup' option enabled
-			if (!element.data(DATA_FORCEDOPEN)) {
-				$document.on('click' + EVENT_NAMESPACE, function documentClick(event) {
-					var target = event.target;
-					if (target !== element[0]) {
-						if (options.mouseOnToPopup) {
-							if (target !== tipElement[0] && !$.contains(tipElement[0], target)) {
-								$.powerTip.hide();
-							}
-						} else {
-							$.powerTip.hide();
-						}
-					}
-				});
-			}
-
-			// if we want to be able to mouse on to the tooltip then we need to
-			// attach hover events to the tooltip that will cancel a close request
-			// on mouseenter and start a new close request on mouseleave
-			// only hook these listeners if we're not in manual mode
-			if (options.mouseOnToPopup && !options.manual) {
-				tipElement.on('mouseenter' + EVENT_NAMESPACE, function tipMouseEnter() {
-					// check activeHover in case the mouse cursor entered the
-					// tooltip during the fadeOut and close cycle
-					if (session.activeHover) {
-						session.activeHover.data(DATA_DISPLAYCONTROLLER).cancel();
-					}
-				});
-				tipElement.on('mouseleave' + EVENT_NAMESPACE, function tipMouseLeave() {
-					// check activeHover in case the mouse cursor left the tooltip
-					// during the fadeOut and close cycle
-					if (session.activeHover) {
-						session.activeHover.data(DATA_DISPLAYCONTROLLER).hide();
-					}
-				});
-			}
-
-			// fadein
-			tipElement.fadeIn(options.fadeInTime, function fadeInCallback() {
-				// start desync polling
-				if (!session.desyncTimeout) {
-					session.desyncTimeout = setInterval(closeDesyncedTip, 500);
-				}
-
-				// trigger powerTipOpen event
-				element.trigger('powerTipOpen');
-			});
-		}
-
-		/**
-		 * Hides the tooltip.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 */
-		function hideTip(element) {
-			// reset session
-			session.isClosing = true;
-			session.isTipOpen = false;
-
-			// stop desync polling
-			session.desyncTimeout = clearInterval(session.desyncTimeout);
-
-			// reset element state
-			element.data(DATA_HASACTIVEHOVER, false);
-			element.data(DATA_FORCEDOPEN, false);
-
-			// remove document click handler
-			$document.off('click' + EVENT_NAMESPACE);
-
-			// unbind the mouseOnToPopup events if they were set
-			tipElement.off(EVENT_NAMESPACE);
-
-			// fade out
-			tipElement.fadeOut(options.fadeOutTime, function fadeOutCallback() {
-				var coords = new CSSCoordinates();
-
-				// reset session and tooltip element
-				session.activeHover = null;
-				session.isClosing = false;
-				session.isFixedTipOpen = false;
-				tipElement.removeClass();
-
-				// support mouse-follow and fixed position tips at the same time by
-				// moving the tooltip to the last cursor location after it is hidden
-				coords.set('top', session.currentY + options.offset);
-				coords.set('left', session.currentX + options.offset);
-				tipElement.css(coords);
-
-				// trigger powerTipClose event
-				element.trigger('powerTipClose');
-			});
-		}
-
-		/**
-		 * Moves the tooltip to the users mouse cursor.
-		 * @private
-		 */
-		function positionTipOnCursor() {
-			// to support having fixed tooltips on the same page as cursor tooltips,
-			// where both instances are referencing the same tooltip element, we
-			// need to keep track of the mouse position constantly, but we should
-			// only set the tip location if a fixed tip is not currently open, a tip
-			// open is imminent or active, and the tooltip element in question does
-			// have a mouse-follow using it.
-			if (!session.isFixedTipOpen && (session.isTipOpen || (session.tipOpenImminent && tipElement.data(DATA_HASMOUSEMOVE)))) {
-				// grab measurements
-				var tipWidth = tipElement.outerWidth(),
-					tipHeight = tipElement.outerHeight(),
-					coords = new CSSCoordinates(),
-					collisions,
-					collisionCount;
-
-				// grab collisions
-				coords.set('top', session.currentY + options.offset);
-				coords.set('left', session.currentX + options.offset);
-				collisions = getViewportCollisions(
-					coords,
-					tipWidth,
-					tipHeight
-				);
-
-				// handle tooltip view port collisions
-				if (collisions !== Collision.none) {
-					collisionCount = countFlags(collisions);
-					if (collisionCount === 1) {
-						// if there is only one collision (bottom or right) then
-						// simply constrain the tooltip to the view port
-						if (collisions === Collision.right) {
-							coords.set('left', session.windowWidth - tipWidth);
-						} else if (collisions === Collision.bottom) {
-							coords.set('top', session.scrollTop + session.windowHeight - tipHeight);
-						}
-					} else {
-						// if the tooltip has more than one collision then it is
-						// trapped in the corner and should be flipped to get it out
-						// of the users way
-						coords.set('left', session.currentX - tipWidth - options.offset);
-						coords.set('top', session.currentY - tipHeight - options.offset);
-					}
-				}
-
-				// position the tooltip
-				tipElement.css(coords);
-			}
-		}
-
-		/**
-		 * Sets the tooltip to the correct position relative to the specified target
-		 * element. Based on options settings.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 */
-		function positionTipOnElement(element) {
-			var priorityList,
-				finalPlacement;
-
-			if (options.smartPlacement) {
-				priorityList = $.fn.powerTip.smartPlacementLists[options.placement];
-
-				// iterate over the priority list and use the first placement option
-				// that does not collide with the view port. if they all collide
-				// then the last placement in the list will be used.
-				$.each(priorityList, function(idx, pos) {
-					// place tooltip and find collisions
-					var collisions = getViewportCollisions(
-						placeTooltip(element, pos),
-						tipElement.outerWidth(),
-						tipElement.outerHeight()
-					);
-
-					// update the final placement variable
-					finalPlacement = pos;
-
-					// break if there were no collisions
-					if (collisions === Collision.none) {
-						return false;
-					}
-				});
-			} else {
-				// if we're not going to use the smart placement feature then just
-				// compute the coordinates and do it
-				placeTooltip(element, options.placement);
-				finalPlacement = options.placement;
-			}
-
-			// add placement as class for CSS arrows
-			tipElement.removeClass('w nw sw e ne se n s w se-alt sw-alt ne-alt nw-alt');
-			tipElement.addClass(finalPlacement);
-		}
-
-		/**
-		 * Sets the tooltip position to the appropriate values to show the tip at
-		 * the specified placement. This function will iterate and test the tooltip
-		 * to support elastic tooltips.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 * @param {string} placement The placement for the tooltip.
-		 * @return {CSSCoordinates} A CSSCoordinates object with the top, left, and
-		 *     right position values.
-		 */
-		function placeTooltip(element, placement) {
-			var iterationCount = 0,
-				tipWidth,
-				tipHeight,
-				coords = new CSSCoordinates();
-
-			// set the tip to 0,0 to get the full expanded width
-			coords.set('top', 0);
-			coords.set('left', 0);
-			tipElement.css(coords);
-
-			// to support elastic tooltips we need to check for a change in the
-			// rendered dimensions after the tooltip has been positioned
-			do {
-				// grab the current tip dimensions
-				tipWidth = tipElement.outerWidth();
-				tipHeight = tipElement.outerHeight();
-
-				// get placement coordinates
-				coords = placementCalculator.compute(
-					element,
-					placement,
-					tipWidth,
-					tipHeight,
-					options.offset
-				);
-
-				// place the tooltip
-				tipElement.css(coords);
-			} while (
-				// sanity check: limit to 5 iterations, and...
-				++iterationCount <= 5 &&
-				// try again if the dimensions changed after placement
-				(tipWidth !== tipElement.outerWidth() || tipHeight !== tipElement.outerHeight())
-			);
-
-			return coords;
-		}
-
-		/**
-		 * Checks for a tooltip desync and closes the tooltip if one occurs.
-		 * @private
-		 */
-		function closeDesyncedTip() {
-			var isDesynced = false;
-			// It is possible for the mouse cursor to leave an element without
-			// firing the mouseleave or blur event. This most commonly happens when
-			// the element is disabled under mouse cursor. If this happens it will
-			// result in a desynced tooltip because the tooltip was never asked to
-			// close. So we should periodically check for a desync situation and
-			// close the tip if such a situation arises.
-			if (session.isTipOpen && !session.isClosing && !session.delayInProgress && ($.inArray('mouseleave', options.closeEvents) > -1 || $.inArray('mouseout', options.closeEvents) > -1 || $.inArray('blur', options.closeEvents) > -1 || $.inArray('focusout', options.closeEvents) > -1)) {
-				// user moused onto another tip or active hover is disabled
-				if (session.activeHover.data(DATA_HASACTIVEHOVER) === false || session.activeHover.is(':disabled')) {
-					isDesynced = true;
-				} else {
-					// hanging tip - have to test if mouse position is not over the
-					// active hover and not over a tooltip set to let the user
-					// interact with it.
-					// for keyboard navigation: this only counts if the element does
-					// not have focus.
-					// for tooltips opened via the api: we need to check if it has
-					// the forcedOpen flag.
-					if (!isMouseOver(session.activeHover) && !session.activeHover.is(':focus') && !session.activeHover.data(DATA_FORCEDOPEN)) {
-						if (tipElement.data(DATA_MOUSEONTOTIP)) {
-							if (!isMouseOver(tipElement)) {
-								isDesynced = true;
-							}
-						} else {
-							isDesynced = true;
-						}
-					}
-				}
-
-				if (isDesynced) {
-					// close the desynced tip
-					hideTip(session.activeHover);
-				}
-			}
-		}
-
-		// expose methods
-		this.showTip = beginShowTip;
-		this.hideTip = hideTip;
-		this.resetPosition = positionTipOnElement;
-	}
-
-	/**
-	 * Determine whether a jQuery object is an SVG element
-	 * @private
-	 * @param {jQuery} element The element to check
-	 * @return {boolean} Whether this is an SVG element
-	 */
-	function isSvgElement(element) {
-		return Boolean(window.SVGElement && element[0] instanceof SVGElement);
-	}
-
-	/**
-	 * Determines if the specified jQuery.Event object has mouse data.
-	 * @private
-	 * @param {jQuery.Event=} event The jQuery.Event object to test.
-	 * @return {boolean} True if there is mouse data, otherwise false.
-	 */
-	function isMouseEvent(event) {
-		return Boolean(event && typeof event.pageX === 'number');
-	}
-
-	/**
-	 * Initializes the viewport dimension cache and hooks up the mouse position
-	 * tracking and viewport dimension tracking events.
-	 * Prevents attaching the events more than once.
-	 * @private
-	 */
-	function initTracking() {
-		if (!session.mouseTrackingActive) {
-			session.mouseTrackingActive = true;
-
-			// grab the current viewport dimensions on load
-			getViewportDimensions();
-			$(getViewportDimensions);
-
-			// hook mouse move tracking
-			$document.on('mousemove' + EVENT_NAMESPACE, trackMouse);
-
-			// hook viewport dimensions tracking
-			$window.on('resize' + EVENT_NAMESPACE, trackResize);
-			$window.on('scroll' + EVENT_NAMESPACE, trackScroll);
-		}
-	}
-
-	/**
-	 * Updates the viewport dimensions cache.
-	 * @private
-	 */
-	function getViewportDimensions() {
-		session.scrollLeft = $window.scrollLeft();
-		session.scrollTop = $window.scrollTop();
-		session.windowWidth = $window.width();
-		session.windowHeight = $window.height();
-	}
-
-	/**
-	 * Updates the window size info in the viewport dimensions cache.
-	 * @private
-	 */
-	function trackResize() {
-		session.windowWidth = $window.width();
-		session.windowHeight = $window.height();
-	}
-
-	/**
-	 * Updates the scroll offset info in the viewport dimensions cache.
-	 * @private
-	 */
-	function trackScroll() {
-		var x = $window.scrollLeft(),
-			y = $window.scrollTop();
-		if (x !== session.scrollLeft) {
-			session.currentX += x - session.scrollLeft;
-			session.scrollLeft = x;
-		}
-		if (y !== session.scrollTop) {
-			session.currentY += y - session.scrollTop;
-			session.scrollTop = y;
-		}
-	}
-
-	/**
-	 * Saves the current mouse coordinates to the session object.
-	 * @private
-	 * @param {jQuery.Event} event The mousemove event for the document.
-	 */
-	function trackMouse(event) {
-		session.currentX = event.pageX;
-		session.currentY = event.pageY;
-	}
-
-	/**
-	 * Tests if the mouse is currently over the specified element.
-	 * @private
-	 * @param {jQuery} element The element to check for hover.
-	 * @return {boolean}
-	 */
-	function isMouseOver(element) {
-		// use getBoundingClientRect() because jQuery's width() and height()
-		// methods do not work with SVG elements
-		// compute width/height because those properties do not exist on the object
-		// returned by getBoundingClientRect() in older versions of IE
-		var elementPosition = element.offset(),
-			elementBox = element[0].getBoundingClientRect(),
-			elementWidth = elementBox.right - elementBox.left,
-			elementHeight = elementBox.bottom - elementBox.top;
-
-		return session.currentX >= elementPosition.left &&
-			session.currentX <= elementPosition.left + elementWidth &&
-			session.currentY >= elementPosition.top &&
-			session.currentY <= elementPosition.top + elementHeight;
-	}
-
-	/**
-	 * Fetches the tooltip content from the specified element's data attributes.
-	 * @private
-	 * @param {jQuery} element The element to get the tooltip content for.
-	 * @return {(string|jQuery|undefined)} The text/HTML string, jQuery object, or
-	 *     undefined if there was no tooltip content for the element.
-	 */
-	function getTooltipContent(element) {
-		var tipText = element.data(DATA_POWERTIP),
-			tipObject = element.data(DATA_POWERTIPJQ),
-			tipTarget = element.data(DATA_POWERTIPTARGET),
-			targetElement,
-			content;
-
-		if (tipText) {
-			if ($.isFunction(tipText)) {
-				tipText = tipText.call(element[0]);
-			}
-			content = tipText;
-		} else if (tipObject) {
-			if ($.isFunction(tipObject)) {
-				tipObject = tipObject.call(element[0]);
-			}
-			if (tipObject.length > 0) {
-				content = tipObject.clone(true, true);
-			}
-		} else if (tipTarget) {
-			targetElement = $('#' + tipTarget);
-			if (targetElement.length > 0) {
-				content = targetElement.html();
-			}
-		}
-
-		return content;
-	}
-
-	/**
-	 * Finds any viewport collisions that an element (the tooltip) would have if it
-	 * were absolutely positioned at the specified coordinates.
-	 * @private
-	 * @param {CSSCoordinates} coords Coordinates for the element.
-	 * @param {number} elementWidth Width of the element in pixels.
-	 * @param {number} elementHeight Height of the element in pixels.
-	 * @return {number} Value with the collision flags.
-	 */
-	function getViewportCollisions(coords, elementWidth, elementHeight) {
-		var viewportTop = session.scrollTop,
-			viewportLeft =  session.scrollLeft,
-			viewportBottom = viewportTop + session.windowHeight,
-			viewportRight = viewportLeft + session.windowWidth,
-			collisions = Collision.none;
-
-		if (coords.top < viewportTop || Math.abs(coords.bottom - session.windowHeight) - elementHeight < viewportTop) {
-			collisions |= Collision.top;
-		}
-		if (coords.top + elementHeight > viewportBottom || Math.abs(coords.bottom - session.windowHeight) > viewportBottom) {
-			collisions |= Collision.bottom;
-		}
-		if (coords.left < viewportLeft || coords.right + elementWidth > viewportRight) {
-			collisions |= Collision.left;
-		}
-		if (coords.left + elementWidth > viewportRight || coords.right < viewportLeft) {
-			collisions |= Collision.right;
-		}
-
-		return collisions;
-	}
-
-	/**
-	 * Counts the number of bits set on a flags value.
-	 * @param {number} value The flags value.
-	 * @return {number} The number of bits that have been set.
-	 */
-	function countFlags(value) {
-		var count = 0;
-		while (value) {
-			value &= value - 1;
-			count++;
-		}
-		return count;
-	}
-
-// return api for commonjs and amd environments
-	return $.powerTip;
-}));
-
-
 /***/ })
-
-/******/ });
+/******/ ]);
 });
+//# sourceMappingURL=vendors.js.map

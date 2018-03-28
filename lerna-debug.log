@@ -1,0 +1,54 @@
+0 silly input [ 'build' ]
+1 silly flags { _: [ 'run' ],
+1 silly flags   'reject-cycles': false,
+1 silly flags   rejectCycles: false,
+1 silly flags   script: 'build',
+1 silly flags   args: [] }
+2 verbose rootPath /Users/mattl/Development/solutions/pano-js
+3 info version 2.9.0
+4 silly existsSync /Users/mattl/Development/solutions/pano-js/VERSION
+5 silly initialize attempt
+6 silly initialize success
+7 silly execute attempt
+8 silly runScriptInDir build [] pano
+9 silly getExecOpts { cwd: '/Users/mattl/Development/solutions/pano-js/packages/pano' }
+10 error build Errored while running script in 'pano'
+11 error execute callback with error
+12 error Error: Command failed: yarn run build
+12 error module.js:557
+12 error     throw err;
+12 error     ^
+12 error
+12 error Error: Cannot find module 'jquery'
+12 error     at Function.Module._resolveFilename (module.js:555:15)
+12 error     at Function.resolve (internal/module.js:18:19)
+12 error     at Object.<anonymous> (/Users/mattl/Development/solutions/pano-js/packages/pano/webpack.config.js:28:23)
+12 error     at Module._compile (module.js:660:30)
+12 error     at Object.Module._extensions..js (module.js:671:10)
+12 error     at Module.load (module.js:573:32)
+12 error     at tryModuleLoad (module.js:513:12)
+12 error     at Function.Module._load (module.js:505:3)
+12 error     at Module.require (module.js:604:17)
+12 error     at require (internal/module.js:11:18)
+12 error error An unexpected error occurred: "Command failed.
+12 error Exit code: 1
+12 error Command: webpack
+12 error Arguments:
+12 error Directory: /Users/mattl/Development/solutions/pano-js/packages/pano
+12 error Output:
+12 error ".
+12 error error An unexpected error occurred: "Command failed.
+12 error Exit code: 1
+12 error Command: sh
+12 error Arguments: -c yarn exec webpack
+12 error Directory: /Users/mattl/Development/solutions/pano-js/packages/pano
+12 error Output:
+12 error ".
+12 error $ yarn exec webpack
+12 error info If you think this is a bug, please open a bug report with the information provided in "/Users/mattl/Development/solutions/pano-js/packages/pano/yarn-error.log".
+12 error info Visit https://yarnpkg.com/en/docs/cli/exec for documentation about this command.
+12 error info If you think this is a bug, please open a bug report with the information provided in "/Users/mattl/Development/solutions/pano-js/packages/pano/yarn-error.log".
+12 error info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+12 error
+12 error     at Promise.all.then.arr (/Users/mattl/Development/solutions/pano-js/node_modules/execa/index.js:236:11)
+12 error     at <anonymous>

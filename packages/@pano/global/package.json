@@ -1,0 +1,10 @@
+{
+  "name": "@pano/global",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "files": ["index.js", "ui.js"],
+  "dependencies": {
+    "@pano/vendors": "1.0.0"
+  }
+}

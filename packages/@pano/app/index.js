@@ -1,0 +1,11 @@
+require('./src/arrow_toggle');
+require('./src/calendar');
+require('./src/date_picker');
+require('./src/dropdown');
+require('./src/file_uploads');
+require('./src/filters');
+require('./src/minicolors');
+require('./src/modals');
+require('./src/nav');
+require('./src/scroll_to');
+require('./src/switches');

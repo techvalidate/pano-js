@@ -37,6 +37,16 @@ module.exports = {
           loader: 'expose-loader',
           options: 'jquery'
       }]
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['env']
+          }
+        }
       }
     ]
   },

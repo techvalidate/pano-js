@@ -82,24 +82,28 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function($) {/* harmony export (immutable) */ __webpack_exports__["load"] = load;
-/* harmony export (immutable) */ __webpack_exports__["ujsSend"] = ujsSend;
-/* harmony export (immutable) */ __webpack_exports__["ujsSuccess"] = ujsSuccess;
-/* harmony export (immutable) */ __webpack_exports__["ujsComplete"] = ujsComplete;
-/* harmony export (immutable) */ __webpack_exports__["ujsStart"] = ujsStart;
-/* harmony export (immutable) */ __webpack_exports__["ujsStop"] = ujsStop;
-/* harmony export (immutable) */ __webpack_exports__["ujsError"] = ujsError;
-/* harmony export (immutable) */ __webpack_exports__["on"] = on;
-/* harmony export (immutable) */ __webpack_exports__["input"] = input;
-/* harmony export (immutable) */ __webpack_exports__["change"] = change;
-/* harmony export (immutable) */ __webpack_exports__["blur"] = blur;
-/* harmony export (immutable) */ __webpack_exports__["focus"] = focus;
-/* harmony export (immutable) */ __webpack_exports__["click"] = click;
-/* harmony export (immutable) */ __webpack_exports__["submit"] = submit;
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.load = load;
+exports.ujsSend = ujsSend;
+exports.ujsSuccess = ujsSuccess;
+exports.ujsComplete = ujsComplete;
+exports.ujsStart = ujsStart;
+exports.ujsStop = ujsStop;
+exports.ujsError = ujsError;
+exports.on = on;
+exports.input = input;
+exports.change = change;
+exports.blur = blur;
+exports.focus = focus;
+exports.click = click;
+exports.submit = submit;
 // =====================================================
 // UI
 //
@@ -113,7 +117,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 // =====================================================
 
 
-
 // =====================================================
 // Page Load
 //
@@ -124,13 +127,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 // supported, we wire your callback up to $(document).ready().
 
 function load(callback) {
-  if ((typeof Turbolinks !== 'undefined' && Turbolinks !== null) && Turbolinks.supported) {
-    $(document).on('turbolinks:load', () => {
-      callback()
+  if (typeof Turbolinks !== 'undefined' && Turbolinks !== null && Turbolinks.supported) {
+    $(document).on('turbolinks:load', function () {
+      callback();
     });
-  }
-  else {
-    $(() => callback());
+  } else {
+    $(function () {
+      return callback();
+    });
   }
 }
 
@@ -142,27 +146,39 @@ function load(callback) {
 // see: https://github.com/rails/jquery-ujs/wiki
 
 function ujsSend(callback) {
-  $(document).ajaxSend(( event, request, options ) => callback(event, request, options));
+  $(document).ajaxSend(function (event, request, options) {
+    return callback(event, request, options);
+  });
 }
 
 function ujsSuccess(callback) {
-  $(document).ajaxSuccess((event, xhr, options) => callback(event, xhr, options));
+  $(document).ajaxSuccess(function (event, xhr, options) {
+    return callback(event, xhr, options);
+  });
 }
 
 function ujsComplete(callback) {
-  $(document).ajaxComplete((event, xhr, options) => callback(event, xhr, options));
+  $(document).ajaxComplete(function (event, xhr, options) {
+    return callback(event, xhr, options);
+  });
 }
 
 function ujsStart(callback) {
-  $(document).ajaxStart(() => callback());
+  $(document).ajaxStart(function () {
+    return callback();
+  });
 }
 
 function ujsStop(callback) {
-  $(document).ajaxStop(() => callback());
+  $(document).ajaxStop(function () {
+    return callback();
+  });
 }
 
 function ujsError(callback) {
-  $(document).ajaxError((event, jqxhr, options, thrownError) => callback(event, jqxhr, options, thrownError));
+  $(document).ajaxError(function (event, jqxhr, options, thrownError) {
+    return callback(event, jqxhr, options, thrownError);
+  });
 }
 
 // =====================================================
@@ -175,8 +191,8 @@ function ujsError(callback) {
 // to your callback.
 
 function on(eventName, selector, callback) {
-  $(document).on(eventName, selector, function(e) {
-    const el = $(e.currentTarget);
+  $(document).on(eventName, selector, function (e) {
+    var el = $(e.currentTarget);
     callback(e, el);
   });
 }
@@ -208,8 +224,8 @@ function focus(selector, callback) {
 // callback  true.
 
 function click(selector, callback) {
-  $(document).on('click touch', selector, function(e) {
-    const el = $(e.currentTarget);
+  $(document).on('click touch', selector, function (e) {
+    var el = $(e.currentTarget);
     if (callback(e, el) !== true) {
       e.preventDefault();
     }
@@ -217,15 +233,14 @@ function click(selector, callback) {
 }
 
 function submit(selector, callback) {
-  $(document).on('submit', selector, function(e) {
-    const el = $(e.currentTarget);
+  $(document).on('submit', selector, function (e) {
+    var el = $(e.currentTarget);
     if (callback(e, el) !== true) {
       e.preventDefault();
     }
   });
 }
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 2 */
@@ -17491,26 +17506,55 @@ var ElementObserver = /** @class */ (function () {
 
 /***/ }),
 /* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($, _) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_stimulus__ = __webpack_require__(23);
+/* WEBPACK VAR INJECTION */(function($, _) {
 
-
-/* harmony default export */ __webpack_exports__["a"] = (class extends __WEBPACK_IMPORTED_MODULE_0_stimulus__["a" /* Controller */] {
-  close() {
-    const $element = $(this.element)
-    $('body').css({ overflow: 'auto' })
-    $element.fadeOut(() => {
-      if ($element.hasClass('js-ajax-modal')) $element.remove()
-    })
-  }
-
-  connect() {
-    $(this.element).find('form').on('ajax:success', _.bind(this.close, this))
-  }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0), __webpack_require__(2)))
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _stimulus = __webpack_require__(23);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _class = function (_Controller) {
+  _inherits(_class, _Controller);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'close',
+    value: function close() {
+      var $element = $(this.element);
+      $('body').css({ overflow: 'auto' });
+      $element.fadeOut(function () {
+        if ($element.hasClass('js-ajax-modal')) $element.remove();
+      });
+    }
+  }, {
+    key: 'connect',
+    value: function connect() {
+      $(this.element).find('form').on('ajax:success', _.bind(this.close, this));
+    }
+  }]);
+
+  return _class;
+}(_stimulus.Controller);
+
+exports.default = _class;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(2)))
 
 /***/ }),
 /* 6 */
@@ -19129,22 +19173,33 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 /* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_utils_ui__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_modals__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_sprinkles__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_sprinkles___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__src_sprinkles__);
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "UI", function() { return __WEBPACK_IMPORTED_MODULE_0__src_utils_ui__; });
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "Modals", function() { return __WEBPACK_IMPORTED_MODULE_1__src_modals__; });
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "Sprinkles", function() { return __WEBPACK_IMPORTED_MODULE_2__src_sprinkles__; });
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Sprinkles = exports.Modals = exports.UI = undefined;
 
+var _ui = __webpack_require__(1);
 
+var UI = _interopRequireWildcard(_ui);
 
+var _modals = __webpack_require__(22);
+
+var Modals = _interopRequireWildcard(_modals);
+
+var _sprinkles = __webpack_require__(40);
+
+var Sprinkles = _interopRequireWildcard(_sprinkles);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+exports.UI = UI;
+exports.Modals = Modals;
+exports.Sprinkles = Sprinkles;
 
 /***/ }),
 /* 19 */
@@ -29533,26 +29588,42 @@ return jQuery;
 
 /***/ }),
 /* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__flyout__ = __webpack_require__(39);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Base", function() { return __WEBPACK_IMPORTED_MODULE_0__base__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Flyout", function() { return __WEBPACK_IMPORTED_MODULE_1__flyout__["a"]; });
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Flyout = exports.Base = undefined;
 
+var _base = __webpack_require__(5);
 
+var _base2 = _interopRequireDefault(_base);
+
+var _flyout = __webpack_require__(39);
+
+var _flyout2 = _interopRequireDefault(_flyout);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.Base = _base2.default;
+exports.Flyout = _flyout2.default;
 
 /***/ }),
 /* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stimulus_core__ = __webpack_require__(24);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["a"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Action", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["a"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ActionDescriptor", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["b"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Application", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["c"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Context", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["d"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Controller", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["e"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "defaultSchema", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["f"]; });
 
 
 
@@ -29562,17 +29633,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_action__ = __webpack_require__(7);
-/* unused harmony reexport Action */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__src_action__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_action_descriptor__ = __webpack_require__(8);
-/* unused harmony reexport ActionDescriptor */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__src_action_descriptor__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_application__ = __webpack_require__(25);
-/* unused harmony reexport Application */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__src_application__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_context__ = __webpack_require__(9);
-/* unused harmony reexport Context */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_3__src_context__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_controller__ = __webpack_require__(37);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_4__src_controller__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_4__src_controller__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_schema__ = __webpack_require__(15);
-/* unused harmony reexport defaultSchema */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_5__src_schema__["a"]; });
 
 
 
@@ -29586,7 +29657,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export Application */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Application; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__schema__ = __webpack_require__(15);
 
@@ -30608,86 +30679,126 @@ function capitalize(name) {
 
 /***/ }),
 /* 39 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($, _) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base__ = __webpack_require__(5);
+/* WEBPACK VAR INJECTION */(function($, _) {
 
-
-/* harmony default export */ __webpack_exports__["a"] = (class extends __WEBPACK_IMPORTED_MODULE_0__base__["a" /* default */] {
-  connect() {
-    super.connect()
-    const controller = this
-
-    this.element.classList.add('open')
-
-    $(window).on('resize', _.bind(this.setHeight, this))
-
-    setTimeout(() => {
-      controller.setHeight()
-    }, 300)
-  }
-
-  close() {
-    this.element.classList.remove('open')
-    super.close()
-  }
-
-  setHeight() {
-    const $footer = $(this.element).find('.modal-footer')
-    const $content = $(this.element).find('.modal-content')
-    const navHeight = 48
-
-    if ($footer.exists()) {
-      $content.css({ 'max-height': `${($(window).height() - navHeight) - $footer.outerHeight() }px` })
-    }
-  }
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0), __webpack_require__(2)))
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _base = __webpack_require__(5);
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _class = function (_ModalController) {
+  _inherits(_class, _ModalController);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'connect',
+    value: function connect() {
+      _get(_class.prototype.__proto__ || Object.getPrototypeOf(_class.prototype), 'connect', this).call(this);
+      var controller = this;
+
+      this.element.classList.add('open');
+
+      $(window).on('resize', _.bind(this.setHeight, this));
+
+      setTimeout(function () {
+        controller.setHeight();
+      }, 300);
+    }
+  }, {
+    key: 'close',
+    value: function close() {
+      this.element.classList.remove('open');
+      _get(_class.prototype.__proto__ || Object.getPrototypeOf(_class.prototype), 'close', this).call(this);
+    }
+  }, {
+    key: 'setHeight',
+    value: function setHeight() {
+      var $footer = $(this.element).find('.modal-footer');
+      var $content = $(this.element).find('.modal-content');
+      var navHeight = 48;
+
+      if ($footer.exists()) {
+        $content.css({ 'max-height': $(window).height() - navHeight - $footer.outerHeight() + 'px' });
+      }
+    }
+  }]);
+
+  return _class;
+}(_base2.default);
+
+exports.default = _class;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(2)))
 
 /***/ }),
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
 /**
  * Load sprinkle dependencies
  */
-__webpack_require__(41)
-__webpack_require__(47)
+__webpack_require__(41);
+__webpack_require__(47);
 
 /**
  * Load sprinkles
  */
-__webpack_require__(51)
-__webpack_require__(52)
-__webpack_require__(53)
-__webpack_require__(54)
-__webpack_require__(55)
-__webpack_require__(57)
+__webpack_require__(51);
+__webpack_require__(52);
+__webpack_require__(53);
+__webpack_require__(54);
+__webpack_require__(55);
+__webpack_require__(57);
 __webpack_require__(58);
 __webpack_require__(59);
 __webpack_require__(60);
 __webpack_require__(61);
-__webpack_require__(62)
-__webpack_require__(63)
+__webpack_require__(62);
+__webpack_require__(63);
 __webpack_require__(64);
-__webpack_require__(65)
-__webpack_require__(66)
+__webpack_require__(65);
+__webpack_require__(66);
 __webpack_require__(67);
 __webpack_require__(73);
-
 
 /***/ }),
 /* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(42)
-__webpack_require__(43)
-__webpack_require__(44)
-__webpack_require__(16)
-__webpack_require__(45)
-__webpack_require__(46)
+"use strict";
+
+
+__webpack_require__(42);
+__webpack_require__(43);
+__webpack_require__(44);
+__webpack_require__(16);
+__webpack_require__(45);
+__webpack_require__(46);
 
 /***/ }),
 /* 42 */
@@ -37301,73 +37412,80 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
 
 __webpack_require__(48);
 __webpack_require__(49);
 __webpack_require__(50);
 
-
 /***/ }),
 /* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {$.behavior = function(target, refineSelector) {
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+$.behavior = function (target, refineSelector) {
   if (refineSelector) {
-    $(`[data-behavior~=${target}]:${refineSelector}`);
+    $('[data-behavior~=' + target + ']:' + refineSelector);
   } else {
-    $(`[data-behavior~=${target}]`);
+    $('[data-behavior~=' + target + ']');
   }
 };
 
-$.registerBehavior = function(dataBehavior, event, callback) {
+$.registerBehavior = function (dataBehavior, event, callback) {
   callback();
-  $.behavior(dataBehavior).on(event, () => callback());
+  $.behavior(dataBehavior).on(event, function () {
+    return callback();
+  });
 };
 
 $.fn.extend({
-  disable: function() {
-    this.each(function() {
+  disable: function disable() {
+    this.each(function () {
       $(this).addClass('disabled').prop('disabled', true);
     });
   },
 
-  enable: function() {
-    this.each(function() {
+  enable: function enable() {
+    this.each(function () {
       $(this).removeClass('disabled').prop('disabled', false);
     });
   },
 
-  exists: function() {
-    return this.length > 0
+  exists: function exists() {
+    return this.length > 0;
   },
 
-  isBlank: function() {
+  isBlank: function isBlank() {
     return this.val() === '';
   },
 
-  uncheck: function() {
-    this.each(function() {
+  uncheck: function uncheck() {
+    this.each(function () {
       $(this).prop('checked', false).removeClass('checked');
     }); // the checked class is for ie8
   }
-})
+});
 
-$.fn.exists = function() {
-  return this.length > 0
-}
-
-
+$.fn.exists = function () {
+  return this.length > 0;
+};
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {$.isCSSFeatureSupported = function(cssFeature) {
-  let supported = false;
-  const domPrefixes = 'Webkit Moz ms O'.split(' ');
-  const elm = document.createElement('div');
-  let cssFeatureUpperCase = null;
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+$.isCSSFeatureSupported = function (cssFeature) {
+  var supported = false;
+  var domPrefixes = 'Webkit Moz ms O'.split(' ');
+  var elm = document.createElement('div');
+  var cssFeatureUpperCase = null;
 
   cssFeature = cssFeature.toLowerCase();
 
@@ -37378,8 +37496,8 @@ $.fn.exists = function() {
   if (supported === false) {
     cssFeatureUpperCase = cssFeature.charAt(0).toUpperCase() + cssFeature.substr(1);
 
-    for (let i = 0, end = domPrefixes.length, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-      if (elm.style[domPrefixes[i] + cssFeatureUpperCase ] !== undefined) {
+    for (var i = 0, end = domPrefixes.length, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+      if (elm.style[domPrefixes[i] + cssFeatureUpperCase] !== undefined) {
         supported = true;
         break;
       }
@@ -37394,93 +37512,101 @@ $.fn.exists = function() {
 /* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(UI, $) {// handle clicks on elements with data-behavior='clickable'.
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $) {
+
+// handle clicks on elements with data-behavior='clickable'.
 // these elements need a data-href attribute.
 
 // there is a hack to allow clicks on links inside 'clickable'
 // elements to be handled normally.
 
-UI.click('[data-behavior~=clickable]', function(e, el) {
+UI.click('[data-behavior~=clickable]', function (e, el) {
   // el is the 'clickable' element, clicked_element is the thing
   // that actually got clicked, which could be a child
-  const clicked_element = $(e.target);
-  if (clicked_element.is('a') || (clicked_element.parents('a').length !== 0)) {
+  var clicked_element = $(e.target);
+  if (clicked_element.is('a') || clicked_element.parents('a').length !== 0) {
     e.stopPropagation();
     return true;
   }
-  const href = $(el).data('href');
+  var href = $(el).data('href');
   if (href) window.location.href = href;
 });
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ }),
 /* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(UI, $) {// click-to-toggle links with arrows
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $) {
 
-UI.click('.js-arrow-toggle', function(e, el) {
-  const target = $(el.data('target'));
+// click-to-toggle links with arrows
+
+UI.click('.js-arrow-toggle', function (e, el) {
+  var target = $(el.data('target'));
   if (target.exists()) {
     el.toggleClass('selected');
     target.slideToggle();
   }
 });
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ }),
 /* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
 /* WEBPACK VAR INJECTION */(function(UI, $, _) {
-UI.click('[show-calendar-modal]', function(e, el) {
+
+UI.click('[show-calendar-modal]', function (e, el) {
   e.preventDefault();
   e.stopPropagation();
-  const href = el.attr('href');
+  var href = el.attr('href');
 
   if (href.indexOf('#') === 0) {
-    const data = $(el).data();
+    var data = $(el).data();
 
     Modals.show($(href), data);
     bindCalendars($('#rangestart'), $('#rangeend'), data);
   }
 });
 
+var bindCalendars = function bindCalendars(rangeStart, rangeEnd, data) {
+  var startCalEl = '.rangestart-value .value';
+  var startCalInput = '#hidden_start_on';
+  var endCalEl = '.rangeend-value .value';
+  var endCalInput = '#hidden_finish_on';
+  var startDate = data['startOn'];
+  var finishDate = data['finishOn'];
 
-const bindCalendars = function(rangeStart, rangeEnd, data) {
-  const startCalEl = '.rangestart-value .value';
-  const startCalInput = '#hidden_start_on';
-  const endCalEl = '.rangeend-value .value';
-  const endCalInput = '#hidden_finish_on';
-  const startDate = data['startOn'];
-  const finishDate = data['finishOn'];
-
-  const setDateValue = function(el, input, date) {
-    const formattedDate= rome.moment(date).format('MMM D, YYYY');
+  var setDateValue = function setDateValue(el, input, date) {
+    var formattedDate = rome.moment(date).format('MMM D, YYYY');
     $(el).text(formattedDate);
     if (input) {
       return $(input).val(date);
     }
   };
 
-  const startCal = rome(rangeStart[0], {
+  var startCal = rome(rangeStart[0], {
     dateValidator: rome.val.beforeEq(rangeEnd[0]),
     initialValue: startDate,
     time: false
-  })
-  .on('data', value => setDateValue(startCalEl, startCalInput, value));
+  }).on('data', function (value) {
+    return setDateValue(startCalEl, startCalInput, value);
+  });
 
-  const endCal = rome(rangeEnd[0], {
+  var endCal = rome(rangeEnd[0], {
     dateValidator: rome.val.afterEq(rangeStart[0]),
     time: false,
     initialValue: finishDate
-  }).on('data', value => setDateValue(endCalEl, endCalInput, value));
+  }).on('data', function (value) {
+    return setDateValue(endCalEl, endCalInput, value);
+  });
 
-  $('.custom_range_form')
-  .on('ajax:complete', () => Modals.close(_.last(Modals.currentModals)))
-  .on('ajax:error', function() {
+  $('.custom_range_form').on('ajax:complete', function () {
+    return Modals.close(_.last(Modals.currentModals));
+  }).on('ajax:error', function () {
     Modals.close(_.last(Modals.currentModals));
     alert("Sorry, an error occurred in processing your request. Please contact support if the error persists.");
   });
@@ -37490,14 +37616,16 @@ const bindCalendars = function(rangeStart, rangeEnd, data) {
   setDateValue(startCalEl, null, startCal.getDate());
   setDateValue(endCalEl, null, endCal.getDate());
 };
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0), __webpack_require__(2)))
 
 /***/ }),
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(UI, $, _) {//#################################################
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $, _) {
+
+//#################################################
 // Date Picker
 // "rome" is a customizeable datepicker plugin
 // https://bevacqua.github.io/rome/
@@ -37506,20 +37634,20 @@ const bindCalendars = function(rangeStart, rangeEnd, data) {
 // `data-datepicker=date-only` will show a date picker without the timepicker
 // `data-datepicker=time-only` will only show the timepicker
 //##################################################
-UI.load(function() {
-  let datepickers = $('[data-datepicker]');
+UI.load(function () {
+  var datepickers = $('[data-datepicker]');
 
   // iterate over the elements in the DOM that are candidates for the datepicker
-  datepickers.each(function(i, datepicker) {
-    const attr = $(datepicker).attr('data-datepicker');
-    let initialVal = null;
+  datepickers.each(function (i, datepicker) {
+    var attr = $(datepicker).attr('data-datepicker');
+    var initialVal = null;
 
     if ($(datepicker).val().length) {
       initialVal = moment(new Date($(datepicker).val())).format('MM/DD/YYYY h:mm A');
     }
 
     // * OUR * date picker default options
-    const options = {
+    var options = {
       inputFormat: 'MM/DD/YYYY h:mm A',
       weekdayFormat: 'min',
       dayFormat: 'D',
@@ -37553,17 +37681,17 @@ UI.load(function() {
         options.styles = {
           "container": "rd-timeonly-container",
           "time": "rd-timeonly-time",
-          "timeList": "rd-timeonly-time-list",
+          "timeList": "rd-timeonly-time-list"
         };
         break;
     }
 
     // add in date validators if needed
-    if  ($(datepicker).attr('data-rule-dateRangeValidate')) {
-      options.dateValidator = function(date) {
-        const endDateField = $($(this.associated).attr('data-rule-dateRangeValidate'))[0];
-        let isValid = true;
-        const yesterday = new Date();
+    if ($(datepicker).attr('data-rule-dateRangeValidate')) {
+      options.dateValidator = function (date) {
+        var endDateField = $($(this.associated).attr('data-rule-dateRangeValidate'))[0];
+        var isValid = true;
+        var yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
 
         if (moment(date).isBefore(yesterday)) {
@@ -37577,19 +37705,18 @@ UI.load(function() {
         return isValid;
       };
     } else if ($(datepicker).attr('data-rome-validate-start')) {
-      const compareField = $($(datepicker).attr('data-rome-validate-start'))[0];
+      var compareField = $($(datepicker).attr('data-rome-validate-start'))[0];
       options.dateValidator = rome.val.afterEq(compareField);
       options.min = new Date();
     }
 
-
     // instantiate the date picker
-    const romePicker = rome(datepicker, options);
+    var romePicker = rome(datepicker, options);
     romePicker.refresh();
 
-    romePicker.on('data', function(evt) {
+    romePicker.on('data', function (evt) {
       $.customRomeValidators(this);
-  });
+    });
   });
 
   // =================================== #
@@ -37597,58 +37724,64 @@ UI.load(function() {
   // =================================== #
 
   // when a form is submitted that has a datepicker, we need to convert the dates back to a format Ruby can use.
-  $('form').submit(function(evt) {
+  $('form').submit(function (evt) {
     datepickers = $('[data-datepicker]');
 
-    _.each(datepickers, function(datepicker) {
+    _.each(datepickers, function (datepicker) {
       if ($(datepicker).val().length) {
         $(datepicker).val(moment($(datepicker).val()));
       }
     });
   });
 });
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0), __webpack_require__(2)))
 
 /***/ }),
 /* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(UI, $) {// ----------------------------------------
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $) {
+
+// ----------------------------------------
 // Extra behavior for jq-dropdowns. main
 // behavior is in jquery.dropdown.min.js
 // ----------------------------------------
 
 // auto-focus search field in dropdown when dropdown is shown
-UI.load(function() {
-  const dropdowns = $('.jq-dropdown');
-  dropdowns.on('show', function(e, dropdownData) {
+UI.load(function () {
+  var dropdowns = $('.jq-dropdown');
+  dropdowns.on('show', function (e, dropdownData) {
 
-    const dropdown = $(e.currentTarget);
-    const link = $(`[data-jq-dropdown='#${dropdown.attr('id')}']`);
+    var dropdown = $(e.currentTarget);
+    var link = $('[data-jq-dropdown=\'#' + dropdown.attr('id') + '\']');
 
-    const searchField = dropdown.find('.menu-search-field');
-    if (searchField.exists()) { searchField.focus(); }
+    var searchField = dropdown.find('.menu-search-field');
+    if (searchField.exists()) {
+      searchField.focus();
+    }
 
     if (dropdown.hasClass('jq-dropdown-anchor-left')) {
-      const dropdownWidth = dropdown.children().first().width();
-      const linkWidth = link.outerWidth();
-      const left = parseInt(dropdown.css('left'));
-      const offset = (left - dropdownWidth) + linkWidth;
+      var dropdownWidth = dropdown.children().first().width();
+      var linkWidth = link.outerWidth();
+      var left = parseInt(dropdown.css('left'));
+      var offset = left - dropdownWidth + linkWidth;
 
-      dropdown.css('left', `${offset}px`);
+      dropdown.css('left', offset + 'px');
     }
   });
 });
 
 // search within dropdown items
-UI.on('keyup', '.jq-dropdown .menu-search-field', function(e, el) {
-  const input = el;
-  const options = input.parent().siblings('li');
-  const selection = __guard__(input.val(), x => x.toLowerCase());
+UI.on('keyup', '.jq-dropdown .menu-search-field', function (e, el) {
+  var input = el;
+  var options = input.parent().siblings('li');
+  var selection = __guard__(input.val(), function (x) {
+    return x.toLowerCase();
+  });
   if (selection) {
-    options.each(function() {
-      const text = $(this).find('.item-text').text().toLowerCase();
+    options.each(function () {
+      var text = $(this).find('.item-text').text().toLowerCase();
       if (text.indexOf(selection) > -1) {
         $(this).show();
       } else {
@@ -37661,43 +37794,46 @@ UI.on('keyup', '.jq-dropdown .menu-search-field', function(e, el) {
 });
 
 // close the dropdown whenever you click a link
-UI.click('.jq-dropdown li a', function(e, el) {
+UI.click('.jq-dropdown li a', function (e, el) {
   el.closest('.jq-dropdown').hide();
   return true;
 });
 
 // FIXME - check need for input.val()?, if not needed remove this function, replace line 34 with input.val().toLowerCase()
 function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
+  return typeof value !== 'undefined' && value !== null ? transform(value) : undefined;
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ }),
 /* 55 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function(UI, $) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dropzone__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dropzone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_dropzone__);
+/* WEBPACK VAR INJECTION */(function(UI, $) {
 
+var _dropzone = __webpack_require__(56);
 
-__WEBPACK_IMPORTED_MODULE_0_dropzone__["autoDiscover"] = false;
+var Dropzone = _interopRequireWildcard(_dropzone);
 
-UI.load(function() {
-  if (__WEBPACK_IMPORTED_MODULE_0_dropzone__["isBrowserSupported"]()) {
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+Dropzone.autoDiscover = false;
+
+UI.load(function () {
+  if (Dropzone.isBrowserSupported()) {
     // dropzone callbacks
-    const dropSuccess = function(responseText) {
+    var dropSuccess = function dropSuccess(responseText) {
       $(document).trigger('inline-spinner:hide', '.dropzone');
       return eval(responseText); // Just redirects to the current page via Turbolinks
     };
 
-    const dropError = function(file, message, dropzone) {
+    var dropError = function dropError(file, message, dropzone) {
       dropzone.removeFile(file);
       alert(message);
     };
 
-    const onProgress = function(file, progress, bytesSent) {
+    var onProgress = function onProgress(file, progress, bytesSent) {
       if (progress >= 100) {
         // reset the progressbar and show the spinner while the image is processing
         $('[data-dz-uploadprogress]').css('width', 0);
@@ -37709,49 +37845,49 @@ UI.load(function() {
     };
 
     // override Dropzone's default image sizer for thumbnail previews
-    const onResize = function(file) {
-      let thmbHeight = 0;
-      let thmbWidth = 0;
-      const previewHeight = parseInt($('.dropzone.dropzone-image-form').css('height'), 10);
-      const previewWidth = parseInt($('.dropzone.dropzone-image-form').css('width'), 10);
+    var onResize = function onResize(file) {
+      var thmbHeight = 0;
+      var thmbWidth = 0;
+      var previewHeight = parseInt($('.dropzone.dropzone-image-form').css('height'), 10);
+      var previewWidth = parseInt($('.dropzone.dropzone-image-form').css('width'), 10);
 
       if (file.height >= file.width) {
         if (file.height > previewHeight) {
           thmbHeight = previewHeight;
-          thmbWidth = (previewHeight * file.width) / file.height;
+          thmbWidth = previewHeight * file.width / file.height;
         } else {
           thmbHeight = this.options.thumbnailHeight;
-          thmbWidth = parseInt((this.options.thumbnailHeight * file.width) / file.height);
+          thmbWidth = parseInt(this.options.thumbnailHeight * file.width / file.height);
         }
       } else {
         if (file.width > previewWidth) {
-          thmbHeight = (previewWidth * file.height) / file.width;
+          thmbHeight = previewWidth * file.height / file.width;
           thmbWidth = previewWidth;
         } else {
-          thmbHeight = parseInt((this.options.thumbnailWidth * file.height) / file.width);
+          thmbHeight = parseInt(this.options.thumbnailWidth * file.height / file.width);
           thmbWidth = this.options.thumbnailWidth;
         }
       }
 
       return {
-        srcX:0,
-        srcY:0,
+        srcX: 0,
+        srcY: 0,
         srcWidth: file.width,
         srcHeight: file.height,
-        trgX:0,
-        trgY:0,
+        trgX: 0,
+        trgY: 0,
         trgWidth: thmbWidth,
         trgHeight: thmbHeight
       };
     };
 
     // find image form elements that need dropzones
-    $('.dropzone-image-form').each(function() {
-      const dzForm = $(this);
-      const param = dzForm.data('dropzone-param');
+    $('.dropzone-image-form').each(function () {
+      var dzForm = $(this);
+      var param = dzForm.data('dropzone-param');
       // instantiate image uploaders
-      const dropzone = new __WEBPACK_IMPORTED_MODULE_0_dropzone__('.dropzone-image-form', {
-        headers: {"Accept": "text/javascript"},
+      var dropzone = new Dropzone('.dropzone-image-form', {
+        headers: { "Accept": "text/javascript" },
         paramName: param,
         acceptedFiles: "image/*",
         uploadMultiple: false,
@@ -37762,22 +37898,26 @@ UI.load(function() {
       });
 
       // event handlers
-      dropzone.on('success', (file, responseText) => dropSuccess(responseText));
+      dropzone.on('success', function (file, responseText) {
+        return dropSuccess(responseText);
+      });
 
-      dropzone.on('error', function(file, message, test) {
+      dropzone.on('error', function (file, message, test) {
         dropError(file, message, this);
       });
 
-      return dropzone.on('uploadprogress', (file, progress, byesSent) => onProgress(file, progress, byesSent));
+      return dropzone.on('uploadprogress', function (file, progress, byesSent) {
+        return onProgress(file, progress, byesSent);
+      });
     });
 
     // find csv form elements that need dropzones
-    $('.dropzone-csv-form').each(function() {
-      const dzForm = $(this);
-      const param = dzForm.data('dropzone-param');
+    $('.dropzone-csv-form').each(function () {
+      var dzForm = $(this);
+      var param = dzForm.data('dropzone-param');
       // instantiate csv uploaders
-      const dropzone = new __WEBPACK_IMPORTED_MODULE_0_dropzone__('.dropzone-csv-form', {
-        headers: {"Accept": "text/javascript"},
+      var dropzone = new Dropzone('.dropzone-csv-form', {
+        headers: { "Accept": "text/javascript" },
         paramName: param,
         acceptedFiles: "text/csv,.csv",
         uploadMultiple: false,
@@ -37786,22 +37926,26 @@ UI.load(function() {
       });
 
       // event handlers
-      dropzone.on('success', (file, responseText) => dropSuccess(responseText));
+      dropzone.on('success', function (file, responseText) {
+        return dropSuccess(responseText);
+      });
 
-      dropzone.on('uploadprogress', (file, progress, byesSent) => onProgress(file, progress, byesSent));
+      dropzone.on('uploadprogress', function (file, progress, byesSent) {
+        return onProgress(file, progress, byesSent);
+      });
 
-      dropzone.on('error', function(file, message) {
+      dropzone.on('error', function (file, message) {
         dropError(file, message, this);
       });
     });
 
     // find PO file form elements that need dropzones
-    $('.dropzone-po-form').each(function() {
-      const dzForm = $(this);
-      const param = dzForm.data('dropzone-param');
+    $('.dropzone-po-form').each(function () {
+      var dzForm = $(this);
+      var param = dzForm.data('dropzone-param');
       // instantiate csv uploaders
-      const dropzone = new __WEBPACK_IMPORTED_MODULE_0_dropzone__('.dropzone-po-form', {
-        headers: {"Accept": "text/javascript"},
+      var dropzone = new Dropzone('.dropzone-po-form', {
+        headers: { "Accept": "text/javascript" },
         paramName: param,
         acceptedFiles: "text/x-gettext-translation, application/x-po, text/x-po, application/octet-stream, .po",
         uploadMultiple: false,
@@ -37810,18 +37954,21 @@ UI.load(function() {
       });
 
       // event handlers
-      dropzone.on('success', (file, responseText) => dropSuccess(responseText));
+      dropzone.on('success', function (file, responseText) {
+        return dropSuccess(responseText);
+      });
 
-      dropzone.on('uploadprogress', (file, progress, byesSent) => onProgress(file, progress, byesSent));
+      dropzone.on('uploadprogress', function (file, progress, byesSent) {
+        return onProgress(file, progress, byesSent);
+      });
 
-      dropzone.on('error', function(file, message) {
+      dropzone.on('error', function (file, message) {
         dropError(file, message, this);
       });
     });
   }
 });
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(0)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ }),
 /* 56 */
@@ -41359,77 +41506,92 @@ function __guardMethod__(obj, methodName, transform) {
 
 /***/ }),
 /* 57 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function($, UI) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_sticky_kit__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_sticky_kit___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_sticky_kit__);
+/* WEBPACK VAR INJECTION */(function($, UI) {
 
+__webpack_require__(17);
 
-const updateFilters = function() {
+var updateFilters = function updateFilters() {
   if ($('#filter-bar').exists()) {
-    $("#filter-bar").stick_in_parent({parent: '#main', offset_top: 88});
+    $("#filter-bar").stick_in_parent({ parent: '#main', offset_top: 88 });
     return $(document.body).trigger("sticky_kit:recalc");
   }
 };
 
-UI.load(() => updateFilters());
+UI.load(function () {
+  return updateFilters();
+});
 
-UI.click('#show-filters-btn', function(e, el) {
+UI.click('#show-filters-btn', function (e, el) {
   $('#filters').toggleClass('show');
   return updateFilters();
 });
 
-UI.ujsSuccess(() => updateFilters());
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0), __webpack_require__(1)))
+UI.ujsSuccess(function () {
+  return updateFilters();
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(1)))
 
 /***/ }),
 /* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(UI, $) {// click on flash messages to dismiss them
-UI.click('.flash', (e, msg) => hideFlashMessage(msg));
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $) {
+
+// click on flash messages to dismiss them
+UI.click('.flash', function (e, msg) {
+  return hideFlashMessage(msg);
+});
 
 // after a while, flash notice messages fade out automatically
-UI.load(function() {
-  const msg = $('.flash-notice');
+UI.load(function () {
+  var msg = $('.flash-notice');
   if (msg.exists()) {
-    setTimeout((() => hideFlashMessage(msg)), 5000);
+    setTimeout(function () {
+      return hideFlashMessage(msg);
+    }, 5000);
   }
 });
 
-const hideFlashMessage = function(msg) {
+var hideFlashMessage = function hideFlashMessage(msg) {
   msg.addClass('hiding');
-  setTimeout((() => msg.remove()), 200);
+  setTimeout(function () {
+    return msg.remove();
+  }, 200);
 };
 
 // delete all flash messages from the DOM prior to turbolinks caching the page.
-if ((typeof Turbolinks !== 'undefined' && Turbolinks !== null) && Turbolinks.supported) {
-  document.addEventListener('turbolinks:before-cache', () => $('.flash').remove());
+if (typeof Turbolinks !== 'undefined' && Turbolinks !== null && Turbolinks.supported) {
+  document.addEventListener('turbolinks:before-cache', function () {
+    return $('.flash').remove();
+  });
 }
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ }),
 /* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(UI, $) {// =====================================================
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $) {
+
+// =====================================================
 // links that submit containing form on click
 // =====================================================
 
-UI.click('form .js-submit-on-click', function(e, el) {
-  let f;
+UI.click('form .js-submit-on-click', function (e, el) {
+  var f = void 0;
   if (f = el.closest('form')) {
     e.stopPropagation();
     return f.submit();
   }
 });
 
-UI.click('form .js-submit-on-click-with-propagation', function(e, el) {
-  let f;
+UI.click('form .js-submit-on-click-with-propagation', function (e, el) {
+  var f = void 0;
   if (f = el.closest('form')) {
     f.submit();
   }
@@ -41440,37 +41602,39 @@ UI.click('form .js-submit-on-click-with-propagation', function(e, el) {
 // fields that auto-focus on page load
 // =====================================================
 
-UI.load(() => $('input.js-focus-on-load').focus());
-
+UI.load(function () {
+  return $('input.js-focus-on-load').focus();
+});
 
 // =====================================================
 // validate all forms with jquery validation plugin.
 // =====================================================
 
-UI.load(() => $.bindFormValidation($('body')));
+UI.load(function () {
+  return $.bindFormValidation($('body'));
+});
 
+$.bindFormValidation = function (html) {
+  return (
+    //add form validation
+    html.find('form').each(function () {
+      var f = $(this);
 
-$.bindFormValidation = html =>
-//add form validation
-  html.find('form').each(function() {
-    const f = $(this);
-
-    if (!f.hasClass('js-novalidate')) {
-      return f.validate();
-    }
-  })
-;
-
-
+      if (!f.hasClass('js-novalidate')) {
+        return f.validate();
+      }
+    })
+  );
+};
 
 // =====================================================
 // for custom password validation message display
 // =====================================================
-$.passwordComplexityValidationMessage = function(element) {
+$.passwordComplexityValidationMessage = function (element) {
 
-  const value = $(element).val();
+  var value = $(element).val();
 
-  if ((value.length >= 8) && $('.min-chars')) {
+  if (value.length >= 8 && $('.min-chars')) {
     $('.min-chars').addClass('valid');
   } else {
     $('.min-chars').removeClass('valid');
@@ -41489,7 +41653,6 @@ $.passwordComplexityValidationMessage = function(element) {
   }
 };
 
-
 // =====================================================
 // custom validator rules
 // =====================================================
@@ -41497,35 +41660,36 @@ $.passwordComplexityValidationMessage = function(element) {
 // ======== passwordComplexityMatch ======== #
 // custom rule: string contains at least one integer, one alpha character and is at least 8 characters in length
 // {data: {rule_passwordComplexityMatch: 'passwordComplexityMatch'}}
-$.validator.addMethod('passwordComplexityMatch', value => /[a-z].*[0-9]|[0-9].*[a-z]/i.test(value) && (value.length >= 8)
-, '8 characters minimum, 1 number and 1 letter');
-
+$.validator.addMethod('passwordComplexityMatch', function (value) {
+  return (/[a-z].*[0-9]|[0-9].*[a-z]/i.test(value) && value.length >= 8
+  );
+}, '8 characters minimum, 1 number and 1 letter');
 
 // ======== dateRangeValidate ======== #
 // custom rule: Validate that the date is before the field specified by the rule attribute
 // {data: {rule_dateRangeValidate: 'my_end_date_field'}}
-$.validator.addMethod('dateRangeValidate', function(value, el) {
-  let isValid = true;
+$.validator.addMethod('dateRangeValidate', function (value, el) {
+  var isValid = true;
   // validate date ranges
-  const dtField = $(el).attr('data-rule-dateRangeValidate');
-  const compareDate = moment(new Date($(dtField).val()));
+  var dtField = $(el).attr('data-rule-dateRangeValidate');
+  var compareDate = moment(new Date($(dtField).val()));
 
   // for date only pickers, we need to set the time to the current
   // time if the selected date is today, for validation purposes.
   // add 20 minutes so the user doesn't get stuck if they allow the page to sit
-  const newValue = moment(new Date(value));
-  const currentDate = moment(new Date());
+  var newValue = moment(new Date(value));
+  var currentDate = moment(new Date());
 
-  if (($(el).attr('data-datepicker') === 'date-only') && (newValue.diff(currentDate, 'days') === 0)) {
+  if ($(el).attr('data-datepicker') === 'date-only' && newValue.diff(currentDate, 'days') === 0) {
     newValue.set({
-      'hour' : currentDate.get('hour'),
-      'minute'  : currentDate.get('minute') + 20,
-      'second' : currentDate.get('second')
+      'hour': currentDate.get('hour'),
+      'minute': currentDate.get('minute') + 20,
+      'second': currentDate.get('second')
     });
     compareDate.set({
-      'hour' : currentDate.get('hour'),
-      'minute'  : currentDate.get('minute') + 20,
-      'second' : currentDate.get('second')
+      'hour': currentDate.get('hour'),
+      'minute': currentDate.get('minute') + 20,
+      'second': currentDate.get('second')
     });
   }
 
@@ -41534,69 +41698,72 @@ $.validator.addMethod('dateRangeValidate', function(value, el) {
   }
 
   return isValid;
-}
-, 'Start must come before End');
+}, 'Start must come before End');
 
 // ======== dateIsInFuture ======== #
 // custom rule: Validate that the date is in the future
 // {data: {rule_dateIsInFuture: 'dateIsInFuture'}}
-$.validator.addMethod('dateIsInFuture', function(value, el) {
+$.validator.addMethod('dateIsInFuture', function (value, el) {
   // for date only pickers, we need to set the time to the current
   // time if the selected date is today, for validation purposes.
   // add 20 minutes so the user doesn't get stuck if the allow the page to sit
-  const newValue = moment(new Date(value));
-  const currentDate = moment(new Date());
+  var newValue = moment(new Date(value));
+  var currentDate = moment(new Date());
 
-  if (($(el).attr('data-datepicker') === 'date-only') && (newValue.diff(currentDate, 'days') === 0)) {
+  if ($(el).attr('data-datepicker') === 'date-only' && newValue.diff(currentDate, 'days') === 0) {
     newValue.set({
-      'hour' : currentDate.get('hour'),
-      'minute'  : currentDate.get('minute') + 20,
-      'second' : currentDate.get('second')
+      'hour': currentDate.get('hour'),
+      'minute': currentDate.get('minute') + 20,
+      'second': currentDate.get('second')
     });
   }
   return newValue.isSameOrAfter(currentDate);
-}
-, 'Current or future date required');
+}, 'Current or future date required');
 
 // ======== customRomeValidators ======== #
 // These are executed independently of jquery Validate
 // used to validate Rome fields, if needed
 // TODO: maybe find a better way to abstract these rules
-$.customRomeValidators = function(field) {
+$.customRomeValidators = function (field) {
   // force jquery validate to check the field to clear any invalid status
   $(field.associated).valid();
 
   // validate a related field, if needed
-  const relatedField = $(field.associated).attr('data-validate-related');
+  var relatedField = $(field.associated).attr('data-validate-related');
   if (relatedField) {
     return $(relatedField).valid();
   }
 };
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ }),
 /* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
 /* WEBPACK VAR INJECTION */(function($, UI) {
+
 // =====================================================
 // Show a loading spinner overlay inline when the spinner event is received
 // =====================================================
 
 //----------------------------------------
 // Show/Hide events for spinner
-$(document).on('inline-spinner:show', (evt, el) => showInlineSpinner(el));
+$(document).on('inline-spinner:show', function (evt, el) {
+  return showInlineSpinner(el);
+});
 
-$(document).on('inline-spinner:hide', (evt, el) => hideInlineSpinner(el));
+$(document).on('inline-spinner:hide', function (evt, el) {
+  return hideInlineSpinner(el);
+});
 
 //----------------------------------------
 // Show the inline spinner
-const showInlineSpinner = function(el) {
-  const transitionSupport = $.isCSSFeatureSupported('transition');
+var showInlineSpinner = function showInlineSpinner(el) {
+  var transitionSupport = $.isCSSFeatureSupported('transition');
   // IE hack for frozen spinner during submit.
   if (!transitionSupport) {
-    UI.load(function() {});
+    UI.load(function () {});
     createFallbackInlineSpinner(el);
     unfreezeIEInlineAnimation(el);
   }
@@ -41606,11 +41773,13 @@ const showInlineSpinner = function(el) {
 
 //----------------------------------------
 // Hide the inline spinner
-const hideInlineSpinner = el => $(el + ' #inline-progress').removeClass('visible');
+var hideInlineSpinner = function hideInlineSpinner(el) {
+  return $(el + ' #inline-progress').removeClass('visible');
+};
 
 //----------------------------------------
 // IE spinner fix for frozen spinners
-const unfreezeIEInlineAnimation = function(el) {
+var unfreezeIEInlineAnimation = function unfreezeIEInlineAnimation(el) {
   $(el + ' .fallback-spinner').innerHTML = '';
   $(el + ' .fallback-spinner').css('display', '');
   $(el + ' .fallback-spinner').css('background', $(el + ' .fallback-spinner').css('background'));
@@ -41618,23 +41787,25 @@ const unfreezeIEInlineAnimation = function(el) {
 
 //----------------------------------------
 // Creates a fallback spinner for unsupported browsers
-const createFallbackInlineSpinner = function(el) {
-  const transitionSupport = $.isCSSFeatureSupported('transition');
+var createFallbackInlineSpinner = function createFallbackInlineSpinner(el) {
+  var transitionSupport = $.isCSSFeatureSupported('transition');
 
   if (!transitionSupport) {
     $(el + ' inline-progress').remove();
-    const fallbackSpinner = '<div class="fallback-spinner"></div>';
+    var fallbackSpinner = '<div class="fallback-spinner"></div>';
     $(el + ' inline-progress').append(fallbackSpinner);
   }
 };
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(1)))
 
 /***/ }),
 /* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(UI, $) {// =====================================================
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $) {
+
+// =====================================================
 // Show a loading spinner overlay on successful form
 // submission and during AJAX events.
 // =====================================================
@@ -41644,7 +41815,7 @@ const createFallbackInlineSpinner = function(el) {
 
 // Spinner won't be shown in Safari on submit, due to the way JavaScript is handled on POST
 // TODO: find a better workaround than click handling and event.preventDefault() on submit.
-UI.submit('form', function(e, el) {
+UI.submit('form', function (e, el) {
   if ($(el).valid() && !$(el).data('remote')) {
     showLoadingSpinner();
     return true;
@@ -41654,24 +41825,30 @@ UI.submit('form', function(e, el) {
 //----------------------------------------
 // Ajax Events
 
-UI.on('ajax:send', document, (e, el) => showLoadingSpinner());
+UI.on('ajax:send', document, function (e, el) {
+  return showLoadingSpinner();
+});
 
 //----------------------------------------
 // Times we need to hide the spinner
 
-$(document).ajaxStop(() => hideLoadingSpinner());
+$(document).ajaxStop(function () {
+  return hideLoadingSpinner();
+});
 
 // this is for a firefox "feature"
-$(window).on('unload', e => hideLoadingSpinner());
+$(window).on('unload', function (e) {
+  return hideLoadingSpinner();
+});
 
 // prevents spinner from showing when back button is used, since Safari would otherwise cache the spinner state
-$(window).bind('pageshow', function(evt) {
+$(window).bind('pageshow', function (evt) {
   if (evt.originalEvent.persisted) {
     return hideLoadingSpinner();
   }
 });
 
-UI.load(function() {
+UI.load(function () {
   // handle browsers that don't use transitions. Ahem, IE8/9
   createFallbackLoadingSpinner();
 
@@ -41685,11 +41862,11 @@ UI.load(function() {
 // Utility methods
 
 // stuff to avoid race condition
-let timeoutPending = false;
-let spinnerHiddenDuringTimeout = false;
+var timeoutPending = false;
+var spinnerHiddenDuringTimeout = false;
 
-const showLoadingSpinner = function() {
-  const transitionSupport = $.isCSSFeatureSupported('transition');
+var showLoadingSpinner = function showLoadingSpinner() {
+  var transitionSupport = $.isCSSFeatureSupported('transition');
 
   // IE hack for frozen spinner during submit.
   if (!transitionSupport) {
@@ -41697,84 +41874,90 @@ const showLoadingSpinner = function() {
   }
 
   timeoutPending = true;
-  return setTimeout((function() {
+  return setTimeout(function () {
     if (!spinnerHiddenDuringTimeout) {
       $('#loading-overlay-container').removeClass('hidden').addClass('visible');
-      setTimeout((() => $('#loading-overlay').addClass('visible')), 1);
+      setTimeout(function () {
+        return $('#loading-overlay').addClass('visible');
+      }, 1);
       timeoutPending = false;
       return spinnerHiddenDuringTimeout = false;
     }
-  }), 200); // the delay is so if things are really fast you won't see the spinner at all.
+  }, 200); // the delay is so if things are really fast you won't see the spinner at all.
 };
 
-const hideLoadingSpinner = function() {
+var hideLoadingSpinner = function hideLoadingSpinner() {
   $('#loading-overlay-container').addClass('hidden');
   $('#loading-overlay').removeClass('visible');
 
-  if (timeoutPending) { return spinnerHiddenDuringTimeout = true; }
+  if (timeoutPending) {
+    return spinnerHiddenDuringTimeout = true;
+  }
 };
 
-const unfreezeIELoadingAnimation =  function() {
+var unfreezeIELoadingAnimation = function unfreezeIELoadingAnimation() {
   $('#loading-overlay-container .fallback-spinner').innerHTML = '';
   $('#loading-overlay-container .fallback-spinner').css('display', '');
   return $('#loading-overlay-container .fallback-spinner').css('background', $('#loading-overlay-container .fallback-spinner').css('background'));
 };
 
-const createFallbackLoadingSpinner = function() {
-  const transitionSupport = $.isCSSFeatureSupported('transition');
+var createFallbackLoadingSpinner = function createFallbackLoadingSpinner() {
+  var transitionSupport = $.isCSSFeatureSupported('transition');
 
   if (!transitionSupport) {
     $('.loading-spinner').remove();
-    const fallbackSpinner = '<div class="fallback-spinner"></div>';
+    var fallbackSpinner = '<div class="fallback-spinner"></div>';
     return $('#loading-overlay').append(fallbackSpinner);
   }
 };
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ }),
 /* 62 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function(UI, $) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery_minicolors__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery_minicolors___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery_minicolors__);
+/* WEBPACK VAR INJECTION */(function(UI, $) {
 
+__webpack_require__(16);
 
-UI.load(() =>
-  // =====================================================
-  // color pickers
-  // =====================================================
+UI.load(function () {
+  return (
+    // =====================================================
+    // color pickers
+    // =====================================================
 
-  $('.color-picker-text-field').minicolors()
-);
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1), __webpack_require__(0)))
+    $('.color-picker-text-field').minicolors()
+  );
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ }),
 /* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(UI, $, _) {// =====================================================
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $, _) {
+
+// =====================================================
 // Click handlers that show and hide modals.
 //
 // usage: add ,js-modal
 //        on click .js-modal, href = dom ID of modal to show.
 // =====================================================
 
-UI.click('.modal-bg', function(e, el) {
-  const $target = $(e.target);
-  const modal = $target.closest('.modal');
+UI.click('.modal-bg', function (e, el) {
+  var $target = $(e.target);
+  var modal = $target.closest('.modal');
   return Modals.close(modal);
 });
 
-UI.click('.js-modal', function(e, el) {
+UI.click('.js-modal', function (e, el) {
   e.preventDefault();
-  const href = el.attr('href');
+  var href = el.attr('href');
 
   if (href.indexOf('#') === 0) {
-    const data = $(el).data();
+    var data = $(el).data();
 
     Modals.show($(href), data);
   } else {
@@ -41782,37 +41965,35 @@ UI.click('.js-modal', function(e, el) {
   }
 });
 
-
-UI.click('.js-close-modal', function(e, el) {
-  const $target = $(e.target);
-  const modal = $target.closest('.modal');
+UI.click('.js-close-modal', function (e, el) {
+  var $target = $(e.target);
+  var modal = $target.closest('.modal');
   return Modals.close(modal);
 });
-
 
 // =====================================================
 //  Modal Methods
 // =====================================================
 
 window.Modals = {
-
-  show(modal, data, callbacks) {
+  show: function show(modal, data, callbacks) {
 
     if (modal) {
       $('body').css('overflow', 'hidden');
       // // need to center during the fadeIn animation
-      modal.fadeIn({duration: 200});
+      modal.fadeIn({ duration: 200 });
       Modals.currentModals.push(modal);
 
       if (callbacks) {
-        return Array.from(callbacks).map((callback) =>
-          (() => callback(modal))());
+        return Array.from(callbacks).map(function (callback) {
+          return function () {
+            return callback(modal);
+          }();
+        });
       }
     }
   },
-
-
-  close(modal) {
+  close: function close(modal) {
     if (modal) {
       modal.fadeOut(200);
       Modals.currentModals.pop(modal);
@@ -41825,32 +42006,36 @@ window.Modals = {
     }
   },
 
+
   currentModals: [],
 
-  showAjax(url, data, callbacks) {
+  showAjax: function showAjax(url, data, callbacks) {
 
-    return $.get(url, function(data, textStatus, jqXHR) {
-// this is the success callback. it gets called after normal responses AND redirects.
+    return $.get(url, function (data, textStatus, jqXHR) {
+      // this is the success callback. it gets called after normal responses AND redirects.
       if (jqXHR.getResponseHeader('REQUIRES_AUTH') === '1') {
-        return window.location = `https://${window.location.hostname}/login`; // send the person to the login page
+        return window.location = 'https://' + window.location.hostname + '/login'; // send the person to the login page
       } else {
-        const htmlResponse = $(data);
+        var htmlResponse = $(data);
         htmlResponse.addClass('js-ajax-modal');
-        const id = htmlResponse.attr('id');
+        var id = htmlResponse.attr('id');
         $('body').append(htmlResponse);
 
         if (id) {
-          Modals.show($(`#${id}`));
+          Modals.show($('#' + id));
         }
 
         if (callbacks && callbacks.length) {
-          callbacks.forEach(function(callback) { if (_.isFunction(callback)) { return callback(htmlResponse); } });
+          callbacks.forEach(function (callback) {
+            if (_.isFunction(callback)) {
+              return callback(htmlResponse);
+            }
+          });
         }
 
         return $('body').css('overflow', 'hidden');
       }
-
-    }).fail(function(jqXHR, textStatus, errorThrown) {
+    }).fail(function (jqXHR, textStatus, errorThrown) {
 
       if (jqXHR.status === 404) {
         alert('Sorry, the requested item could not be found.');
@@ -41861,14 +42046,8 @@ window.Modals = {
       }
     });
   },
-
-
-  ajaxloadingMessage() {
-    return `\
-<div class='modal loading'>
-  <h2>Loading...</h2>
-</div>\
-`;
+  ajaxloadingMessage: function ajaxloadingMessage() {
+    return '<div class=\'modal loading\'>\n  <h2>Loading...</h2>\n</div>';
   }
 };
 
@@ -41902,17 +42081,16 @@ window.Modals = {
 //            eval(response)
 //        })
 //  })
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0), __webpack_require__(2)))
 
 /***/ }),
 /* 64 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function($, UI) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_sticky_kit__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_sticky_kit___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_sticky_kit__);
+/* WEBPACK VAR INJECTION */(function($, UI) {
+
+__webpack_require__(17);
 
 // ===================================================
 // show/hide the mobile dropdown menu
@@ -41920,29 +42098,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 // TODO: BAD CODE -- MAKE MORE DRY, OR USE JQ-DROPDOWN
 
-const mobileNavBgClickHandler = function(event) {
+var mobileNavBgClickHandler = function mobileNavBgClickHandler(event) {
   // have to use vanilla js to use the .contains method
-  const dropdown = document.getElementById('mobile-nav');
-  const trigger = document.getElementById('mobile-nav-trigger');
+  var dropdown = document.getElementById('mobile-nav');
+  var trigger = document.getElementById('mobile-nav-trigger');
   if (!dropdown.contains(event.target) && !trigger.contains(event.target)) {
     hideMobileNav();
   }
 };
 
-const showMobileNav = function() {
+var showMobileNav = function showMobileNav() {
   $('#mobile-nav-trigger').addClass('open');
   $('#mobile-nav').addClass('visible');
   document.addEventListener('click', mobileNavBgClickHandler);
 };
 
-const hideMobileNav = function() {
+var hideMobileNav = function hideMobileNav() {
   $('#mobile-nav-trigger').removeClass('open');
   $('#mobile-nav').removeClass('visible');
   document.removeEventListener('click', mobileNavBgClickHandler);
 };
 
 // open/close the menu when the menu trigger is clicked
-UI.click('#mobile-nav-trigger', function(e, el) {
+UI.click('#mobile-nav-trigger', function (e, el) {
   if ($('#mobile-nav').hasClass('visible')) {
     hideMobileNav();
   } else {
@@ -41956,29 +42134,29 @@ UI.click('#mobile-nav-trigger', function(e, el) {
 
 // TODO: BAD CODE -- MAKE MORE DRY, OR USE JQ-DROPDOWN
 
-const userDropdownBgClickHandler = function(event) {
+var userDropdownBgClickHandler = function userDropdownBgClickHandler(event) {
   // have to use vanilla js to use the .contains method
-  const dropdown = document.getElementById('cur-user-dropdown');
-  const trigger = document.getElementById('cur-user-dropdown-trigger');
+  var dropdown = document.getElementById('cur-user-dropdown');
+  var trigger = document.getElementById('cur-user-dropdown-trigger');
   if (!dropdown.contains(event.target) && !trigger.contains(event.target)) {
     hideCurUserDropdown();
   }
 };
 
-const showCurUserDropdown = function() {
+var showCurUserDropdown = function showCurUserDropdown() {
   $('#cur-user-dropdown-trigger').addClass('open');
   $('#cur-user-dropdown').addClass('visible');
   document.addEventListener('click', userDropdownBgClickHandler);
 };
 
-var hideCurUserDropdown = function() {
+var hideCurUserDropdown = function hideCurUserDropdown() {
   $('#cur-user-dropdown-trigger').removeClass('open');
   $('#cur-user-dropdown').removeClass('visible');
   document.removeEventListener('click', userDropdownBgClickHandler);
 };
 
 // open/close the menu when the menu trigger is clicked
-UI.click('#cur-user-dropdown-trigger', function(e, el) {
+UI.click('#cur-user-dropdown-trigger', function (e, el) {
   if ($('#cur-user-dropdown').hasClass('visible')) {
     hideCurUserDropdown();
   } else {
@@ -41990,64 +42168,77 @@ UI.click('#cur-user-dropdown-trigger', function(e, el) {
 // sticky version of subnavs
 // ===================================================
 
-UI.load(() => $("#subnav.sticky-subnav").stick_in_parent({bottoming: false, offset_top: $('#nav').height()}));
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0), __webpack_require__(1)))
+UI.load(function () {
+  return $("#subnav.sticky-subnav").stick_in_parent({ bottoming: false, offset_top: $('#nav').height() });
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(1)))
 
 /***/ }),
 /* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(UI, $) {UI.click('.scroll-to-self', (e, el) => $('html, body').animate({ scrollTop: el.offset().top }, 300));
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $) {
 
-UI.click('.scroll-to-target', function(e, el) {
-  const target = $(el.data('scroll-target'));
-  const offset = el.data('scroll-offset') || 0;
+UI.click('.scroll-to-self', function (e, el) {
+  return $('html, body').animate({ scrollTop: el.offset().top }, 300);
+});
+
+UI.click('.scroll-to-target', function (e, el) {
+  var target = $(el.data('scroll-target'));
+  var offset = el.data('scroll-offset') || 0;
   $('html, body').animate({ scrollTop: target.offset().top - offset }, 300);
 });
 
-
-UI.click('.scroll-to-top', (e, el) => $('html, body').animate({ scrollTop: 0 }, 300));
-
+UI.click('.scroll-to-top', function (e, el) {
+  return $('html, body').animate({ scrollTop: 0 }, 300);
+});
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ }),
 /* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(UI, $) {const settings = {
-  color: '#23D385',
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $) {
+
+var settings = {
+  color: '#23D385'
 };
 
-UI.load(function() {
+UI.load(function () {
   // elem = document.querySelector('.js-switch')
   // new Switchery(elem, settings)
-  const switches = $('.js-switch');
-  switches.each(function() {
+  var switches = $('.js-switch');
+  switches.each(function () {
     new Switchery(this, settings);
   });
 });
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ }),
 /* 67 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jstz__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jstz___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jstz__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_js_cookie__ = __webpack_require__(72);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_js_cookie___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_js_cookie__);
+
+
+var _jstz = __webpack_require__(68);
+
+var jstz = _interopRequireWildcard(_jstz);
+
+var _jsCookie = __webpack_require__(72);
+
+var _jsCookie2 = _interopRequireDefault(_jsCookie);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 // Store local time zone in cookie
+var tz = jstz.determine();
 
-
-
-const tz = __WEBPACK_IMPORTED_MODULE_0_jstz__["determine"]();
-
-__WEBPACK_IMPORTED_MODULE_1_js_cookie___default.a.set('timezone', tz.name(), {expires: 7, path: '/'});
-
+_jsCookie2.default.set('timezone', tz.name(), { expires: 7, path: '/' });
 
 /***/ }),
 /* 68 */
@@ -43688,9 +43879,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 /* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(UI, $) {UI.load(function() {
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $) {
+
+UI.load(function () {
   // setup powertips options for the tooltips
-  const tooltipOptions = {
+  var tooltipOptions = {
     placement: 'n',
     smartPlacement: true,
     popupId: 'content-tooltip'
@@ -43700,7 +43894,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
   // currently we use our own fork of PowerTips: https://github.com/techvalidate/jquery-powertip
   $('.js-tooltip').powerTip(tooltipOptions);
 });
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ })

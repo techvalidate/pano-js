@@ -4,6 +4,8 @@
   "repository": "git@github.com:techvalidate/pano.git",
   "author": "Matt Lindeboom <mattl@surveymonkey.com>",
   "private": true,
+  "main": "./pano.js",
+  "modules": "./index.js",
   "scripts": {
     "build": "yarn webpack"
   },

@@ -1,6 +1,7 @@
-import * as Dropzone from 'dropzone'
+const Dropzone = require('dropzone/dist/dropzone-amd-module')
 
-Dropzone.autoDiscover = false;
+Dropzone.autoDiscover = false
+
 
 UI.load(function() {
   if (Dropzone.isBrowserSupported()) {

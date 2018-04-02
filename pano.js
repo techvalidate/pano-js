@@ -70,14 +70,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 18);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(19);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(18);
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
@@ -17345,7 +17345,7 @@ function submit(selector, callback) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(6)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(22)(module)))
 
 /***/ }),
 /* 3 */
@@ -17558,34 +17558,6 @@ exports.default = _class;
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports) {
-
-module.exports = function(module) {
-	if(!module.webpackPolyfill) {
-		module.deprecate = function() {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if(!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
-
-/***/ }),
-/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17682,7 +17654,7 @@ var Action = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYWN0aW9uLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vcGFja2FnZXMvQHN0aW11bHVzL2NvcmUvc3JjL2FjdGlvbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFLQTtJQUtFLGdCQUFZLE9BQWdCLEVBQUUsVUFBNEIsRUFBRSxXQUF3QjtRQUNsRixJQUFJLENBQUMsT0FBTyxHQUFHLE9BQU8sQ0FBQTtRQUN0QixJQUFJLENBQUMsVUFBVSxHQUFHLFVBQVUsQ0FBQTtRQUM1QixJQUFJLENBQUMsV0FBVyxHQUFHLFdBQVcsQ0FBQTtJQUNoQyxDQUFDO0lBRUQsd0JBQU8sR0FBUDtRQUNFLElBQUksQ0FBQyxXQUFXLENBQUMsZ0JBQWdCLENBQUMsSUFBSSxDQUFDLFNBQVMsRUFBRSxJQUFJLEVBQUUsS0FBSyxDQUFDLENBQUE7SUFDaEUsQ0FBQztJQUVELDJCQUFVLEdBQVY7UUFDRSxJQUFJLENBQUMsV0FBVyxDQUFDLG1CQUFtQixDQUFDLElBQUksQ0FBQyxTQUFTLEVBQUUsSUFBSSxFQUFFLEtBQUssQ0FBQyxDQUFBO0lBQ25FLENBQUM7SUFFRCxvQ0FBbUIsR0FBbkIsVUFBb0IsTUFBcUI7UUFDdkMsTUFBTSxDQUFDLE1BQU0sSUFBSSxJQUFJLElBQUksTUFBTSxDQUFDLFVBQVUsQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxDQUFBO0lBQ3ZFLENBQUM7SUFFRCw0QkFBVyxHQUFYLFVBQVksS0FBWTtRQUN0QixFQUFFLENBQUMsQ0FBQyxJQUFJLENBQUMsb0JBQW9CLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxDQUFDO1lBQ3JDLElBQUksQ0FBQyxlQUFlLENBQUMsS0FBSyxDQUFDLENBQUE7UUFDN0IsQ0FBQztJQUNILENBQUM7SUFFRCxzQkFBSSw2QkFBUzthQUFiO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFBO1FBQ2xDLENBQUM7OztPQUFBO0lBRUQsc0JBQUksMEJBQU07YUFBVjtZQUNFLElBQU0sTUFBTSxHQUFHLElBQUksQ0FBQyxVQUFVLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxDQUFBO1lBQy9DLEVBQUUsQ0FBQyxDQUFDLE9BQU8sTUFBTSxJQUFJLFVBQVUsQ0FBQyxDQUFDLENBQUM7Z0JBQ2hDLE1BQU0sQ0FBQyxNQUFNLENBQUE7WUFDZixDQUFDO1lBQ0QsTUFBTSxJQUFJLEtBQUssQ0FBQyxjQUFXLElBQUksQ0FBQyxVQUFVLHlDQUFrQyxJQUFJLENBQUMsVUFBVSxPQUFHLENBQUMsQ0FBQTtRQUNqRyxDQUFDOzs7T0FBQTtJQUVPLGdDQUFlLEdBQXZCLFVBQXdCLEtBQVk7UUFDbEMsSUFBSSxDQUFDO1lBQ0gsSUFBSSxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLFVBQVUsRUFBRSxLQUFLLENBQUMsQ0FBQTtRQUMxQyxDQUFDO1FBQUMsS0FBSyxDQUFDLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQztZQUNmLElBQUksQ0FBQyxPQUFPLENBQUMsV0FBVyxDQUFDLEtBQUssRUFBRSx1QkFBb0IsSUFBSSxDQUFDLFVBQVUsT0FBRyxFQUFFLEVBQUUsS0FBSyxPQUFBLEVBQUUsQ0FBQyxDQUFBO1FBQ3BGLENBQUM7SUFDSCxDQUFDO0lBRU8scUNBQW9CLEdBQTVCLFVBQTZCLEtBQVk7UUFDdkMsSUFBTSxXQUFXLEdBQUcsS0FBSyxDQUFDLE1BQU0sQ0FBQTtRQUNoQyxFQUFFLENBQUMsQ0FBQyxJQUFJLENBQUMsT0FBTyxLQUFLLFdBQVcsQ0FBQyxDQUFDLENBQUM7WUFDakMsTUFBTSxDQUFDLElBQUksQ0FBQTtRQUNiLENBQUM7UUFBQyxJQUFJLENBQUMsRUFBRSxDQUFDLENBQUMsV0FBVyxZQUFZLE9BQU8sSUFBSSxJQUFJLENBQUMsT0FBTyxDQUFDLFFBQVEsQ0FBQyxXQUFXLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFDaEYsTUFBTSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsZUFBZSxDQUFDLFdBQVcsQ0FBQyxDQUFBO1FBQ2hELENBQUM7UUFBQyxJQUFJLENBQUMsQ0FBQztZQUNOLE1BQU0sQ0FBQyxJQUFJLENBQUE7UUFDYixDQUFDO0lBQ0gsQ0FBQztJQUVELHNCQUFZLDhCQUFVO2FBQXRCO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsVUFBVSxDQUFBO1FBQ2hDLENBQUM7OztPQUFBO0lBRUQsc0JBQVksOEJBQVU7YUFBdEI7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxVQUFVLENBQUE7UUFDbkMsQ0FBQzs7O09BQUE7SUFFRCxzQkFBWSwyQkFBTzthQUFuQjtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLE9BQU8sQ0FBQTtRQUMzQixDQUFDOzs7T0FBQTtJQUVELHNCQUFZLHlCQUFLO2FBQWpCO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsS0FBSyxDQUFBO1FBQzNCLENBQUM7OztPQUFBO0lBQ0gsYUFBQztBQUFELENBQUMsQUEzRUQsSUEyRUMifQ==
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17774,7 +17746,7 @@ function stringifyEventTarget(eventTarget) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYWN0aW9uX2Rlc2NyaXB0b3IuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvY29yZS9zcmMvYWN0aW9uX2Rlc2NyaXB0b3IudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBT0EsMkRBQTJEO0FBQzNELElBQU0sT0FBTyxHQUFHLDZDQUE2QyxDQUFBO0FBRTdEO0lBa0RFLDBCQUFZLFVBQWtCLEVBQUUsU0FBaUIsRUFBRSxVQUFrQixFQUFFLFdBQXdCO1FBQzdGLElBQUksQ0FBQyxVQUFVLEdBQUcsVUFBVSxDQUFBO1FBQzVCLElBQUksQ0FBQyxTQUFTLEdBQUcsU0FBUyxDQUFBO1FBQzFCLElBQUksQ0FBQyxVQUFVLEdBQUcsVUFBVSxDQUFBO1FBQzVCLElBQUksQ0FBQyxXQUFXLEdBQUcsV0FBVyxDQUFBO0lBQ2hDLENBQUM7SUF4Q00sMkJBQVUsR0FBakIsVUFBa0IsT0FBZ0M7UUFDaEQsTUFBTSxDQUFDLElBQUksZ0JBQWdCLENBQ3pCLE9BQU8sQ0FBQyxVQUFVLElBQUssS0FBSyxDQUFDLHlDQUF5QyxDQUFDLEVBQ3ZFLE9BQU8sQ0FBQyxTQUFTLElBQU0sS0FBSyxDQUFDLHlDQUF5QyxDQUFDLEVBQ3ZFLE9BQU8sQ0FBQyxVQUFVLElBQUssS0FBSyxDQUFDLDBDQUEwQyxDQUFDLEVBQ3hFLE9BQU8sQ0FBQyxXQUFXLElBQUksS0FBSyxDQUFDLDJDQUEyQyxDQUFDLENBQzFFLENBQUE7SUFDSCxDQUFDO0lBRU0scURBQW9DLEdBQTNDLFVBQTRDLE9BQWdCLEVBQUUsZ0JBQXdCO1FBQ3BGLElBQUksQ0FBQztZQUNILElBQU0sT0FBTyxHQUFHLElBQUksQ0FBQyw0Q0FBNEMsQ0FBQyxnQkFBZ0IsQ0FBQyxDQUFBO1lBQ25GLE9BQU8sQ0FBQyxTQUFTLEdBQUcsT0FBTyxDQUFDLFNBQVMsSUFBSSxJQUFJLENBQUMsNkJBQTZCLENBQUMsT0FBTyxDQUFDLENBQUE7WUFDcEYsT0FBTyxD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
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17876,11 +17848,11 @@ var Context = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29udGV4dC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL0BzdGltdWx1cy9jb3JlL3NyYy9jb250ZXh0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNBLE9BQU8sRUFBRSxTQUFTLEVBQUUsTUFBTSxjQUFjLENBQUE7QUFHeEMsT0FBTyxFQUFFLG9CQUFvQixFQUFnQyxNQUFNLDBCQUEwQixDQUFBO0FBRzdGLE9BQU8sRUFBRSxLQUFLLEVBQUUsTUFBTSxTQUFTLENBQUE7QUFFL0I7SUFPRSxpQkFBWSxNQUFjLEVBQUUsT0FBZ0I7UUFDMUMsSUFBSSxDQUFDLE1BQU0sR0FBRyxNQUFNLENBQUE7UUFDcEIsSUFBSSxDQUFDLEtBQUssR0FBRyxJQUFJLEtBQUssQ0FBQyxJQUFJLENBQUMsTUFBTSxFQUFFLElBQUksQ0FBQyxVQUFVLEVBQUUsT0FBTyxDQUFDLENBQUE7UUFDN0QsSUFBSSxDQUFDLE9BQU8sR0FBRyxJQUFJLFNBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQTtRQUNsQyxJQUFJLENBQUMsb0JBQW9CLEdBQUcsSUFBSSxvQkFBb0IsQ0FBQyxJQUFJLEVBQUUsSUFBSSxDQUFDLENBQUE7UUFFaEUsSUFBSSxDQUFDO1lBQ0gsSUFBSSxDQUFDLFVBQVUsR0FBRyxJQUFJLE1BQU0sQ0FBQyxxQkFBcUIsQ0FBQyxJQUFJLENBQUMsQ0FBQTtZQUN4RCxJQUFJLENBQUMsVUFBVSxDQUFDLFVBQVUsRUFBRSxDQUFBO1FBQzlCLENBQUM7UUFBQyxLQUFLLENBQUMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDO1lBQ2YsSUFBSSxDQUFDLFdBQVcsQ0FBQyxLQUFLLEVBQUUseUJBQXlCLENBQUMsQ0FBQTtRQUNwRCxDQUFDO0lBQ0gsQ0FBQztJQUVELHlCQUFPLEdBQVA7UUFDRSxJQUFJLENBQUMsT0FBTyxDQUFDLEtBQUssRUFBRSxDQUFBO1FBQ3BCLElBQUksQ0FBQyxvQkFBb0IsQ0FBQyxLQUFLLEVBQUUsQ0FBQTtRQUVqQyxJQUFJLENBQUM7WUFDSCxJQUFJLENBQUMsVUFBVSxDQUFDLE9BQU8sRUFBRSxDQUFBO1FBQzNCLENBQUM7UUFBQyxLQUFLLENBQUMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDO1lBQ2YsSUFBSSxDQUFDLFdBQVcsQ0FBQyxLQUFLLEVBQUUsdUJBQXVCLENBQUMsQ0FBQTtRQUNsRCxDQUFDO0lBQ0gsQ0FBQztJQUVELDRCQUFVLEdBQVY7UUFDRSxJQUFJLENBQUM7WUFDSCxJQUFJLENBQUMsVUFBVSxDQUFDLFVBQVUsRUFBRSxDQUFBO1FBQzlCLENBQUM7UUFBQyxLQUFLLENBQUMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDO1lBQ2YsSUFBSSxDQUFDLFdBQVcsQ0FBQyxLQUFLLEVBQUUsMEJBQTBCLENBQUMsQ0FBQTtRQUNyRCxDQUFDO1FBRUQsSUFBSSxDQUFDLG9CQUFvQixDQUFDLElBQUksRUFBRSxDQUFBO1FBQ2hDLElBQUksQ0FBQyxPQUFPLENBQUMsSUFBSSxFQUFFLENBQUE7SUFDckIsQ0FBQztJQUVELHNCQUFJLGdDQUFXO2FBQWY7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxXQUFXLENBQUE7UUFDaEMsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSwrQkFBVTthQUFkO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsVUFBVSxDQUFBO1FBQy9CLENBQUM7OztPQUFBO0lBRUQsc0JBQUksMkJBQU07YUFBVjtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsV0FBVyxDQUFDLE1BQU0sQ0FBQTtRQUNoQyxDQUFDOzs7T0FBQTtJQUVELHNCQUFJLDRCQUFPO2FBQVg7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxPQUFPLENBQUE7UUFDM0IsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSxrQ0FBYTthQUFqQjtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLGFBQWEsQ0FBQTtRQUNuQyxDQUFDOzs7T0FBQTtJQUVELGtDQUFrQztJQUVsQyxlQUFlO0lBQ2YsdUNBQXFCLEdBQXJCLFVBQXNCLE1BQWM7UUFDbEMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxHQUFHLENBQUMsTUFBTSxDQUFDLENBQUE7SUFDMUIsQ0FBQztJQUVELGVBQWU7SUFDZiwwQ0FBd0IsR0FBeEIsVUFBeUIsTUFBYztRQUNyQyxJQUFJLENBQUMsT0FBTyxDQUFDLE1BQU0sQ0FBQyxNQUFNLENBQUMsQ0FBQTtJQUM3QixDQUFDO0lBRUQsaUJBQWlCO0lBRWpCLDZCQUFXLEdBQVgsVUFBWSxLQUFZLEVBQUUsT0FBZSxFQUFFLE1BQW1CO1FBQW5CLHVCQUFBLEVBQUEsV0FBbUI7UUFDdEQsSUFBQSxTQUEwQyxFQUF4QywwQkFBVSxFQUFFLDBCQUFVLEVBQUUsb0JBQU8sQ0FBUztRQUNoRCxNQUFNLEdBQUcsTUFBTSxDQUFDLE1BQU0sQ0FBQyxFQUFFLFVBQVUsWUFBQSxFQUFFLFVBQVUsWUFBQSxFQUFFLE9BQU8sU0FBQSxFQUFFLEVBQUUsTUFBTSxDQUFDLENBQUE7UUFDbkUsSUFBSSxDQUFDLFdBQVcsQ0FBQyxXQUFXLENBQUMsS0FBSyxFQUFFLFdBQVMsT0FBUyxFQUFFLE1BQU0sQ0FBQyxDQUFBO0lBQ2pFLENBQUM7SUFDSCxjQUFDO0FBQUQsQ0FBQyxBQWxGRCxJQWtGQyJ9
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_multimap__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_multimap__ = __webpack_require__(10);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__src_multimap__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_indexed_multimap__ = __webpack_require__(30);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__src_indexed_multimap__["a"]; });
@@ -17889,12 +17861,12 @@ var Context = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvbXVsdGltYXAvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsY0FBYyxnQkFBZ0IsQ0FBQTtBQUM5QixjQUFjLHdCQUF3QixDQUFBIn0=
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Multimap; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__set_operations__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__set_operations__ = __webpack_require__(11);
 
 var Multimap = /** @class */ (function () {
     function Multimap() {
@@ -17954,7 +17926,7 @@ var Multimap = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibXVsdGltYXAuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvbXVsdGltYXAvc3JjL211bHRpbWFwLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBRSxHQUFHLEVBQUUsR0FBRyxFQUFFLE1BQU0sa0JBQWtCLENBQUE7QUFFM0M7SUFHRTtRQUNFLElBQUksQ0FBQyxXQUFXLEdBQUcsSUFBSSxHQUFHLEVBQWEsQ0FBQTtJQUN6QyxDQUFDO0lBRUQsc0JBQUksNEJBQU07YUFBVjtZQUNFLElBQU0sSUFBSSxHQUFHLEtBQUssQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLFdBQVcsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxDQUFBO1lBQ2xELE1BQU0sQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLFVBQUMsTUFBTSxFQUFFLEdBQUcsSUFBSyxPQUFBLE1BQU0sQ0FBQyxNQUFNLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQyxFQUE5QixDQUE4QixFQUFRLEVBQUUsQ0FBQyxDQUFBO1FBQy9FLENBQUM7OztPQUFBO0lBRUQsc0JBQUksMEJBQUk7YUFBUjtZQUNFLElBQU0sSUFBSSxHQUFHLEtBQUssQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLFdBQVcsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxDQUFBO1lBQ2xELE1BQU0sQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLFVBQUMsSUFBSSxFQUFFLEdBQUcsSUFBSyxPQUFBLElBQUksR0FBRyxHQUFHLENBQUMsSUFBSSxFQUFmLENBQWUsRUFBRSxDQUFDLENBQUMsQ0FBQTtRQUN2RCxDQUFDOzs7T0FBQTtJQUVELHNCQUFHLEdBQUgsVUFBSSxHQUFNLEVBQUUsS0FBUTtRQUNsQixHQUFHLENBQUMsSUFBSSxDQUFDLFdBQVcsRUFBRSxHQUFHLEVBQUUsS0FBSyxDQUFDLENBQUE7SUFDbkMsQ0FBQztJQUVELHlCQUFNLEdBQU4sVUFBTyxHQUFNLEVBQUUsS0FBUTtRQUNyQixHQUFHLENBQUMsSUFBSSxDQUFDLFdBQVcsRUFBRSxHQUFHLEVBQUUsS0FBSyxDQUFDLENBQUE7SUFDbkMsQ0FBQztJQUVELHNCQUFHLEdBQUgsVUFBSSxHQUFNLEVBQUUsS0FBUTtRQUNsQixJQUFNLE1BQU0sR0FBRyxJQUFJLENBQUMsV0FBVyxDQUFDLEdBQUcsQ0FBQyxHQUFHLENBQUMsQ0FBQTtRQUN4QyxNQUFNLENBQUMsTUFBTSxJQUFJLElBQUksSUFBSSxNQUFNLENBQUMsR0FBRyxDQUFDLEtBQUssQ0FBQyxDQUFBO0lBQzVDLENBQUM7SUFFRCx5QkFBTSxHQUFOLFVBQU8sR0FBTTtRQUNYLE1BQU0sQ0FBQyxJQUFJLENBQUMsV0FBVyxDQUFDLEdBQUcsQ0FBQyxHQUFHLENBQUMsQ0FBQTtJQUNsQyxDQUFDO0lBRUQsMkJBQVEsR0FBUixVQUFTLEtBQVE7UUFDZixJQUFNLElBQUksR0FBRyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxXQUFXLENBQUMsTUFBTSxFQUFFLENBQUMsQ0FBQTtRQUNsRCxNQUFNLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxVQUFBLEdBQUcsSUFBSSxPQUFBLEdBQUcsQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLEVBQWQsQ0FBYyxDQUFDLENBQUE7SUFDekMsQ0FBQztJQUVELGtDQUFlLEdBQWYsVUFBZ0IsR0FBTTtRQUNwQixJQUFNLE1BQU0sR0FBRyxJQUFJLENBQUMsV0FBVyxDQUFDLEdBQUcsQ0FBQyxHQUFHLENBQUMsQ0FBQTtRQUN4QyxNQUFNLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUMsQ0FBQyxFQUFFLENBQUE7SUFDekMsQ0FBQztJQUVELGtDQUFlLEdBQWYsVUFBZ0IsS0FBUTtRQUN0QixNQUFNLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsV0FBVyxDQUFDO2FBQ2hDLE1BQU0sQ0FBQyxVQUFDLEVBQWE7Z0JBQVosV0FBRyxFQUFFLGNBQU07WUFBTSxPQUFBLE1BQU0sQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDO1FBQWpCLENBQWlCLENBQUM7YUFDNUMsR0FBRyxDQUFDLFVBQUMsRUFBYTtnQkFBWixXQUFHLEVBQUUsY0FBTTtZQUFNLE9BQUEsR0FBRztRQUFILENBQUcsQ0FBQyxDQUFBO0lBQ2hDLENBQUM7SUFDSCxlQUFDO0FBQUQsQ0FBQyxBQWpERCxJQWlEQyJ9
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17986,7 +17958,7 @@ function prune(map, key) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2V0X29wZXJhdGlvbnMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvbXVsdGltYXAvc3JjL3NldF9vcGVyYXRpb25zLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE1BQU0sY0FBb0IsR0FBbUIsRUFBRSxHQUFNLEVBQUUsS0FBUTtJQUM3RCxLQUFLLENBQUMsR0FBRyxFQUFFLEdBQUcsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxLQUFLLENBQUMsQ0FBQTtBQUM1QixDQUFDO0FBRUQsTUFBTSxjQUFvQixHQUFtQixFQUFFLEdBQU0sRUFBRSxLQUFRO0lBQzdELEtBQUssQ0FBQyxHQUFHLEVBQUUsR0FBRyxDQUFDLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBQyxDQUFBO0lBQzdCLEtBQUssQ0FBQyxHQUFHLEVBQUUsR0FBRyxDQUFDLENBQUE7QUFDakIsQ0FBQztBQUVELE1BQU0sZ0JBQXNCLEdBQW1CLEVBQUUsR0FBTTtJQUNyRCxJQUFJLE1BQU0sR0FBRyxHQUFHLENBQUMsR0FBRyxDQUFDLEdBQUcsQ0FBQyxDQUFBO0lBQ3pCLEVBQUUsQ0FBQyxDQUFDLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQztRQUNaLE1BQU0sR0FBRyxJQUFJLEdBQUcsRUFBRSxDQUFBO1FBQ2xCLEdBQUcsQ0FBQyxHQUFHLENBQUMsR0FBRyxFQUFFLE1BQU0sQ0FBQyxDQUFBO0lBQ3RCLENBQUM7SUFDRCxNQUFNLENBQUMsTUFBTSxDQUFBO0FBQ2YsQ0FBQztBQUVELE1BQU0sZ0JBQXNCLEdBQW1CLEVBQUUsR0FBTTtJQUNyRCxJQUFNLE1BQU0sR0FBRyxHQUFHLENBQUMsR0FBRyxDQUFDLEdBQUcsQ0FBQyxDQUFBO0lBQzNCLEVBQUUsQ0FBQyxDQUFDLE1BQU0sSUFBSSxJQUFJLElBQUksTUFBTSxDQUFDLElBQUksSUFBSSxDQUFDLENBQUMsQ0FBQyxDQUFDO1FBQ3ZDLEdBQUcsQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUE7SUFDakIsQ0FBQztBQUNILENBQUMifQ==
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18002,7 +17974,7 @@ function prune(map, key) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvbXV0YXRpb24tb2JzZXJ2ZXJzL2luZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGNBQWMsMEJBQTBCLENBQUE7QUFDeEMsY0FBYyx3QkFBd0IsQ0FBQTtBQUN0QyxjQUFjLDJCQUEyQixDQUFBIn0=
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18014,7 +17986,7 @@ function attributeValueContainsToken(attributeName, token) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VsZWN0b3JzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vcGFja2FnZXMvQHN0aW11bHVzL2NvcmUvc3JjL3NlbGVjdG9ycy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxlQUFlO0FBQ2YsTUFBTSxzQ0FBc0MsYUFBcUIsRUFBRSxLQUFhO0lBQzlFLE1BQU0sQ0FBQyxNQUFJLGFBQWEsWUFBTSxLQUFLLFFBQUksQ0FBQTtBQUN6QyxDQUFDIn0=
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18027,7 +17999,7 @@ var defaultSchema = {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2NoZW1hLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vcGFja2FnZXMvQHN0aW11bHVzL2NvcmUvc3JjL3NjaGVtYS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFNQSxNQUFNLENBQUMsSUFBTSxhQUFhLEdBQVc7SUFDbkMsbUJBQW1CLEVBQUUsaUJBQWlCO0lBQ3RDLGVBQWUsRUFBRSxhQUFhO0lBQzlCLGVBQWUsRUFBRSxhQUFhO0NBQy9CLENBQUEifQ==
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -18896,7 +18868,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 }));
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports) {
 
 // Generated by CoffeeScript 1.6.2
@@ -19172,7 +19144,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19187,7 +19159,7 @@ var _ui = __webpack_require__(1);
 
 var UI = _interopRequireWildcard(_ui);
 
-var _modals = __webpack_require__(22);
+var _modals = __webpack_require__(21);
 
 var Modals = _interopRequireWildcard(_modals);
 
@@ -19202,21 +19174,21 @@ exports.Modals = Modals;
 exports.Sprinkles = Sprinkles;
 
 /***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(19);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ }),
 /* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(20);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jquery"] = __webpack_require__(20);
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
 /* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jquery"] = __webpack_require__(21);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
-
-/***/ }),
-/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -29587,7 +29559,7 @@ return jQuery;
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29612,6 +29584,34 @@ exports.Base = _base2.default;
 exports.Flyout = _flyout2.default;
 
 /***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+module.exports = function(module) {
+	if(!module.webpackPolyfill) {
+		module.deprecate = function() {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if(!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
+
+/***/ }),
 /* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -29632,17 +29632,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_action__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_action__ = __webpack_require__(6);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__src_action__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_action_descriptor__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_action_descriptor__ = __webpack_require__(7);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__src_action_descriptor__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_application__ = __webpack_require__(25);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__src_application__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_context__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_context__ = __webpack_require__(8);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_3__src_context__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_controller__ = __webpack_require__(37);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_4__src_controller__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_schema__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_schema__ = __webpack_require__(14);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_5__src_schema__["a"]; });
 
 
@@ -29659,7 +29659,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Application; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__schema__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__schema__ = __webpack_require__(14);
 
 
 var Application = /** @class */ (function () {
@@ -29730,7 +29730,7 @@ var Application = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Router; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__module__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stimulus_mutation_observers__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stimulus_mutation_observers__ = __webpack_require__(12);
 
 
 var Router = /** @class */ (function () {
@@ -29847,7 +29847,7 @@ var Router = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Module; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__definition__ = __webpack_require__(36);
 
 
@@ -29969,10 +29969,10 @@ var ActionSet = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return InlineActionObserver; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__action__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__action_descriptor__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__stimulus_multimap__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__stimulus_mutation_observers__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__action__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__action_descriptor__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__stimulus_multimap__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__stimulus_mutation_observers__ = __webpack_require__(12);
 
 
 
@@ -30073,8 +30073,8 @@ var InlineActionObserver = /** @class */ (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return IndexedMultimap; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__multimap__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__set_operations__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__multimap__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__set_operations__ = __webpack_require__(11);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -30191,7 +30191,7 @@ var AttributeObserver = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TokenListObserver; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__element_observer__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stimulus_multimap__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stimulus_multimap__ = __webpack_require__(9);
 
 
 var TokenListObserver = /** @class */ (function () {
@@ -30314,7 +30314,7 @@ var TokenListObserver = /** @class */ (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Scope; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__data_map__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__target_set__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__selectors__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__selectors__ = __webpack_require__(13);
 
 
 
@@ -30417,7 +30417,7 @@ function dasherize(value) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TargetSet; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__selectors__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__selectors__ = __webpack_require__(13);
 
 var TargetSet = /** @class */ (function () {
     function TargetSet(scope) {
@@ -30796,7 +30796,7 @@ __webpack_require__(73);
 __webpack_require__(42);
 __webpack_require__(43);
 __webpack_require__(44);
-__webpack_require__(16);
+__webpack_require__(15);
 __webpack_require__(45);
 __webpack_require__(46);
 
@@ -37812,11 +37812,7 @@ function __guard__(value, transform) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function(UI, $) {
 
-var _dropzone = __webpack_require__(56);
-
-var Dropzone = _interopRequireWildcard(_dropzone);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+var Dropzone = __webpack_require__(56);
 
 Dropzone.autoDiscover = false;
 
@@ -37974,8 +37970,22 @@ UI.load(function () {
 /* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Uses AMD or browser globals to create a jQuery plugin.
+(function (factory) {
+  if (true) {
+      // AMD. Register as an anonymous module.
+      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {
+      // Browser globals
+      factory(jQuery);
+  }
+} (function (jQuery) {
+    var module = { exports: { } }; // Fake component
+
 "use strict";
-/* WEBPACK VAR INJECTION */(function(jQuery, module) {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -38044,7 +38054,7 @@ var Emitter = function () {
           args[_key - 1] = arguments[_key];
         }
 
-        for (var _iterator = callbacks, _isArray = true, _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+        for (var _iterator = callbacks, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
           var _ref;
 
           if (_isArray) {
@@ -38528,7 +38538,7 @@ var Dropzone = function (_Emitter) {
           var messageElement = void 0;
           this.element.className = this.element.className + " dz-browser-not-supported";
 
-          for (var _iterator2 = this.element.getElementsByTagName("div"), _isArray2 = true, _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
+          for (var _iterator2 = this.element.getElementsByTagName("div"), _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
             var _ref2;
 
             if (_isArray2) {
@@ -38724,7 +38734,7 @@ var Dropzone = function (_Emitter) {
             file.previewTemplate = file.previewElement; // Backwards compatibility
 
             this.previewsContainer.appendChild(file.previewElement);
-            for (var _iterator3 = file.previewElement.querySelectorAll("[data-dz-name]"), _isArray3 = true, _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[Symbol.iterator]();;) {
+            for (var _iterator3 = file.previewElement.querySelectorAll("[data-dz-name]"), _isArray3 = Array.isArray(_iterator3), _i3 = 0, _iterator3 = _isArray3 ? _iterator3 : _iterator3[Symbol.iterator]();;) {
               var _ref3;
 
               if (_isArray3) {
@@ -38740,7 +38750,7 @@ var Dropzone = function (_Emitter) {
 
               node.textContent = file.name;
             }
-            for (var _iterator4 = file.previewElement.querySelectorAll("[data-dz-size]"), _isArray4 = true, _i4 = 0, _iterator4 = _isArray4 ? _iterator4 : _iterator4[Symbol.iterator]();;) {
+            for (var _iterator4 = file.previewElement.querySelectorAll("[data-dz-size]"), _isArray4 = Array.isArray(_iterator4), _i4 = 0, _iterator4 = _isArray4 ? _iterator4 : _iterator4[Symbol.iterator]();;) {
               if (_isArray4) {
                 if (_i4 >= _iterator4.length) break;
                 node = _iterator4[_i4++];
@@ -38776,7 +38786,7 @@ var Dropzone = function (_Emitter) {
               }
             };
 
-            for (var _iterator5 = file.previewElement.querySelectorAll("[data-dz-remove]"), _isArray5 = true, _i5 = 0, _iterator5 = _isArray5 ? _iterator5 : _iterator5[Symbol.iterator]();;) {
+            for (var _iterator5 = file.previewElement.querySelectorAll("[data-dz-remove]"), _isArray5 = Array.isArray(_iterator5), _i5 = 0, _iterator5 = _isArray5 ? _iterator5 : _iterator5[Symbol.iterator]();;) {
               var _ref4;
 
               if (_isArray5) {
@@ -38810,7 +38820,7 @@ var Dropzone = function (_Emitter) {
         thumbnail: function thumbnail(file, dataUrl) {
           if (file.previewElement) {
             file.previewElement.classList.remove("dz-file-preview");
-            for (var _iterator6 = file.previewElement.querySelectorAll("[data-dz-thumbnail]"), _isArray6 = true, _i6 = 0, _iterator6 = _isArray6 ? _iterator6 : _iterator6[Symbol.iterator]();;) {
+            for (var _iterator6 = file.previewElement.querySelectorAll("[data-dz-thumbnail]"), _isArray6 = Array.isArray(_iterator6), _i6 = 0, _iterator6 = _isArray6 ? _iterator6 : _iterator6[Symbol.iterator]();;) {
               var _ref5;
 
               if (_isArray6) {
@@ -38843,7 +38853,7 @@ var Dropzone = function (_Emitter) {
             if (typeof message !== "String" && message.error) {
               message = message.error;
             }
-            for (var _iterator7 = file.previewElement.querySelectorAll("[data-dz-errormessage]"), _isArray7 = true, _i7 = 0, _iterator7 = _isArray7 ? _iterator7 : _iterator7[Symbol.iterator]();;) {
+            for (var _iterator7 = file.previewElement.querySelectorAll("[data-dz-errormessage]"), _isArray7 = Array.isArray(_iterator7), _i7 = 0, _iterator7 = _isArray7 ? _iterator7 : _iterator7[Symbol.iterator]();;) {
               var _ref6;
 
               if (_isArray7) {
@@ -38883,7 +38893,7 @@ var Dropzone = function (_Emitter) {
         // To get the total number of bytes of the file, use `file.size`
         uploadprogress: function uploadprogress(file, progress, bytesSent) {
           if (file.previewElement) {
-            for (var _iterator8 = file.previewElement.querySelectorAll("[data-dz-uploadprogress]"), _isArray8 = true, _i8 = 0, _iterator8 = _isArray8 ? _iterator8 : _iterator8[Symbol.iterator]();;) {
+            for (var _iterator8 = file.previewElement.querySelectorAll("[data-dz-uploadprogress]"), _isArray8 = Array.isArray(_iterator8), _i8 = 0, _iterator8 = _isArray8 ? _iterator8 : _iterator8[Symbol.iterator]();;) {
               var _ref7;
 
               if (_isArray8) {
@@ -38962,7 +38972,7 @@ var Dropzone = function (_Emitter) {
         objects[_key2 - 1] = arguments[_key2];
       }
 
-      for (var _iterator9 = objects, _isArray9 = true, _i9 = 0, _iterator9 = _isArray9 ? _iterator9 : _iterator9[Symbol.iterator]();;) {
+      for (var _iterator9 = objects, _isArray9 = Array.isArray(_iterator9), _i9 = 0, _iterator9 = _isArray9 ? _iterator9 : _iterator9[Symbol.iterator]();;) {
         var _ref8;
 
         if (_isArray9) {
@@ -39204,7 +39214,7 @@ var Dropzone = function (_Emitter) {
             var files = _this3.hiddenFileInput.files;
 
             if (files.length) {
-              for (var _iterator10 = files, _isArray10 = true, _i10 = 0, _iterator10 = _isArray10 ? _iterator10 : _iterator10[Symbol.iterator]();;) {
+              for (var _iterator10 = files, _isArray10 = Array.isArray(_iterator10), _i10 = 0, _iterator10 = _isArray10 ? _iterator10 : _iterator10[Symbol.iterator]();;) {
                 var _ref9;
 
                 if (_isArray10) {
@@ -39233,7 +39243,7 @@ var Dropzone = function (_Emitter) {
       // Setup all event listeners on the Dropzone object itself.
       // They're not in @setupEventListeners() because they shouldn't be removed
       // again when the dropzone gets disabled.
-      for (var _iterator11 = this.events, _isArray11 = true, _i11 = 0, _iterator11 = _isArray11 ? _iterator11 : _iterator11[Symbol.iterator]();;) {
+      for (var _iterator11 = this.events, _isArray11 = Array.isArray(_iterator11), _i11 = 0, _iterator11 = _isArray11 ? _iterator11 : _iterator11[Symbol.iterator]();;) {
         var _ref10;
 
         if (_isArray11) {
@@ -39366,7 +39376,7 @@ var Dropzone = function (_Emitter) {
       var activeFiles = this.getActiveFiles();
 
       if (activeFiles.length) {
-        for (var _iterator12 = this.getActiveFiles(), _isArray12 = true, _i12 = 0, _iterator12 = _isArray12 ? _iterator12 : _iterator12[Symbol.iterator]();;) {
+        for (var _iterator12 = this.getActiveFiles(), _isArray12 = Array.isArray(_iterator12), _i12 = 0, _iterator12 = _isArray12 ? _iterator12 : _iterator12[Symbol.iterator]();;) {
           var _ref11;
 
           if (_isArray12) {
@@ -39456,7 +39466,7 @@ var Dropzone = function (_Emitter) {
     key: "getExistingFallback",
     value: function getExistingFallback() {
       var getFallback = function getFallback(elements) {
-        for (var _iterator13 = elements, _isArray13 = true, _i13 = 0, _iterator13 = _isArray13 ? _iterator13 : _iterator13[Symbol.iterator]();;) {
+        for (var _iterator13 = elements, _isArray13 = Array.isArray(_iterator13), _i13 = 0, _iterator13 = _isArray13 ? _iterator13 : _iterator13[Symbol.iterator]();;) {
           var _ref12;
 
           if (_isArray13) {
@@ -39638,7 +39648,7 @@ var Dropzone = function (_Emitter) {
   }, {
     key: "handleFiles",
     value: function handleFiles(files) {
-      for (var _iterator14 = files, _isArray14 = true, _i15 = 0, _iterator14 = _isArray14 ? _iterator14 : _iterator14[Symbol.iterator]();;) {
+      for (var _iterator14 = files, _isArray14 = Array.isArray(_iterator14), _i15 = 0, _iterator14 = _isArray14 ? _iterator14 : _iterator14[Symbol.iterator]();;) {
         var _ref13;
 
         if (_isArray14) {
@@ -39666,7 +39676,7 @@ var Dropzone = function (_Emitter) {
 
       return function () {
         var result = [];
-        for (var _iterator15 = items, _isArray15 = true, _i16 = 0, _iterator15 = _isArray15 ? _iterator15 : _iterator15[Symbol.iterator]();;) {
+        for (var _iterator15 = items, _isArray15 = Array.isArray(_iterator15), _i16 = 0, _iterator15 = _isArray15 ? _iterator15 : _iterator15[Symbol.iterator]();;) {
           var _ref14;
 
           if (_isArray15) {
@@ -39722,7 +39732,7 @@ var Dropzone = function (_Emitter) {
       var readEntries = function readEntries() {
         return dirReader.readEntries(function (entries) {
           if (entries.length > 0) {
-            for (var _iterator16 = entries, _isArray16 = true, _i17 = 0, _iterator16 = _isArray16 ? _iterator16 : _iterator16[Symbol.iterator]();;) {
+            for (var _iterator16 = entries, _isArray16 = Array.isArray(_iterator16), _i17 = 0, _iterator16 = _isArray16 ? _iterator16 : _iterator16[Symbol.iterator]();;) {
               var _ref15;
 
               if (_isArray16) {
@@ -39825,7 +39835,7 @@ var Dropzone = function (_Emitter) {
   }, {
     key: "enqueueFiles",
     value: function enqueueFiles(files) {
-      for (var _iterator17 = files, _isArray17 = true, _i18 = 0, _iterator17 = _isArray17 ? _iterator17 : _iterator17[Symbol.iterator]();;) {
+      for (var _iterator17 = files, _isArray17 = Array.isArray(_iterator17), _i18 = 0, _iterator17 = _isArray17 ? _iterator17 : _iterator17[Symbol.iterator]();;) {
         var _ref16;
 
         if (_isArray17) {
@@ -39914,7 +39924,7 @@ var Dropzone = function (_Emitter) {
       if (cancelIfNecessary == null) {
         cancelIfNecessary = false;
       }
-      for (var _iterator18 = this.files.slice(), _isArray18 = true, _i19 = 0, _iterator18 = _isArray18 ? _iterator18 : _iterator18[Symbol.iterator]();;) {
+      for (var _iterator18 = this.files.slice(), _isArray18 = Array.isArray(_iterator18), _i19 = 0, _iterator18 = _isArray18 ? _iterator18 : _iterator18[Symbol.iterator]();;) {
         var _ref17;
 
         if (_isArray18) {
@@ -40134,7 +40144,7 @@ var Dropzone = function (_Emitter) {
   }, {
     key: "processFiles",
     value: function processFiles(files) {
-      for (var _iterator19 = files, _isArray19 = true, _i20 = 0, _iterator19 = _isArray19 ? _iterator19 : _iterator19[Symbol.iterator]();;) {
+      for (var _iterator19 = files, _isArray19 = Array.isArray(_iterator19), _i20 = 0, _iterator19 = _isArray19 ? _iterator19 : _iterator19[Symbol.iterator]();;) {
         var _ref18;
 
         if (_isArray19) {
@@ -40181,7 +40191,7 @@ var Dropzone = function (_Emitter) {
     value: function cancelUpload(file) {
       if (file.status === Dropzone.UPLOADING) {
         var groupedFiles = this._getFilesWithXhr(file.xhr);
-        for (var _iterator20 = groupedFiles, _isArray20 = true, _i21 = 0, _iterator20 = _isArray20 ? _iterator20 : _iterator20[Symbol.iterator]();;) {
+        for (var _iterator20 = groupedFiles, _isArray20 = Array.isArray(_iterator20), _i21 = 0, _iterator20 = _isArray20 ? _iterator20 : _iterator20[Symbol.iterator]();;) {
           var _ref19;
 
           if (_isArray20) {
@@ -40200,7 +40210,7 @@ var Dropzone = function (_Emitter) {
         if (typeof file.xhr !== 'undefined') {
           file.xhr.abort();
         }
-        for (var _iterator21 = groupedFiles, _isArray21 = true, _i22 = 0, _iterator21 = _isArray21 ? _iterator21 : _iterator21[Symbol.iterator]();;) {
+        for (var _iterator21 = groupedFiles, _isArray21 = Array.isArray(_iterator21), _i22 = 0, _iterator21 = _isArray21 ? _iterator21 : _iterator21[Symbol.iterator]();;) {
           var _ref20;
 
           if (_isArray21) {
@@ -40368,7 +40378,7 @@ var Dropzone = function (_Emitter) {
       var xhr = new XMLHttpRequest();
 
       // Put the xhr object in the file objects to be able to reference it later.
-      for (var _iterator22 = files, _isArray22 = true, _i24 = 0, _iterator22 = _isArray22 ? _iterator22 : _iterator22[Symbol.iterator]();;) {
+      for (var _iterator22 = files, _isArray22 = Array.isArray(_iterator22), _i24 = 0, _iterator22 = _isArray22 ? _iterator22 : _iterator22[Symbol.iterator]();;) {
         var _ref21;
 
         if (_isArray22) {
@@ -40446,7 +40456,7 @@ var Dropzone = function (_Emitter) {
       }
 
       // Let the user add additional data if necessary
-      for (var _iterator23 = files, _isArray23 = true, _i25 = 0, _iterator23 = _isArray23 ? _iterator23 : _iterator23[Symbol.iterator]();;) {
+      for (var _iterator23 = files, _isArray23 = Array.isArray(_iterator23), _i25 = 0, _iterator23 = _isArray23 ? _iterator23 : _iterator23[Symbol.iterator]();;) {
         var _ref22;
 
         if (_isArray23) {
@@ -40510,7 +40520,7 @@ var Dropzone = function (_Emitter) {
     value: function _addFormElementData(formData) {
       // Take care of other input elements
       if (this.element.tagName === "FORM") {
-        for (var _iterator24 = this.element.querySelectorAll("input, textarea, select, button"), _isArray24 = true, _i26 = 0, _iterator24 = _isArray24 ? _iterator24 : _iterator24[Symbol.iterator]();;) {
+        for (var _iterator24 = this.element.querySelectorAll("input, textarea, select, button"), _isArray24 = Array.isArray(_iterator24), _i26 = 0, _iterator24 = _isArray24 ? _iterator24 : _iterator24[Symbol.iterator]();;) {
           var _ref23;
 
           if (_isArray24) {
@@ -40533,7 +40543,7 @@ var Dropzone = function (_Emitter) {
 
           if (input.tagName === "SELECT" && input.hasAttribute("multiple")) {
             // Possibly multiple values
-            for (var _iterator25 = input.options, _isArray25 = true, _i27 = 0, _iterator25 = _isArray25 ? _iterator25 : _iterator25[Symbol.iterator]();;) {
+            for (var _iterator25 = input.options, _isArray25 = Array.isArray(_iterator25), _i27 = 0, _iterator25 = _isArray25 ? _iterator25 : _iterator25[Symbol.iterator]();;) {
               var _ref24;
 
               if (_isArray25) {
@@ -40590,7 +40600,7 @@ var Dropzone = function (_Emitter) {
           }
           file.upload.progress = file.upload.progress / file.upload.totalChunkCount;
         } else {
-          for (var _iterator26 = files, _isArray26 = true, _i28 = 0, _iterator26 = _isArray26 ? _iterator26 : _iterator26[Symbol.iterator]();;) {
+          for (var _iterator26 = files, _isArray26 = Array.isArray(_iterator26), _i28 = 0, _iterator26 = _isArray26 ? _iterator26 : _iterator26[Symbol.iterator]();;) {
             var _ref25;
 
             if (_isArray26) {
@@ -40609,7 +40619,7 @@ var Dropzone = function (_Emitter) {
             _file2.upload.bytesSent = e.loaded;
           }
         }
-        for (var _iterator27 = files, _isArray27 = true, _i29 = 0, _iterator27 = _isArray27 ? _iterator27 : _iterator27[Symbol.iterator]();;) {
+        for (var _iterator27 = files, _isArray27 = Array.isArray(_iterator27), _i29 = 0, _iterator27 = _isArray27 ? _iterator27 : _iterator27[Symbol.iterator]();;) {
           var _ref26;
 
           if (_isArray27) {
@@ -40632,7 +40642,7 @@ var Dropzone = function (_Emitter) {
 
         progress = 100;
 
-        for (var _iterator28 = files, _isArray28 = true, _i30 = 0, _iterator28 = _isArray28 ? _iterator28 : _iterator28[Symbol.iterator]();;) {
+        for (var _iterator28 = files, _isArray28 = Array.isArray(_iterator28), _i30 = 0, _iterator28 = _isArray28 ? _iterator28 : _iterator28[Symbol.iterator]();;) {
           var _ref27;
 
           if (_isArray28) {
@@ -40658,7 +40668,7 @@ var Dropzone = function (_Emitter) {
           return;
         }
 
-        for (var _iterator29 = files, _isArray29 = true, _i31 = 0, _iterator29 = _isArray29 ? _iterator29 : _iterator29[Symbol.iterator]();;) {
+        for (var _iterator29 = files, _isArray29 = Array.isArray(_iterator29), _i31 = 0, _iterator29 = _isArray29 ? _iterator29 : _iterator29[Symbol.iterator]();;) {
           var _ref28;
 
           if (_isArray29) {
@@ -40731,7 +40741,7 @@ var Dropzone = function (_Emitter) {
         }
       }
 
-      for (var _iterator30 = files, _isArray30 = true, _i32 = 0, _iterator30 = _isArray30 ? _iterator30 : _iterator30[Symbol.iterator]();;) {
+      for (var _iterator30 = files, _isArray30 = Array.isArray(_iterator30), _i32 = 0, _iterator30 = _isArray30 ? _iterator30 : _iterator30[Symbol.iterator]();;) {
         var _ref29;
 
         if (_isArray30) {
@@ -40760,7 +40770,7 @@ var Dropzone = function (_Emitter) {
   }, {
     key: "_finished",
     value: function _finished(files, responseText, e) {
-      for (var _iterator31 = files, _isArray31 = true, _i33 = 0, _iterator31 = _isArray31 ? _iterator31 : _iterator31[Symbol.iterator]();;) {
+      for (var _iterator31 = files, _isArray31 = Array.isArray(_iterator31), _i33 = 0, _iterator31 = _isArray31 ? _iterator31 : _iterator31[Symbol.iterator]();;) {
         var _ref30;
 
         if (_isArray31) {
@@ -40794,7 +40804,7 @@ var Dropzone = function (_Emitter) {
   }, {
     key: "_errorProcessing",
     value: function _errorProcessing(files, message, xhr) {
-      for (var _iterator32 = files, _isArray32 = true, _i34 = 0, _iterator32 = _isArray32 ? _iterator32 : _iterator32[Symbol.iterator]();;) {
+      for (var _iterator32 = files, _isArray32 = Array.isArray(_iterator32), _i34 = 0, _iterator32 = _isArray32 ? _iterator32 : _iterator32[Symbol.iterator]();;) {
         var _ref31;
 
         if (_isArray32) {
@@ -40893,7 +40903,7 @@ Dropzone.discover = function () {
     var checkElements = function checkElements(elements) {
       return function () {
         var result = [];
-        for (var _iterator33 = elements, _isArray33 = true, _i35 = 0, _iterator33 = _isArray33 ? _iterator33 : _iterator33[Symbol.iterator]();;) {
+        for (var _iterator33 = elements, _isArray33 = Array.isArray(_iterator33), _i35 = 0, _iterator33 = _isArray33 ? _iterator33 : _iterator33[Symbol.iterator]();;) {
           var _ref32;
 
           if (_isArray33) {
@@ -40922,7 +40932,7 @@ Dropzone.discover = function () {
 
   return function () {
     var result = [];
-    for (var _iterator34 = dropzones, _isArray34 = true, _i36 = 0, _iterator34 = _isArray34 ? _iterator34 : _iterator34[Symbol.iterator]();;) {
+    for (var _iterator34 = dropzones, _isArray34 = Array.isArray(_iterator34), _i36 = 0, _iterator34 = _isArray34 ? _iterator34 : _iterator34[Symbol.iterator]();;) {
       var _ref33;
 
       if (_isArray34) {
@@ -40971,7 +40981,7 @@ Dropzone.isBrowserSupported = function () {
       capableBrowser = false;
     } else {
       // The browser supports the API, but may be blacklisted.
-      for (var _iterator35 = Dropzone.blacklistedBrowsers, _isArray35 = true, _i37 = 0, _iterator35 = _isArray35 ? _iterator35 : _iterator35[Symbol.iterator]();;) {
+      for (var _iterator35 = Dropzone.blacklistedBrowsers, _isArray35 = Array.isArray(_iterator35), _i37 = 0, _iterator35 = _isArray35 ? _iterator35 : _iterator35[Symbol.iterator]();;) {
         var _ref34;
 
         if (_isArray35) {
@@ -41072,7 +41082,7 @@ Dropzone.getElements = function (els, name) {
   if (els instanceof Array) {
     elements = [];
     try {
-      for (var _iterator36 = els, _isArray36 = true, _i38 = 0, _iterator36 = _isArray36 ? _iterator36 : _iterator36[Symbol.iterator]();;) {
+      for (var _iterator36 = els, _isArray36 = Array.isArray(_iterator36), _i38 = 0, _iterator36 = _isArray36 ? _iterator36 : _iterator36[Symbol.iterator]();;) {
         if (_isArray36) {
           if (_i38 >= _iterator36.length) break;
           el = _iterator36[_i38++];
@@ -41089,7 +41099,7 @@ Dropzone.getElements = function (els, name) {
     }
   } else if (typeof els === "string") {
     elements = [];
-    for (var _iterator37 = document.querySelectorAll(els), _isArray37 = true, _i39 = 0, _iterator37 = _isArray37 ? _iterator37 : _iterator37[Symbol.iterator]();;) {
+    for (var _iterator37 = document.querySelectorAll(els), _isArray37 = Array.isArray(_iterator37), _i39 = 0, _iterator37 = _isArray37 ? _iterator37 : _iterator37[Symbol.iterator]();;) {
       if (_isArray37) {
         if (_i39 >= _iterator37.length) break;
         el = _iterator37[_i39++];
@@ -41136,7 +41146,7 @@ Dropzone.isValidFile = function (file, acceptedFiles) {
   var mimeType = file.type;
   var baseMimeType = mimeType.replace(/\/.*$/, "");
 
-  for (var _iterator38 = acceptedFiles, _isArray38 = true, _i40 = 0, _iterator38 = _isArray38 ? _iterator38 : _iterator38[Symbol.iterator]();;) {
+  for (var _iterator38 = acceptedFiles, _isArray38 = Array.isArray(_iterator38), _i40 = 0, _iterator38 = _isArray38 ? _iterator38 : _iterator38[Symbol.iterator]();;) {
     var _ref35;
 
     if (_isArray38) {
@@ -41502,7 +41512,8 @@ function __guardMethod__(obj, methodName, transform) {
   }
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(6)(module)))
+    return module.exports;
+}));
 
 /***/ }),
 /* 57 */
@@ -41511,7 +41522,7 @@ function __guardMethod__(obj, methodName, transform) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($, UI) {
 
-__webpack_require__(17);
+__webpack_require__(16);
 
 var updateFilters = function updateFilters() {
   if ($('#filter-bar').exists()) {
@@ -41919,7 +41930,7 @@ var createFallbackLoadingSpinner = function createFallbackLoadingSpinner() {
 "use strict";
 /* WEBPACK VAR INJECTION */(function(UI, $) {
 
-__webpack_require__(16);
+__webpack_require__(15);
 
 UI.load(function () {
   return (
@@ -41975,7 +41986,7 @@ UI.click('.js-close-modal', function (e, el) {
 //  Modal Methods
 // =====================================================
 
-window.Modals = {
+var Modals = {
   show: function show(modal, data, callbacks) {
 
     if (modal) {
@@ -42090,7 +42101,7 @@ window.Modals = {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($, UI) {
 
-__webpack_require__(17);
+__webpack_require__(16);
 
 // ===================================================
 // show/hide the mobile dropdown menu

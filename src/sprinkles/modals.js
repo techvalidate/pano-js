@@ -36,7 +36,7 @@ UI.click('.js-close-modal', function(e, el) {
 //  Modal Methods
 // =====================================================
 
-window.Modals = {
+const Modals = {
 
   show(modal, data, callbacks) {
 

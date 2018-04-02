@@ -9,6 +9,11 @@ export default class extends Controller {
     })
   }
 
+  open() {
+    $('body').css({ overflow: 'hidden' })
+    $(this.element).fadeIn()
+  }
+
   connect() {
     $(this.element).find('form').on('ajax:success', _.bind(this.close, this))
   }

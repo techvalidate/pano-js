@@ -1,9 +1,9 @@
 import * as UI from './src/utils/ui'
-import * as Modals from './src/modals'
+import Controllers from './src/controllers'
 import * as Sprinkles from './src/sprinkles'
 
 export {
-  UI,
-  Modals,
-  Sprinkles
+  Controllers,
+  Sprinkles,
+  UI
 }

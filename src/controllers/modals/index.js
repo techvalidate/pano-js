@@ -1,7 +1,9 @@
 import Base from './base'
 import Flyout from './flyout'
 
-export {
+const Modals =  {
   Base,
   Flyout
 }
+
+export default Modals

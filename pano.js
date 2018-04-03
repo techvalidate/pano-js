@@ -29605,7 +29605,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Controllers = {
   Modals: _modals2.default,
-  ModalController: ModalController
+  ModalController: _modalController2.default
 };
 
 exports.default = Controllers;

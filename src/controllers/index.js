@@ -1,5 +1,5 @@
 import Modals from './modals'
-import ApplicationController from './modalController'
+import ModalController from './modalController'
 
 const Controllers = {
   Modals,

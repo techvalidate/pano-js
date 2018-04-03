@@ -2,7 +2,7 @@ Arguments:
   /usr/local/Cellar/node/9.5.0/bin/node /usr/local/bin/yarn build
 
 PATH: 
-  /Users/mattl/.rvm/gems/ruby-2.3.1/bin:/Users/mattl/.rvm/gems/ruby-2.3.1@global/bin:/Users/mattl/.rvm/rubies/ruby-2.3.1/bin:/Users/mattl/Downloads/google-cloud-sdk/bin:/Users/mattl/cmus/bin:/Users/mattl/.yarn/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/mattl/.rvm/gems/ruby-2.3.1/bin:/Users/mattl/.rvm/gems/ruby-2.3.1@global/bin:/Users/mattl/.rvm/rubies/ruby-2.3.1/bin:/Users/mattl/cmus/bin:/Users/mattl/.yarn/bin:/Users/mattl/.rvm/bin:/usr/local/bin/elasticsearch:/usr/bin/java:/usr/local/opt/mysql/bin:/Users/mattl/.fzf/bin:/Users/mattl/.rvm/bin:/usr/local/bin/elasticsearch:/usr/bin/java:/usr/local/opt/mysql/bin
+  /Users/mattl/.rvm/gems/ruby-2.3.1/bin:/Users/mattl/.rvm/gems/ruby-2.3.1@global/bin:/Users/mattl/.rvm/rubies/ruby-2.3.1/bin:/Users/mattl/Downloads/google-cloud-sdk/bin:/Users/mattl/cmus/bin:/Users/mattl/.yarn/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/mattl/.rvm/gems/ruby-2.3.1/bin:/Users/mattl/.rvm/gems/ruby-2.3.1@global/bin:/Users/mattl/.rvm/rubies/ruby-2.3.1/bin:/Users/mattl/Downloads/google-cloud-sdk/bin:/Users/mattl/cmus/bin:/Users/mattl/.yarn/bin:/Users/mattl/.rvm/bin:/usr/local/bin/elasticsearch:/usr/bin/java:/usr/local/opt/mysql/bin:/Users/mattl/.fzf/bin:/Users/mattl/.rvm/bin:/usr/local/bin/elasticsearch:/usr/bin/java:/usr/local/opt/mysql/bin
 
 Yarn version: 
   1.5.1
@@ -20,13 +20,14 @@ npm manifest:
     "repository": "git@github.com:techvalidate/pano.git",
     "author": "Matt Lindeboom <mattl@surveymonkey.com>",
     "private": true,
+    "main": "./pano.js",
+    "modules": "./index.js",
     "scripts": {
       "build": "yarn webpack"
     },
     "dependencies": {
       "dropzone": "^5.4.0",
       "fullpage.js": "^2.9.6",
-      "jquery": "^3.2.1",
       "jquery-dropdown": "https://github.com/soundasleep/jquery-dropdown#master",
       "jquery-minicolors": "^2.1.10",
       "jquery-powertip": "^1.3.0",
@@ -40,6 +41,9 @@ npm manifest:
       "sticky-kit": "^1.1.3",
       "stimulus": "^1.0.1",
       "switchery": "^0.0.2"
+    },
+    "peerDependencies": {
+      "jquery": "^3.2.1"
     },
     "devDependencies": {
       "babel-core": "^6.26.0",

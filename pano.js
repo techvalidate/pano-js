@@ -29597,15 +29597,15 @@ var _modals = __webpack_require__(23);
 
 var _modals2 = _interopRequireDefault(_modals);
 
-var _applicationController = __webpack_require__(41);
+var _modalController = __webpack_require__(41);
 
-var _applicationController2 = _interopRequireDefault(_applicationController);
+var _modalController2 = _interopRequireDefault(_modalController);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Controllers = {
   Modals: _modals2.default,
-  ApplicationController: _applicationController2.default
+  ModalController: ModalController
 };
 
 exports.default = Controllers;
@@ -30822,8 +30822,8 @@ var _class = function (_Controller) {
   }
 
   _createClass(_class, [{
-    key: 'openModal',
-    value: function openModal(e) {
+    key: 'open',
+    value: function open(e) {
       e.preventDefault();
       var $target = $(e.target);
       var modalId = $target.attr('href');

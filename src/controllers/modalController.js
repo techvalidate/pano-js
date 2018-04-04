@@ -7,7 +7,9 @@ export default class extends Controller {
     const modalId = $target.attr('href')
 
     if (modalId.indexOf('#') === 0) {
-      $(this.element).find(modalId).fadeIn({duration: 200})
+      const modal = $(this.element).find(modalId)
+      modal.fadeIn({duration: 200})
+      modal.find('.modal-dialog').addClass('open')
     }
   }
 }

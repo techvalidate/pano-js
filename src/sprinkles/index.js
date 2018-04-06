@@ -18,7 +18,6 @@ require('./forms.js');
 require('./inlineSpinner');
 require('./loadingSpinner');
 require('./minicolors.js')
-require('./modals.js')
 require('./nav.js');
 require('./scrollTo.js')
 require('./switches.js')

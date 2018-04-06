@@ -78,7 +78,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(19);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 1 */
@@ -244,6 +244,33 @@ function submit(selector, callback) {
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -17345,34 +17372,7 @@ function submit(selector, callback) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(24)(module)))
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(24)(module)))
 
 /***/ }),
 /* 4 */
@@ -17560,7 +17560,7 @@ var _class = function (_Controller) {
 }(_stimulus.Controller);
 
 exports.default = _class;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(3)))
 
 /***/ }),
 /* 6 */
@@ -19202,14 +19202,14 @@ exports.UI = UI;
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(20);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jquery"] = __webpack_require__(21);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 21 */
@@ -30789,7 +30789,7 @@ var _class = function (_ModalController) {
 }(_base2.default);
 
 exports.default = _class;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(3)))
 
 /***/ }),
 /* 41 */
@@ -30825,12 +30825,61 @@ var _class = function (_Controller) {
     key: 'open',
     value: function open(e) {
       e.preventDefault();
+
       var $target = $(e.target);
       var modalId = $target.attr('href');
 
       if (modalId.indexOf('#') === 0) {
-        $(this.element).find(modalId).fadeIn({ duration: 200 });
+        var modal = $(this.element).find(modalId);
+        this.show(modal);
+      } else {
+        this.getModal();
       }
+    }
+  }, {
+    key: 'show',
+    value: function show(modal) {
+      var openTimeout = void 0;
+      modal.fadeIn({ duration: 200 });
+      $('body').css('overflow', 'hidden');
+
+      clearTimeout(openTimeout);
+      openTimeout = setTimeout(function () {
+        return modal.addClass('open');
+      }, 300);
+    }
+  }, {
+    key: 'getModal',
+    value: function getModal(url) {
+
+      $.get(url, function (data, textStatus, jqXHR) {
+        // this is the success callback. it gets called after normal responses AND redirects.
+        if (jqXHR.getResponseHeader('REQUIRES_AUTH') === '1') {
+          window.location = 'https://' + window.location.hostname + '/login'; // send the person to the login page
+        } else {
+
+          var htmlResponse = $(data);
+          htmlResponse.addClass('js-ajax-modal');
+          var id = htmlResponse.attr('id');
+
+          $('body').append(htmlResponse);
+
+          if (id) {
+            this.show($('#' + id));
+          }
+
+          $('body').css('overflow', 'hidden');
+        }
+      }).fail(function (jqXHR, textStatus, errorThrown) {
+
+        if (jqXHR.status === 404) {
+          alert('Sorry, the requested item could not be found.');
+        }
+
+        if (jqXHR.status === 500) {
+          return alert('Sorry, an error occurred in processing your request. Please contact support if the error persists.');
+        }
+      });
     }
   }]);
 
@@ -30871,8 +30920,7 @@ __webpack_require__(65);
 __webpack_require__(66);
 __webpack_require__(67);
 __webpack_require__(68);
-__webpack_require__(69);
-__webpack_require__(75);
+__webpack_require__(74);
 
 /***/ }),
 /* 43 */
@@ -37704,7 +37752,7 @@ var bindCalendars = function bindCalendars(rangeStart, rangeEnd, data) {
   setDateValue(startCalEl, null, startCal.getDate());
   setDateValue(endCalEl, null, endCal.getDate());
 };
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0), __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0), __webpack_require__(3)))
 
 /***/ }),
 /* 55 */
@@ -37822,7 +37870,7 @@ UI.load(function () {
     });
   });
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0), __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0), __webpack_require__(3)))
 
 /***/ }),
 /* 56 */
@@ -42036,157 +42084,6 @@ UI.load(function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(UI, $, _) {
-
-// =====================================================
-// Click handlers that show and hide modals.
-//
-// usage: add ,js-modal
-//        on click .js-modal, href = dom ID of modal to show.
-// =====================================================
-
-UI.click('.modal-bg', function (e, el) {
-  var $target = $(e.target);
-  var modal = $target.closest('.modal');
-  return Modals.close(modal);
-});
-
-UI.click('.js-modal', function (e, el) {
-  e.preventDefault();
-  var href = el.attr('href');
-
-  if (href.indexOf('#') === 0) {
-    var data = $(el).data();
-
-    Modals.show($(href), data);
-  } else {
-    Modals.showAjax(href, null, [$.bindFormValidation]);
-  }
-});
-
-UI.click('.js-close-modal', function (e, el) {
-  var $target = $(e.target);
-  var modal = $target.closest('.modal');
-  return Modals.close(modal);
-});
-
-// =====================================================
-//  Modal Methods
-// =====================================================
-
-var Modals = {
-  show: function show(modal, data, callbacks) {
-
-    if (modal) {
-      $('body').css('overflow', 'hidden');
-      // // need to center during the fadeIn animation
-      modal.fadeIn({ duration: 200 });
-      Modals.currentModals.push(modal);
-
-      if (callbacks) {
-        return Array.from(callbacks).map(function (callback) {
-          return function () {
-            return callback(modal);
-          }();
-        });
-      }
-    }
-  },
-  close: function close(modal) {
-    if (modal) {
-      modal.fadeOut(200);
-      Modals.currentModals.pop(modal);
-
-      if (modal.hasClass('js-ajax-modal')) {
-        modal.remove();
-      }
-
-      return $('body').css('overflow', 'auto');
-    }
-  },
-
-
-  currentModals: [],
-
-  showAjax: function showAjax(url, data, callbacks) {
-
-    return $.get(url, function (data, textStatus, jqXHR) {
-      // this is the success callback. it gets called after normal responses AND redirects.
-      if (jqXHR.getResponseHeader('REQUIRES_AUTH') === '1') {
-        return window.location = 'https://' + window.location.hostname + '/login'; // send the person to the login page
-      } else {
-        var htmlResponse = $(data);
-        htmlResponse.addClass('js-ajax-modal');
-        var id = htmlResponse.attr('id');
-        $('body').append(htmlResponse);
-
-        if (id) {
-          Modals.show($('#' + id));
-        }
-
-        if (callbacks && callbacks.length) {
-          callbacks.forEach(function (callback) {
-            if (_.isFunction(callback)) {
-              return callback(htmlResponse);
-            }
-          });
-        }
-
-        return $('body').css('overflow', 'hidden');
-      }
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-
-      if (jqXHR.status === 404) {
-        alert('Sorry, the requested item could not be found.');
-      }
-
-      if (jqXHR.status === 500) {
-        return alert('Sorry, an error occurred in processing your request. Please contact support if the error persists.');
-      }
-    });
-  },
-  ajaxloadingMessage: function ajaxloadingMessage() {
-    return '<div class=\'modal loading\'>\n  <h2>Loading...</h2>\n</div>';
-  }
-};
-
-//#Override the default confirm dialog by rails
-//$.rails.allowAction = (link) ->
-//  if link.data("confirm") == undefined
-//    return true
-//
-//  $.rails.showConfirmationDialog(link)
-//  return false
-//
-//#User click confirm button
-//$.rails.confirmed = (link) ->
-//  link.data("confirm", null)
-//  link.trigger("click.rails")
-//
-//#Display the confirmation dialog
-//$.rails.showConfirmationDialog = (link) ->
-//  message = link.data("confirm")
-//  url = link.attr('href')
-//  method = link.data('method')
-//
-//  vex.dialog.confirm({
-//    message: message
-//    callback: (value) ->
-//      if value && url && method
-//        $.ajax({
-//          url: url
-//          method: method
-//          success: (response) ->
-//            eval(response)
-//        })
-//  })
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0), __webpack_require__(2)))
-
-/***/ }),
-/* 66 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 /* WEBPACK VAR INJECTION */(function($, UI) {
 
 __webpack_require__(17);
@@ -42273,7 +42170,7 @@ UI.load(function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(1)))
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42295,7 +42192,7 @@ UI.click('.scroll-to-top', function (e, el) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42316,17 +42213,17 @@ UI.load(function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(0)))
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _jstz = __webpack_require__(70);
+var _jstz = __webpack_require__(69);
 
 var jstz = _interopRequireWildcard(_jstz);
 
-var _jsCookie = __webpack_require__(74);
+var _jsCookie = __webpack_require__(73);
 
 var _jsCookie2 = _interopRequireDefault(_jsCookie);
 
@@ -42340,14 +42237,14 @@ var tz = jstz.determine();
 _jsCookie2.default.set('timezone', tz.name(), { expires: 7, path: '/' });
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(71);
+module.exports = __webpack_require__(70);
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root) {/*global exports, Intl*/
@@ -43766,7 +43663,7 @@ jstz.olson.dst_rules = {
 };
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     module.exports = jstz;
-} else if (("function" !== 'undefined' && __webpack_require__(72) !== null) && (__webpack_require__(73) != null)) {
+} else if (("function" !== 'undefined' && __webpack_require__(71) !== null) && (__webpack_require__(72) != null)) {
     !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function() {
         return jstz;
     }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
@@ -43782,7 +43679,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports) {
 
 module.exports = function() {
@@ -43791,7 +43688,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -43800,7 +43697,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -43975,7 +43872,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

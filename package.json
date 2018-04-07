@@ -1,13 +1,14 @@
 {
   "name": "pano-js",
-  "version": "3.0.0",
+  "version": "1.0.0",
   "repository": "git@github.com:techvalidate/pano.git",
-  "author": "Matt Lindeboom <mattl@surveymonkey.com>",
-  "private": true,
+  "contributors":["Matt Lindeboom <mattl@surveymonkey.com>"],
+  "license": "MIT",
   "main": "./pano.js",
   "modules": "./index.js",
   "scripts": {
-    "build": "yarn webpack"
+    "build": "yarn webpack",
+    "watch": "yarn webpack -w"
   },
   "dependencies": {
     "dropzone": "^5.4.0",

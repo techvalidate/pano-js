@@ -1,17 +1,18 @@
+import 'whatwg-fetch' // fetch polyfill
 import { Controller } from 'stimulus'
 
 export default class extends Controller {
   open(e) {
+    const $target = $(e.currentTarget)
+    const modalUri = $target.attr('href')
+
     e.preventDefault();
 
-    const $target = $(e.target)
-    const modalId = $target.attr('href')
-
-    if (modalId.indexOf('#') === 0) {
-      const modal = $(this.element).find(modalId)
+    if (modalUri.indexOf('#') === 0) {
+      const modal = $(this.element).find(modalUri)
       this.show(modal)
     } else {
-      this.getModal()
+      this.getModal(modalUri)
     }
   }
 
@@ -25,35 +26,29 @@ export default class extends Controller {
   }
 
   getModal(url) {
+    const controller = this
+    fetch(url, {
+      credentials: 'same-origin',
+      redirect: 'follow'
+    })
+      .then((response) => {
 
-    $.get(url, function(data, textStatus, jqXHR) {
-      // this is the success callback. it gets called after normal responses AND redirects.
-      if (jqXHR.getResponseHeader('REQUIRES_AUTH') === '1') {
-        window.location = `https://${window.location.hostname}/login`; // send the person to the login page
-      } else {
+        if(response.ok) return response.text()
 
-        const htmlResponse = $(data);
-        htmlResponse.addClass('js-ajax-modal');
-        const id = htmlResponse.attr('id');
+        if (response.status === 404) throw new Error('Sorry, the requested item could not be found.')
 
-        $('body').append(htmlResponse);
+        throw new Error('Sorry, an error occurred in processing your request. Please contact support if the error persists.')
+      }).then((html) => {
+        const $htmlResponse = $(html)
+        const id = $htmlResponse.attr('id')
 
-        if (id) {
-          this.show($(`#${id}`));
-        }
+        $htmlResponse.addClass('js-ajax-modal')
+        $('body').append($htmlResponse)
 
+        controller.show($(`#${id}`))
         $('body').css('overflow', 'hidden');
-      }
-
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-
-      if (jqXHR.status === 404) {
-        alert('Sorry, the requested item could not be found.');
-      }
-
-      if (jqXHR.status === 500) {
-        return alert('Sorry, an error occurred in processing your request. Please contact support if the error persists.');
-      }
-    });
+      }).catch((err) => {
+        alert(err.message)
+      })
   }
 }

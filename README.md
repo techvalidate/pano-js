@@ -50,5 +50,5 @@ You can use `yarn link` to easily make updates to Pano-JS and see real time upda
     const config = environment.toWebpackConfig()
     config.watchOptions = { ignored: [/node_modules([\\]+|\/)+(?!\pano-js)/]}
    ```
-To unlink run `yarn unlink pano-js`
+To unlink run `yarn unlink pano-js` and then run `yarn` again to reinstall from github.
 

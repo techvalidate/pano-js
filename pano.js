@@ -36188,20 +36188,38 @@ var _class = function (_Controller) {
     value: function toggle(e) {
       var target = e.currentTarget;
       if (target.classList.contains('item-open')) {
-        (0, _velocityAnimate2.default)(target.querySelector('.item-content'), 'slideUp', {
-          easing: 'easeInOutQuad',
-          duration: 200,
-          complete: function complete() {
-            target.classList.remove('item-open');
-          }
-        });
+        this.close(target);
       } else {
-        target.classList.add('item-open');
-        (0, _velocityAnimate2.default)(target.querySelector('.item-content'), 'slideDown', {
-          easing: 'easeInOutQuad',
-          duration: 200
-        });
+        this.open(target);
       }
+    }
+  }, {
+    key: 'open',
+    value: function open(item) {
+      item.classList.add('item-open');
+      (0, _velocityAnimate2.default)(item.querySelector('.item-content'), 'slideDown', {
+        easing: 'easeInOutQuad',
+        duration: 200
+      });
+    }
+  }, {
+    key: 'close',
+    value: function close(item) {
+      item.classList.remove('item-open');
+      (0, _velocityAnimate2.default)(item.querySelector('.item-content'), 'slideUp', {
+        easing: 'easeInOutQuad',
+        duration: 200
+      });
+    }
+  }, {
+    key: 'connect',
+    value: function connect() {
+      var _this2 = this;
+
+      var items = this.element.querySelectorAll('li');
+      items.forEach(function (item) {
+        if (item.classList.contains('item-open')) _this2.open(item);
+      });
     }
   }]);
 

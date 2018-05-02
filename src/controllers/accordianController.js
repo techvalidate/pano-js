@@ -6,21 +6,33 @@ export default class extends Controller {
   toggle(e) {
     const target = e.currentTarget
     if (target.classList.contains('item-open')) {
-      Velocity(target.querySelector('.item-content'), 'slideUp', {
-        easing: 'easeInOutQuad',
-        duration: 200,
-        complete: function(){
-          target.classList.remove('item-open')
-        }
-      })
-
+      this.close(target)
     } else {
-      target.classList.add('item-open')
-      Velocity(target.querySelector('.item-content'), 'slideDown',
-      {
-        easing: 'easeInOutQuad',
-        duration: 200
-      })
+      this.open(target)
     }
+  }
+
+  open(item) {
+    item.classList.add('item-open')
+    Velocity(item.querySelector('.item-content'), 'slideDown',
+    {
+      easing: 'easeInOutQuad',
+      duration: 200
+    })
+  }
+
+  close(item) {
+    item.classList.remove('item-open')
+    Velocity(item.querySelector('.item-content'), 'slideUp', {
+      easing: 'easeInOutQuad',
+      duration: 200
+    })
+  }
+
+  connect() {
+    const items = this.element.querySelectorAll('li')
+    items.forEach((item) => {
+      if (item.classList.contains('item-open')) this.open(item)
+    })
   }
 }

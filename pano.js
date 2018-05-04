@@ -49502,7 +49502,6 @@ function registerControllers(application, controllers) {
     if (typeof controller === 'function') {
       // Take first part of controller name (i.e., Modal in ModalController) and format it to lowercase.
       var name = key.match(/^([A-Z])([a-z]+)/)[0].toLowerCase();
-
       application.register(name, controller);
     } else if ((typeof controller === 'undefined' ? 'undefined' : _typeof(controller)) === 'object') {
       registerControllers(controller);

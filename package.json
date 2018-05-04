@@ -13,6 +13,7 @@
     "watch": "yarn webpack -w"
   },
   "dependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "dropzone": "^5.4.0",
     "fullpage.js": "^2.9.6",
     "jquery-dropdown": "https://github.com/soundasleep/jquery-dropdown#master",

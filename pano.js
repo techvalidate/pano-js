@@ -49491,10 +49491,17 @@ Object.defineProperty(exports, "__esModule", {
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 exports.default = registerControllers;
+/**
+ * registerControllers - A helper function to register imported classes with your stimulus application.
+ *
+ * @param {function} application - your stimulus application instance.
+ * @param {hash} controllers - should be a hash with {ControllerName}Controller as the key and the class as the value.
+ */
 function registerControllers(application, controllers) {
   for (var key in controllers) {
     var controller = controllers[key];
     if (typeof controller === 'function') {
+      // Take first part of controller name (i.e., Modal in ModalController) and format it to lowercase.
       var name = key.match(/^([A-Z])([a-z]+)/)[0].toLowerCase();
 
       application.register(name, controller);

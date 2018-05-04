@@ -42,7 +42,7 @@ import 'pano-js'
 ## Loading Pano-JS Stimulus controllers in your application ##
 Stimulus typically uses require contexts to load the controllers in your application. Pano-JS comes a collection of common controllers for modals, popovers, etc. You'll want to load them differently. The stimulus `application` will allow you to register controllers manually.
 
-Pano-JS exports a helper function called `registerControllers` that takes your application instance and the imported `Controllers` hash, and will register them auto-magically.
+Pano-JS exports a helper function called [`registerControllers`](https://github.com/techvalidate/pano-js/blob/master/src/registerControllers.js) that takes your application instance and the imported `Controllers` hash, and will register them auto-magically.
 
 ```javascript
 import { Application } from 'stimulus'

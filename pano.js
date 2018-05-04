@@ -49492,8 +49492,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.default = registerControllers;
 /**
- * registerControllers - A helper function to register imported classes with your stimulus application.
- *
+ * registerControllers - A helper function to register imported classes with your stimulus application.å
  * @param {function} application - your stimulus application instance.
  * @param {hash} controllers - should be a hash with {ControllerName}Controller as the key and the class as the value.
  */

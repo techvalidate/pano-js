@@ -1,9 +1,10 @@
-import Base from './base'
-import Flyout from './flyout'
-
+import ModalController from './modalController'
+import FlyoutController from './flyoutController'
+import ModalsController from './modalsController'
 const Modals =  {
-  Base,
-  Flyout
+  ModalsController,
+  ModalController,
+  FlyoutController
 }
 
 export default Modals

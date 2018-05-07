@@ -1,4 +1,4 @@
-import ModalController from './base'
+import ModalController from './modalController'
 
 export default class extends ModalController {
   connect() {

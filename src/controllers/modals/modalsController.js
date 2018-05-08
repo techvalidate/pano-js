@@ -18,11 +18,12 @@ export default class extends Controller {
 
   show(modal) {
     let openTimeout
-    modal.fadeIn({duration: 200})
+
+    Velocity(modal, 'fadeIn', {duration: 200})
     $('body').css('overflow', 'hidden');
 
     clearTimeout(openTimeout)
-    openTimeout = setTimeout((() => modal.addClass('open')), 300)
+    openTimeout = setTimeout((() => $(modal).addClass('open')), 300)
   }
 
   getModal(url) {

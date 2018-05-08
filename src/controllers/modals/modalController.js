@@ -1,4 +1,5 @@
 import { Controller } from 'stimulus'
+import Velocity from 'velocity-animate'
 
 export default class extends Controller {
   close() {
@@ -11,7 +12,7 @@ export default class extends Controller {
 
   open() {
     $('body').css({ overflow: 'hidden' })
-    $(this.element).fadeIn()
+    Velocity(this.element, 'fadeIn', {duration: 300})
   }
 
   connect() {

@@ -7,5 +7,5 @@ export {
   Controllers,
   registerControllers,
   Sprinkles,
-  UI,
+  UI
 }

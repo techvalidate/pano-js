@@ -1,6 +1,9 @@
 import { Controller } from 'stimulus'
 import rome from 'rome'
 
+const moment = rome.moment
+
+// TODO - Fork Rome to fix option issues.
 export default class DatePickerController extends Controller {
   static targets = ['startCalendar', 'finishCalendar', 'start', 'finish', 'form']
 
@@ -11,33 +14,31 @@ export default class DatePickerController extends Controller {
     return this.finishCalendarTarget
   }
   get startDate() {
-    return rome.moment(new Date(this.startTarget.value))
+    return moment(new Date(this.startTarget.value))
   }
   set startDate(date) {
-    this.startTarget.value = rome.moment(date).format('MMM D, YYYY')
+    if (date.isValid()) {
+      this.startTarget.value = date.format('MMM D, YYYY')
+    }
   }
   get finishDate() {
-    return rome.moment(new Date(this.finishTarget.value))
+    return moment(new Date(this.finishTarget.value))
   }
   set finishDate(date) {
-    this.finishTarget.value = rome.moment(date).format('MMM D, YYYY')
+    if (date.isValid()) {
+      this.finishTarget.value = date.format('MMM D, YYYY')
+    }
   }
 
   setSelectionRange() {
-    const startDay = this.startDate.date()
-    const finishDay = this.finishDate.date()
     const calendars = [this.startCalendar, this.finishCalendar]
 
     calendars.forEach((calendar, index) => {
-      findRangeAndToggle(calendar, startDay, finishDay, index)
+      findRangeAndToggle(calendar, this.startDate, this.finishDate, index)
     })
   }
 
-  apply() {
-
-  }
-
-  connect() {
+  setCalendars() {
     const controller = this
     this.startDate = this.startDate
     this.finishDate = this.finishDate
@@ -45,34 +46,45 @@ export default class DatePickerController extends Controller {
     rome(this.startCalendar, {
       dateValidator: rome.val.beforeEq(this.finishDate),
       time: false,
-      initialValue: this.startDate
+      initialValue: this.startDate,
+      max: this.finishDate
     }).on('data', (data) => {
-      controller.startDate = data
+      controller.startDate = moment(data)
       controller.setSelectionRange()
     })
+
     rome(this.finishCalendar, {
       dateValidator: rome.val.afterEq(this.startDate),
       time: false,
-      initialValue: this.finishDate
+      initialValue: this.finishDate,
+      min: this.startDate.add(3, 'days')
     }).on('data', (data) => {
-      controller.finishDate = data
+      controller.finishDate = moment(data)
+      this.setCalendars()
       controller.setSelectionRange()
     })
+  }
 
+  apply() {
+    this.formTarget.submit()
+  }
 
+  connect() {
+    this.setCalendars()
     this.setSelectionRange()
   }
 }
 
-function findRangeAndToggle(calendar, startDay, finishDay, index) {
+function findRangeAndToggle(calendar, startDate, finishDate, index) {
   calendar.querySelectorAll('.rd-day-body:not(.rd-day-prev-month):not(.rd-day-disabled)').forEach((column, i) => {
     const columnIndex = i + 1
     column.classList.remove('in-range')
+    const cal = rome.find(calendar)
 
     if (index === 0) {
-      if (columnIndex > startDay) column.classList.add('in-range')
+      if (columnIndex > startDate.date()) column.classList.add('in-range')
     } else {
-      if (columnIndex < finishDay) column.classList.add('in-range')
+      if (columnIndex < finishDate.date()) column.classList.add('in-range')
     }
   })
 }

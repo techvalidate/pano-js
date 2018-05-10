@@ -54021,6 +54021,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var moment = _rome2.default.moment;
+
+// TODO - Fork Rome to fix option issues.
+
 var DatePickerController = function (_Controller) {
   _inherits(DatePickerController, _Controller);
 
@@ -54033,20 +54037,19 @@ var DatePickerController = function (_Controller) {
   _createClass(DatePickerController, [{
     key: 'setSelectionRange',
     value: function setSelectionRange() {
-      var startDay = this.startDate.date();
-      var finishDay = this.finishDate.date();
+      var _this2 = this;
+
       var calendars = [this.startCalendar, this.finishCalendar];
 
       calendars.forEach(function (calendar, index) {
-        findRangeAndToggle(calendar, startDay, finishDay, index);
+        findRangeAndToggle(calendar, _this2.startDate, _this2.finishDate, index);
       });
     }
   }, {
-    key: 'apply',
-    value: function apply() {}
-  }, {
-    key: 'connect',
-    value: function connect() {
+    key: 'setCalendars',
+    value: function setCalendars() {
+      var _this3 = this;
+
       var controller = this;
       this.startDate = this.startDate;
       this.finishDate = this.finishDate;
@@ -54054,20 +54057,33 @@ var DatePickerController = function (_Controller) {
       (0, _rome2.default)(this.startCalendar, {
         dateValidator: _rome2.default.val.beforeEq(this.finishDate),
         time: false,
-        initialValue: this.startDate
+        initialValue: this.startDate,
+        max: this.finishDate
       }).on('data', function (data) {
-        controller.startDate = data;
-        controller.setSelectionRange();
-      });
-      (0, _rome2.default)(this.finishCalendar, {
-        dateValidator: _rome2.default.val.afterEq(this.startDate),
-        time: false,
-        initialValue: this.finishDate
-      }).on('data', function (data) {
-        controller.finishDate = data;
+        controller.startDate = moment(data);
         controller.setSelectionRange();
       });
 
+      (0, _rome2.default)(this.finishCalendar, {
+        dateValidator: _rome2.default.val.afterEq(this.startDate),
+        time: false,
+        initialValue: this.finishDate,
+        min: this.startDate.add(3, 'days')
+      }).on('data', function (data) {
+        controller.finishDate = moment(data);
+        _this3.setCalendars();
+        controller.setSelectionRange();
+      });
+    }
+  }, {
+    key: 'apply',
+    value: function apply() {
+      this.formTarget.submit();
+    }
+  }, {
+    key: 'connect',
+    value: function connect() {
+      this.setCalendars();
       this.setSelectionRange();
     }
   }, {
@@ -54083,18 +54099,22 @@ var DatePickerController = function (_Controller) {
   }, {
     key: 'startDate',
     get: function get() {
-      return _rome2.default.moment(new Date(this.startTarget.value));
+      return moment(new Date(this.startTarget.value));
     },
     set: function set(date) {
-      this.startTarget.value = _rome2.default.moment(date).format('MMM D, YYYY');
+      if (date.isValid()) {
+        this.startTarget.value = date.format('MMM D, YYYY');
+      }
     }
   }, {
     key: 'finishDate',
     get: function get() {
-      return _rome2.default.moment(new Date(this.finishTarget.value));
+      return moment(new Date(this.finishTarget.value));
     },
     set: function set(date) {
-      this.finishTarget.value = _rome2.default.moment(date).format('MMM D, YYYY');
+      if (date.isValid()) {
+        this.finishTarget.value = date.format('MMM D, YYYY');
+      }
     }
   }]);
 
@@ -54105,15 +54125,16 @@ DatePickerController.targets = ['startCalendar', 'finishCalendar', 'start', 'fin
 exports.default = DatePickerController;
 
 
-function findRangeAndToggle(calendar, startDay, finishDay, index) {
+function findRangeAndToggle(calendar, startDate, finishDate, index) {
   calendar.querySelectorAll('.rd-day-body:not(.rd-day-prev-month):not(.rd-day-disabled)').forEach(function (column, i) {
     var columnIndex = i + 1;
     column.classList.remove('in-range');
+    var cal = _rome2.default.find(calendar);
 
     if (index === 0) {
-      if (columnIndex > startDay) column.classList.add('in-range');
+      if (columnIndex > startDate.date()) column.classList.add('in-range');
     } else {
-      if (columnIndex < finishDay) column.classList.add('in-range');
+      if (columnIndex < finishDate.date()) column.classList.add('in-range');
     }
   });
 }

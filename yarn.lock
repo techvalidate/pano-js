@@ -1175,9 +1175,9 @@ builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
 
-bullseye@1.4.6:
-  version "1.4.6"
-  resolved "https://registry.yarnpkg.com/bullseye/-/bullseye-1.4.6.tgz#b73f606f7b4273be80ac65acd75295d62606fe24"
+bullseye@^1.4.3:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/bullseye/-/bullseye-1.5.0.tgz#81a6786581948df47bb1d690bdbf4844cb860b8c"
   dependencies:
     crossvent "^1.3.1"
     seleccion "2.0.0"
@@ -1402,6 +1402,13 @@ contra@1.9.1:
     atoa "1.0.0"
     ticky "1.0.0"
 
+contra@^1.9.4:
+  version "1.9.4"
+  resolved "https://registry.yarnpkg.com/contra/-/contra-1.9.4.tgz#f53bde42d7e5b5985cae4d99a8d610526de8f28d"
+  dependencies:
+    atoa "1.0.0"
+    ticky "1.0.1"
+
 convert-source-map@^1.5.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.5.1.tgz#b8278097b9bc229365de5c62cf5fcaed8b5599e5"
@@ -1461,13 +1468,7 @@ cross-spawn@^5.0.1:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
-crossvent@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/crossvent/-/crossvent-1.5.0.tgz#3779c1242699e19417f0414e61b144753a52fd6d"
-  dependencies:
-    custom-event "1.0.0"
-
-crossvent@^1.3.1:
+crossvent@^1.2.0, crossvent@^1.3.1:
   version "1.5.5"
   resolved "https://registry.yarnpkg.com/crossvent/-/crossvent-1.5.5.tgz#ad20878e4921e9be73d9d6976f8b2ecd0f71a0b1"
   dependencies:
@@ -1506,10 +1507,6 @@ currently-unhandled@^0.4.1:
   resolved "https://registry.yarnpkg.com/currently-unhandled/-/currently-unhandled-0.4.1.tgz#988df33feab191ef799a61369dd76c17adf957ea"
   dependencies:
     array-find-index "^1.0.1"
-
-custom-event@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/custom-event/-/custom-event-1.0.0.tgz#2e4628be19dc4b214b5c02630c5971e811618062"
 
 custom-event@^1.0.0:
   version "1.0.1"
@@ -3072,9 +3069,13 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.1, mkdirp@~0.5.0:
   dependencies:
     minimist "0.0.8"
 
-moment@^2.18.1, moment@^2.8.2:
+moment@^2.18.1:
   version "2.21.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.21.0.tgz#2a114b51d2a6ec9e6d83cf803f838a878d8a023a"
+
+moment@^2.8.2:
+  version "2.22.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.1.tgz#529a2e9bf973f259c9643d237fda84de3a26e8ad"
 
 ms@2.0.0:
   version "2.0.0"
@@ -3806,13 +3807,13 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^2.0.0"
     inherits "^2.0.1"
 
-rome@^2.1.22:
-  version "2.1.22"
-  resolved "https://registry.yarnpkg.com/rome/-/rome-2.1.22.tgz#4bf25318cc0522ae92dd090472ce7a6e0b1f5e02"
+rome@2.1.20:
+  version "2.1.20"
+  resolved "https://registry.yarnpkg.com/rome/-/rome-2.1.20.tgz#c2bc2c0ecb842546503cecac1bb637638d9c54e5"
   dependencies:
-    bullseye "1.4.6"
+    bullseye "^1.4.3"
     contra "1.9.1"
-    crossvent "1.5.0"
+    crossvent "^1.2.0"
     moment "^2.8.2"
 
 safe-buffer@5.1.1, safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
@@ -4261,6 +4262,10 @@ thunky@^1.0.2:
 ticky@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/ticky/-/ticky-1.0.0.tgz#e87f38ee0491ea32f62e8f0567ba9638b29f049c"
+
+ticky@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ticky/-/ticky-1.0.1.tgz#b7cfa71e768f1c9000c497b9151b30947c50e46d"
 
 time-stamp@^2.0.0:
   version "2.0.0"

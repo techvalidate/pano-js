@@ -9,8 +9,6 @@ require('../utils')
  * Load sprinkles
  */
 require('./arrowToggle.js')
-require('./calendar.js')
-require('./datePicker.js')
 require('./dropdown.js')
 require('./fileUploads.js')
 require('./filters.js')

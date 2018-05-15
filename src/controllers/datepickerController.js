@@ -46,8 +46,7 @@ export default class DatePickerController extends Controller {
     rome(this.startCalendar, {
       dateValidator: rome.val.beforeEq(this.finishCalendar),
       time: false,
-      initialValue: this.startDate,
-      max: this.finishDate
+      initialValue: this.startDate
     }).on('data', (data) => {
       controller.startDate = moment(data)
       controller.setSelectionRange()
@@ -56,8 +55,7 @@ export default class DatePickerController extends Controller {
     rome(this.finishCalendar, {
       dateValidator: rome.val.afterEq(this.startCalendar),
       time: false,
-      initialValue: this.finishDate,
-      min: this.startDate.add(3, 'days')
+      initialValue: this.finishDate
     }).on('data', (data) => {
       controller.finishDate = moment(data)
       this.setCalendars()

@@ -4944,7 +4944,7 @@ function find (el, type, fn) {
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.5';
+  var VERSION = '4.17.10';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -5368,6 +5368,14 @@ function find (el, type, fn) {
   /** Used to access faster Node.js helpers. */
   var nodeUtil = (function() {
     try {
+      // Use `util.types` for Node.js 10+.
+      var types = freeModule && freeModule.require && freeModule.require('util').types;
+
+      if (types) {
+        return types;
+      }
+
+      // Legacy `process.binding('util')` for Node.js < 10.
       return freeProcess && freeProcess.binding && freeProcess.binding('util');
     } catch (e) {}
   }());
@@ -53496,6 +53504,12 @@ __webpack_require__(183);
 
 var _stimulus = __webpack_require__(5);
 
+var _velocityAnimate = __webpack_require__(23);
+
+var _velocityAnimate2 = _interopRequireDefault(_velocityAnimate);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -53532,7 +53546,7 @@ var _class = function (_Controller) {
     value: function show(modal) {
       var openTimeout = void 0;
 
-      Velocity(modal, 'fadeIn', { duration: 200 });
+      (0, _velocityAnimate2.default)(modal, 'fadeIn', { duration: 200 });
       $('body').css('overflow', 'hidden');
 
       clearTimeout(openTimeout);
@@ -54110,8 +54124,7 @@ var DatePickerController = function (_Controller) {
       (0, _rome2.default)(this.startCalendar, {
         dateValidator: _rome2.default.val.beforeEq(this.finishCalendar),
         time: false,
-        initialValue: this.startDate,
-        max: this.finishDate
+        initialValue: this.startDate
       }).on('data', function (data) {
         controller.startDate = moment(data);
         controller.setSelectionRange();
@@ -54120,8 +54133,7 @@ var DatePickerController = function (_Controller) {
       (0, _rome2.default)(this.finishCalendar, {
         dateValidator: _rome2.default.val.afterEq(this.startCalendar),
         time: false,
-        initialValue: this.finishDate,
-        min: this.startDate.add(3, 'days')
+        initialValue: this.finishDate
       }).on('data', function (data) {
         controller.finishDate = moment(data);
         _this3.setCalendars();

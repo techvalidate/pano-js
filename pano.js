@@ -63247,9 +63247,9 @@ __webpack_require__(234);
 
 $.behavior = function (target, refineSelector) {
   if (refineSelector) {
-    $('[data-behavior~=' + target + ']:' + refineSelector);
+    return $('[data-behavior~=' + target + ']:' + refineSelector);
   } else {
-    $('[data-behavior~=' + target + ']');
+    return $('[data-behavior~=' + target + ']');
   }
 };
 

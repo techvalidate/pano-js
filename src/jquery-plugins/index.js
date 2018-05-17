@@ -1,7 +1,7 @@
-require('jquery-ujs')
 require('jquery-dropdown')
 require('jquery-powertip')
 require('jquery-minicolors')
 require('jquery-validation')
+require('jquery-ui')
 require('rome')
 require('fullpage.js/dist/jquery.fullpage.js')

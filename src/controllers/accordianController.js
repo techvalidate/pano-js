@@ -5,10 +5,11 @@ import Velocity from 'velocity-animate'
 export default class extends Controller {
   toggle(e) {
     const target = e.currentTarget
-    if (target.classList.contains('item-open')) {
-      this.close(target)
+    const item = target.parentNode
+    if (item.classList.contains('item-open')) {
+      this.close(item)
     } else {
-      this.open(target)
+      this.open(item)
     }
   }
 
@@ -17,7 +18,7 @@ export default class extends Controller {
     Velocity(item.querySelector('.item-content'), 'slideDown',
     {
       easing: 'easeInOutQuad',
-      duration: 200
+      duration: 300
     })
   }
 
@@ -25,7 +26,7 @@ export default class extends Controller {
     item.classList.remove('item-open')
     Velocity(item.querySelector('.item-content'), 'slideUp', {
       easing: 'easeInOutQuad',
-      duration: 200
+      duration: 300
     })
   }
 

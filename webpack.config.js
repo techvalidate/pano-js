@@ -36,7 +36,14 @@ module.exports = {
       }, {
           loader: 'expose-loader',
           options: 'jquery'
-      }]
+        }]
+      },
+      {
+        test: require.resolve('moment'),
+        use: [{
+          loader: 'expose-loader',
+          options: 'moment'
+        }]
       },
       {
         test: /\.js$/,
@@ -48,6 +55,20 @@ module.exports = {
             plugins: ['transform-class-properties']
           }
         }
+      },
+      {
+        test: /\.(jpe?g|png|gif)$/i,
+        loader:"file-loader",
+        query:{
+          name:'[name].[ext]',
+          outputPath:'images/'
+          //the images will be emmited to public/assets/images/ folder
+          //the images will be put in the DOM <style> tag as eg. background: url(assets/images/image.png);
+        }
+      },
+      {
+        test: /\.css$/,
+        loaders: ["style-loader","css-loader"]
       }
     ]
   },

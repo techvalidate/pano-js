@@ -70,4531 +70,52 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 158);
+/******/ 	return __webpack_require__(__webpack_require__.s = 167);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var require;//! moment.js
-
-;(function (global, factory) {
-     true ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    global.moment = factory()
-}(this, (function () { 'use strict';
-
-    var hookCallback;
-
-    function hooks () {
-        return hookCallback.apply(null, arguments);
-    }
-
-    // This is done to register the method called with moment()
-    // without creating circular dependencies.
-    function setHookCallback (callback) {
-        hookCallback = callback;
-    }
-
-    function isArray(input) {
-        return input instanceof Array || Object.prototype.toString.call(input) === '[object Array]';
-    }
-
-    function isObject(input) {
-        // IE8 will treat undefined and null as object if it wasn't for
-        // input != null
-        return input != null && Object.prototype.toString.call(input) === '[object Object]';
-    }
-
-    function isObjectEmpty(obj) {
-        if (Object.getOwnPropertyNames) {
-            return (Object.getOwnPropertyNames(obj).length === 0);
-        } else {
-            var k;
-            for (k in obj) {
-                if (obj.hasOwnProperty(k)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-
-    function isUndefined(input) {
-        return input === void 0;
-    }
-
-    function isNumber(input) {
-        return typeof input === 'number' || Object.prototype.toString.call(input) === '[object Number]';
-    }
-
-    function isDate(input) {
-        return input instanceof Date || Object.prototype.toString.call(input) === '[object Date]';
-    }
-
-    function map(arr, fn) {
-        var res = [], i;
-        for (i = 0; i < arr.length; ++i) {
-            res.push(fn(arr[i], i));
-        }
-        return res;
-    }
-
-    function hasOwnProp(a, b) {
-        return Object.prototype.hasOwnProperty.call(a, b);
-    }
-
-    function extend(a, b) {
-        for (var i in b) {
-            if (hasOwnProp(b, i)) {
-                a[i] = b[i];
-            }
-        }
-
-        if (hasOwnProp(b, 'toString')) {
-            a.toString = b.toString;
-        }
-
-        if (hasOwnProp(b, 'valueOf')) {
-            a.valueOf = b.valueOf;
-        }
-
-        return a;
-    }
-
-    function createUTC (input, format, locale, strict) {
-        return createLocalOrUTC(input, format, locale, strict, true).utc();
-    }
-
-    function defaultParsingFlags() {
-        // We need to deep clone this object.
-        return {
-            empty           : false,
-            unusedTokens    : [],
-            unusedInput     : [],
-            overflow        : -2,
-            charsLeftOver   : 0,
-            nullInput       : false,
-            invalidMonth    : null,
-            invalidFormat   : false,
-            userInvalidated : false,
-            iso             : false,
-            parsedDateParts : [],
-            meridiem        : null,
-            rfc2822         : false,
-            weekdayMismatch : false
-        };
-    }
-
-    function getParsingFlags(m) {
-        if (m._pf == null) {
-            m._pf = defaultParsingFlags();
-        }
-        return m._pf;
-    }
-
-    var some;
-    if (Array.prototype.some) {
-        some = Array.prototype.some;
-    } else {
-        some = function (fun) {
-            var t = Object(this);
-            var len = t.length >>> 0;
-
-            for (var i = 0; i < len; i++) {
-                if (i in t && fun.call(this, t[i], i, t)) {
-                    return true;
-                }
-            }
-
-            return false;
-        };
-    }
-
-    function isValid(m) {
-        if (m._isValid == null) {
-            var flags = getParsingFlags(m);
-            var parsedParts = some.call(flags.parsedDateParts, function (i) {
-                return i != null;
-            });
-            var isNowValid = !isNaN(m._d.getTime()) &&
-                flags.overflow < 0 &&
-                !flags.empty &&
-                !flags.invalidMonth &&
-                !flags.invalidWeekday &&
-                !flags.weekdayMismatch &&
-                !flags.nullInput &&
-                !flags.invalidFormat &&
-                !flags.userInvalidated &&
-                (!flags.meridiem || (flags.meridiem && parsedParts));
-
-            if (m._strict) {
-                isNowValid = isNowValid &&
-                    flags.charsLeftOver === 0 &&
-                    flags.unusedTokens.length === 0 &&
-                    flags.bigHour === undefined;
-            }
-
-            if (Object.isFrozen == null || !Object.isFrozen(m)) {
-                m._isValid = isNowValid;
-            }
-            else {
-                return isNowValid;
-            }
-        }
-        return m._isValid;
-    }
-
-    function createInvalid (flags) {
-        var m = createUTC(NaN);
-        if (flags != null) {
-            extend(getParsingFlags(m), flags);
-        }
-        else {
-            getParsingFlags(m).userInvalidated = true;
-        }
-
-        return m;
-    }
-
-    // Plugins that add properties should also add the key here (null value),
-    // so we can properly clone ourselves.
-    var momentProperties = hooks.momentProperties = [];
-
-    function copyConfig(to, from) {
-        var i, prop, val;
-
-        if (!isUndefined(from._isAMomentObject)) {
-            to._isAMomentObject = from._isAMomentObject;
-        }
-        if (!isUndefined(from._i)) {
-            to._i = from._i;
-        }
-        if (!isUndefined(from._f)) {
-            to._f = from._f;
-        }
-        if (!isUndefined(from._l)) {
-            to._l = from._l;
-        }
-        if (!isUndefined(from._strict)) {
-            to._strict = from._strict;
-        }
-        if (!isUndefined(from._tzm)) {
-            to._tzm = from._tzm;
-        }
-        if (!isUndefined(from._isUTC)) {
-            to._isUTC = from._isUTC;
-        }
-        if (!isUndefined(from._offset)) {
-            to._offset = from._offset;
-        }
-        if (!isUndefined(from._pf)) {
-            to._pf = getParsingFlags(from);
-        }
-        if (!isUndefined(from._locale)) {
-            to._locale = from._locale;
-        }
-
-        if (momentProperties.length > 0) {
-            for (i = 0; i < momentProperties.length; i++) {
-                prop = momentProperties[i];
-                val = from[prop];
-                if (!isUndefined(val)) {
-                    to[prop] = val;
-                }
-            }
-        }
-
-        return to;
-    }
-
-    var updateInProgress = false;
-
-    // Moment prototype object
-    function Moment(config) {
-        copyConfig(this, config);
-        this._d = new Date(config._d != null ? config._d.getTime() : NaN);
-        if (!this.isValid()) {
-            this._d = new Date(NaN);
-        }
-        // Prevent infinite loop in case updateOffset creates new moment
-        // objects.
-        if (updateInProgress === false) {
-            updateInProgress = true;
-            hooks.updateOffset(this);
-            updateInProgress = false;
-        }
-    }
-
-    function isMoment (obj) {
-        return obj instanceof Moment || (obj != null && obj._isAMomentObject != null);
-    }
-
-    function absFloor (number) {
-        if (number < 0) {
-            // -0 -> 0
-            return Math.ceil(number) || 0;
-        } else {
-            return Math.floor(number);
-        }
-    }
-
-    function toInt(argumentForCoercion) {
-        var coercedNumber = +argumentForCoercion,
-            value = 0;
-
-        if (coercedNumber !== 0 && isFinite(coercedNumber)) {
-            value = absFloor(coercedNumber);
-        }
-
-        return value;
-    }
-
-    // compare two arrays, return the number of differences
-    function compareArrays(array1, array2, dontConvert) {
-        var len = Math.min(array1.length, array2.length),
-            lengthDiff = Math.abs(array1.length - array2.length),
-            diffs = 0,
-            i;
-        for (i = 0; i < len; i++) {
-            if ((dontConvert && array1[i] !== array2[i]) ||
-                (!dontConvert && toInt(array1[i]) !== toInt(array2[i]))) {
-                diffs++;
-            }
-        }
-        return diffs + lengthDiff;
-    }
-
-    function warn(msg) {
-        if (hooks.suppressDeprecationWarnings === false &&
-                (typeof console !==  'undefined') && console.warn) {
-            console.warn('Deprecation warning: ' + msg);
-        }
-    }
-
-    function deprecate(msg, fn) {
-        var firstTime = true;
-
-        return extend(function () {
-            if (hooks.deprecationHandler != null) {
-                hooks.deprecationHandler(null, msg);
-            }
-            if (firstTime) {
-                var args = [];
-                var arg;
-                for (var i = 0; i < arguments.length; i++) {
-                    arg = '';
-                    if (typeof arguments[i] === 'object') {
-                        arg += '\n[' + i + '] ';
-                        for (var key in arguments[0]) {
-                            arg += key + ': ' + arguments[0][key] + ', ';
-                        }
-                        arg = arg.slice(0, -2); // Remove trailing comma and space
-                    } else {
-                        arg = arguments[i];
-                    }
-                    args.push(arg);
-                }
-                warn(msg + '\nArguments: ' + Array.prototype.slice.call(args).join('') + '\n' + (new Error()).stack);
-                firstTime = false;
-            }
-            return fn.apply(this, arguments);
-        }, fn);
-    }
-
-    var deprecations = {};
-
-    function deprecateSimple(name, msg) {
-        if (hooks.deprecationHandler != null) {
-            hooks.deprecationHandler(name, msg);
-        }
-        if (!deprecations[name]) {
-            warn(msg);
-            deprecations[name] = true;
-        }
-    }
-
-    hooks.suppressDeprecationWarnings = false;
-    hooks.deprecationHandler = null;
-
-    function isFunction(input) {
-        return input instanceof Function || Object.prototype.toString.call(input) === '[object Function]';
-    }
-
-    function set (config) {
-        var prop, i;
-        for (i in config) {
-            prop = config[i];
-            if (isFunction(prop)) {
-                this[i] = prop;
-            } else {
-                this['_' + i] = prop;
-            }
-        }
-        this._config = config;
-        // Lenient ordinal parsing accepts just a number in addition to
-        // number + (possibly) stuff coming from _dayOfMonthOrdinalParse.
-        // TODO: Remove "ordinalParse" fallback in next major release.
-        this._dayOfMonthOrdinalParseLenient = new RegExp(
-            (this._dayOfMonthOrdinalParse.source || this._ordinalParse.source) +
-                '|' + (/\d{1,2}/).source);
-    }
-
-    function mergeConfigs(parentConfig, childConfig) {
-        var res = extend({}, parentConfig), prop;
-        for (prop in childConfig) {
-            if (hasOwnProp(childConfig, prop)) {
-                if (isObject(parentConfig[prop]) && isObject(childConfig[prop])) {
-                    res[prop] = {};
-                    extend(res[prop], parentConfig[prop]);
-                    extend(res[prop], childConfig[prop]);
-                } else if (childConfig[prop] != null) {
-                    res[prop] = childConfig[prop];
-                } else {
-                    delete res[prop];
-                }
-            }
-        }
-        for (prop in parentConfig) {
-            if (hasOwnProp(parentConfig, prop) &&
-                    !hasOwnProp(childConfig, prop) &&
-                    isObject(parentConfig[prop])) {
-                // make sure changes to properties don't modify parent config
-                res[prop] = extend({}, res[prop]);
-            }
-        }
-        return res;
-    }
-
-    function Locale(config) {
-        if (config != null) {
-            this.set(config);
-        }
-    }
-
-    var keys;
-
-    if (Object.keys) {
-        keys = Object.keys;
-    } else {
-        keys = function (obj) {
-            var i, res = [];
-            for (i in obj) {
-                if (hasOwnProp(obj, i)) {
-                    res.push(i);
-                }
-            }
-            return res;
-        };
-    }
-
-    var defaultCalendar = {
-        sameDay : '[Today at] LT',
-        nextDay : '[Tomorrow at] LT',
-        nextWeek : 'dddd [at] LT',
-        lastDay : '[Yesterday at] LT',
-        lastWeek : '[Last] dddd [at] LT',
-        sameElse : 'L'
-    };
-
-    function calendar (key, mom, now) {
-        var output = this._calendar[key] || this._calendar['sameElse'];
-        return isFunction(output) ? output.call(mom, now) : output;
-    }
-
-    var defaultLongDateFormat = {
-        LTS  : 'h:mm:ss A',
-        LT   : 'h:mm A',
-        L    : 'MM/DD/YYYY',
-        LL   : 'MMMM D, YYYY',
-        LLL  : 'MMMM D, YYYY h:mm A',
-        LLLL : 'dddd, MMMM D, YYYY h:mm A'
-    };
-
-    function longDateFormat (key) {
-        var format = this._longDateFormat[key],
-            formatUpper = this._longDateFormat[key.toUpperCase()];
-
-        if (format || !formatUpper) {
-            return format;
-        }
-
-        this._longDateFormat[key] = formatUpper.replace(/MMMM|MM|DD|dddd/g, function (val) {
-            return val.slice(1);
-        });
-
-        return this._longDateFormat[key];
-    }
-
-    var defaultInvalidDate = 'Invalid date';
-
-    function invalidDate () {
-        return this._invalidDate;
-    }
-
-    var defaultOrdinal = '%d';
-    var defaultDayOfMonthOrdinalParse = /\d{1,2}/;
-
-    function ordinal (number) {
-        return this._ordinal.replace('%d', number);
-    }
-
-    var defaultRelativeTime = {
-        future : 'in %s',
-        past   : '%s ago',
-        s  : 'a few seconds',
-        ss : '%d seconds',
-        m  : 'a minute',
-        mm : '%d minutes',
-        h  : 'an hour',
-        hh : '%d hours',
-        d  : 'a day',
-        dd : '%d days',
-        M  : 'a month',
-        MM : '%d months',
-        y  : 'a year',
-        yy : '%d years'
-    };
-
-    function relativeTime (number, withoutSuffix, string, isFuture) {
-        var output = this._relativeTime[string];
-        return (isFunction(output)) ?
-            output(number, withoutSuffix, string, isFuture) :
-            output.replace(/%d/i, number);
-    }
-
-    function pastFuture (diff, output) {
-        var format = this._relativeTime[diff > 0 ? 'future' : 'past'];
-        return isFunction(format) ? format(output) : format.replace(/%s/i, output);
-    }
-
-    var aliases = {};
-
-    function addUnitAlias (unit, shorthand) {
-        var lowerCase = unit.toLowerCase();
-        aliases[lowerCase] = aliases[lowerCase + 's'] = aliases[shorthand] = unit;
-    }
-
-    function normalizeUnits(units) {
-        return typeof units === 'string' ? aliases[units] || aliases[units.toLowerCase()] : undefined;
-    }
-
-    function normalizeObjectUnits(inputObject) {
-        var normalizedInput = {},
-            normalizedProp,
-            prop;
-
-        for (prop in inputObject) {
-            if (hasOwnProp(inputObject, prop)) {
-                normalizedProp = normalizeUnits(prop);
-                if (normalizedProp) {
-                    normalizedInput[normalizedProp] = inputObject[prop];
-                }
-            }
-        }
-
-        return normalizedInput;
-    }
-
-    var priorities = {};
-
-    function addUnitPriority(unit, priority) {
-        priorities[unit] = priority;
-    }
-
-    function getPrioritizedUnits(unitsObj) {
-        var units = [];
-        for (var u in unitsObj) {
-            units.push({unit: u, priority: priorities[u]});
-        }
-        units.sort(function (a, b) {
-            return a.priority - b.priority;
-        });
-        return units;
-    }
-
-    function zeroFill(number, targetLength, forceSign) {
-        var absNumber = '' + Math.abs(number),
-            zerosToFill = targetLength - absNumber.length,
-            sign = number >= 0;
-        return (sign ? (forceSign ? '+' : '') : '-') +
-            Math.pow(10, Math.max(0, zerosToFill)).toString().substr(1) + absNumber;
-    }
-
-    var formattingTokens = /(\[[^\[]*\])|(\\)?([Hh]mm(ss)?|Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Qo?|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g;
-
-    var localFormattingTokens = /(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g;
-
-    var formatFunctions = {};
-
-    var formatTokenFunctions = {};
-
-    // token:    'M'
-    // padded:   ['MM', 2]
-    // ordinal:  'Mo'
-    // callback: function () { this.month() + 1 }
-    function addFormatToken (token, padded, ordinal, callback) {
-        var func = callback;
-        if (typeof callback === 'string') {
-            func = function () {
-                return this[callback]();
-            };
-        }
-        if (token) {
-            formatTokenFunctions[token] = func;
-        }
-        if (padded) {
-            formatTokenFunctions[padded[0]] = function () {
-                return zeroFill(func.apply(this, arguments), padded[1], padded[2]);
-            };
-        }
-        if (ordinal) {
-            formatTokenFunctions[ordinal] = function () {
-                return this.localeData().ordinal(func.apply(this, arguments), token);
-            };
-        }
-    }
-
-    function removeFormattingTokens(input) {
-        if (input.match(/\[[\s\S]/)) {
-            return input.replace(/^\[|\]$/g, '');
-        }
-        return input.replace(/\\/g, '');
-    }
-
-    function makeFormatFunction(format) {
-        var array = format.match(formattingTokens), i, length;
-
-        for (i = 0, length = array.length; i < length; i++) {
-            if (formatTokenFunctions[array[i]]) {
-                array[i] = formatTokenFunctions[array[i]];
-            } else {
-                array[i] = removeFormattingTokens(array[i]);
-            }
-        }
-
-        return function (mom) {
-            var output = '', i;
-            for (i = 0; i < length; i++) {
-                output += isFunction(array[i]) ? array[i].call(mom, format) : array[i];
-            }
-            return output;
-        };
-    }
-
-    // format date using native date object
-    function formatMoment(m, format) {
-        if (!m.isValid()) {
-            return m.localeData().invalidDate();
-        }
-
-        format = expandFormat(format, m.localeData());
-        formatFunctions[format] = formatFunctions[format] || makeFormatFunction(format);
-
-        return formatFunctions[format](m);
-    }
-
-    function expandFormat(format, locale) {
-        var i = 5;
-
-        function replaceLongDateFormatTokens(input) {
-            return locale.longDateFormat(input) || input;
-        }
-
-        localFormattingTokens.lastIndex = 0;
-        while (i >= 0 && localFormattingTokens.test(format)) {
-            format = format.replace(localFormattingTokens, replaceLongDateFormatTokens);
-            localFormattingTokens.lastIndex = 0;
-            i -= 1;
-        }
-
-        return format;
-    }
-
-    var match1         = /\d/;            //       0 - 9
-    var match2         = /\d\d/;          //      00 - 99
-    var match3         = /\d{3}/;         //     000 - 999
-    var match4         = /\d{4}/;         //    0000 - 9999
-    var match6         = /[+-]?\d{6}/;    // -999999 - 999999
-    var match1to2      = /\d\d?/;         //       0 - 99
-    var match3to4      = /\d\d\d\d?/;     //     999 - 9999
-    var match5to6      = /\d\d\d\d\d\d?/; //   99999 - 999999
-    var match1to3      = /\d{1,3}/;       //       0 - 999
-    var match1to4      = /\d{1,4}/;       //       0 - 9999
-    var match1to6      = /[+-]?\d{1,6}/;  // -999999 - 999999
-
-    var matchUnsigned  = /\d+/;           //       0 - inf
-    var matchSigned    = /[+-]?\d+/;      //    -inf - inf
-
-    var matchOffset    = /Z|[+-]\d\d:?\d\d/gi; // +00:00 -00:00 +0000 -0000 or Z
-    var matchShortOffset = /Z|[+-]\d\d(?::?\d\d)?/gi; // +00 -00 +00:00 -00:00 +0000 -0000 or Z
-
-    var matchTimestamp = /[+-]?\d+(\.\d{1,3})?/; // 123456789 123456789.123
-
-    // any word (or two) characters or numbers including two/three word month in arabic.
-    // includes scottish gaelic two word and hyphenated months
-    var matchWord = /[0-9]{0,256}['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFF07\uFF10-\uFFEF]{1,256}|[\u0600-\u06FF\/]{1,256}(\s*?[\u0600-\u06FF]{1,256}){1,2}/i;
-
-    var regexes = {};
-
-    function addRegexToken (token, regex, strictRegex) {
-        regexes[token] = isFunction(regex) ? regex : function (isStrict, localeData) {
-            return (isStrict && strictRegex) ? strictRegex : regex;
-        };
-    }
-
-    function getParseRegexForToken (token, config) {
-        if (!hasOwnProp(regexes, token)) {
-            return new RegExp(unescapeFormat(token));
-        }
-
-        return regexes[token](config._strict, config._locale);
-    }
-
-    // Code from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
-    function unescapeFormat(s) {
-        return regexEscape(s.replace('\\', '').replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g, function (matched, p1, p2, p3, p4) {
-            return p1 || p2 || p3 || p4;
-        }));
-    }
-
-    function regexEscape(s) {
-        return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-    }
-
-    var tokens = {};
-
-    function addParseToken (token, callback) {
-        var i, func = callback;
-        if (typeof token === 'string') {
-            token = [token];
-        }
-        if (isNumber(callback)) {
-            func = function (input, array) {
-                array[callback] = toInt(input);
-            };
-        }
-        for (i = 0; i < token.length; i++) {
-            tokens[token[i]] = func;
-        }
-    }
-
-    function addWeekParseToken (token, callback) {
-        addParseToken(token, function (input, array, config, token) {
-            config._w = config._w || {};
-            callback(input, config._w, config, token);
-        });
-    }
-
-    function addTimeToArrayFromToken(token, input, config) {
-        if (input != null && hasOwnProp(tokens, token)) {
-            tokens[token](input, config._a, config, token);
-        }
-    }
-
-    var YEAR = 0;
-    var MONTH = 1;
-    var DATE = 2;
-    var HOUR = 3;
-    var MINUTE = 4;
-    var SECOND = 5;
-    var MILLISECOND = 6;
-    var WEEK = 7;
-    var WEEKDAY = 8;
-
-    // FORMATTING
-
-    addFormatToken('Y', 0, 0, function () {
-        var y = this.year();
-        return y <= 9999 ? '' + y : '+' + y;
-    });
-
-    addFormatToken(0, ['YY', 2], 0, function () {
-        return this.year() % 100;
-    });
-
-    addFormatToken(0, ['YYYY',   4],       0, 'year');
-    addFormatToken(0, ['YYYYY',  5],       0, 'year');
-    addFormatToken(0, ['YYYYYY', 6, true], 0, 'year');
-
-    // ALIASES
-
-    addUnitAlias('year', 'y');
-
-    // PRIORITIES
-
-    addUnitPriority('year', 1);
-
-    // PARSING
-
-    addRegexToken('Y',      matchSigned);
-    addRegexToken('YY',     match1to2, match2);
-    addRegexToken('YYYY',   match1to4, match4);
-    addRegexToken('YYYYY',  match1to6, match6);
-    addRegexToken('YYYYYY', match1to6, match6);
-
-    addParseToken(['YYYYY', 'YYYYYY'], YEAR);
-    addParseToken('YYYY', function (input, array) {
-        array[YEAR] = input.length === 2 ? hooks.parseTwoDigitYear(input) : toInt(input);
-    });
-    addParseToken('YY', function (input, array) {
-        array[YEAR] = hooks.parseTwoDigitYear(input);
-    });
-    addParseToken('Y', function (input, array) {
-        array[YEAR] = parseInt(input, 10);
-    });
-
-    // HELPERS
-
-    function daysInYear(year) {
-        return isLeapYear(year) ? 366 : 365;
-    }
-
-    function isLeapYear(year) {
-        return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-    }
-
-    // HOOKS
-
-    hooks.parseTwoDigitYear = function (input) {
-        return toInt(input) + (toInt(input) > 68 ? 1900 : 2000);
-    };
-
-    // MOMENTS
-
-    var getSetYear = makeGetSet('FullYear', true);
-
-    function getIsLeapYear () {
-        return isLeapYear(this.year());
-    }
-
-    function makeGetSet (unit, keepTime) {
-        return function (value) {
-            if (value != null) {
-                set$1(this, unit, value);
-                hooks.updateOffset(this, keepTime);
-                return this;
-            } else {
-                return get(this, unit);
-            }
-        };
-    }
-
-    function get (mom, unit) {
-        return mom.isValid() ?
-            mom._d['get' + (mom._isUTC ? 'UTC' : '') + unit]() : NaN;
-    }
-
-    function set$1 (mom, unit, value) {
-        if (mom.isValid() && !isNaN(value)) {
-            if (unit === 'FullYear' && isLeapYear(mom.year()) && mom.month() === 1 && mom.date() === 29) {
-                mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value, mom.month(), daysInMonth(value, mom.month()));
-            }
-            else {
-                mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value);
-            }
-        }
-    }
-
-    // MOMENTS
-
-    function stringGet (units) {
-        units = normalizeUnits(units);
-        if (isFunction(this[units])) {
-            return this[units]();
-        }
-        return this;
-    }
-
-
-    function stringSet (units, value) {
-        if (typeof units === 'object') {
-            units = normalizeObjectUnits(units);
-            var prioritized = getPrioritizedUnits(units);
-            for (var i = 0; i < prioritized.length; i++) {
-                this[prioritized[i].unit](units[prioritized[i].unit]);
-            }
-        } else {
-            units = normalizeUnits(units);
-            if (isFunction(this[units])) {
-                return this[units](value);
-            }
-        }
-        return this;
-    }
-
-    function mod(n, x) {
-        return ((n % x) + x) % x;
-    }
-
-    var indexOf;
-
-    if (Array.prototype.indexOf) {
-        indexOf = Array.prototype.indexOf;
-    } else {
-        indexOf = function (o) {
-            // I know
-            var i;
-            for (i = 0; i < this.length; ++i) {
-                if (this[i] === o) {
-                    return i;
-                }
-            }
-            return -1;
-        };
-    }
-
-    function daysInMonth(year, month) {
-        if (isNaN(year) || isNaN(month)) {
-            return NaN;
-        }
-        var modMonth = mod(month, 12);
-        year += (month - modMonth) / 12;
-        return modMonth === 1 ? (isLeapYear(year) ? 29 : 28) : (31 - modMonth % 7 % 2);
-    }
-
-    // FORMATTING
-
-    addFormatToken('M', ['MM', 2], 'Mo', function () {
-        return this.month() + 1;
-    });
-
-    addFormatToken('MMM', 0, 0, function (format) {
-        return this.localeData().monthsShort(this, format);
-    });
-
-    addFormatToken('MMMM', 0, 0, function (format) {
-        return this.localeData().months(this, format);
-    });
-
-    // ALIASES
-
-    addUnitAlias('month', 'M');
-
-    // PRIORITY
-
-    addUnitPriority('month', 8);
-
-    // PARSING
-
-    addRegexToken('M',    match1to2);
-    addRegexToken('MM',   match1to2, match2);
-    addRegexToken('MMM',  function (isStrict, locale) {
-        return locale.monthsShortRegex(isStrict);
-    });
-    addRegexToken('MMMM', function (isStrict, locale) {
-        return locale.monthsRegex(isStrict);
-    });
-
-    addParseToken(['M', 'MM'], function (input, array) {
-        array[MONTH] = toInt(input) - 1;
-    });
-
-    addParseToken(['MMM', 'MMMM'], function (input, array, config, token) {
-        var month = config._locale.monthsParse(input, token, config._strict);
-        // if we didn't find a month name, mark the date as invalid.
-        if (month != null) {
-            array[MONTH] = month;
-        } else {
-            getParsingFlags(config).invalidMonth = input;
-        }
-    });
-
-    // LOCALES
-
-    var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s)+MMMM?/;
-    var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
-    function localeMonths (m, format) {
-        if (!m) {
-            return isArray(this._months) ? this._months :
-                this._months['standalone'];
-        }
-        return isArray(this._months) ? this._months[m.month()] :
-            this._months[(this._months.isFormat || MONTHS_IN_FORMAT).test(format) ? 'format' : 'standalone'][m.month()];
-    }
-
-    var defaultLocaleMonthsShort = 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_');
-    function localeMonthsShort (m, format) {
-        if (!m) {
-            return isArray(this._monthsShort) ? this._monthsShort :
-                this._monthsShort['standalone'];
-        }
-        return isArray(this._monthsShort) ? this._monthsShort[m.month()] :
-            this._monthsShort[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
-    }
-
-    function handleStrictParse(monthName, format, strict) {
-        var i, ii, mom, llc = monthName.toLocaleLowerCase();
-        if (!this._monthsParse) {
-            // this is not used
-            this._monthsParse = [];
-            this._longMonthsParse = [];
-            this._shortMonthsParse = [];
-            for (i = 0; i < 12; ++i) {
-                mom = createUTC([2000, i]);
-                this._shortMonthsParse[i] = this.monthsShort(mom, '').toLocaleLowerCase();
-                this._longMonthsParse[i] = this.months(mom, '').toLocaleLowerCase();
-            }
-        }
-
-        if (strict) {
-            if (format === 'MMM') {
-                ii = indexOf.call(this._shortMonthsParse, llc);
-                return ii !== -1 ? ii : null;
-            } else {
-                ii = indexOf.call(this._longMonthsParse, llc);
-                return ii !== -1 ? ii : null;
-            }
-        } else {
-            if (format === 'MMM') {
-                ii = indexOf.call(this._shortMonthsParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._longMonthsParse, llc);
-                return ii !== -1 ? ii : null;
-            } else {
-                ii = indexOf.call(this._longMonthsParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._shortMonthsParse, llc);
-                return ii !== -1 ? ii : null;
-            }
-        }
-    }
-
-    function localeMonthsParse (monthName, format, strict) {
-        var i, mom, regex;
-
-        if (this._monthsParseExact) {
-            return handleStrictParse.call(this, monthName, format, strict);
-        }
-
-        if (!this._monthsParse) {
-            this._monthsParse = [];
-            this._longMonthsParse = [];
-            this._shortMonthsParse = [];
-        }
-
-        // TODO: add sorting
-        // Sorting makes sure if one month (or abbr) is a prefix of another
-        // see sorting in computeMonthsParse
-        for (i = 0; i < 12; i++) {
-            // make the regex if we don't have it already
-            mom = createUTC([2000, i]);
-            if (strict && !this._longMonthsParse[i]) {
-                this._longMonthsParse[i] = new RegExp('^' + this.months(mom, '').replace('.', '') + '$', 'i');
-                this._shortMonthsParse[i] = new RegExp('^' + this.monthsShort(mom, '').replace('.', '') + '$', 'i');
-            }
-            if (!strict && !this._monthsParse[i]) {
-                regex = '^' + this.months(mom, '') + '|^' + this.monthsShort(mom, '');
-                this._monthsParse[i] = new RegExp(regex.replace('.', ''), 'i');
-            }
-            // test the regex
-            if (strict && format === 'MMMM' && this._longMonthsParse[i].test(monthName)) {
-                return i;
-            } else if (strict && format === 'MMM' && this._shortMonthsParse[i].test(monthName)) {
-                return i;
-            } else if (!strict && this._monthsParse[i].test(monthName)) {
-                return i;
-            }
-        }
-    }
-
-    // MOMENTS
-
-    function setMonth (mom, value) {
-        var dayOfMonth;
-
-        if (!mom.isValid()) {
-            // No op
-            return mom;
-        }
-
-        if (typeof value === 'string') {
-            if (/^\d+$/.test(value)) {
-                value = toInt(value);
-            } else {
-                value = mom.localeData().monthsParse(value);
-                // TODO: Another silent failure?
-                if (!isNumber(value)) {
-                    return mom;
-                }
-            }
-        }
-
-        dayOfMonth = Math.min(mom.date(), daysInMonth(mom.year(), value));
-        mom._d['set' + (mom._isUTC ? 'UTC' : '') + 'Month'](value, dayOfMonth);
-        return mom;
-    }
-
-    function getSetMonth (value) {
-        if (value != null) {
-            setMonth(this, value);
-            hooks.updateOffset(this, true);
-            return this;
-        } else {
-            return get(this, 'Month');
-        }
-    }
-
-    function getDaysInMonth () {
-        return daysInMonth(this.year(), this.month());
-    }
-
-    var defaultMonthsShortRegex = matchWord;
-    function monthsShortRegex (isStrict) {
-        if (this._monthsParseExact) {
-            if (!hasOwnProp(this, '_monthsRegex')) {
-                computeMonthsParse.call(this);
-            }
-            if (isStrict) {
-                return this._monthsShortStrictRegex;
-            } else {
-                return this._monthsShortRegex;
-            }
-        } else {
-            if (!hasOwnProp(this, '_monthsShortRegex')) {
-                this._monthsShortRegex = defaultMonthsShortRegex;
-            }
-            return this._monthsShortStrictRegex && isStrict ?
-                this._monthsShortStrictRegex : this._monthsShortRegex;
-        }
-    }
-
-    var defaultMonthsRegex = matchWord;
-    function monthsRegex (isStrict) {
-        if (this._monthsParseExact) {
-            if (!hasOwnProp(this, '_monthsRegex')) {
-                computeMonthsParse.call(this);
-            }
-            if (isStrict) {
-                return this._monthsStrictRegex;
-            } else {
-                return this._monthsRegex;
-            }
-        } else {
-            if (!hasOwnProp(this, '_monthsRegex')) {
-                this._monthsRegex = defaultMonthsRegex;
-            }
-            return this._monthsStrictRegex && isStrict ?
-                this._monthsStrictRegex : this._monthsRegex;
-        }
-    }
-
-    function computeMonthsParse () {
-        function cmpLenRev(a, b) {
-            return b.length - a.length;
-        }
-
-        var shortPieces = [], longPieces = [], mixedPieces = [],
-            i, mom;
-        for (i = 0; i < 12; i++) {
-            // make the regex if we don't have it already
-            mom = createUTC([2000, i]);
-            shortPieces.push(this.monthsShort(mom, ''));
-            longPieces.push(this.months(mom, ''));
-            mixedPieces.push(this.months(mom, ''));
-            mixedPieces.push(this.monthsShort(mom, ''));
-        }
-        // Sorting makes sure if one month (or abbr) is a prefix of another it
-        // will match the longer piece.
-        shortPieces.sort(cmpLenRev);
-        longPieces.sort(cmpLenRev);
-        mixedPieces.sort(cmpLenRev);
-        for (i = 0; i < 12; i++) {
-            shortPieces[i] = regexEscape(shortPieces[i]);
-            longPieces[i] = regexEscape(longPieces[i]);
-        }
-        for (i = 0; i < 24; i++) {
-            mixedPieces[i] = regexEscape(mixedPieces[i]);
-        }
-
-        this._monthsRegex = new RegExp('^(' + mixedPieces.join('|') + ')', 'i');
-        this._monthsShortRegex = this._monthsRegex;
-        this._monthsStrictRegex = new RegExp('^(' + longPieces.join('|') + ')', 'i');
-        this._monthsShortStrictRegex = new RegExp('^(' + shortPieces.join('|') + ')', 'i');
-    }
-
-    function createDate (y, m, d, h, M, s, ms) {
-        // can't just apply() to create a date:
-        // https://stackoverflow.com/q/181348
-        var date = new Date(y, m, d, h, M, s, ms);
-
-        // the date constructor remaps years 0-99 to 1900-1999
-        if (y < 100 && y >= 0 && isFinite(date.getFullYear())) {
-            date.setFullYear(y);
-        }
-        return date;
-    }
-
-    function createUTCDate (y) {
-        var date = new Date(Date.UTC.apply(null, arguments));
-
-        // the Date.UTC function remaps years 0-99 to 1900-1999
-        if (y < 100 && y >= 0 && isFinite(date.getUTCFullYear())) {
-            date.setUTCFullYear(y);
-        }
-        return date;
-    }
-
-    // start-of-first-week - start-of-year
-    function firstWeekOffset(year, dow, doy) {
-        var // first-week day -- which january is always in the first week (4 for iso, 1 for other)
-            fwd = 7 + dow - doy,
-            // first-week day local weekday -- which local weekday is fwd
-            fwdlw = (7 + createUTCDate(year, 0, fwd).getUTCDay() - dow) % 7;
-
-        return -fwdlw + fwd - 1;
-    }
-
-    // https://en.wikipedia.org/wiki/ISO_week_date#Calculating_a_date_given_the_year.2C_week_number_and_weekday
-    function dayOfYearFromWeeks(year, week, weekday, dow, doy) {
-        var localWeekday = (7 + weekday - dow) % 7,
-            weekOffset = firstWeekOffset(year, dow, doy),
-            dayOfYear = 1 + 7 * (week - 1) + localWeekday + weekOffset,
-            resYear, resDayOfYear;
-
-        if (dayOfYear <= 0) {
-            resYear = year - 1;
-            resDayOfYear = daysInYear(resYear) + dayOfYear;
-        } else if (dayOfYear > daysInYear(year)) {
-            resYear = year + 1;
-            resDayOfYear = dayOfYear - daysInYear(year);
-        } else {
-            resYear = year;
-            resDayOfYear = dayOfYear;
-        }
-
-        return {
-            year: resYear,
-            dayOfYear: resDayOfYear
-        };
-    }
-
-    function weekOfYear(mom, dow, doy) {
-        var weekOffset = firstWeekOffset(mom.year(), dow, doy),
-            week = Math.floor((mom.dayOfYear() - weekOffset - 1) / 7) + 1,
-            resWeek, resYear;
-
-        if (week < 1) {
-            resYear = mom.year() - 1;
-            resWeek = week + weeksInYear(resYear, dow, doy);
-        } else if (week > weeksInYear(mom.year(), dow, doy)) {
-            resWeek = week - weeksInYear(mom.year(), dow, doy);
-            resYear = mom.year() + 1;
-        } else {
-            resYear = mom.year();
-            resWeek = week;
-        }
-
-        return {
-            week: resWeek,
-            year: resYear
-        };
-    }
-
-    function weeksInYear(year, dow, doy) {
-        var weekOffset = firstWeekOffset(year, dow, doy),
-            weekOffsetNext = firstWeekOffset(year + 1, dow, doy);
-        return (daysInYear(year) - weekOffset + weekOffsetNext) / 7;
-    }
-
-    // FORMATTING
-
-    addFormatToken('w', ['ww', 2], 'wo', 'week');
-    addFormatToken('W', ['WW', 2], 'Wo', 'isoWeek');
-
-    // ALIASES
-
-    addUnitAlias('week', 'w');
-    addUnitAlias('isoWeek', 'W');
-
-    // PRIORITIES
-
-    addUnitPriority('week', 5);
-    addUnitPriority('isoWeek', 5);
-
-    // PARSING
-
-    addRegexToken('w',  match1to2);
-    addRegexToken('ww', match1to2, match2);
-    addRegexToken('W',  match1to2);
-    addRegexToken('WW', match1to2, match2);
-
-    addWeekParseToken(['w', 'ww', 'W', 'WW'], function (input, week, config, token) {
-        week[token.substr(0, 1)] = toInt(input);
-    });
-
-    // HELPERS
-
-    // LOCALES
-
-    function localeWeek (mom) {
-        return weekOfYear(mom, this._week.dow, this._week.doy).week;
-    }
-
-    var defaultLocaleWeek = {
-        dow : 0, // Sunday is the first day of the week.
-        doy : 6  // The week that contains Jan 1st is the first week of the year.
-    };
-
-    function localeFirstDayOfWeek () {
-        return this._week.dow;
-    }
-
-    function localeFirstDayOfYear () {
-        return this._week.doy;
-    }
-
-    // MOMENTS
-
-    function getSetWeek (input) {
-        var week = this.localeData().week(this);
-        return input == null ? week : this.add((input - week) * 7, 'd');
-    }
-
-    function getSetISOWeek (input) {
-        var week = weekOfYear(this, 1, 4).week;
-        return input == null ? week : this.add((input - week) * 7, 'd');
-    }
-
-    // FORMATTING
-
-    addFormatToken('d', 0, 'do', 'day');
-
-    addFormatToken('dd', 0, 0, function (format) {
-        return this.localeData().weekdaysMin(this, format);
-    });
-
-    addFormatToken('ddd', 0, 0, function (format) {
-        return this.localeData().weekdaysShort(this, format);
-    });
-
-    addFormatToken('dddd', 0, 0, function (format) {
-        return this.localeData().weekdays(this, format);
-    });
-
-    addFormatToken('e', 0, 0, 'weekday');
-    addFormatToken('E', 0, 0, 'isoWeekday');
-
-    // ALIASES
-
-    addUnitAlias('day', 'd');
-    addUnitAlias('weekday', 'e');
-    addUnitAlias('isoWeekday', 'E');
-
-    // PRIORITY
-    addUnitPriority('day', 11);
-    addUnitPriority('weekday', 11);
-    addUnitPriority('isoWeekday', 11);
-
-    // PARSING
-
-    addRegexToken('d',    match1to2);
-    addRegexToken('e',    match1to2);
-    addRegexToken('E',    match1to2);
-    addRegexToken('dd',   function (isStrict, locale) {
-        return locale.weekdaysMinRegex(isStrict);
-    });
-    addRegexToken('ddd',   function (isStrict, locale) {
-        return locale.weekdaysShortRegex(isStrict);
-    });
-    addRegexToken('dddd',   function (isStrict, locale) {
-        return locale.weekdaysRegex(isStrict);
-    });
-
-    addWeekParseToken(['dd', 'ddd', 'dddd'], function (input, week, config, token) {
-        var weekday = config._locale.weekdaysParse(input, token, config._strict);
-        // if we didn't get a weekday name, mark the date as invalid
-        if (weekday != null) {
-            week.d = weekday;
-        } else {
-            getParsingFlags(config).invalidWeekday = input;
-        }
-    });
-
-    addWeekParseToken(['d', 'e', 'E'], function (input, week, config, token) {
-        week[token] = toInt(input);
-    });
-
-    // HELPERS
-
-    function parseWeekday(input, locale) {
-        if (typeof input !== 'string') {
-            return input;
-        }
-
-        if (!isNaN(input)) {
-            return parseInt(input, 10);
-        }
-
-        input = locale.weekdaysParse(input);
-        if (typeof input === 'number') {
-            return input;
-        }
-
-        return null;
-    }
-
-    function parseIsoWeekday(input, locale) {
-        if (typeof input === 'string') {
-            return locale.weekdaysParse(input) % 7 || 7;
-        }
-        return isNaN(input) ? null : input;
-    }
-
-    // LOCALES
-
-    var defaultLocaleWeekdays = 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_');
-    function localeWeekdays (m, format) {
-        if (!m) {
-            return isArray(this._weekdays) ? this._weekdays :
-                this._weekdays['standalone'];
-        }
-        return isArray(this._weekdays) ? this._weekdays[m.day()] :
-            this._weekdays[this._weekdays.isFormat.test(format) ? 'format' : 'standalone'][m.day()];
-    }
-
-    var defaultLocaleWeekdaysShort = 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_');
-    function localeWeekdaysShort (m) {
-        return (m) ? this._weekdaysShort[m.day()] : this._weekdaysShort;
-    }
-
-    var defaultLocaleWeekdaysMin = 'Su_Mo_Tu_We_Th_Fr_Sa'.split('_');
-    function localeWeekdaysMin (m) {
-        return (m) ? this._weekdaysMin[m.day()] : this._weekdaysMin;
-    }
-
-    function handleStrictParse$1(weekdayName, format, strict) {
-        var i, ii, mom, llc = weekdayName.toLocaleLowerCase();
-        if (!this._weekdaysParse) {
-            this._weekdaysParse = [];
-            this._shortWeekdaysParse = [];
-            this._minWeekdaysParse = [];
-
-            for (i = 0; i < 7; ++i) {
-                mom = createUTC([2000, 1]).day(i);
-                this._minWeekdaysParse[i] = this.weekdaysMin(mom, '').toLocaleLowerCase();
-                this._shortWeekdaysParse[i] = this.weekdaysShort(mom, '').toLocaleLowerCase();
-                this._weekdaysParse[i] = this.weekdays(mom, '').toLocaleLowerCase();
-            }
-        }
-
-        if (strict) {
-            if (format === 'dddd') {
-                ii = indexOf.call(this._weekdaysParse, llc);
-                return ii !== -1 ? ii : null;
-            } else if (format === 'ddd') {
-                ii = indexOf.call(this._shortWeekdaysParse, llc);
-                return ii !== -1 ? ii : null;
-            } else {
-                ii = indexOf.call(this._minWeekdaysParse, llc);
-                return ii !== -1 ? ii : null;
-            }
-        } else {
-            if (format === 'dddd') {
-                ii = indexOf.call(this._weekdaysParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._shortWeekdaysParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._minWeekdaysParse, llc);
-                return ii !== -1 ? ii : null;
-            } else if (format === 'ddd') {
-                ii = indexOf.call(this._shortWeekdaysParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._weekdaysParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._minWeekdaysParse, llc);
-                return ii !== -1 ? ii : null;
-            } else {
-                ii = indexOf.call(this._minWeekdaysParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._weekdaysParse, llc);
-                if (ii !== -1) {
-                    return ii;
-                }
-                ii = indexOf.call(this._shortWeekdaysParse, llc);
-                return ii !== -1 ? ii : null;
-            }
-        }
-    }
-
-    function localeWeekdaysParse (weekdayName, format, strict) {
-        var i, mom, regex;
-
-        if (this._weekdaysParseExact) {
-            return handleStrictParse$1.call(this, weekdayName, format, strict);
-        }
-
-        if (!this._weekdaysParse) {
-            this._weekdaysParse = [];
-            this._minWeekdaysParse = [];
-            this._shortWeekdaysParse = [];
-            this._fullWeekdaysParse = [];
-        }
-
-        for (i = 0; i < 7; i++) {
-            // make the regex if we don't have it already
-
-            mom = createUTC([2000, 1]).day(i);
-            if (strict && !this._fullWeekdaysParse[i]) {
-                this._fullWeekdaysParse[i] = new RegExp('^' + this.weekdays(mom, '').replace('.', '\.?') + '$', 'i');
-                this._shortWeekdaysParse[i] = new RegExp('^' + this.weekdaysShort(mom, '').replace('.', '\.?') + '$', 'i');
-                this._minWeekdaysParse[i] = new RegExp('^' + this.weekdaysMin(mom, '').replace('.', '\.?') + '$', 'i');
-            }
-            if (!this._weekdaysParse[i]) {
-                regex = '^' + this.weekdays(mom, '') + '|^' + this.weekdaysShort(mom, '') + '|^' + this.weekdaysMin(mom, '');
-                this._weekdaysParse[i] = new RegExp(regex.replace('.', ''), 'i');
-            }
-            // test the regex
-            if (strict && format === 'dddd' && this._fullWeekdaysParse[i].test(weekdayName)) {
-                return i;
-            } else if (strict && format === 'ddd' && this._shortWeekdaysParse[i].test(weekdayName)) {
-                return i;
-            } else if (strict && format === 'dd' && this._minWeekdaysParse[i].test(weekdayName)) {
-                return i;
-            } else if (!strict && this._weekdaysParse[i].test(weekdayName)) {
-                return i;
-            }
-        }
-    }
-
-    // MOMENTS
-
-    function getSetDayOfWeek (input) {
-        if (!this.isValid()) {
-            return input != null ? this : NaN;
-        }
-        var day = this._isUTC ? this._d.getUTCDay() : this._d.getDay();
-        if (input != null) {
-            input = parseWeekday(input, this.localeData());
-            return this.add(input - day, 'd');
-        } else {
-            return day;
-        }
-    }
-
-    function getSetLocaleDayOfWeek (input) {
-        if (!this.isValid()) {
-            return input != null ? this : NaN;
-        }
-        var weekday = (this.day() + 7 - this.localeData()._week.dow) % 7;
-        return input == null ? weekday : this.add(input - weekday, 'd');
-    }
-
-    function getSetISODayOfWeek (input) {
-        if (!this.isValid()) {
-            return input != null ? this : NaN;
-        }
-
-        // behaves the same as moment#day except
-        // as a getter, returns 7 instead of 0 (1-7 range instead of 0-6)
-        // as a setter, sunday should belong to the previous week.
-
-        if (input != null) {
-            var weekday = parseIsoWeekday(input, this.localeData());
-            return this.day(this.day() % 7 ? weekday : weekday - 7);
-        } else {
-            return this.day() || 7;
-        }
-    }
-
-    var defaultWeekdaysRegex = matchWord;
-    function weekdaysRegex (isStrict) {
-        if (this._weekdaysParseExact) {
-            if (!hasOwnProp(this, '_weekdaysRegex')) {
-                computeWeekdaysParse.call(this);
-            }
-            if (isStrict) {
-                return this._weekdaysStrictRegex;
-            } else {
-                return this._weekdaysRegex;
-            }
-        } else {
-            if (!hasOwnProp(this, '_weekdaysRegex')) {
-                this._weekdaysRegex = defaultWeekdaysRegex;
-            }
-            return this._weekdaysStrictRegex && isStrict ?
-                this._weekdaysStrictRegex : this._weekdaysRegex;
-        }
-    }
-
-    var defaultWeekdaysShortRegex = matchWord;
-    function weekdaysShortRegex (isStrict) {
-        if (this._weekdaysParseExact) {
-            if (!hasOwnProp(this, '_weekdaysRegex')) {
-                computeWeekdaysParse.call(this);
-            }
-            if (isStrict) {
-                return this._weekdaysShortStrictRegex;
-            } else {
-                return this._weekdaysShortRegex;
-            }
-        } else {
-            if (!hasOwnProp(this, '_weekdaysShortRegex')) {
-                this._weekdaysShortRegex = defaultWeekdaysShortRegex;
-            }
-            return this._weekdaysShortStrictRegex && isStrict ?
-                this._weekdaysShortStrictRegex : this._weekdaysShortRegex;
-        }
-    }
-
-    var defaultWeekdaysMinRegex = matchWord;
-    function weekdaysMinRegex (isStrict) {
-        if (this._weekdaysParseExact) {
-            if (!hasOwnProp(this, '_weekdaysRegex')) {
-                computeWeekdaysParse.call(this);
-            }
-            if (isStrict) {
-                return this._weekdaysMinStrictRegex;
-            } else {
-                return this._weekdaysMinRegex;
-            }
-        } else {
-            if (!hasOwnProp(this, '_weekdaysMinRegex')) {
-                this._weekdaysMinRegex = defaultWeekdaysMinRegex;
-            }
-            return this._weekdaysMinStrictRegex && isStrict ?
-                this._weekdaysMinStrictRegex : this._weekdaysMinRegex;
-        }
-    }
-
-
-    function computeWeekdaysParse () {
-        function cmpLenRev(a, b) {
-            return b.length - a.length;
-        }
-
-        var minPieces = [], shortPieces = [], longPieces = [], mixedPieces = [],
-            i, mom, minp, shortp, longp;
-        for (i = 0; i < 7; i++) {
-            // make the regex if we don't have it already
-            mom = createUTC([2000, 1]).day(i);
-            minp = this.weekdaysMin(mom, '');
-            shortp = this.weekdaysShort(mom, '');
-            longp = this.weekdays(mom, '');
-            minPieces.push(minp);
-            shortPieces.push(shortp);
-            longPieces.push(longp);
-            mixedPieces.push(minp);
-            mixedPieces.push(shortp);
-            mixedPieces.push(longp);
-        }
-        // Sorting makes sure if one weekday (or abbr) is a prefix of another it
-        // will match the longer piece.
-        minPieces.sort(cmpLenRev);
-        shortPieces.sort(cmpLenRev);
-        longPieces.sort(cmpLenRev);
-        mixedPieces.sort(cmpLenRev);
-        for (i = 0; i < 7; i++) {
-            shortPieces[i] = regexEscape(shortPieces[i]);
-            longPieces[i] = regexEscape(longPieces[i]);
-            mixedPieces[i] = regexEscape(mixedPieces[i]);
-        }
-
-        this._weekdaysRegex = new RegExp('^(' + mixedPieces.join('|') + ')', 'i');
-        this._weekdaysShortRegex = this._weekdaysRegex;
-        this._weekdaysMinRegex = this._weekdaysRegex;
-
-        this._weekdaysStrictRegex = new RegExp('^(' + longPieces.join('|') + ')', 'i');
-        this._weekdaysShortStrictRegex = new RegExp('^(' + shortPieces.join('|') + ')', 'i');
-        this._weekdaysMinStrictRegex = new RegExp('^(' + minPieces.join('|') + ')', 'i');
-    }
-
-    // FORMATTING
-
-    function hFormat() {
-        return this.hours() % 12 || 12;
-    }
-
-    function kFormat() {
-        return this.hours() || 24;
-    }
-
-    addFormatToken('H', ['HH', 2], 0, 'hour');
-    addFormatToken('h', ['hh', 2], 0, hFormat);
-    addFormatToken('k', ['kk', 2], 0, kFormat);
-
-    addFormatToken('hmm', 0, 0, function () {
-        return '' + hFormat.apply(this) + zeroFill(this.minutes(), 2);
-    });
-
-    addFormatToken('hmmss', 0, 0, function () {
-        return '' + hFormat.apply(this) + zeroFill(this.minutes(), 2) +
-            zeroFill(this.seconds(), 2);
-    });
-
-    addFormatToken('Hmm', 0, 0, function () {
-        return '' + this.hours() + zeroFill(this.minutes(), 2);
-    });
-
-    addFormatToken('Hmmss', 0, 0, function () {
-        return '' + this.hours() + zeroFill(this.minutes(), 2) +
-            zeroFill(this.seconds(), 2);
-    });
-
-    function meridiem (token, lowercase) {
-        addFormatToken(token, 0, 0, function () {
-            return this.localeData().meridiem(this.hours(), this.minutes(), lowercase);
-        });
-    }
-
-    meridiem('a', true);
-    meridiem('A', false);
-
-    // ALIASES
-
-    addUnitAlias('hour', 'h');
-
-    // PRIORITY
-    addUnitPriority('hour', 13);
-
-    // PARSING
-
-    function matchMeridiem (isStrict, locale) {
-        return locale._meridiemParse;
-    }
-
-    addRegexToken('a',  matchMeridiem);
-    addRegexToken('A',  matchMeridiem);
-    addRegexToken('H',  match1to2);
-    addRegexToken('h',  match1to2);
-    addRegexToken('k',  match1to2);
-    addRegexToken('HH', match1to2, match2);
-    addRegexToken('hh', match1to2, match2);
-    addRegexToken('kk', match1to2, match2);
-
-    addRegexToken('hmm', match3to4);
-    addRegexToken('hmmss', match5to6);
-    addRegexToken('Hmm', match3to4);
-    addRegexToken('Hmmss', match5to6);
-
-    addParseToken(['H', 'HH'], HOUR);
-    addParseToken(['k', 'kk'], function (input, array, config) {
-        var kInput = toInt(input);
-        array[HOUR] = kInput === 24 ? 0 : kInput;
-    });
-    addParseToken(['a', 'A'], function (input, array, config) {
-        config._isPm = config._locale.isPM(input);
-        config._meridiem = input;
-    });
-    addParseToken(['h', 'hh'], function (input, array, config) {
-        array[HOUR] = toInt(input);
-        getParsingFlags(config).bigHour = true;
-    });
-    addParseToken('hmm', function (input, array, config) {
-        var pos = input.length - 2;
-        array[HOUR] = toInt(input.substr(0, pos));
-        array[MINUTE] = toInt(input.substr(pos));
-        getParsingFlags(config).bigHour = true;
-    });
-    addParseToken('hmmss', function (input, array, config) {
-        var pos1 = input.length - 4;
-        var pos2 = input.length - 2;
-        array[HOUR] = toInt(input.substr(0, pos1));
-        array[MINUTE] = toInt(input.substr(pos1, 2));
-        array[SECOND] = toInt(input.substr(pos2));
-        getParsingFlags(config).bigHour = true;
-    });
-    addParseToken('Hmm', function (input, array, config) {
-        var pos = input.length - 2;
-        array[HOUR] = toInt(input.substr(0, pos));
-        array[MINUTE] = toInt(input.substr(pos));
-    });
-    addParseToken('Hmmss', function (input, array, config) {
-        var pos1 = input.length - 4;
-        var pos2 = input.length - 2;
-        array[HOUR] = toInt(input.substr(0, pos1));
-        array[MINUTE] = toInt(input.substr(pos1, 2));
-        array[SECOND] = toInt(input.substr(pos2));
-    });
-
-    // LOCALES
-
-    function localeIsPM (input) {
-        // IE8 Quirks Mode & IE7 Standards Mode do not allow accessing strings like arrays
-        // Using charAt should be more compatible.
-        return ((input + '').toLowerCase().charAt(0) === 'p');
-    }
-
-    var defaultLocaleMeridiemParse = /[ap]\.?m?\.?/i;
-    function localeMeridiem (hours, minutes, isLower) {
-        if (hours > 11) {
-            return isLower ? 'pm' : 'PM';
-        } else {
-            return isLower ? 'am' : 'AM';
-        }
-    }
-
-
-    // MOMENTS
-
-    // Setting the hour should keep the time, because the user explicitly
-    // specified which hour they want. So trying to maintain the same hour (in
-    // a new timezone) makes sense. Adding/subtracting hours does not follow
-    // this rule.
-    var getSetHour = makeGetSet('Hours', true);
-
-    var baseConfig = {
-        calendar: defaultCalendar,
-        longDateFormat: defaultLongDateFormat,
-        invalidDate: defaultInvalidDate,
-        ordinal: defaultOrdinal,
-        dayOfMonthOrdinalParse: defaultDayOfMonthOrdinalParse,
-        relativeTime: defaultRelativeTime,
-
-        months: defaultLocaleMonths,
-        monthsShort: defaultLocaleMonthsShort,
-
-        week: defaultLocaleWeek,
-
-        weekdays: defaultLocaleWeekdays,
-        weekdaysMin: defaultLocaleWeekdaysMin,
-        weekdaysShort: defaultLocaleWeekdaysShort,
-
-        meridiemParse: defaultLocaleMeridiemParse
-    };
-
-    // internal storage for locale config files
-    var locales = {};
-    var localeFamilies = {};
-    var globalLocale;
-
-    function normalizeLocale(key) {
-        return key ? key.toLowerCase().replace('_', '-') : key;
-    }
-
-    // pick the locale from the array
-    // try ['en-au', 'en-gb'] as 'en-au', 'en-gb', 'en', as in move through the list trying each
-    // substring from most specific to least, but move to the next array item if it's a more specific variant than the current root
-    function chooseLocale(names) {
-        var i = 0, j, next, locale, split;
-
-        while (i < names.length) {
-            split = normalizeLocale(names[i]).split('-');
-            j = split.length;
-            next = normalizeLocale(names[i + 1]);
-            next = next ? next.split('-') : null;
-            while (j > 0) {
-                locale = loadLocale(split.slice(0, j).join('-'));
-                if (locale) {
-                    return locale;
-                }
-                if (next && next.length >= j && compareArrays(split, next, true) >= j - 1) {
-                    //the next array item is better than a shallower substring of this one
-                    break;
-                }
-                j--;
-            }
-            i++;
-        }
-        return globalLocale;
-    }
-
-    function loadLocale(name) {
-        var oldLocale = null;
-        // TODO: Find a better way to register and load all the locales in Node
-        if (!locales[name] && (typeof module !== 'undefined') &&
-                module && module.exports) {
-            try {
-                oldLocale = globalLocale._abbr;
-                var aliasedRequire = require;
-                __webpack_require__(185)("./" + name);
-                getSetGlobalLocale(oldLocale);
-            } catch (e) {}
-        }
-        return locales[name];
-    }
-
-    // This function will load locale and then set the global locale.  If
-    // no arguments are passed in, it will simply return the current global
-    // locale key.
-    function getSetGlobalLocale (key, values) {
-        var data;
-        if (key) {
-            if (isUndefined(values)) {
-                data = getLocale(key);
-            }
-            else {
-                data = defineLocale(key, values);
-            }
-
-            if (data) {
-                // moment.duration._locale = moment._locale = data;
-                globalLocale = data;
-            }
-            else {
-                if ((typeof console !==  'undefined') && console.warn) {
-                    //warn user if arguments are passed but the locale could not be set
-                    console.warn('Locale ' + key +  ' not found. Did you forget to load it?');
-                }
-            }
-        }
-
-        return globalLocale._abbr;
-    }
-
-    function defineLocale (name, config) {
-        if (config !== null) {
-            var locale, parentConfig = baseConfig;
-            config.abbr = name;
-            if (locales[name] != null) {
-                deprecateSimple('defineLocaleOverride',
-                        'use moment.updateLocale(localeName, config) to change ' +
-                        'an existing locale. moment.defineLocale(localeName, ' +
-                        'config) should only be used for creating a new locale ' +
-                        'See http://momentjs.com/guides/#/warnings/define-locale/ for more info.');
-                parentConfig = locales[name]._config;
-            } else if (config.parentLocale != null) {
-                if (locales[config.parentLocale] != null) {
-                    parentConfig = locales[config.parentLocale]._config;
-                } else {
-                    locale = loadLocale(config.parentLocale);
-                    if (locale != null) {
-                        parentConfig = locale._config;
-                    } else {
-                        if (!localeFamilies[config.parentLocale]) {
-                            localeFamilies[config.parentLocale] = [];
-                        }
-                        localeFamilies[config.parentLocale].push({
-                            name: name,
-                            config: config
-                        });
-                        return null;
-                    }
-                }
-            }
-            locales[name] = new Locale(mergeConfigs(parentConfig, config));
-
-            if (localeFamilies[name]) {
-                localeFamilies[name].forEach(function (x) {
-                    defineLocale(x.name, x.config);
-                });
-            }
-
-            // backwards compat for now: also set the locale
-            // make sure we set the locale AFTER all child locales have been
-            // created, so we won't end up with the child locale set.
-            getSetGlobalLocale(name);
-
-
-            return locales[name];
-        } else {
-            // useful for testing
-            delete locales[name];
-            return null;
-        }
-    }
-
-    function updateLocale(name, config) {
-        if (config != null) {
-            var locale, tmpLocale, parentConfig = baseConfig;
-            // MERGE
-            tmpLocale = loadLocale(name);
-            if (tmpLocale != null) {
-                parentConfig = tmpLocale._config;
-            }
-            config = mergeConfigs(parentConfig, config);
-            locale = new Locale(config);
-            locale.parentLocale = locales[name];
-            locales[name] = locale;
-
-            // backwards compat for now: also set the locale
-            getSetGlobalLocale(name);
-        } else {
-            // pass null for config to unupdate, useful for tests
-            if (locales[name] != null) {
-                if (locales[name].parentLocale != null) {
-                    locales[name] = locales[name].parentLocale;
-                } else if (locales[name] != null) {
-                    delete locales[name];
-                }
-            }
-        }
-        return locales[name];
-    }
-
-    // returns locale data
-    function getLocale (key) {
-        var locale;
-
-        if (key && key._locale && key._locale._abbr) {
-            key = key._locale._abbr;
-        }
-
-        if (!key) {
-            return globalLocale;
-        }
-
-        if (!isArray(key)) {
-            //short-circuit everything else
-            locale = loadLocale(key);
-            if (locale) {
-                return locale;
-            }
-            key = [key];
-        }
-
-        return chooseLocale(key);
-    }
-
-    function listLocales() {
-        return keys(locales);
-    }
-
-    function checkOverflow (m) {
-        var overflow;
-        var a = m._a;
-
-        if (a && getParsingFlags(m).overflow === -2) {
-            overflow =
-                a[MONTH]       < 0 || a[MONTH]       > 11  ? MONTH :
-                a[DATE]        < 1 || a[DATE]        > daysInMonth(a[YEAR], a[MONTH]) ? DATE :
-                a[HOUR]        < 0 || a[HOUR]        > 24 || (a[HOUR] === 24 && (a[MINUTE] !== 0 || a[SECOND] !== 0 || a[MILLISECOND] !== 0)) ? HOUR :
-                a[MINUTE]      < 0 || a[MINUTE]      > 59  ? MINUTE :
-                a[SECOND]      < 0 || a[SECOND]      > 59  ? SECOND :
-                a[MILLISECOND] < 0 || a[MILLISECOND] > 999 ? MILLISECOND :
-                -1;
-
-            if (getParsingFlags(m)._overflowDayOfYear && (overflow < YEAR || overflow > DATE)) {
-                overflow = DATE;
-            }
-            if (getParsingFlags(m)._overflowWeeks && overflow === -1) {
-                overflow = WEEK;
-            }
-            if (getParsingFlags(m)._overflowWeekday && overflow === -1) {
-                overflow = WEEKDAY;
-            }
-
-            getParsingFlags(m).overflow = overflow;
-        }
-
-        return m;
-    }
-
-    // Pick the first defined of two or three arguments.
-    function defaults(a, b, c) {
-        if (a != null) {
-            return a;
-        }
-        if (b != null) {
-            return b;
-        }
-        return c;
-    }
-
-    function currentDateArray(config) {
-        // hooks is actually the exported moment object
-        var nowValue = new Date(hooks.now());
-        if (config._useUTC) {
-            return [nowValue.getUTCFullYear(), nowValue.getUTCMonth(), nowValue.getUTCDate()];
-        }
-        return [nowValue.getFullYear(), nowValue.getMonth(), nowValue.getDate()];
-    }
-
-    // convert an array to a date.
-    // the array should mirror the parameters below
-    // note: all values past the year are optional and will default to the lowest possible value.
-    // [year, month, day , hour, minute, second, millisecond]
-    function configFromArray (config) {
-        var i, date, input = [], currentDate, expectedWeekday, yearToUse;
-
-        if (config._d) {
-            return;
-        }
-
-        currentDate = currentDateArray(config);
-
-        //compute day of the year from weeks and weekdays
-        if (config._w && config._a[DATE] == null && config._a[MONTH] == null) {
-            dayOfYearFromWeekInfo(config);
-        }
-
-        //if the day of the year is set, figure out what it is
-        if (config._dayOfYear != null) {
-            yearToUse = defaults(config._a[YEAR], currentDate[YEAR]);
-
-            if (config._dayOfYear > daysInYear(yearToUse) || config._dayOfYear === 0) {
-                getParsingFlags(config)._overflowDayOfYear = true;
-            }
-
-            date = createUTCDate(yearToUse, 0, config._dayOfYear);
-            config._a[MONTH] = date.getUTCMonth();
-            config._a[DATE] = date.getUTCDate();
-        }
-
-        // Default to current date.
-        // * if no year, month, day of month are given, default to today
-        // * if day of month is given, default month and year
-        // * if month is given, default only year
-        // * if year is given, don't default anything
-        for (i = 0; i < 3 && config._a[i] == null; ++i) {
-            config._a[i] = input[i] = currentDate[i];
-        }
-
-        // Zero out whatever was not defaulted, including time
-        for (; i < 7; i++) {
-            config._a[i] = input[i] = (config._a[i] == null) ? (i === 2 ? 1 : 0) : config._a[i];
-        }
-
-        // Check for 24:00:00.000
-        if (config._a[HOUR] === 24 &&
-                config._a[MINUTE] === 0 &&
-                config._a[SECOND] === 0 &&
-                config._a[MILLISECOND] === 0) {
-            config._nextDay = true;
-            config._a[HOUR] = 0;
-        }
-
-        config._d = (config._useUTC ? createUTCDate : createDate).apply(null, input);
-        expectedWeekday = config._useUTC ? config._d.getUTCDay() : config._d.getDay();
-
-        // Apply timezone offset from input. The actual utcOffset can be changed
-        // with parseZone.
-        if (config._tzm != null) {
-            config._d.setUTCMinutes(config._d.getUTCMinutes() - config._tzm);
-        }
-
-        if (config._nextDay) {
-            config._a[HOUR] = 24;
-        }
-
-        // check for mismatching day of week
-        if (config._w && typeof config._w.d !== 'undefined' && config._w.d !== expectedWeekday) {
-            getParsingFlags(config).weekdayMismatch = true;
-        }
-    }
-
-    function dayOfYearFromWeekInfo(config) {
-        var w, weekYear, week, weekday, dow, doy, temp, weekdayOverflow;
-
-        w = config._w;
-        if (w.GG != null || w.W != null || w.E != null) {
-            dow = 1;
-            doy = 4;
-
-            // TODO: We need to take the current isoWeekYear, but that depends on
-            // how we interpret now (local, utc, fixed offset). So create
-            // a now version of current config (take local/utc/offset flags, and
-            // create now).
-            weekYear = defaults(w.GG, config._a[YEAR], weekOfYear(createLocal(), 1, 4).year);
-            week = defaults(w.W, 1);
-            weekday = defaults(w.E, 1);
-            if (weekday < 1 || weekday > 7) {
-                weekdayOverflow = true;
-            }
-        } else {
-            dow = config._locale._week.dow;
-            doy = config._locale._week.doy;
-
-            var curWeek = weekOfYear(createLocal(), dow, doy);
-
-            weekYear = defaults(w.gg, config._a[YEAR], curWeek.year);
-
-            // Default to current week.
-            week = defaults(w.w, curWeek.week);
-
-            if (w.d != null) {
-                // weekday -- low day numbers are considered next week
-                weekday = w.d;
-                if (weekday < 0 || weekday > 6) {
-                    weekdayOverflow = true;
-                }
-            } else if (w.e != null) {
-                // local weekday -- counting starts from begining of week
-                weekday = w.e + dow;
-                if (w.e < 0 || w.e > 6) {
-                    weekdayOverflow = true;
-                }
-            } else {
-                // default to begining of week
-                weekday = dow;
-            }
-        }
-        if (week < 1 || week > weeksInYear(weekYear, dow, doy)) {
-            getParsingFlags(config)._overflowWeeks = true;
-        } else if (weekdayOverflow != null) {
-            getParsingFlags(config)._overflowWeekday = true;
-        } else {
-            temp = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy);
-            config._a[YEAR] = temp.year;
-            config._dayOfYear = temp.dayOfYear;
-        }
-    }
-
-    // iso 8601 regex
-    // 0000-00-00 0000-W00 or 0000-W00-0 + T + 00 or 00:00 or 00:00:00 or 00:00:00.000 + +00:00 or +0000 or +00)
-    var extendedIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})-(?:\d\d-\d\d|W\d\d-\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?::\d\d(?::\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/;
-    var basicIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})(?:\d\d\d\d|W\d\d\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?:\d\d(?:\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/;
-
-    var tzRegex = /Z|[+-]\d\d(?::?\d\d)?/;
-
-    var isoDates = [
-        ['YYYYYY-MM-DD', /[+-]\d{6}-\d\d-\d\d/],
-        ['YYYY-MM-DD', /\d{4}-\d\d-\d\d/],
-        ['GGGG-[W]WW-E', /\d{4}-W\d\d-\d/],
-        ['GGGG-[W]WW', /\d{4}-W\d\d/, false],
-        ['YYYY-DDD', /\d{4}-\d{3}/],
-        ['YYYY-MM', /\d{4}-\d\d/, false],
-        ['YYYYYYMMDD', /[+-]\d{10}/],
-        ['YYYYMMDD', /\d{8}/],
-        // YYYYMM is NOT allowed by the standard
-        ['GGGG[W]WWE', /\d{4}W\d{3}/],
-        ['GGGG[W]WW', /\d{4}W\d{2}/, false],
-        ['YYYYDDD', /\d{7}/]
-    ];
-
-    // iso time formats and regexes
-    var isoTimes = [
-        ['HH:mm:ss.SSSS', /\d\d:\d\d:\d\d\.\d+/],
-        ['HH:mm:ss,SSSS', /\d\d:\d\d:\d\d,\d+/],
-        ['HH:mm:ss', /\d\d:\d\d:\d\d/],
-        ['HH:mm', /\d\d:\d\d/],
-        ['HHmmss.SSSS', /\d\d\d\d\d\d\.\d+/],
-        ['HHmmss,SSSS', /\d\d\d\d\d\d,\d+/],
-        ['HHmmss', /\d\d\d\d\d\d/],
-        ['HHmm', /\d\d\d\d/],
-        ['HH', /\d\d/]
-    ];
-
-    var aspNetJsonRegex = /^\/?Date\((\-?\d+)/i;
-
-    // date from iso format
-    function configFromISO(config) {
-        var i, l,
-            string = config._i,
-            match = extendedIsoRegex.exec(string) || basicIsoRegex.exec(string),
-            allowTime, dateFormat, timeFormat, tzFormat;
-
-        if (match) {
-            getParsingFlags(config).iso = true;
-
-            for (i = 0, l = isoDates.length; i < l; i++) {
-                if (isoDates[i][1].exec(match[1])) {
-                    dateFormat = isoDates[i][0];
-                    allowTime = isoDates[i][2] !== false;
-                    break;
-                }
-            }
-            if (dateFormat == null) {
-                config._isValid = false;
-                return;
-            }
-            if (match[3]) {
-                for (i = 0, l = isoTimes.length; i < l; i++) {
-                    if (isoTimes[i][1].exec(match[3])) {
-                        // match[2] should be 'T' or space
-                        timeFormat = (match[2] || ' ') + isoTimes[i][0];
-                        break;
-                    }
-                }
-                if (timeFormat == null) {
-                    config._isValid = false;
-                    return;
-                }
-            }
-            if (!allowTime && timeFormat != null) {
-                config._isValid = false;
-                return;
-            }
-            if (match[4]) {
-                if (tzRegex.exec(match[4])) {
-                    tzFormat = 'Z';
-                } else {
-                    config._isValid = false;
-                    return;
-                }
-            }
-            config._f = dateFormat + (timeFormat || '') + (tzFormat || '');
-            configFromStringAndFormat(config);
-        } else {
-            config._isValid = false;
-        }
-    }
-
-    // RFC 2822 regex: For details see https://tools.ietf.org/html/rfc2822#section-3.3
-    var rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|([+-]\d{4}))$/;
-
-    function extractFromRFC2822Strings(yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr) {
-        var result = [
-            untruncateYear(yearStr),
-            defaultLocaleMonthsShort.indexOf(monthStr),
-            parseInt(dayStr, 10),
-            parseInt(hourStr, 10),
-            parseInt(minuteStr, 10)
-        ];
-
-        if (secondStr) {
-            result.push(parseInt(secondStr, 10));
-        }
-
-        return result;
-    }
-
-    function untruncateYear(yearStr) {
-        var year = parseInt(yearStr, 10);
-        if (year <= 49) {
-            return 2000 + year;
-        } else if (year <= 999) {
-            return 1900 + year;
-        }
-        return year;
-    }
-
-    function preprocessRFC2822(s) {
-        // Remove comments and folding whitespace and replace multiple-spaces with a single space
-        return s.replace(/\([^)]*\)|[\n\t]/g, ' ').replace(/(\s\s+)/g, ' ').trim();
-    }
-
-    function checkWeekday(weekdayStr, parsedInput, config) {
-        if (weekdayStr) {
-            // TODO: Replace the vanilla JS Date object with an indepentent day-of-week check.
-            var weekdayProvided = defaultLocaleWeekdaysShort.indexOf(weekdayStr),
-                weekdayActual = new Date(parsedInput[0], parsedInput[1], parsedInput[2]).getDay();
-            if (weekdayProvided !== weekdayActual) {
-                getParsingFlags(config).weekdayMismatch = true;
-                config._isValid = false;
-                return false;
-            }
-        }
-        return true;
-    }
-
-    var obsOffsets = {
-        UT: 0,
-        GMT: 0,
-        EDT: -4 * 60,
-        EST: -5 * 60,
-        CDT: -5 * 60,
-        CST: -6 * 60,
-        MDT: -6 * 60,
-        MST: -7 * 60,
-        PDT: -7 * 60,
-        PST: -8 * 60
-    };
-
-    function calculateOffset(obsOffset, militaryOffset, numOffset) {
-        if (obsOffset) {
-            return obsOffsets[obsOffset];
-        } else if (militaryOffset) {
-            // the only allowed military tz is Z
-            return 0;
-        } else {
-            var hm = parseInt(numOffset, 10);
-            var m = hm % 100, h = (hm - m) / 100;
-            return h * 60 + m;
-        }
-    }
-
-    // date and time from ref 2822 format
-    function configFromRFC2822(config) {
-        var match = rfc2822.exec(preprocessRFC2822(config._i));
-        if (match) {
-            var parsedArray = extractFromRFC2822Strings(match[4], match[3], match[2], match[5], match[6], match[7]);
-            if (!checkWeekday(match[1], parsedArray, config)) {
-                return;
-            }
-
-            config._a = parsedArray;
-            config._tzm = calculateOffset(match[8], match[9], match[10]);
-
-            config._d = createUTCDate.apply(null, config._a);
-            config._d.setUTCMinutes(config._d.getUTCMinutes() - config._tzm);
-
-            getParsingFlags(config).rfc2822 = true;
-        } else {
-            config._isValid = false;
-        }
-    }
-
-    // date from iso format or fallback
-    function configFromString(config) {
-        var matched = aspNetJsonRegex.exec(config._i);
-
-        if (matched !== null) {
-            config._d = new Date(+matched[1]);
-            return;
-        }
-
-        configFromISO(config);
-        if (config._isValid === false) {
-            delete config._isValid;
-        } else {
-            return;
-        }
-
-        configFromRFC2822(config);
-        if (config._isValid === false) {
-            delete config._isValid;
-        } else {
-            return;
-        }
-
-        // Final attempt, use Input Fallback
-        hooks.createFromInputFallback(config);
-    }
-
-    hooks.createFromInputFallback = deprecate(
-        'value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), ' +
-        'which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are ' +
-        'discouraged and will be removed in an upcoming major release. Please refer to ' +
-        'http://momentjs.com/guides/#/warnings/js-date/ for more info.',
-        function (config) {
-            config._d = new Date(config._i + (config._useUTC ? ' UTC' : ''));
-        }
-    );
-
-    // constant that refers to the ISO standard
-    hooks.ISO_8601 = function () {};
-
-    // constant that refers to the RFC 2822 form
-    hooks.RFC_2822 = function () {};
-
-    // date from string and format string
-    function configFromStringAndFormat(config) {
-        // TODO: Move this to another part of the creation flow to prevent circular deps
-        if (config._f === hooks.ISO_8601) {
-            configFromISO(config);
-            return;
-        }
-        if (config._f === hooks.RFC_2822) {
-            configFromRFC2822(config);
-            return;
-        }
-        config._a = [];
-        getParsingFlags(config).empty = true;
-
-        // This array is used to make a Date, either with `new Date` or `Date.UTC`
-        var string = '' + config._i,
-            i, parsedInput, tokens, token, skipped,
-            stringLength = string.length,
-            totalParsedInputLength = 0;
-
-        tokens = expandFormat(config._f, config._locale).match(formattingTokens) || [];
-
-        for (i = 0; i < tokens.length; i++) {
-            token = tokens[i];
-            parsedInput = (string.match(getParseRegexForToken(token, config)) || [])[0];
-            // console.log('token', token, 'parsedInput', parsedInput,
-            //         'regex', getParseRegexForToken(token, config));
-            if (parsedInput) {
-                skipped = string.substr(0, string.indexOf(parsedInput));
-                if (skipped.length > 0) {
-                    getParsingFlags(config).unusedInput.push(skipped);
-                }
-                string = string.slice(string.indexOf(parsedInput) + parsedInput.length);
-                totalParsedInputLength += parsedInput.length;
-            }
-            // don't parse if it's not a known token
-            if (formatTokenFunctions[token]) {
-                if (parsedInput) {
-                    getParsingFlags(config).empty = false;
-                }
-                else {
-                    getParsingFlags(config).unusedTokens.push(token);
-                }
-                addTimeToArrayFromToken(token, parsedInput, config);
-            }
-            else if (config._strict && !parsedInput) {
-                getParsingFlags(config).unusedTokens.push(token);
-            }
-        }
-
-        // add remaining unparsed input length to the string
-        getParsingFlags(config).charsLeftOver = stringLength - totalParsedInputLength;
-        if (string.length > 0) {
-            getParsingFlags(config).unusedInput.push(string);
-        }
-
-        // clear _12h flag if hour is <= 12
-        if (config._a[HOUR] <= 12 &&
-            getParsingFlags(config).bigHour === true &&
-            config._a[HOUR] > 0) {
-            getParsingFlags(config).bigHour = undefined;
-        }
-
-        getParsingFlags(config).parsedDateParts = config._a.slice(0);
-        getParsingFlags(config).meridiem = config._meridiem;
-        // handle meridiem
-        config._a[HOUR] = meridiemFixWrap(config._locale, config._a[HOUR], config._meridiem);
-
-        configFromArray(config);
-        checkOverflow(config);
-    }
-
-
-    function meridiemFixWrap (locale, hour, meridiem) {
-        var isPm;
-
-        if (meridiem == null) {
-            // nothing to do
-            return hour;
-        }
-        if (locale.meridiemHour != null) {
-            return locale.meridiemHour(hour, meridiem);
-        } else if (locale.isPM != null) {
-            // Fallback
-            isPm = locale.isPM(meridiem);
-            if (isPm && hour < 12) {
-                hour += 12;
-            }
-            if (!isPm && hour === 12) {
-                hour = 0;
-            }
-            return hour;
-        } else {
-            // this is not supposed to happen
-            return hour;
-        }
-    }
-
-    // date from string and array of format strings
-    function configFromStringAndArray(config) {
-        var tempConfig,
-            bestMoment,
-
-            scoreToBeat,
-            i,
-            currentScore;
-
-        if (config._f.length === 0) {
-            getParsingFlags(config).invalidFormat = true;
-            config._d = new Date(NaN);
-            return;
-        }
-
-        for (i = 0; i < config._f.length; i++) {
-            currentScore = 0;
-            tempConfig = copyConfig({}, config);
-            if (config._useUTC != null) {
-                tempConfig._useUTC = config._useUTC;
-            }
-            tempConfig._f = config._f[i];
-            configFromStringAndFormat(tempConfig);
-
-            if (!isValid(tempConfig)) {
-                continue;
-            }
-
-            // if there is any input that was not parsed add a penalty for that format
-            currentScore += getParsingFlags(tempConfig).charsLeftOver;
-
-            //or tokens
-            currentScore += getParsingFlags(tempConfig).unusedTokens.length * 10;
-
-            getParsingFlags(tempConfig).score = currentScore;
-
-            if (scoreToBeat == null || currentScore < scoreToBeat) {
-                scoreToBeat = currentScore;
-                bestMoment = tempConfig;
-            }
-        }
-
-        extend(config, bestMoment || tempConfig);
-    }
-
-    function configFromObject(config) {
-        if (config._d) {
-            return;
-        }
-
-        var i = normalizeObjectUnits(config._i);
-        config._a = map([i.year, i.month, i.day || i.date, i.hour, i.minute, i.second, i.millisecond], function (obj) {
-            return obj && parseInt(obj, 10);
-        });
-
-        configFromArray(config);
-    }
-
-    function createFromConfig (config) {
-        var res = new Moment(checkOverflow(prepareConfig(config)));
-        if (res._nextDay) {
-            // Adding is smart enough around DST
-            res.add(1, 'd');
-            res._nextDay = undefined;
-        }
-
-        return res;
-    }
-
-    function prepareConfig (config) {
-        var input = config._i,
-            format = config._f;
-
-        config._locale = config._locale || getLocale(config._l);
-
-        if (input === null || (format === undefined && input === '')) {
-            return createInvalid({nullInput: true});
-        }
-
-        if (typeof input === 'string') {
-            config._i = input = config._locale.preparse(input);
-        }
-
-        if (isMoment(input)) {
-            return new Moment(checkOverflow(input));
-        } else if (isDate(input)) {
-            config._d = input;
-        } else if (isArray(format)) {
-            configFromStringAndArray(config);
-        } else if (format) {
-            configFromStringAndFormat(config);
-        }  else {
-            configFromInput(config);
-        }
-
-        if (!isValid(config)) {
-            config._d = null;
-        }
-
-        return config;
-    }
-
-    function configFromInput(config) {
-        var input = config._i;
-        if (isUndefined(input)) {
-            config._d = new Date(hooks.now());
-        } else if (isDate(input)) {
-            config._d = new Date(input.valueOf());
-        } else if (typeof input === 'string') {
-            configFromString(config);
-        } else if (isArray(input)) {
-            config._a = map(input.slice(0), function (obj) {
-                return parseInt(obj, 10);
-            });
-            configFromArray(config);
-        } else if (isObject(input)) {
-            configFromObject(config);
-        } else if (isNumber(input)) {
-            // from milliseconds
-            config._d = new Date(input);
-        } else {
-            hooks.createFromInputFallback(config);
-        }
-    }
-
-    function createLocalOrUTC (input, format, locale, strict, isUTC) {
-        var c = {};
-
-        if (locale === true || locale === false) {
-            strict = locale;
-            locale = undefined;
-        }
-
-        if ((isObject(input) && isObjectEmpty(input)) ||
-                (isArray(input) && input.length === 0)) {
-            input = undefined;
-        }
-        // object construction must be done this way.
-        // https://github.com/moment/moment/issues/1423
-        c._isAMomentObject = true;
-        c._useUTC = c._isUTC = isUTC;
-        c._l = locale;
-        c._i = input;
-        c._f = format;
-        c._strict = strict;
-
-        return createFromConfig(c);
-    }
-
-    function createLocal (input, format, locale, strict) {
-        return createLocalOrUTC(input, format, locale, strict, false);
-    }
-
-    var prototypeMin = deprecate(
-        'moment().min is deprecated, use moment.max instead. http://momentjs.com/guides/#/warnings/min-max/',
-        function () {
-            var other = createLocal.apply(null, arguments);
-            if (this.isValid() && other.isValid()) {
-                return other < this ? this : other;
-            } else {
-                return createInvalid();
-            }
-        }
-    );
-
-    var prototypeMax = deprecate(
-        'moment().max is deprecated, use moment.min instead. http://momentjs.com/guides/#/warnings/min-max/',
-        function () {
-            var other = createLocal.apply(null, arguments);
-            if (this.isValid() && other.isValid()) {
-                return other > this ? this : other;
-            } else {
-                return createInvalid();
-            }
-        }
-    );
-
-    // Pick a moment m from moments so that m[fn](other) is true for all
-    // other. This relies on the function fn to be transitive.
-    //
-    // moments should either be an array of moment objects or an array, whose
-    // first element is an array of moment objects.
-    function pickBy(fn, moments) {
-        var res, i;
-        if (moments.length === 1 && isArray(moments[0])) {
-            moments = moments[0];
-        }
-        if (!moments.length) {
-            return createLocal();
-        }
-        res = moments[0];
-        for (i = 1; i < moments.length; ++i) {
-            if (!moments[i].isValid() || moments[i][fn](res)) {
-                res = moments[i];
-            }
-        }
-        return res;
-    }
-
-    // TODO: Use [].sort instead?
-    function min () {
-        var args = [].slice.call(arguments, 0);
-
-        return pickBy('isBefore', args);
-    }
-
-    function max () {
-        var args = [].slice.call(arguments, 0);
-
-        return pickBy('isAfter', args);
-    }
-
-    var now = function () {
-        return Date.now ? Date.now() : +(new Date());
-    };
-
-    var ordering = ['year', 'quarter', 'month', 'week', 'day', 'hour', 'minute', 'second', 'millisecond'];
-
-    function isDurationValid(m) {
-        for (var key in m) {
-            if (!(indexOf.call(ordering, key) !== -1 && (m[key] == null || !isNaN(m[key])))) {
-                return false;
-            }
-        }
-
-        var unitHasDecimal = false;
-        for (var i = 0; i < ordering.length; ++i) {
-            if (m[ordering[i]]) {
-                if (unitHasDecimal) {
-                    return false; // only allow non-integers for smallest unit
-                }
-                if (parseFloat(m[ordering[i]]) !== toInt(m[ordering[i]])) {
-                    unitHasDecimal = true;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    function isValid$1() {
-        return this._isValid;
-    }
-
-    function createInvalid$1() {
-        return createDuration(NaN);
-    }
-
-    function Duration (duration) {
-        var normalizedInput = normalizeObjectUnits(duration),
-            years = normalizedInput.year || 0,
-            quarters = normalizedInput.quarter || 0,
-            months = normalizedInput.month || 0,
-            weeks = normalizedInput.week || 0,
-            days = normalizedInput.day || 0,
-            hours = normalizedInput.hour || 0,
-            minutes = normalizedInput.minute || 0,
-            seconds = normalizedInput.second || 0,
-            milliseconds = normalizedInput.millisecond || 0;
-
-        this._isValid = isDurationValid(normalizedInput);
-
-        // representation for dateAddRemove
-        this._milliseconds = +milliseconds +
-            seconds * 1e3 + // 1000
-            minutes * 6e4 + // 1000 * 60
-            hours * 1000 * 60 * 60; //using 1000 * 60 * 60 instead of 36e5 to avoid floating point rounding errors https://github.com/moment/moment/issues/2978
-        // Because of dateAddRemove treats 24 hours as different from a
-        // day when working around DST, we need to store them separately
-        this._days = +days +
-            weeks * 7;
-        // It is impossible to translate months into days without knowing
-        // which months you are are talking about, so we have to store
-        // it separately.
-        this._months = +months +
-            quarters * 3 +
-            years * 12;
-
-        this._data = {};
-
-        this._locale = getLocale();
-
-        this._bubble();
-    }
-
-    function isDuration (obj) {
-        return obj instanceof Duration;
-    }
-
-    function absRound (number) {
-        if (number < 0) {
-            return Math.round(-1 * number) * -1;
-        } else {
-            return Math.round(number);
-        }
-    }
-
-    // FORMATTING
-
-    function offset (token, separator) {
-        addFormatToken(token, 0, 0, function () {
-            var offset = this.utcOffset();
-            var sign = '+';
-            if (offset < 0) {
-                offset = -offset;
-                sign = '-';
-            }
-            return sign + zeroFill(~~(offset / 60), 2) + separator + zeroFill(~~(offset) % 60, 2);
-        });
-    }
-
-    offset('Z', ':');
-    offset('ZZ', '');
-
-    // PARSING
-
-    addRegexToken('Z',  matchShortOffset);
-    addRegexToken('ZZ', matchShortOffset);
-    addParseToken(['Z', 'ZZ'], function (input, array, config) {
-        config._useUTC = true;
-        config._tzm = offsetFromString(matchShortOffset, input);
-    });
-
-    // HELPERS
-
-    // timezone chunker
-    // '+10:00' > ['10',  '00']
-    // '-1530'  > ['-15', '30']
-    var chunkOffset = /([\+\-]|\d\d)/gi;
-
-    function offsetFromString(matcher, string) {
-        var matches = (string || '').match(matcher);
-
-        if (matches === null) {
-            return null;
-        }
-
-        var chunk   = matches[matches.length - 1] || [];
-        var parts   = (chunk + '').match(chunkOffset) || ['-', 0, 0];
-        var minutes = +(parts[1] * 60) + toInt(parts[2]);
-
-        return minutes === 0 ?
-          0 :
-          parts[0] === '+' ? minutes : -minutes;
-    }
-
-    // Return a moment from input, that is local/utc/zone equivalent to model.
-    function cloneWithOffset(input, model) {
-        var res, diff;
-        if (model._isUTC) {
-            res = model.clone();
-            diff = (isMoment(input) || isDate(input) ? input.valueOf() : createLocal(input).valueOf()) - res.valueOf();
-            // Use low-level api, because this fn is low-level api.
-            res._d.setTime(res._d.valueOf() + diff);
-            hooks.updateOffset(res, false);
-            return res;
-        } else {
-            return createLocal(input).local();
-        }
-    }
-
-    function getDateOffset (m) {
-        // On Firefox.24 Date#getTimezoneOffset returns a floating point.
-        // https://github.com/moment/moment/pull/1871
-        return -Math.round(m._d.getTimezoneOffset() / 15) * 15;
-    }
-
-    // HOOKS
-
-    // This function will be called whenever a moment is mutated.
-    // It is intended to keep the offset in sync with the timezone.
-    hooks.updateOffset = function () {};
-
-    // MOMENTS
-
-    // keepLocalTime = true means only change the timezone, without
-    // affecting the local hour. So 5:31:26 +0300 --[utcOffset(2, true)]-->
-    // 5:31:26 +0200 It is possible that 5:31:26 doesn't exist with offset
-    // +0200, so we adjust the time as needed, to be valid.
-    //
-    // Keeping the time actually adds/subtracts (one hour)
-    // from the actual represented time. That is why we call updateOffset
-    // a second time. In case it wants us to change the offset again
-    // _changeInProgress == true case, then we have to adjust, because
-    // there is no such time in the given timezone.
-    function getSetOffset (input, keepLocalTime, keepMinutes) {
-        var offset = this._offset || 0,
-            localAdjust;
-        if (!this.isValid()) {
-            return input != null ? this : NaN;
-        }
-        if (input != null) {
-            if (typeof input === 'string') {
-                input = offsetFromString(matchShortOffset, input);
-                if (input === null) {
-                    return this;
-                }
-            } else if (Math.abs(input) < 16 && !keepMinutes) {
-                input = input * 60;
-            }
-            if (!this._isUTC && keepLocalTime) {
-                localAdjust = getDateOffset(this);
-            }
-            this._offset = input;
-            this._isUTC = true;
-            if (localAdjust != null) {
-                this.add(localAdjust, 'm');
-            }
-            if (offset !== input) {
-                if (!keepLocalTime || this._changeInProgress) {
-                    addSubtract(this, createDuration(input - offset, 'm'), 1, false);
-                } else if (!this._changeInProgress) {
-                    this._changeInProgress = true;
-                    hooks.updateOffset(this, true);
-                    this._changeInProgress = null;
-                }
-            }
-            return this;
-        } else {
-            return this._isUTC ? offset : getDateOffset(this);
-        }
-    }
-
-    function getSetZone (input, keepLocalTime) {
-        if (input != null) {
-            if (typeof input !== 'string') {
-                input = -input;
-            }
-
-            this.utcOffset(input, keepLocalTime);
-
-            return this;
-        } else {
-            return -this.utcOffset();
-        }
-    }
-
-    function setOffsetToUTC (keepLocalTime) {
-        return this.utcOffset(0, keepLocalTime);
-    }
-
-    function setOffsetToLocal (keepLocalTime) {
-        if (this._isUTC) {
-            this.utcOffset(0, keepLocalTime);
-            this._isUTC = false;
-
-            if (keepLocalTime) {
-                this.subtract(getDateOffset(this), 'm');
-            }
-        }
-        return this;
-    }
-
-    function setOffsetToParsedOffset () {
-        if (this._tzm != null) {
-            this.utcOffset(this._tzm, false, true);
-        } else if (typeof this._i === 'string') {
-            var tZone = offsetFromString(matchOffset, this._i);
-            if (tZone != null) {
-                this.utcOffset(tZone);
-            }
-            else {
-                this.utcOffset(0, true);
-            }
-        }
-        return this;
-    }
-
-    function hasAlignedHourOffset (input) {
-        if (!this.isValid()) {
-            return false;
-        }
-        input = input ? createLocal(input).utcOffset() : 0;
-
-        return (this.utcOffset() - input) % 60 === 0;
-    }
-
-    function isDaylightSavingTime () {
-        return (
-            this.utcOffset() > this.clone().month(0).utcOffset() ||
-            this.utcOffset() > this.clone().month(5).utcOffset()
-        );
-    }
-
-    function isDaylightSavingTimeShifted () {
-        if (!isUndefined(this._isDSTShifted)) {
-            return this._isDSTShifted;
-        }
-
-        var c = {};
-
-        copyConfig(c, this);
-        c = prepareConfig(c);
-
-        if (c._a) {
-            var other = c._isUTC ? createUTC(c._a) : createLocal(c._a);
-            this._isDSTShifted = this.isValid() &&
-                compareArrays(c._a, other.toArray()) > 0;
-        } else {
-            this._isDSTShifted = false;
-        }
-
-        return this._isDSTShifted;
-    }
-
-    function isLocal () {
-        return this.isValid() ? !this._isUTC : false;
-    }
-
-    function isUtcOffset () {
-        return this.isValid() ? this._isUTC : false;
-    }
-
-    function isUtc () {
-        return this.isValid() ? this._isUTC && this._offset === 0 : false;
-    }
-
-    // ASP.NET json date format regex
-    var aspNetRegex = /^(\-|\+)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)(\.\d*)?)?$/;
-
-    // from http://docs.closure-library.googlecode.com/git/closure_goog_date_date.js.source.html
-    // somewhat more in line with 4.4.3.2 2004 spec, but allows decimal anywhere
-    // and further modified to allow for strings containing both week and day
-    var isoRegex = /^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)W)?(?:([-+]?[0-9,.]*)D)?(?:T(?:([-+]?[0-9,.]*)H)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)S)?)?$/;
-
-    function createDuration (input, key) {
-        var duration = input,
-            // matching against regexp is expensive, do it on demand
-            match = null,
-            sign,
-            ret,
-            diffRes;
-
-        if (isDuration(input)) {
-            duration = {
-                ms : input._milliseconds,
-                d  : input._days,
-                M  : input._months
-            };
-        } else if (isNumber(input)) {
-            duration = {};
-            if (key) {
-                duration[key] = input;
-            } else {
-                duration.milliseconds = input;
-            }
-        } else if (!!(match = aspNetRegex.exec(input))) {
-            sign = (match[1] === '-') ? -1 : 1;
-            duration = {
-                y  : 0,
-                d  : toInt(match[DATE])                         * sign,
-                h  : toInt(match[HOUR])                         * sign,
-                m  : toInt(match[MINUTE])                       * sign,
-                s  : toInt(match[SECOND])                       * sign,
-                ms : toInt(absRound(match[MILLISECOND] * 1000)) * sign // the millisecond decimal point is included in the match
-            };
-        } else if (!!(match = isoRegex.exec(input))) {
-            sign = (match[1] === '-') ? -1 : (match[1] === '+') ? 1 : 1;
-            duration = {
-                y : parseIso(match[2], sign),
-                M : parseIso(match[3], sign),
-                w : parseIso(match[4], sign),
-                d : parseIso(match[5], sign),
-                h : parseIso(match[6], sign),
-                m : parseIso(match[7], sign),
-                s : parseIso(match[8], sign)
-            };
-        } else if (duration == null) {// checks for null or undefined
-            duration = {};
-        } else if (typeof duration === 'object' && ('from' in duration || 'to' in duration)) {
-            diffRes = momentsDifference(createLocal(duration.from), createLocal(duration.to));
-
-            duration = {};
-            duration.ms = diffRes.milliseconds;
-            duration.M = diffRes.months;
-        }
-
-        ret = new Duration(duration);
-
-        if (isDuration(input) && hasOwnProp(input, '_locale')) {
-            ret._locale = input._locale;
-        }
-
-        return ret;
-    }
-
-    createDuration.fn = Duration.prototype;
-    createDuration.invalid = createInvalid$1;
-
-    function parseIso (inp, sign) {
-        // We'd normally use ~~inp for this, but unfortunately it also
-        // converts floats to ints.
-        // inp may be undefined, so careful calling replace on it.
-        var res = inp && parseFloat(inp.replace(',', '.'));
-        // apply sign while we're at it
-        return (isNaN(res) ? 0 : res) * sign;
-    }
-
-    function positiveMomentsDifference(base, other) {
-        var res = {milliseconds: 0, months: 0};
-
-        res.months = other.month() - base.month() +
-            (other.year() - base.year()) * 12;
-        if (base.clone().add(res.months, 'M').isAfter(other)) {
-            --res.months;
-        }
-
-        res.milliseconds = +other - +(base.clone().add(res.months, 'M'));
-
-        return res;
-    }
-
-    function momentsDifference(base, other) {
-        var res;
-        if (!(base.isValid() && other.isValid())) {
-            return {milliseconds: 0, months: 0};
-        }
-
-        other = cloneWithOffset(other, base);
-        if (base.isBefore(other)) {
-            res = positiveMomentsDifference(base, other);
-        } else {
-            res = positiveMomentsDifference(other, base);
-            res.milliseconds = -res.milliseconds;
-            res.months = -res.months;
-        }
-
-        return res;
-    }
-
-    // TODO: remove 'name' arg after deprecation is removed
-    function createAdder(direction, name) {
-        return function (val, period) {
-            var dur, tmp;
-            //invert the arguments, but complain about it
-            if (period !== null && !isNaN(+period)) {
-                deprecateSimple(name, 'moment().' + name  + '(period, number) is deprecated. Please use moment().' + name + '(number, period). ' +
-                'See http://momentjs.com/guides/#/warnings/add-inverted-param/ for more info.');
-                tmp = val; val = period; period = tmp;
-            }
-
-            val = typeof val === 'string' ? +val : val;
-            dur = createDuration(val, period);
-            addSubtract(this, dur, direction);
-            return this;
-        };
-    }
-
-    function addSubtract (mom, duration, isAdding, updateOffset) {
-        var milliseconds = duration._milliseconds,
-            days = absRound(duration._days),
-            months = absRound(duration._months);
-
-        if (!mom.isValid()) {
-            // No op
-            return;
-        }
-
-        updateOffset = updateOffset == null ? true : updateOffset;
-
-        if (months) {
-            setMonth(mom, get(mom, 'Month') + months * isAdding);
-        }
-        if (days) {
-            set$1(mom, 'Date', get(mom, 'Date') + days * isAdding);
-        }
-        if (milliseconds) {
-            mom._d.setTime(mom._d.valueOf() + milliseconds * isAdding);
-        }
-        if (updateOffset) {
-            hooks.updateOffset(mom, days || months);
-        }
-    }
-
-    var add      = createAdder(1, 'add');
-    var subtract = createAdder(-1, 'subtract');
-
-    function getCalendarFormat(myMoment, now) {
-        var diff = myMoment.diff(now, 'days', true);
-        return diff < -6 ? 'sameElse' :
-                diff < -1 ? 'lastWeek' :
-                diff < 0 ? 'lastDay' :
-                diff < 1 ? 'sameDay' :
-                diff < 2 ? 'nextDay' :
-                diff < 7 ? 'nextWeek' : 'sameElse';
-    }
-
-    function calendar$1 (time, formats) {
-        // We want to compare the start of today, vs this.
-        // Getting start-of-today depends on whether we're local/utc/offset or not.
-        var now = time || createLocal(),
-            sod = cloneWithOffset(now, this).startOf('day'),
-            format = hooks.calendarFormat(this, sod) || 'sameElse';
-
-        var output = formats && (isFunction(formats[format]) ? formats[format].call(this, now) : formats[format]);
-
-        return this.format(output || this.localeData().calendar(format, this, createLocal(now)));
-    }
-
-    function clone () {
-        return new Moment(this);
-    }
-
-    function isAfter (input, units) {
-        var localInput = isMoment(input) ? input : createLocal(input);
-        if (!(this.isValid() && localInput.isValid())) {
-            return false;
-        }
-        units = normalizeUnits(!isUndefined(units) ? units : 'millisecond');
-        if (units === 'millisecond') {
-            return this.valueOf() > localInput.valueOf();
-        } else {
-            return localInput.valueOf() < this.clone().startOf(units).valueOf();
-        }
-    }
-
-    function isBefore (input, units) {
-        var localInput = isMoment(input) ? input : createLocal(input);
-        if (!(this.isValid() && localInput.isValid())) {
-            return false;
-        }
-        units = normalizeUnits(!isUndefined(units) ? units : 'millisecond');
-        if (units === 'millisecond') {
-            return this.valueOf() < localInput.valueOf();
-        } else {
-            return this.clone().endOf(units).valueOf() < localInput.valueOf();
-        }
-    }
-
-    function isBetween (from, to, units, inclusivity) {
-        inclusivity = inclusivity || '()';
-        return (inclusivity[0] === '(' ? this.isAfter(from, units) : !this.isBefore(from, units)) &&
-            (inclusivity[1] === ')' ? this.isBefore(to, units) : !this.isAfter(to, units));
-    }
-
-    function isSame (input, units) {
-        var localInput = isMoment(input) ? input : createLocal(input),
-            inputMs;
-        if (!(this.isValid() && localInput.isValid())) {
-            return false;
-        }
-        units = normalizeUnits(units || 'millisecond');
-        if (units === 'millisecond') {
-            return this.valueOf() === localInput.valueOf();
-        } else {
-            inputMs = localInput.valueOf();
-            return this.clone().startOf(units).valueOf() <= inputMs && inputMs <= this.clone().endOf(units).valueOf();
-        }
-    }
-
-    function isSameOrAfter (input, units) {
-        return this.isSame(input, units) || this.isAfter(input,units);
-    }
-
-    function isSameOrBefore (input, units) {
-        return this.isSame(input, units) || this.isBefore(input,units);
-    }
-
-    function diff (input, units, asFloat) {
-        var that,
-            zoneDelta,
-            output;
-
-        if (!this.isValid()) {
-            return NaN;
-        }
-
-        that = cloneWithOffset(input, this);
-
-        if (!that.isValid()) {
-            return NaN;
-        }
-
-        zoneDelta = (that.utcOffset() - this.utcOffset()) * 6e4;
-
-        units = normalizeUnits(units);
-
-        switch (units) {
-            case 'year': output = monthDiff(this, that) / 12; break;
-            case 'month': output = monthDiff(this, that); break;
-            case 'quarter': output = monthDiff(this, that) / 3; break;
-            case 'second': output = (this - that) / 1e3; break; // 1000
-            case 'minute': output = (this - that) / 6e4; break; // 1000 * 60
-            case 'hour': output = (this - that) / 36e5; break; // 1000 * 60 * 60
-            case 'day': output = (this - that - zoneDelta) / 864e5; break; // 1000 * 60 * 60 * 24, negate dst
-            case 'week': output = (this - that - zoneDelta) / 6048e5; break; // 1000 * 60 * 60 * 24 * 7, negate dst
-            default: output = this - that;
-        }
-
-        return asFloat ? output : absFloor(output);
-    }
-
-    function monthDiff (a, b) {
-        // difference in months
-        var wholeMonthDiff = ((b.year() - a.year()) * 12) + (b.month() - a.month()),
-            // b is in (anchor - 1 month, anchor + 1 month)
-            anchor = a.clone().add(wholeMonthDiff, 'months'),
-            anchor2, adjust;
-
-        if (b - anchor < 0) {
-            anchor2 = a.clone().add(wholeMonthDiff - 1, 'months');
-            // linear across the month
-            adjust = (b - anchor) / (anchor - anchor2);
-        } else {
-            anchor2 = a.clone().add(wholeMonthDiff + 1, 'months');
-            // linear across the month
-            adjust = (b - anchor) / (anchor2 - anchor);
-        }
-
-        //check for negative zero, return zero if negative zero
-        return -(wholeMonthDiff + adjust) || 0;
-    }
-
-    hooks.defaultFormat = 'YYYY-MM-DDTHH:mm:ssZ';
-    hooks.defaultFormatUtc = 'YYYY-MM-DDTHH:mm:ss[Z]';
-
-    function toString () {
-        return this.clone().locale('en').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
-    }
-
-    function toISOString(keepOffset) {
-        if (!this.isValid()) {
-            return null;
-        }
-        var utc = keepOffset !== true;
-        var m = utc ? this.clone().utc() : this;
-        if (m.year() < 0 || m.year() > 9999) {
-            return formatMoment(m, utc ? 'YYYYYY-MM-DD[T]HH:mm:ss.SSS[Z]' : 'YYYYYY-MM-DD[T]HH:mm:ss.SSSZ');
-        }
-        if (isFunction(Date.prototype.toISOString)) {
-            // native implementation is ~50x faster, use it when we can
-            if (utc) {
-                return this.toDate().toISOString();
-            } else {
-                return new Date(this.valueOf() + this.utcOffset() * 60 * 1000).toISOString().replace('Z', formatMoment(m, 'Z'));
-            }
-        }
-        return formatMoment(m, utc ? 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]' : 'YYYY-MM-DD[T]HH:mm:ss.SSSZ');
-    }
-
-    /**
-     * Return a human readable representation of a moment that can
-     * also be evaluated to get a new moment which is the same
-     *
-     * @link https://nodejs.org/dist/latest/docs/api/util.html#util_custom_inspect_function_on_objects
-     */
-    function inspect () {
-        if (!this.isValid()) {
-            return 'moment.invalid(/* ' + this._i + ' */)';
-        }
-        var func = 'moment';
-        var zone = '';
-        if (!this.isLocal()) {
-            func = this.utcOffset() === 0 ? 'moment.utc' : 'moment.parseZone';
-            zone = 'Z';
-        }
-        var prefix = '[' + func + '("]';
-        var year = (0 <= this.year() && this.year() <= 9999) ? 'YYYY' : 'YYYYYY';
-        var datetime = '-MM-DD[T]HH:mm:ss.SSS';
-        var suffix = zone + '[")]';
-
-        return this.format(prefix + year + datetime + suffix);
-    }
-
-    function format (inputString) {
-        if (!inputString) {
-            inputString = this.isUtc() ? hooks.defaultFormatUtc : hooks.defaultFormat;
-        }
-        var output = formatMoment(this, inputString);
-        return this.localeData().postformat(output);
-    }
-
-    function from (time, withoutSuffix) {
-        if (this.isValid() &&
-                ((isMoment(time) && time.isValid()) ||
-                 createLocal(time).isValid())) {
-            return createDuration({to: this, from: time}).locale(this.locale()).humanize(!withoutSuffix);
-        } else {
-            return this.localeData().invalidDate();
-        }
-    }
-
-    function fromNow (withoutSuffix) {
-        return this.from(createLocal(), withoutSuffix);
-    }
-
-    function to (time, withoutSuffix) {
-        if (this.isValid() &&
-                ((isMoment(time) && time.isValid()) ||
-                 createLocal(time).isValid())) {
-            return createDuration({from: this, to: time}).locale(this.locale()).humanize(!withoutSuffix);
-        } else {
-            return this.localeData().invalidDate();
-        }
-    }
-
-    function toNow (withoutSuffix) {
-        return this.to(createLocal(), withoutSuffix);
-    }
-
-    // If passed a locale key, it will set the locale for this
-    // instance.  Otherwise, it will return the locale configuration
-    // variables for this instance.
-    function locale (key) {
-        var newLocaleData;
-
-        if (key === undefined) {
-            return this._locale._abbr;
-        } else {
-            newLocaleData = getLocale(key);
-            if (newLocaleData != null) {
-                this._locale = newLocaleData;
-            }
-            return this;
-        }
-    }
-
-    var lang = deprecate(
-        'moment().lang() is deprecated. Instead, use moment().localeData() to get the language configuration. Use moment().locale() to change languages.',
-        function (key) {
-            if (key === undefined) {
-                return this.localeData();
-            } else {
-                return this.locale(key);
-            }
-        }
-    );
-
-    function localeData () {
-        return this._locale;
-    }
-
-    function startOf (units) {
-        units = normalizeUnits(units);
-        // the following switch intentionally omits break keywords
-        // to utilize falling through the cases.
-        switch (units) {
-            case 'year':
-                this.month(0);
-                /* falls through */
-            case 'quarter':
-            case 'month':
-                this.date(1);
-                /* falls through */
-            case 'week':
-            case 'isoWeek':
-            case 'day':
-            case 'date':
-                this.hours(0);
-                /* falls through */
-            case 'hour':
-                this.minutes(0);
-                /* falls through */
-            case 'minute':
-                this.seconds(0);
-                /* falls through */
-            case 'second':
-                this.milliseconds(0);
-        }
-
-        // weeks are a special case
-        if (units === 'week') {
-            this.weekday(0);
-        }
-        if (units === 'isoWeek') {
-            this.isoWeekday(1);
-        }
-
-        // quarters are also special
-        if (units === 'quarter') {
-            this.month(Math.floor(this.month() / 3) * 3);
-        }
-
-        return this;
-    }
-
-    function endOf (units) {
-        units = normalizeUnits(units);
-        if (units === undefined || units === 'millisecond') {
-            return this;
-        }
-
-        // 'date' is an alias for 'day', so it should be considered as such.
-        if (units === 'date') {
-            units = 'day';
-        }
-
-        return this.startOf(units).add(1, (units === 'isoWeek' ? 'week' : units)).subtract(1, 'ms');
-    }
-
-    function valueOf () {
-        return this._d.valueOf() - ((this._offset || 0) * 60000);
-    }
-
-    function unix () {
-        return Math.floor(this.valueOf() / 1000);
-    }
-
-    function toDate () {
-        return new Date(this.valueOf());
-    }
-
-    function toArray () {
-        var m = this;
-        return [m.year(), m.month(), m.date(), m.hour(), m.minute(), m.second(), m.millisecond()];
-    }
-
-    function toObject () {
-        var m = this;
-        return {
-            years: m.year(),
-            months: m.month(),
-            date: m.date(),
-            hours: m.hours(),
-            minutes: m.minutes(),
-            seconds: m.seconds(),
-            milliseconds: m.milliseconds()
-        };
-    }
-
-    function toJSON () {
-        // new Date(NaN).toJSON() === null
-        return this.isValid() ? this.toISOString() : null;
-    }
-
-    function isValid$2 () {
-        return isValid(this);
-    }
-
-    function parsingFlags () {
-        return extend({}, getParsingFlags(this));
-    }
-
-    function invalidAt () {
-        return getParsingFlags(this).overflow;
-    }
-
-    function creationData() {
-        return {
-            input: this._i,
-            format: this._f,
-            locale: this._locale,
-            isUTC: this._isUTC,
-            strict: this._strict
-        };
-    }
-
-    // FORMATTING
-
-    addFormatToken(0, ['gg', 2], 0, function () {
-        return this.weekYear() % 100;
-    });
-
-    addFormatToken(0, ['GG', 2], 0, function () {
-        return this.isoWeekYear() % 100;
-    });
-
-    function addWeekYearFormatToken (token, getter) {
-        addFormatToken(0, [token, token.length], 0, getter);
-    }
-
-    addWeekYearFormatToken('gggg',     'weekYear');
-    addWeekYearFormatToken('ggggg',    'weekYear');
-    addWeekYearFormatToken('GGGG',  'isoWeekYear');
-    addWeekYearFormatToken('GGGGG', 'isoWeekYear');
-
-    // ALIASES
-
-    addUnitAlias('weekYear', 'gg');
-    addUnitAlias('isoWeekYear', 'GG');
-
-    // PRIORITY
-
-    addUnitPriority('weekYear', 1);
-    addUnitPriority('isoWeekYear', 1);
-
-
-    // PARSING
-
-    addRegexToken('G',      matchSigned);
-    addRegexToken('g',      matchSigned);
-    addRegexToken('GG',     match1to2, match2);
-    addRegexToken('gg',     match1to2, match2);
-    addRegexToken('GGGG',   match1to4, match4);
-    addRegexToken('gggg',   match1to4, match4);
-    addRegexToken('GGGGG',  match1to6, match6);
-    addRegexToken('ggggg',  match1to6, match6);
-
-    addWeekParseToken(['gggg', 'ggggg', 'GGGG', 'GGGGG'], function (input, week, config, token) {
-        week[token.substr(0, 2)] = toInt(input);
-    });
-
-    addWeekParseToken(['gg', 'GG'], function (input, week, config, token) {
-        week[token] = hooks.parseTwoDigitYear(input);
-    });
-
-    // MOMENTS
-
-    function getSetWeekYear (input) {
-        return getSetWeekYearHelper.call(this,
-                input,
-                this.week(),
-                this.weekday(),
-                this.localeData()._week.dow,
-                this.localeData()._week.doy);
-    }
-
-    function getSetISOWeekYear (input) {
-        return getSetWeekYearHelper.call(this,
-                input, this.isoWeek(), this.isoWeekday(), 1, 4);
-    }
-
-    function getISOWeeksInYear () {
-        return weeksInYear(this.year(), 1, 4);
-    }
-
-    function getWeeksInYear () {
-        var weekInfo = this.localeData()._week;
-        return weeksInYear(this.year(), weekInfo.dow, weekInfo.doy);
-    }
-
-    function getSetWeekYearHelper(input, week, weekday, dow, doy) {
-        var weeksTarget;
-        if (input == null) {
-            return weekOfYear(this, dow, doy).year;
-        } else {
-            weeksTarget = weeksInYear(input, dow, doy);
-            if (week > weeksTarget) {
-                week = weeksTarget;
-            }
-            return setWeekAll.call(this, input, week, weekday, dow, doy);
-        }
-    }
-
-    function setWeekAll(weekYear, week, weekday, dow, doy) {
-        var dayOfYearData = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy),
-            date = createUTCDate(dayOfYearData.year, 0, dayOfYearData.dayOfYear);
-
-        this.year(date.getUTCFullYear());
-        this.month(date.getUTCMonth());
-        this.date(date.getUTCDate());
-        return this;
-    }
-
-    // FORMATTING
-
-    addFormatToken('Q', 0, 'Qo', 'quarter');
-
-    // ALIASES
-
-    addUnitAlias('quarter', 'Q');
-
-    // PRIORITY
-
-    addUnitPriority('quarter', 7);
-
-    // PARSING
-
-    addRegexToken('Q', match1);
-    addParseToken('Q', function (input, array) {
-        array[MONTH] = (toInt(input) - 1) * 3;
-    });
-
-    // MOMENTS
-
-    function getSetQuarter (input) {
-        return input == null ? Math.ceil((this.month() + 1) / 3) : this.month((input - 1) * 3 + this.month() % 3);
-    }
-
-    // FORMATTING
-
-    addFormatToken('D', ['DD', 2], 'Do', 'date');
-
-    // ALIASES
-
-    addUnitAlias('date', 'D');
-
-    // PRIORITY
-    addUnitPriority('date', 9);
-
-    // PARSING
-
-    addRegexToken('D',  match1to2);
-    addRegexToken('DD', match1to2, match2);
-    addRegexToken('Do', function (isStrict, locale) {
-        // TODO: Remove "ordinalParse" fallback in next major release.
-        return isStrict ?
-          (locale._dayOfMonthOrdinalParse || locale._ordinalParse) :
-          locale._dayOfMonthOrdinalParseLenient;
-    });
-
-    addParseToken(['D', 'DD'], DATE);
-    addParseToken('Do', function (input, array) {
-        array[DATE] = toInt(input.match(match1to2)[0]);
-    });
-
-    // MOMENTS
-
-    var getSetDayOfMonth = makeGetSet('Date', true);
-
-    // FORMATTING
-
-    addFormatToken('DDD', ['DDDD', 3], 'DDDo', 'dayOfYear');
-
-    // ALIASES
-
-    addUnitAlias('dayOfYear', 'DDD');
-
-    // PRIORITY
-    addUnitPriority('dayOfYear', 4);
-
-    // PARSING
-
-    addRegexToken('DDD',  match1to3);
-    addRegexToken('DDDD', match3);
-    addParseToken(['DDD', 'DDDD'], function (input, array, config) {
-        config._dayOfYear = toInt(input);
-    });
-
-    // HELPERS
-
-    // MOMENTS
-
-    function getSetDayOfYear (input) {
-        var dayOfYear = Math.round((this.clone().startOf('day') - this.clone().startOf('year')) / 864e5) + 1;
-        return input == null ? dayOfYear : this.add((input - dayOfYear), 'd');
-    }
-
-    // FORMATTING
-
-    addFormatToken('m', ['mm', 2], 0, 'minute');
-
-    // ALIASES
-
-    addUnitAlias('minute', 'm');
-
-    // PRIORITY
-
-    addUnitPriority('minute', 14);
-
-    // PARSING
-
-    addRegexToken('m',  match1to2);
-    addRegexToken('mm', match1to2, match2);
-    addParseToken(['m', 'mm'], MINUTE);
-
-    // MOMENTS
-
-    var getSetMinute = makeGetSet('Minutes', false);
-
-    // FORMATTING
-
-    addFormatToken('s', ['ss', 2], 0, 'second');
-
-    // ALIASES
-
-    addUnitAlias('second', 's');
-
-    // PRIORITY
-
-    addUnitPriority('second', 15);
-
-    // PARSING
-
-    addRegexToken('s',  match1to2);
-    addRegexToken('ss', match1to2, match2);
-    addParseToken(['s', 'ss'], SECOND);
-
-    // MOMENTS
-
-    var getSetSecond = makeGetSet('Seconds', false);
-
-    // FORMATTING
-
-    addFormatToken('S', 0, 0, function () {
-        return ~~(this.millisecond() / 100);
-    });
-
-    addFormatToken(0, ['SS', 2], 0, function () {
-        return ~~(this.millisecond() / 10);
-    });
-
-    addFormatToken(0, ['SSS', 3], 0, 'millisecond');
-    addFormatToken(0, ['SSSS', 4], 0, function () {
-        return this.millisecond() * 10;
-    });
-    addFormatToken(0, ['SSSSS', 5], 0, function () {
-        return this.millisecond() * 100;
-    });
-    addFormatToken(0, ['SSSSSS', 6], 0, function () {
-        return this.millisecond() * 1000;
-    });
-    addFormatToken(0, ['SSSSSSS', 7], 0, function () {
-        return this.millisecond() * 10000;
-    });
-    addFormatToken(0, ['SSSSSSSS', 8], 0, function () {
-        return this.millisecond() * 100000;
-    });
-    addFormatToken(0, ['SSSSSSSSS', 9], 0, function () {
-        return this.millisecond() * 1000000;
-    });
-
-
-    // ALIASES
-
-    addUnitAlias('millisecond', 'ms');
-
-    // PRIORITY
-
-    addUnitPriority('millisecond', 16);
-
-    // PARSING
-
-    addRegexToken('S',    match1to3, match1);
-    addRegexToken('SS',   match1to3, match2);
-    addRegexToken('SSS',  match1to3, match3);
-
-    var token;
-    for (token = 'SSSS'; token.length <= 9; token += 'S') {
-        addRegexToken(token, matchUnsigned);
-    }
-
-    function parseMs(input, array) {
-        array[MILLISECOND] = toInt(('0.' + input) * 1000);
-    }
-
-    for (token = 'S'; token.length <= 9; token += 'S') {
-        addParseToken(token, parseMs);
-    }
-    // MOMENTS
-
-    var getSetMillisecond = makeGetSet('Milliseconds', false);
-
-    // FORMATTING
-
-    addFormatToken('z',  0, 0, 'zoneAbbr');
-    addFormatToken('zz', 0, 0, 'zoneName');
-
-    // MOMENTS
-
-    function getZoneAbbr () {
-        return this._isUTC ? 'UTC' : '';
-    }
-
-    function getZoneName () {
-        return this._isUTC ? 'Coordinated Universal Time' : '';
-    }
-
-    var proto = Moment.prototype;
-
-    proto.add               = add;
-    proto.calendar          = calendar$1;
-    proto.clone             = clone;
-    proto.diff              = diff;
-    proto.endOf             = endOf;
-    proto.format            = format;
-    proto.from              = from;
-    proto.fromNow           = fromNow;
-    proto.to                = to;
-    proto.toNow             = toNow;
-    proto.get               = stringGet;
-    proto.invalidAt         = invalidAt;
-    proto.isAfter           = isAfter;
-    proto.isBefore          = isBefore;
-    proto.isBetween         = isBetween;
-    proto.isSame            = isSame;
-    proto.isSameOrAfter     = isSameOrAfter;
-    proto.isSameOrBefore    = isSameOrBefore;
-    proto.isValid           = isValid$2;
-    proto.lang              = lang;
-    proto.locale            = locale;
-    proto.localeData        = localeData;
-    proto.max               = prototypeMax;
-    proto.min               = prototypeMin;
-    proto.parsingFlags      = parsingFlags;
-    proto.set               = stringSet;
-    proto.startOf           = startOf;
-    proto.subtract          = subtract;
-    proto.toArray           = toArray;
-    proto.toObject          = toObject;
-    proto.toDate            = toDate;
-    proto.toISOString       = toISOString;
-    proto.inspect           = inspect;
-    proto.toJSON            = toJSON;
-    proto.toString          = toString;
-    proto.unix              = unix;
-    proto.valueOf           = valueOf;
-    proto.creationData      = creationData;
-    proto.year       = getSetYear;
-    proto.isLeapYear = getIsLeapYear;
-    proto.weekYear    = getSetWeekYear;
-    proto.isoWeekYear = getSetISOWeekYear;
-    proto.quarter = proto.quarters = getSetQuarter;
-    proto.month       = getSetMonth;
-    proto.daysInMonth = getDaysInMonth;
-    proto.week           = proto.weeks        = getSetWeek;
-    proto.isoWeek        = proto.isoWeeks     = getSetISOWeek;
-    proto.weeksInYear    = getWeeksInYear;
-    proto.isoWeeksInYear = getISOWeeksInYear;
-    proto.date       = getSetDayOfMonth;
-    proto.day        = proto.days             = getSetDayOfWeek;
-    proto.weekday    = getSetLocaleDayOfWeek;
-    proto.isoWeekday = getSetISODayOfWeek;
-    proto.dayOfYear  = getSetDayOfYear;
-    proto.hour = proto.hours = getSetHour;
-    proto.minute = proto.minutes = getSetMinute;
-    proto.second = proto.seconds = getSetSecond;
-    proto.millisecond = proto.milliseconds = getSetMillisecond;
-    proto.utcOffset            = getSetOffset;
-    proto.utc                  = setOffsetToUTC;
-    proto.local                = setOffsetToLocal;
-    proto.parseZone            = setOffsetToParsedOffset;
-    proto.hasAlignedHourOffset = hasAlignedHourOffset;
-    proto.isDST                = isDaylightSavingTime;
-    proto.isLocal              = isLocal;
-    proto.isUtcOffset          = isUtcOffset;
-    proto.isUtc                = isUtc;
-    proto.isUTC                = isUtc;
-    proto.zoneAbbr = getZoneAbbr;
-    proto.zoneName = getZoneName;
-    proto.dates  = deprecate('dates accessor is deprecated. Use date instead.', getSetDayOfMonth);
-    proto.months = deprecate('months accessor is deprecated. Use month instead', getSetMonth);
-    proto.years  = deprecate('years accessor is deprecated. Use year instead', getSetYear);
-    proto.zone   = deprecate('moment().zone is deprecated, use moment().utcOffset instead. http://momentjs.com/guides/#/warnings/zone/', getSetZone);
-    proto.isDSTShifted = deprecate('isDSTShifted is deprecated. See http://momentjs.com/guides/#/warnings/dst-shifted/ for more information', isDaylightSavingTimeShifted);
-
-    function createUnix (input) {
-        return createLocal(input * 1000);
-    }
-
-    function createInZone () {
-        return createLocal.apply(null, arguments).parseZone();
-    }
-
-    function preParsePostFormat (string) {
-        return string;
-    }
-
-    var proto$1 = Locale.prototype;
-
-    proto$1.calendar        = calendar;
-    proto$1.longDateFormat  = longDateFormat;
-    proto$1.invalidDate     = invalidDate;
-    proto$1.ordinal         = ordinal;
-    proto$1.preparse        = preParsePostFormat;
-    proto$1.postformat      = preParsePostFormat;
-    proto$1.relativeTime    = relativeTime;
-    proto$1.pastFuture      = pastFuture;
-    proto$1.set             = set;
-
-    proto$1.months            =        localeMonths;
-    proto$1.monthsShort       =        localeMonthsShort;
-    proto$1.monthsParse       =        localeMonthsParse;
-    proto$1.monthsRegex       = monthsRegex;
-    proto$1.monthsShortRegex  = monthsShortRegex;
-    proto$1.week = localeWeek;
-    proto$1.firstDayOfYear = localeFirstDayOfYear;
-    proto$1.firstDayOfWeek = localeFirstDayOfWeek;
-
-    proto$1.weekdays       =        localeWeekdays;
-    proto$1.weekdaysMin    =        localeWeekdaysMin;
-    proto$1.weekdaysShort  =        localeWeekdaysShort;
-    proto$1.weekdaysParse  =        localeWeekdaysParse;
-
-    proto$1.weekdaysRegex       =        weekdaysRegex;
-    proto$1.weekdaysShortRegex  =        weekdaysShortRegex;
-    proto$1.weekdaysMinRegex    =        weekdaysMinRegex;
-
-    proto$1.isPM = localeIsPM;
-    proto$1.meridiem = localeMeridiem;
-
-    function get$1 (format, index, field, setter) {
-        var locale = getLocale();
-        var utc = createUTC().set(setter, index);
-        return locale[field](utc, format);
-    }
-
-    function listMonthsImpl (format, index, field) {
-        if (isNumber(format)) {
-            index = format;
-            format = undefined;
-        }
-
-        format = format || '';
-
-        if (index != null) {
-            return get$1(format, index, field, 'month');
-        }
-
-        var i;
-        var out = [];
-        for (i = 0; i < 12; i++) {
-            out[i] = get$1(format, i, field, 'month');
-        }
-        return out;
-    }
-
-    // ()
-    // (5)
-    // (fmt, 5)
-    // (fmt)
-    // (true)
-    // (true, 5)
-    // (true, fmt, 5)
-    // (true, fmt)
-    function listWeekdaysImpl (localeSorted, format, index, field) {
-        if (typeof localeSorted === 'boolean') {
-            if (isNumber(format)) {
-                index = format;
-                format = undefined;
-            }
-
-            format = format || '';
-        } else {
-            format = localeSorted;
-            index = format;
-            localeSorted = false;
-
-            if (isNumber(format)) {
-                index = format;
-                format = undefined;
-            }
-
-            format = format || '';
-        }
-
-        var locale = getLocale(),
-            shift = localeSorted ? locale._week.dow : 0;
-
-        if (index != null) {
-            return get$1(format, (index + shift) % 7, field, 'day');
-        }
-
-        var i;
-        var out = [];
-        for (i = 0; i < 7; i++) {
-            out[i] = get$1(format, (i + shift) % 7, field, 'day');
-        }
-        return out;
-    }
-
-    function listMonths (format, index) {
-        return listMonthsImpl(format, index, 'months');
-    }
-
-    function listMonthsShort (format, index) {
-        return listMonthsImpl(format, index, 'monthsShort');
-    }
-
-    function listWeekdays (localeSorted, format, index) {
-        return listWeekdaysImpl(localeSorted, format, index, 'weekdays');
-    }
-
-    function listWeekdaysShort (localeSorted, format, index) {
-        return listWeekdaysImpl(localeSorted, format, index, 'weekdaysShort');
-    }
-
-    function listWeekdaysMin (localeSorted, format, index) {
-        return listWeekdaysImpl(localeSorted, format, index, 'weekdaysMin');
-    }
-
-    getSetGlobalLocale('en', {
-        dayOfMonthOrdinalParse: /\d{1,2}(th|st|nd|rd)/,
-        ordinal : function (number) {
-            var b = number % 10,
-                output = (toInt(number % 100 / 10) === 1) ? 'th' :
-                (b === 1) ? 'st' :
-                (b === 2) ? 'nd' :
-                (b === 3) ? 'rd' : 'th';
-            return number + output;
-        }
-    });
-
-    // Side effect imports
-
-    hooks.lang = deprecate('moment.lang is deprecated. Use moment.locale instead.', getSetGlobalLocale);
-    hooks.langData = deprecate('moment.langData is deprecated. Use moment.localeData instead.', getLocale);
-
-    var mathAbs = Math.abs;
-
-    function abs () {
-        var data           = this._data;
-
-        this._milliseconds = mathAbs(this._milliseconds);
-        this._days         = mathAbs(this._days);
-        this._months       = mathAbs(this._months);
-
-        data.milliseconds  = mathAbs(data.milliseconds);
-        data.seconds       = mathAbs(data.seconds);
-        data.minutes       = mathAbs(data.minutes);
-        data.hours         = mathAbs(data.hours);
-        data.months        = mathAbs(data.months);
-        data.years         = mathAbs(data.years);
-
-        return this;
-    }
-
-    function addSubtract$1 (duration, input, value, direction) {
-        var other = createDuration(input, value);
-
-        duration._milliseconds += direction * other._milliseconds;
-        duration._days         += direction * other._days;
-        duration._months       += direction * other._months;
-
-        return duration._bubble();
-    }
-
-    // supports only 2.0-style add(1, 's') or add(duration)
-    function add$1 (input, value) {
-        return addSubtract$1(this, input, value, 1);
-    }
-
-    // supports only 2.0-style subtract(1, 's') or subtract(duration)
-    function subtract$1 (input, value) {
-        return addSubtract$1(this, input, value, -1);
-    }
-
-    function absCeil (number) {
-        if (number < 0) {
-            return Math.floor(number);
-        } else {
-            return Math.ceil(number);
-        }
-    }
-
-    function bubble () {
-        var milliseconds = this._milliseconds;
-        var days         = this._days;
-        var months       = this._months;
-        var data         = this._data;
-        var seconds, minutes, hours, years, monthsFromDays;
-
-        // if we have a mix of positive and negative values, bubble down first
-        // check: https://github.com/moment/moment/issues/2166
-        if (!((milliseconds >= 0 && days >= 0 && months >= 0) ||
-                (milliseconds <= 0 && days <= 0 && months <= 0))) {
-            milliseconds += absCeil(monthsToDays(months) + days) * 864e5;
-            days = 0;
-            months = 0;
-        }
-
-        // The following code bubbles up values, see the tests for
-        // examples of what that means.
-        data.milliseconds = milliseconds % 1000;
-
-        seconds           = absFloor(milliseconds / 1000);
-        data.seconds      = seconds % 60;
-
-        minutes           = absFloor(seconds / 60);
-        data.minutes      = minutes % 60;
-
-        hours             = absFloor(minutes / 60);
-        data.hours        = hours % 24;
-
-        days += absFloor(hours / 24);
-
-        // convert days to months
-        monthsFromDays = absFloor(daysToMonths(days));
-        months += monthsFromDays;
-        days -= absCeil(monthsToDays(monthsFromDays));
-
-        // 12 months -> 1 year
-        years = absFloor(months / 12);
-        months %= 12;
-
-        data.days   = days;
-        data.months = months;
-        data.years  = years;
-
-        return this;
-    }
-
-    function daysToMonths (days) {
-        // 400 years have 146097 days (taking into account leap year rules)
-        // 400 years have 12 months === 4800
-        return days * 4800 / 146097;
-    }
-
-    function monthsToDays (months) {
-        // the reverse of daysToMonths
-        return months * 146097 / 4800;
-    }
-
-    function as (units) {
-        if (!this.isValid()) {
-            return NaN;
-        }
-        var days;
-        var months;
-        var milliseconds = this._milliseconds;
-
-        units = normalizeUnits(units);
-
-        if (units === 'month' || units === 'year') {
-            days   = this._days   + milliseconds / 864e5;
-            months = this._months + daysToMonths(days);
-            return units === 'month' ? months : months / 12;
-        } else {
-            // handle milliseconds separately because of floating point math errors (issue #1867)
-            days = this._days + Math.round(monthsToDays(this._months));
-            switch (units) {
-                case 'week'   : return days / 7     + milliseconds / 6048e5;
-                case 'day'    : return days         + milliseconds / 864e5;
-                case 'hour'   : return days * 24    + milliseconds / 36e5;
-                case 'minute' : return days * 1440  + milliseconds / 6e4;
-                case 'second' : return days * 86400 + milliseconds / 1000;
-                // Math.floor prevents floating point math errors here
-                case 'millisecond': return Math.floor(days * 864e5) + milliseconds;
-                default: throw new Error('Unknown unit ' + units);
-            }
-        }
-    }
-
-    // TODO: Use this.as('ms')?
-    function valueOf$1 () {
-        if (!this.isValid()) {
-            return NaN;
-        }
-        return (
-            this._milliseconds +
-            this._days * 864e5 +
-            (this._months % 12) * 2592e6 +
-            toInt(this._months / 12) * 31536e6
-        );
-    }
-
-    function makeAs (alias) {
-        return function () {
-            return this.as(alias);
-        };
-    }
-
-    var asMilliseconds = makeAs('ms');
-    var asSeconds      = makeAs('s');
-    var asMinutes      = makeAs('m');
-    var asHours        = makeAs('h');
-    var asDays         = makeAs('d');
-    var asWeeks        = makeAs('w');
-    var asMonths       = makeAs('M');
-    var asYears        = makeAs('y');
-
-    function clone$1 () {
-        return createDuration(this);
-    }
-
-    function get$2 (units) {
-        units = normalizeUnits(units);
-        return this.isValid() ? this[units + 's']() : NaN;
-    }
-
-    function makeGetter(name) {
-        return function () {
-            return this.isValid() ? this._data[name] : NaN;
-        };
-    }
-
-    var milliseconds = makeGetter('milliseconds');
-    var seconds      = makeGetter('seconds');
-    var minutes      = makeGetter('minutes');
-    var hours        = makeGetter('hours');
-    var days         = makeGetter('days');
-    var months       = makeGetter('months');
-    var years        = makeGetter('years');
-
-    function weeks () {
-        return absFloor(this.days() / 7);
-    }
-
-    var round = Math.round;
-    var thresholds = {
-        ss: 44,         // a few seconds to seconds
-        s : 45,         // seconds to minute
-        m : 45,         // minutes to hour
-        h : 22,         // hours to day
-        d : 26,         // days to month
-        M : 11          // months to year
-    };
-
-    // helper function for moment.fn.from, moment.fn.fromNow, and moment.duration.fn.humanize
-    function substituteTimeAgo(string, number, withoutSuffix, isFuture, locale) {
-        return locale.relativeTime(number || 1, !!withoutSuffix, string, isFuture);
-    }
-
-    function relativeTime$1 (posNegDuration, withoutSuffix, locale) {
-        var duration = createDuration(posNegDuration).abs();
-        var seconds  = round(duration.as('s'));
-        var minutes  = round(duration.as('m'));
-        var hours    = round(duration.as('h'));
-        var days     = round(duration.as('d'));
-        var months   = round(duration.as('M'));
-        var years    = round(duration.as('y'));
-
-        var a = seconds <= thresholds.ss && ['s', seconds]  ||
-                seconds < thresholds.s   && ['ss', seconds] ||
-                minutes <= 1             && ['m']           ||
-                minutes < thresholds.m   && ['mm', minutes] ||
-                hours   <= 1             && ['h']           ||
-                hours   < thresholds.h   && ['hh', hours]   ||
-                days    <= 1             && ['d']           ||
-                days    < thresholds.d   && ['dd', days]    ||
-                months  <= 1             && ['M']           ||
-                months  < thresholds.M   && ['MM', months]  ||
-                years   <= 1             && ['y']           || ['yy', years];
-
-        a[2] = withoutSuffix;
-        a[3] = +posNegDuration > 0;
-        a[4] = locale;
-        return substituteTimeAgo.apply(null, a);
-    }
-
-    // This function allows you to set the rounding function for relative time strings
-    function getSetRelativeTimeRounding (roundingFunction) {
-        if (roundingFunction === undefined) {
-            return round;
-        }
-        if (typeof(roundingFunction) === 'function') {
-            round = roundingFunction;
-            return true;
-        }
-        return false;
-    }
-
-    // This function allows you to set a threshold for relative time strings
-    function getSetRelativeTimeThreshold (threshold, limit) {
-        if (thresholds[threshold] === undefined) {
-            return false;
-        }
-        if (limit === undefined) {
-            return thresholds[threshold];
-        }
-        thresholds[threshold] = limit;
-        if (threshold === 's') {
-            thresholds.ss = limit - 1;
-        }
-        return true;
-    }
-
-    function humanize (withSuffix) {
-        if (!this.isValid()) {
-            return this.localeData().invalidDate();
-        }
-
-        var locale = this.localeData();
-        var output = relativeTime$1(this, !withSuffix, locale);
-
-        if (withSuffix) {
-            output = locale.pastFuture(+this, output);
-        }
-
-        return locale.postformat(output);
-    }
-
-    var abs$1 = Math.abs;
-
-    function sign(x) {
-        return ((x > 0) - (x < 0)) || +x;
-    }
-
-    function toISOString$1() {
-        // for ISO strings we do not use the normal bubbling rules:
-        //  * milliseconds bubble up until they become hours
-        //  * days do not bubble at all
-        //  * months bubble up until they become years
-        // This is because there is no context-free conversion between hours and days
-        // (think of clock changes)
-        // and also not between days and months (28-31 days per month)
-        if (!this.isValid()) {
-            return this.localeData().invalidDate();
-        }
-
-        var seconds = abs$1(this._milliseconds) / 1000;
-        var days         = abs$1(this._days);
-        var months       = abs$1(this._months);
-        var minutes, hours, years;
-
-        // 3600 seconds -> 60 minutes -> 1 hour
-        minutes           = absFloor(seconds / 60);
-        hours             = absFloor(minutes / 60);
-        seconds %= 60;
-        minutes %= 60;
-
-        // 12 months -> 1 year
-        years  = absFloor(months / 12);
-        months %= 12;
-
-
-        // inspired by https://github.com/dordille/moment-isoduration/blob/master/moment.isoduration.js
-        var Y = years;
-        var M = months;
-        var D = days;
-        var h = hours;
-        var m = minutes;
-        var s = seconds ? seconds.toFixed(3).replace(/\.?0+$/, '') : '';
-        var total = this.asSeconds();
-
-        if (!total) {
-            // this is the same as C#'s (Noda) and python (isodate)...
-            // but not other JS (goog.date)
-            return 'P0D';
-        }
-
-        var totalSign = total < 0 ? '-' : '';
-        var ymSign = sign(this._months) !== sign(total) ? '-' : '';
-        var daysSign = sign(this._days) !== sign(total) ? '-' : '';
-        var hmsSign = sign(this._milliseconds) !== sign(total) ? '-' : '';
-
-        return totalSign + 'P' +
-            (Y ? ymSign + Y + 'Y' : '') +
-            (M ? ymSign + M + 'M' : '') +
-            (D ? daysSign + D + 'D' : '') +
-            ((h || m || s) ? 'T' : '') +
-            (h ? hmsSign + h + 'H' : '') +
-            (m ? hmsSign + m + 'M' : '') +
-            (s ? hmsSign + s + 'S' : '');
-    }
-
-    var proto$2 = Duration.prototype;
-
-    proto$2.isValid        = isValid$1;
-    proto$2.abs            = abs;
-    proto$2.add            = add$1;
-    proto$2.subtract       = subtract$1;
-    proto$2.as             = as;
-    proto$2.asMilliseconds = asMilliseconds;
-    proto$2.asSeconds      = asSeconds;
-    proto$2.asMinutes      = asMinutes;
-    proto$2.asHours        = asHours;
-    proto$2.asDays         = asDays;
-    proto$2.asWeeks        = asWeeks;
-    proto$2.asMonths       = asMonths;
-    proto$2.asYears        = asYears;
-    proto$2.valueOf        = valueOf$1;
-    proto$2._bubble        = bubble;
-    proto$2.clone          = clone$1;
-    proto$2.get            = get$2;
-    proto$2.milliseconds   = milliseconds;
-    proto$2.seconds        = seconds;
-    proto$2.minutes        = minutes;
-    proto$2.hours          = hours;
-    proto$2.days           = days;
-    proto$2.weeks          = weeks;
-    proto$2.months         = months;
-    proto$2.years          = years;
-    proto$2.humanize       = humanize;
-    proto$2.toISOString    = toISOString$1;
-    proto$2.toString       = toISOString$1;
-    proto$2.toJSON         = toISOString$1;
-    proto$2.locale         = locale;
-    proto$2.localeData     = localeData;
-
-    proto$2.toIsoString = deprecate('toIsoString() is deprecated. Please use toISOString() instead (notice the capitals)', toISOString$1);
-    proto$2.lang = lang;
-
-    // Side effect imports
-
-    // FORMATTING
-
-    addFormatToken('X', 0, 0, 'unix');
-    addFormatToken('x', 0, 0, 'valueOf');
-
-    // PARSING
-
-    addRegexToken('x', matchSigned);
-    addRegexToken('X', matchTimestamp);
-    addParseToken('X', function (input, array, config) {
-        config._d = new Date(parseFloat(input, 10) * 1000);
-    });
-    addParseToken('x', function (input, array, config) {
-        config._d = new Date(toInt(input));
-    });
-
-    // Side effect imports
-
-
-    hooks.version = '2.22.1';
-
-    setHookCallback(createLocal);
-
-    hooks.fn                    = proto;
-    hooks.min                   = min;
-    hooks.max                   = max;
-    hooks.now                   = now;
-    hooks.utc                   = createUTC;
-    hooks.unix                  = createUnix;
-    hooks.months                = listMonths;
-    hooks.isDate                = isDate;
-    hooks.locale                = getSetGlobalLocale;
-    hooks.invalid               = createInvalid;
-    hooks.duration              = createDuration;
-    hooks.isMoment              = isMoment;
-    hooks.weekdays              = listWeekdays;
-    hooks.parseZone             = createInZone;
-    hooks.localeData            = getLocale;
-    hooks.isDuration            = isDuration;
-    hooks.monthsShort           = listMonthsShort;
-    hooks.weekdaysMin           = listWeekdaysMin;
-    hooks.defineLocale          = defineLocale;
-    hooks.updateLocale          = updateLocale;
-    hooks.locales               = listLocales;
-    hooks.weekdaysShort         = listWeekdaysShort;
-    hooks.normalizeUnits        = normalizeUnits;
-    hooks.relativeTimeRounding  = getSetRelativeTimeRounding;
-    hooks.relativeTimeThreshold = getSetRelativeTimeThreshold;
-    hooks.calendarFormat        = getCalendarFormat;
-    hooks.prototype             = proto;
-
-    // currently HTML5 input type only supports 24-hour formats
-    hooks.HTML5_FMT = {
-        DATETIME_LOCAL: 'YYYY-MM-DDTHH:mm',             // <input type="datetime-local" />
-        DATETIME_LOCAL_SECONDS: 'YYYY-MM-DDTHH:mm:ss',  // <input type="datetime-local" step="1" />
-        DATETIME_LOCAL_MS: 'YYYY-MM-DDTHH:mm:ss.SSS',   // <input type="datetime-local" step="0.001" />
-        DATE: 'YYYY-MM-DD',                             // <input type="date" />
-        TIME: 'HH:mm',                                  // <input type="time" />
-        TIME_SECONDS: 'HH:mm:ss',                       // <input type="time" step="1" />
-        TIME_MS: 'HH:mm:ss.SSS',                        // <input type="time" step="0.001" />
-        WEEK: 'YYYY-[W]WW',                             // <input type="week" />
-        MONTH: 'YYYY-MM'                                // <input type="month" />
-    };
-
-    return hooks;
-
-})));
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)(module)))
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["moment"] = __webpack_require__(194);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(159);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(168);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4756,34 +277,33 @@ function submit(selector, callback) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports) {
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
 
-var g;
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
+	if ( true ) {
 
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
 
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
+		// Browser globals
+		factory( jQuery );
+	}
+} ( function( $ ) {
 
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
+$.ui = $.ui || {};
 
-module.exports = g;
+return $.ui.version = "1.12.1";
+
+} ) );
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4802,12 +322,12 @@ module.exports = api;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stimulus_core__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stimulus_core__ = __webpack_require__(173);
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Action", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["a"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ActionDescriptor", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["b"]; });
 /* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Application", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["c"]; });
@@ -4818,14 +338,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-var customEvent = __webpack_require__(198);
-var eventmap = __webpack_require__(199);
+var customEvent = __webpack_require__(208);
+var eventmap = __webpack_require__(209);
 var doc = global.document;
 var addEvent = addEventEasy;
 var removeEvent = removeEventEasy;
@@ -4924,10 +444,10 @@ function find (el, type, fn) {
   }
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -4944,7 +464,7 @@ function find (el, type, fn) {
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.10';
+  var VERSION = '4.17.5';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -5368,14 +888,6 @@ function find (el, type, fn) {
   /** Used to access faster Node.js helpers. */
   var nodeUtil = (function() {
     try {
-      // Use `util.types` for Node.js 10+.
-      var types = freeModule && freeModule.require && freeModule.require('util').types;
-
-      if (types) {
-        return types;
-      }
-
-      // Legacy `process.binding('util')` for Node.js < 10.
       return freeProcess && freeProcess.binding && freeProcess.binding('util');
     } catch (e) {}
   }());
@@ -22037,10 +17549,10 @@ function find (el, type, fn) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(14)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(16)(module)))
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22170,7 +17682,7 @@ var ElementObserver = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZWxlbWVudF9vYnNlcnZlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL0BzdGltdWx1cy9tdXRhdGlvbi1vYnNlcnZlcnMvc3JjL2VsZW1lbnRfb2JzZXJ2ZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBU0E7SUFRRSx5QkFBWSxPQUFPLEVBQUUsUUFBUTtRQUE3QixpQkFPQztRQU5DLElBQUksQ0FBQyxPQUFPLEdBQUcsT0FBTyxDQUFBO1FBQ3RCLElBQUksQ0FBQyxPQUFPLEdBQUcsS0FBSyxDQUFBO1FBQ3BCLElBQUksQ0FBQyxRQUFRLEdBQUcsUUFBUSxDQUFBO1FBRXhCLElBQUksQ0FBQyxRQUFRLEdBQUcsSUFBSSxHQUFHLENBQUE7UUFDdkIsSUFBSSxDQUFDLGdCQUFnQixHQUFHLElBQUksZ0JBQWdCLENBQUMsVUFBQyxTQUFTLElBQUssT0FBQSxLQUFJLENBQUMsZ0JBQWdCLENBQUMsU0FBUyxDQUFDLEVBQWhDLENBQWdDLENBQUMsQ0FBQTtJQUMvRixDQUFDO0lBRUQsK0JBQUssR0FBTDtRQUNFLEVBQUUsQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUM7WUFDbEIsSUFBSSxDQUFDLGdCQUFnQixDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQUMsT0FBTyxFQUFFLEVBQUUsVUFBVSxFQUFFLElBQUksRUFBRSxTQUFTLEVBQUUsSUFBSSxFQUFFLE9BQU8sRUFBRSxJQUFJLEVBQUUsQ0FBQyxDQUFBO1lBQ2pHLElBQUksQ0FBQyxPQUFPLEdBQUcsSUFBSSxDQUFBO1lBQ25CLElBQUksQ0FBQyxPQUFPLEVBQUUsQ0FBQTtRQUNoQixDQUFDO0lBQ0gsQ0FBQztJQUVELDhCQUFJLEdBQUo7UUFDRSxFQUFFLENBQUMsQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQztZQUNqQixJQUFJLENBQUMsZ0JBQWdCLENBQUMsV0FBVyxFQUFFLENBQUE7WUFDbkMsSUFBSSxDQUFDLGdCQUFnQixDQUFDLFVBQVUsRUFBRSxDQUFBO1lBQ2xDLElBQUksQ0FBQyxPQUFPLEdBQUcsS0FBSyxDQUFBO1FBQ3RCLENBQUM7SUFDSCxDQUFDO0lBRUQsaUNBQU8sR0FBUDtRQUNFLEVBQUUsQ0FBQyxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDO1lBQ2pCLElBQU0sT0FBTyxHQUFHLElBQUksR0FBRyxDQUFDLElBQUksQ0FBQyxtQkFBbUIsRUFBRSxDQUFDLENBQUE7WUFFbkQsR0FBRyxDQUFDLENBQWtCLFVBQXlCLEVBQXpCLEtBQUEsS0FBSyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLEVBQXpCLGNBQXlCLEVBQXpCLElBQXlCO2dCQUExQyxJQUFNLE9BQU8sU0FBQTtnQkFDaEIsRUFBRSxDQUFDLENBQUMsQ0FBQyxPQUFPLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUMsQ0FBQztvQkFDMUIsSUFBSSxDQUFDLGFBQWEsQ0FBQyxPQUFPLENBQUMsQ0FBQTtnQkFDN0IsQ0FBQzthQUNGO1lBRUQsR0FBRyxDQUFDLENBQWtCLFVBQW1CLEVBQW5CLEtBQUEsS0FBSyxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsRUFBbkIsY0FBbUIsRUFBbkIsSUFBbUI7Z0JBQXBDLElBQU0sT0FBTyxTQUFBO2dCQUNoQixJQUFJLENBQUMsVUFBVSxDQUFDLE9BQU8sQ0FBQyxDQUFBO2FBQ3pCO1FBQ0gsQ0FBQztJQUNILENBQUM7SUFFRCw2QkFBNkI7SUFFckIsMENBQWdCLEdBQXhCLFVBQXlCLFNBQTJCO1FBQ2xELEdBQUcsQ0FBQyxDQUFtQixVQUFTLEVBQVQsdUJBQVMsRUFBVCx1QkFBUyxFQUFULElBQVM7WUFBM0IsSUFBTSxRQUFRLGtCQUFBO1lBQ2pCLElBQUksQ0FBQyxlQUFlLENBQUMsUUFBUSxDQUFDLENBQUE7U0FDL0I7SUFDSCxDQUFDO0lBRU8seUNBQWUsR0FBdkIsVUFBd0IsUUFBd0I7UUFDOUMsRUFBRSxDQUFDLENBQUMsUUFBUSxDQUFDLElBQUksSUFBSSxZQUFZLENBQUMsQ0FBQyxDQUFDO1lBQ2xDLElBQUksQ0FBQyxzQkFBc0IsQ0FBQyxRQUFRLENBQUMsTUFBTSxFQUFFLFFBQVEsQ0FBQyxhQUFjLENBQUMsQ0FBQTtRQUN2RSxDQUFDO1FBQUMsSUFBSSxDQUFDLEVBQUUsQ0FBQyxDQUFDLFFBQVEsQ0FBQyxJQUFJLElBQUksV0FBVyxDQUFDLENBQUMsQ0FBQztZQUN4QyxJQUFJLENBQUMsbUJBQW1CLENBQUMsUUFBUSxDQUFDLFlBQVksQ0FBQyxDQUFBO1lBQy9DLElBQUksQ0FBQyxpQkFBaUIsQ0FBQyxRQUFRLENBQUMsVUFBVSxDQUFDLENBQUE7UUFDN0MsQ0FBQztJQUNILENBQUM7SUFFTyxnREFBc0IsR0FBOUIsVUFBK0IsSUFBVSxFQUFFLGFBQXFCO1FBQzlELElBQU0sT0FBTyxHQUFHLElBQWUsQ0FBQTtRQUMvQixFQUFFLENBQUMsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLEdBQUcsQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFDL0IsRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyx1QkFBdUIsSUFBSSxJQUFJLENBQUMsWUFBWSxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUMsQ0FBQztnQkFDeEUsSUFBSSxDQUFDLFFBQVEsQ0FBQyx1QkFBdUIsQ0FBQyxPQUFPLEVBQUUsYUFBYSxDQUFDLENBQUE7WUFDL0QsQ0FBQztZQUFDLElBQUksQ0FBQyxDQUFDO2dCQUNOLElBQUksQ0FBQyxhQUFhLENBQUMsT0FBTyxDQUFDLENBQUE7WUFDN0IsQ0FBQztRQUNILENBQUM7UUFBQyxJQUFJLENBQUMsRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLFlBQVksQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFDdEMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxPQUFPLENBQUMsQ0FBQTtRQUMxQixDQUFDO0lBQ0gsQ0FBQztJQUVPLDZDQUFtQixHQUEzQixVQUE0QixLQUFlO1FBQ3pDLEdBQUcsQ0FBQyxDQUFlLFVBQWlCLEVBQWpCLEtBQUEsS0FBSyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsRUFBakIsY0FBaUIsRUFBakIsSUFBaUI7WUFBL0IsSUFBTSxJQUFJLFNBQUE7WUFDYixJQUFJLENBQUMsV0FBVyxDQUFDLElBQUksRUFBRSxJQUFJLENBQUMsYUFBYSxDQUFDLENBQUE7U0FDM0M7SUFDSCxDQUFDO0lBRU8sMkNBQWlCLEdBQXpCLFVBQTBCLEtBQWU7UUFDdkMsR0FBRyxDQUFDLENBQWUsVUFBaUIsRUFBakIsS0FBQSxLQUFLLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxFQUFqQixjQUFpQixFQUFqQixJQUFpQjtZQUEvQixJQUFNLElBQUksU0FBQTtZQUNiLElBQUksQ0FBQyxXQUFXLENBQUMsSUFBSSxFQUFFLElBQUksQ0FBQyxVQUFVLENBQUMsQ0FBQTtTQUN4QztJQUNILENBQUM7SUFFRCxtQkFBbUI7SUFFWCxzQ0FBWSxHQUFwQixVQUFxQixPQUFnQjtRQUNuQyxNQUFNLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxZQUFZLENBQUMsT0FBTyxDQUFDLENBQUE7SUFDNUMsQ0FBQztJQUVPLDZDQUFtQixHQUEzQixVQUE0QixJQUE0QjtRQUE1QixxQkFBQSxFQUFBLE9BQWdCLElBQUksQ0FBQyxPQUFPO1FBQ3RELE1BQU0sQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLG1CQUFtQixDQUFDLElBQUksQ0FBQyxDQUFBO0lBQ2hELENBQUM7SUFFTyxxQ0FBVyxHQUFuQixVQUFvQixJQUFVLEVBQUUsU0FBcUM7UUFDbkUsSUFBTSxJQUFJLEdBQUcsSUFBSSxDQUFDLGVBQWUsQ0FBQyxJQUFJLENBQUMsQ0FBQTtRQUN2QyxFQUFFLENBQUMsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDO1lBQ1QsR0FBRyxDQUFDLENBQWtCLFVBQThCLEVBQTlCLEtBQUEsSUFBSSxDQUFDLG1CQUFtQixDQUFDLElBQUksQ0FBQyxFQUE5QixjQUE4QixFQUE5QixJQUE4QjtnQkFBL0MsSUFBTSxPQUFPLFNBQUE7Z0JBQ2hCLFNBQVMsQ0FBQyxJQUFJLENBQUMsSUFBSSxFQUFFLE9BQU8sQ0FBQyxDQUFBO2FBQzlCO1FBQ0gsQ0FBQztJQUNILENBQUM7SUFFTyx5Q0FBZSxHQUF2QixVQUF3QixJQUFVO1FBQ2hDLEVBQUUsQ0FBQyxDQUFDLElBQUksQ0FBQyxRQUFRLElBQUksSUFBSSxDQUFDLFlBQVksQ0FBQyxDQUFDLENBQUM7WUFDdkMsTUFBTSxDQUFDLElBQWUsQ0FBQTtRQUN4QixDQUFDO0lBQ0gsQ0FBQztJQUVELG1CQUFtQjtJQUVYLG9DQUFVLEdBQWxCLFVBQW1CLE9BQWdCO1FBQ2pDLEVBQUUsQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQyxDQUFDO1lBQ2hDLElBQUksQ0FBQyxRQUFRLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFBO1lBQzFCLEVBQUUsQ0FBQyxDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsY0FBYyxDQUFDLENBQUMsQ0FBQztnQkFDakMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxjQUFjLENBQUMsT0FBTyxDQUFDLENBQUE7WUFDdkMsQ0FBQztRQUNILENBQUM7SUFDSCxDQUFDO0lBRU8sdUNBQWEsR0FBckIsVUFBc0IsT0FBZ0I7UUFDcEMsRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQyxDQUFDO1lBQy9CLElBQUksQ0FBQyxRQUFRLENBQUMsTUFBTSxDQUFDLE9BQU8sQ0FBQyxDQUFBO1lBQzdCLEVBQUUsQ0FBQyxDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsZ0JBQWdCLENBQUMsQ0FBQyxDQUFDO2dCQUNuQyxJQUFJLENBQUMsUUFBUSxDQUFDLGdCQUFnQixDQUFDLE9BQU8sQ0FBQyxDQUFBO1lBQ3pDLENBQUM7UUFDSCxDQUFDO0lBQ0gsQ0FBQztJQUNILHNCQUFDO0FBQUQsQ0FBQyxBQXZJRCxJQXVJQyJ9
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! VelocityJS.org (1.5.0). (C) 2014 Julian Shapiro. MIT @license: en.wikipedia.org/wiki/MIT_License */
@@ -26954,7 +22466,7 @@ var ElementObserver = /** @class */ (function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26985,13 +22497,13 @@ module.exports = {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var momentum = __webpack_require__(4);
+var momentum = __webpack_require__(5);
 
 function raw (date, format) {
   if (typeof date === 'string') {
@@ -27014,7 +22526,7 @@ module.exports = parse;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27028,7 +22540,749 @@ module.exports = isInput;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * jQuery UI Widget 1.12.1
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ */
+
+//>>label: Widget
+//>>group: Core
+//>>description: Provides a factory for creating stateful widgets with a common API.
+//>>docs: http://api.jqueryui.com/jQuery.widget/
+//>>demos: http://jqueryui.com/widget/
+
+( function( factory ) {
+	if ( true ) {
+
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1), __webpack_require__(4) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}( function( $ ) {
+
+var widgetUuid = 0;
+var widgetSlice = Array.prototype.slice;
+
+$.cleanData = ( function( orig ) {
+	return function( elems ) {
+		var events, elem, i;
+		for ( i = 0; ( elem = elems[ i ] ) != null; i++ ) {
+			try {
+
+				// Only trigger remove when necessary to save time
+				events = $._data( elem, "events" );
+				if ( events && events.remove ) {
+					$( elem ).triggerHandler( "remove" );
+				}
+
+			// Http://bugs.jquery.com/ticket/8235
+			} catch ( e ) {}
+		}
+		orig( elems );
+	};
+} )( $.cleanData );
+
+$.widget = function( name, base, prototype ) {
+	var existingConstructor, constructor, basePrototype;
+
+	// ProxiedPrototype allows the provided prototype to remain unmodified
+	// so that it can be used as a mixin for multiple widgets (#8876)
+	var proxiedPrototype = {};
+
+	var namespace = name.split( "." )[ 0 ];
+	name = name.split( "." )[ 1 ];
+	var fullName = namespace + "-" + name;
+
+	if ( !prototype ) {
+		prototype = base;
+		base = $.Widget;
+	}
+
+	if ( $.isArray( prototype ) ) {
+		prototype = $.extend.apply( null, [ {} ].concat( prototype ) );
+	}
+
+	// Create selector for plugin
+	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
+		return !!$.data( elem, fullName );
+	};
+
+	$[ namespace ] = $[ namespace ] || {};
+	existingConstructor = $[ namespace ][ name ];
+	constructor = $[ namespace ][ name ] = function( options, element ) {
+
+		// Allow instantiation without "new" keyword
+		if ( !this._createWidget ) {
+			return new constructor( options, element );
+		}
+
+		// Allow instantiation without initializing for simple inheritance
+		// must use "new" keyword (the code above always passes args)
+		if ( arguments.length ) {
+			this._createWidget( options, element );
+		}
+	};
+
+	// Extend with the existing constructor to carry over any static properties
+	$.extend( constructor, existingConstructor, {
+		version: prototype.version,
+
+		// Copy the object used to create the prototype in case we need to
+		// redefine the widget later
+		_proto: $.extend( {}, prototype ),
+
+		// Track widgets that inherit from this widget in case this widget is
+		// redefined after a widget inherits from it
+		_childConstructors: []
+	} );
+
+	basePrototype = new base();
+
+	// We need to make the options hash a property directly on the new instance
+	// otherwise we'll modify the options hash on the prototype that we're
+	// inheriting from
+	basePrototype.options = $.widget.extend( {}, basePrototype.options );
+	$.each( prototype, function( prop, value ) {
+		if ( !$.isFunction( value ) ) {
+			proxiedPrototype[ prop ] = value;
+			return;
+		}
+		proxiedPrototype[ prop ] = ( function() {
+			function _super() {
+				return base.prototype[ prop ].apply( this, arguments );
+			}
+
+			function _superApply( args ) {
+				return base.prototype[ prop ].apply( this, args );
+			}
+
+			return function() {
+				var __super = this._super;
+				var __superApply = this._superApply;
+				var returnValue;
+
+				this._super = _super;
+				this._superApply = _superApply;
+
+				returnValue = value.apply( this, arguments );
+
+				this._super = __super;
+				this._superApply = __superApply;
+
+				return returnValue;
+			};
+		} )();
+	} );
+	constructor.prototype = $.widget.extend( basePrototype, {
+
+		// TODO: remove support for widgetEventPrefix
+		// always use the name + a colon as the prefix, e.g., draggable:start
+		// don't prefix for widgets that aren't DOM-based
+		widgetEventPrefix: existingConstructor ? ( basePrototype.widgetEventPrefix || name ) : name
+	}, proxiedPrototype, {
+		constructor: constructor,
+		namespace: namespace,
+		widgetName: name,
+		widgetFullName: fullName
+	} );
+
+	// If this widget is being redefined then we need to find all widgets that
+	// are inheriting from it and redefine all of them so that they inherit from
+	// the new version of this widget. We're essentially trying to replace one
+	// level in the prototype chain.
+	if ( existingConstructor ) {
+		$.each( existingConstructor._childConstructors, function( i, child ) {
+			var childPrototype = child.prototype;
+
+			// Redefine the child widget using the same prototype that was
+			// originally used, but inherit from the new version of the base
+			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor,
+				child._proto );
+		} );
+
+		// Remove the list of existing child constructors from the old constructor
+		// so the old child constructors can be garbage collected
+		delete existingConstructor._childConstructors;
+	} else {
+		base._childConstructors.push( constructor );
+	}
+
+	$.widget.bridge( name, constructor );
+
+	return constructor;
+};
+
+$.widget.extend = function( target ) {
+	var input = widgetSlice.call( arguments, 1 );
+	var inputIndex = 0;
+	var inputLength = input.length;
+	var key;
+	var value;
+
+	for ( ; inputIndex < inputLength; inputIndex++ ) {
+		for ( key in input[ inputIndex ] ) {
+			value = input[ inputIndex ][ key ];
+			if ( input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
+
+				// Clone objects
+				if ( $.isPlainObject( value ) ) {
+					target[ key ] = $.isPlainObject( target[ key ] ) ?
+						$.widget.extend( {}, target[ key ], value ) :
+
+						// Don't extend strings, arrays, etc. with objects
+						$.widget.extend( {}, value );
+
+				// Copy everything else by reference
+				} else {
+					target[ key ] = value;
+				}
+			}
+		}
+	}
+	return target;
+};
+
+$.widget.bridge = function( name, object ) {
+	var fullName = object.prototype.widgetFullName || name;
+	$.fn[ name ] = function( options ) {
+		var isMethodCall = typeof options === "string";
+		var args = widgetSlice.call( arguments, 1 );
+		var returnValue = this;
+
+		if ( isMethodCall ) {
+
+			// If this is an empty collection, we need to have the instance method
+			// return undefined instead of the jQuery instance
+			if ( !this.length && options === "instance" ) {
+				returnValue = undefined;
+			} else {
+				this.each( function() {
+					var methodValue;
+					var instance = $.data( this, fullName );
+
+					if ( options === "instance" ) {
+						returnValue = instance;
+						return false;
+					}
+
+					if ( !instance ) {
+						return $.error( "cannot call methods on " + name +
+							" prior to initialization; " +
+							"attempted to call method '" + options + "'" );
+					}
+
+					if ( !$.isFunction( instance[ options ] ) || options.charAt( 0 ) === "_" ) {
+						return $.error( "no such method '" + options + "' for " + name +
+							" widget instance" );
+					}
+
+					methodValue = instance[ options ].apply( instance, args );
+
+					if ( methodValue !== instance && methodValue !== undefined ) {
+						returnValue = methodValue && methodValue.jquery ?
+							returnValue.pushStack( methodValue.get() ) :
+							methodValue;
+						return false;
+					}
+				} );
+			}
+		} else {
+
+			// Allow multiple hashes to be passed on init
+			if ( args.length ) {
+				options = $.widget.extend.apply( null, [ options ].concat( args ) );
+			}
+
+			this.each( function() {
+				var instance = $.data( this, fullName );
+				if ( instance ) {
+					instance.option( options || {} );
+					if ( instance._init ) {
+						instance._init();
+					}
+				} else {
+					$.data( this, fullName, new object( options, this ) );
+				}
+			} );
+		}
+
+		return returnValue;
+	};
+};
+
+$.Widget = function( /* options, element */ ) {};
+$.Widget._childConstructors = [];
+
+$.Widget.prototype = {
+	widgetName: "widget",
+	widgetEventPrefix: "",
+	defaultElement: "<div>",
+
+	options: {
+		classes: {},
+		disabled: false,
+
+		// Callbacks
+		create: null
+	},
+
+	_createWidget: function( options, element ) {
+		element = $( element || this.defaultElement || this )[ 0 ];
+		this.element = $( element );
+		this.uuid = widgetUuid++;
+		this.eventNamespace = "." + this.widgetName + this.uuid;
+
+		this.bindings = $();
+		this.hoverable = $();
+		this.focusable = $();
+		this.classesElementLookup = {};
+
+		if ( element !== this ) {
+			$.data( element, this.widgetFullName, this );
+			this._on( true, this.element, {
+				remove: function( event ) {
+					if ( event.target === element ) {
+						this.destroy();
+					}
+				}
+			} );
+			this.document = $( element.style ?
+
+				// Element within the document
+				element.ownerDocument :
+
+				// Element is window or document
+				element.document || element );
+			this.window = $( this.document[ 0 ].defaultView || this.document[ 0 ].parentWindow );
+		}
+
+		this.options = $.widget.extend( {},
+			this.options,
+			this._getCreateOptions(),
+			options );
+
+		this._create();
+
+		if ( this.options.disabled ) {
+			this._setOptionDisabled( this.options.disabled );
+		}
+
+		this._trigger( "create", null, this._getCreateEventData() );
+		this._init();
+	},
+
+	_getCreateOptions: function() {
+		return {};
+	},
+
+	_getCreateEventData: $.noop,
+
+	_create: $.noop,
+
+	_init: $.noop,
+
+	destroy: function() {
+		var that = this;
+
+		this._destroy();
+		$.each( this.classesElementLookup, function( key, value ) {
+			that._removeClass( value, key );
+		} );
+
+		// We can probably remove the unbind calls in 2.0
+		// all event bindings should go through this._on()
+		this.element
+			.off( this.eventNamespace )
+			.removeData( this.widgetFullName );
+		this.widget()
+			.off( this.eventNamespace )
+			.removeAttr( "aria-disabled" );
+
+		// Clean up events and states
+		this.bindings.off( this.eventNamespace );
+	},
+
+	_destroy: $.noop,
+
+	widget: function() {
+		return this.element;
+	},
+
+	option: function( key, value ) {
+		var options = key;
+		var parts;
+		var curOption;
+		var i;
+
+		if ( arguments.length === 0 ) {
+
+			// Don't return a reference to the internal hash
+			return $.widget.extend( {}, this.options );
+		}
+
+		if ( typeof key === "string" ) {
+
+			// Handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
+			options = {};
+			parts = key.split( "." );
+			key = parts.shift();
+			if ( parts.length ) {
+				curOption = options[ key ] = $.widget.extend( {}, this.options[ key ] );
+				for ( i = 0; i < parts.length - 1; i++ ) {
+					curOption[ parts[ i ] ] = curOption[ parts[ i ] ] || {};
+					curOption = curOption[ parts[ i ] ];
+				}
+				key = parts.pop();
+				if ( arguments.length === 1 ) {
+					return curOption[ key ] === undefined ? null : curOption[ key ];
+				}
+				curOption[ key ] = value;
+			} else {
+				if ( arguments.length === 1 ) {
+					return this.options[ key ] === undefined ? null : this.options[ key ];
+				}
+				options[ key ] = value;
+			}
+		}
+
+		this._setOptions( options );
+
+		return this;
+	},
+
+	_setOptions: function( options ) {
+		var key;
+
+		for ( key in options ) {
+			this._setOption( key, options[ key ] );
+		}
+
+		return this;
+	},
+
+	_setOption: function( key, value ) {
+		if ( key === "classes" ) {
+			this._setOptionClasses( value );
+		}
+
+		this.options[ key ] = value;
+
+		if ( key === "disabled" ) {
+			this._setOptionDisabled( value );
+		}
+
+		return this;
+	},
+
+	_setOptionClasses: function( value ) {
+		var classKey, elements, currentElements;
+
+		for ( classKey in value ) {
+			currentElements = this.classesElementLookup[ classKey ];
+			if ( value[ classKey ] === this.options.classes[ classKey ] ||
+					!currentElements ||
+					!currentElements.length ) {
+				continue;
+			}
+
+			// We are doing this to create a new jQuery object because the _removeClass() call
+			// on the next line is going to destroy the reference to the current elements being
+			// tracked. We need to save a copy of this collection so that we can add the new classes
+			// below.
+			elements = $( currentElements.get() );
+			this._removeClass( currentElements, classKey );
+
+			// We don't use _addClass() here, because that uses this.options.classes
+			// for generating the string of classes. We want to use the value passed in from
+			// _setOption(), this is the new value of the classes option which was passed to
+			// _setOption(). We pass this value directly to _classes().
+			elements.addClass( this._classes( {
+				element: elements,
+				keys: classKey,
+				classes: value,
+				add: true
+			} ) );
+		}
+	},
+
+	_setOptionDisabled: function( value ) {
+		this._toggleClass( this.widget(), this.widgetFullName + "-disabled", null, !!value );
+
+		// If the widget is becoming disabled, then nothing is interactive
+		if ( value ) {
+			this._removeClass( this.hoverable, null, "ui-state-hover" );
+			this._removeClass( this.focusable, null, "ui-state-focus" );
+		}
+	},
+
+	enable: function() {
+		return this._setOptions( { disabled: false } );
+	},
+
+	disable: function() {
+		return this._setOptions( { disabled: true } );
+	},
+
+	_classes: function( options ) {
+		var full = [];
+		var that = this;
+
+		options = $.extend( {
+			element: this.element,
+			classes: this.options.classes || {}
+		}, options );
+
+		function processClassString( classes, checkOption ) {
+			var current, i;
+			for ( i = 0; i < classes.length; i++ ) {
+				current = that.classesElementLookup[ classes[ i ] ] || $();
+				if ( options.add ) {
+					current = $( $.unique( current.get().concat( options.element.get() ) ) );
+				} else {
+					current = $( current.not( options.element ).get() );
+				}
+				that.classesElementLookup[ classes[ i ] ] = current;
+				full.push( classes[ i ] );
+				if ( checkOption && options.classes[ classes[ i ] ] ) {
+					full.push( options.classes[ classes[ i ] ] );
+				}
+			}
+		}
+
+		this._on( options.element, {
+			"remove": "_untrackClassesElement"
+		} );
+
+		if ( options.keys ) {
+			processClassString( options.keys.match( /\S+/g ) || [], true );
+		}
+		if ( options.extra ) {
+			processClassString( options.extra.match( /\S+/g ) || [] );
+		}
+
+		return full.join( " " );
+	},
+
+	_untrackClassesElement: function( event ) {
+		var that = this;
+		$.each( that.classesElementLookup, function( key, value ) {
+			if ( $.inArray( event.target, value ) !== -1 ) {
+				that.classesElementLookup[ key ] = $( value.not( event.target ).get() );
+			}
+		} );
+	},
+
+	_removeClass: function( element, keys, extra ) {
+		return this._toggleClass( element, keys, extra, false );
+	},
+
+	_addClass: function( element, keys, extra ) {
+		return this._toggleClass( element, keys, extra, true );
+	},
+
+	_toggleClass: function( element, keys, extra, add ) {
+		add = ( typeof add === "boolean" ) ? add : extra;
+		var shift = ( typeof element === "string" || element === null ),
+			options = {
+				extra: shift ? keys : extra,
+				keys: shift ? element : keys,
+				element: shift ? this.element : element,
+				add: add
+			};
+		options.element.toggleClass( this._classes( options ), add );
+		return this;
+	},
+
+	_on: function( suppressDisabledCheck, element, handlers ) {
+		var delegateElement;
+		var instance = this;
+
+		// No suppressDisabledCheck flag, shuffle arguments
+		if ( typeof suppressDisabledCheck !== "boolean" ) {
+			handlers = element;
+			element = suppressDisabledCheck;
+			suppressDisabledCheck = false;
+		}
+
+		// No element argument, shuffle and use this.element
+		if ( !handlers ) {
+			handlers = element;
+			element = this.element;
+			delegateElement = this.widget();
+		} else {
+			element = delegateElement = $( element );
+			this.bindings = this.bindings.add( element );
+		}
+
+		$.each( handlers, function( event, handler ) {
+			function handlerProxy() {
+
+				// Allow widgets to customize the disabled handling
+				// - disabled as an array instead of boolean
+				// - disabled class as method for disabling individual parts
+				if ( !suppressDisabledCheck &&
+						( instance.options.disabled === true ||
+						$( this ).hasClass( "ui-state-disabled" ) ) ) {
+					return;
+				}
+				return ( typeof handler === "string" ? instance[ handler ] : handler )
+					.apply( instance, arguments );
+			}
+
+			// Copy the guid so direct unbinding works
+			if ( typeof handler !== "string" ) {
+				handlerProxy.guid = handler.guid =
+					handler.guid || handlerProxy.guid || $.guid++;
+			}
+
+			var match = event.match( /^([\w:-]*)\s*(.*)$/ );
+			var eventName = match[ 1 ] + instance.eventNamespace;
+			var selector = match[ 2 ];
+
+			if ( selector ) {
+				delegateElement.on( eventName, selector, handlerProxy );
+			} else {
+				element.on( eventName, handlerProxy );
+			}
+		} );
+	},
+
+	_off: function( element, eventName ) {
+		eventName = ( eventName || "" ).split( " " ).join( this.eventNamespace + " " ) +
+			this.eventNamespace;
+		element.off( eventName ).off( eventName );
+
+		// Clear the stack to avoid memory leaks (#10056)
+		this.bindings = $( this.bindings.not( element ).get() );
+		this.focusable = $( this.focusable.not( element ).get() );
+		this.hoverable = $( this.hoverable.not( element ).get() );
+	},
+
+	_delay: function( handler, delay ) {
+		function handlerProxy() {
+			return ( typeof handler === "string" ? instance[ handler ] : handler )
+				.apply( instance, arguments );
+		}
+		var instance = this;
+		return setTimeout( handlerProxy, delay || 0 );
+	},
+
+	_hoverable: function( element ) {
+		this.hoverable = this.hoverable.add( element );
+		this._on( element, {
+			mouseenter: function( event ) {
+				this._addClass( $( event.currentTarget ), null, "ui-state-hover" );
+			},
+			mouseleave: function( event ) {
+				this._removeClass( $( event.currentTarget ), null, "ui-state-hover" );
+			}
+		} );
+	},
+
+	_focusable: function( element ) {
+		this.focusable = this.focusable.add( element );
+		this._on( element, {
+			focusin: function( event ) {
+				this._addClass( $( event.currentTarget ), null, "ui-state-focus" );
+			},
+			focusout: function( event ) {
+				this._removeClass( $( event.currentTarget ), null, "ui-state-focus" );
+			}
+		} );
+	},
+
+	_trigger: function( type, event, data ) {
+		var prop, orig;
+		var callback = this.options[ type ];
+
+		data = data || {};
+		event = $.Event( event );
+		event.type = ( type === this.widgetEventPrefix ?
+			type :
+			this.widgetEventPrefix + type ).toLowerCase();
+
+		// The original event may come from any element
+		// so we need to reset the target on the new event
+		event.target = this.element[ 0 ];
+
+		// Copy original event properties over to the new event
+		orig = event.originalEvent;
+		if ( orig ) {
+			for ( prop in orig ) {
+				if ( !( prop in event ) ) {
+					event[ prop ] = orig[ prop ];
+				}
+			}
+		}
+
+		this.element.trigger( event, data );
+		return !( $.isFunction( callback ) &&
+			callback.apply( this.element[ 0 ], [ event ].concat( data ) ) === false ||
+			event.isDefaultPrevented() );
+	}
+};
+
+$.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
+	$.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
+		if ( typeof options === "string" ) {
+			options = { effect: options };
+		}
+
+		var hasOptions;
+		var effectName = !options ?
+			method :
+			options === true || typeof options === "number" ?
+				defaultEffect :
+				options.effect || defaultEffect;
+
+		options = options || {};
+		if ( typeof options === "number" ) {
+			options = { duration: options };
+		}
+
+		hasOptions = !$.isEmptyObject( options );
+		options.complete = callback;
+
+		if ( options.delay ) {
+			element.delay( options.delay );
+		}
+
+		if ( hasOptions && $.effects && $.effects.effect[ effectName ] ) {
+			element[ method ]( options );
+		} else if ( effectName !== method && element[ effectName ] ) {
+			element[ effectName ]( options.duration, options.easing, callback );
+		} else {
+			element.queue( function( next ) {
+				$( this )[ method ]();
+				if ( callback ) {
+					callback.call( element[ 0 ] );
+				}
+				next();
+			} );
+		}
+	};
+} );
+
+return $.widget;
+
+} ) );
+
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27040,9 +23294,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _stimulus = __webpack_require__(5);
+var _stimulus = __webpack_require__(6);
 
-var _velocityAnimate = __webpack_require__(9);
+var _velocityAnimate = __webpack_require__(10);
 
 var _velocityAnimate2 = _interopRequireDefault(_velocityAnimate);
 
@@ -27082,6 +23336,9 @@ var _class = function (_Controller) {
     key: 'connect',
     value: function connect() {
       $(this.element).find('form').on('ajax:success', _.bind(this.close, this));
+      if (this.data.get('autoload')) {
+        this.open();
+      }
     }
   }]);
 
@@ -27089,10 +23346,10 @@ var _class = function (_Controller) {
 }(_stimulus.Controller);
 
 exports.default = _class;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(8)))
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -27120,7 +23377,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27217,7 +23474,7 @@ var Action = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYWN0aW9uLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vcGFja2FnZXMvQHN0aW11bHVzL2NvcmUvc3JjL2FjdGlvbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFLQTtJQUtFLGdCQUFZLE9BQWdCLEVBQUUsVUFBNEIsRUFBRSxXQUF3QjtRQUNsRixJQUFJLENBQUMsT0FBTyxHQUFHLE9BQU8sQ0FBQTtRQUN0QixJQUFJLENBQUMsVUFBVSxHQUFHLFVBQVUsQ0FBQTtRQUM1QixJQUFJLENBQUMsV0FBVyxHQUFHLFdBQVcsQ0FBQTtJQUNoQyxDQUFDO0lBRUQsd0JBQU8sR0FBUDtRQUNFLElBQUksQ0FBQyxXQUFXLENBQUMsZ0JBQWdCLENBQUMsSUFBSSxDQUFDLFNBQVMsRUFBRSxJQUFJLEVBQUUsS0FBSyxDQUFDLENBQUE7SUFDaEUsQ0FBQztJQUVELDJCQUFVLEdBQVY7UUFDRSxJQUFJLENBQUMsV0FBVyxDQUFDLG1CQUFtQixDQUFDLElBQUksQ0FBQyxTQUFTLEVBQUUsSUFBSSxFQUFFLEtBQUssQ0FBQyxDQUFBO0lBQ25FLENBQUM7SUFFRCxvQ0FBbUIsR0FBbkIsVUFBb0IsTUFBcUI7UUFDdkMsTUFBTSxDQUFDLE1BQU0sSUFBSSxJQUFJLElBQUksTUFBTSxDQUFDLFVBQVUsQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxDQUFBO0lBQ3ZFLENBQUM7SUFFRCw0QkFBVyxHQUFYLFVBQVksS0FBWTtRQUN0QixFQUFFLENBQUMsQ0FBQyxJQUFJLENBQUMsb0JBQW9CLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxDQUFDO1lBQ3JDLElBQUksQ0FBQyxlQUFlLENBQUMsS0FBSyxDQUFDLENBQUE7UUFDN0IsQ0FBQztJQUNILENBQUM7SUFFRCxzQkFBSSw2QkFBUzthQUFiO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsU0FBUyxDQUFBO1FBQ2xDLENBQUM7OztPQUFBO0lBRUQsc0JBQUksMEJBQU07YUFBVjtZQUNFLElBQU0sTUFBTSxHQUFHLElBQUksQ0FBQyxVQUFVLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxDQUFBO1lBQy9DLEVBQUUsQ0FBQyxDQUFDLE9BQU8sTUFBTSxJQUFJLFVBQVUsQ0FBQyxDQUFDLENBQUM7Z0JBQ2hDLE1BQU0sQ0FBQyxNQUFNLENBQUE7WUFDZixDQUFDO1lBQ0QsTUFBTSxJQUFJLEtBQUssQ0FBQyxjQUFXLElBQUksQ0FBQyxVQUFVLHlDQUFrQyxJQUFJLENBQUMsVUFBVSxPQUFHLENBQUMsQ0FBQTtRQUNqRyxDQUFDOzs7T0FBQTtJQUVPLGdDQUFlLEdBQXZCLFVBQXdCLEtBQVk7UUFDbEMsSUFBSSxDQUFDO1lBQ0gsSUFBSSxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLFVBQVUsRUFBRSxLQUFLLENBQUMsQ0FBQTtRQUMxQyxDQUFDO1FBQUMsS0FBSyxDQUFDLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQztZQUNmLElBQUksQ0FBQyxPQUFPLENBQUMsV0FBVyxDQUFDLEtBQUssRUFBRSx1QkFBb0IsSUFBSSxDQUFDLFVBQVUsT0FBRyxFQUFFLEVBQUUsS0FBSyxPQUFBLEVBQUUsQ0FBQyxDQUFBO1FBQ3BGLENBQUM7SUFDSCxDQUFDO0lBRU8scUNBQW9CLEdBQTVCLFVBQTZCLEtBQVk7UUFDdkMsSUFBTSxXQUFXLEdBQUcsS0FBSyxDQUFDLE1BQU0sQ0FBQTtRQUNoQyxFQUFFLENBQUMsQ0FBQyxJQUFJLENBQUMsT0FBTyxLQUFLLFdBQVcsQ0FBQyxDQUFDLENBQUM7WUFDakMsTUFBTSxDQUFDLElBQUksQ0FBQTtRQUNiLENBQUM7UUFBQyxJQUFJLENBQUMsRUFBRSxDQUFDLENBQUMsV0FBVyxZQUFZLE9BQU8sSUFBSSxJQUFJLENBQUMsT0FBTyxDQUFDLFFBQVEsQ0FBQyxXQUFXLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFDaEYsTUFBTSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsZUFBZSxDQUFDLFdBQVcsQ0FBQyxDQUFBO1FBQ2hELENBQUM7UUFBQyxJQUFJLENBQUMsQ0FBQztZQUNOLE1BQU0sQ0FBQyxJQUFJLENBQUE7UUFDYixDQUFDO0lBQ0gsQ0FBQztJQUVELHNCQUFZLDhCQUFVO2FBQXRCO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsVUFBVSxDQUFBO1FBQ2hDLENBQUM7OztPQUFBO0lBRUQsc0JBQVksOEJBQVU7YUFBdEI7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxVQUFVLENBQUE7UUFDbkMsQ0FBQzs7O09BQUE7SUFFRCxzQkFBWSwyQkFBTzthQUFuQjtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLE9BQU8sQ0FBQTtRQUMzQixDQUFDOzs7T0FBQTtJQUVELHNCQUFZLHlCQUFLO2FBQWpCO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsS0FBSyxDQUFBO1FBQzNCLENBQUM7OztPQUFBO0lBQ0gsYUFBQztBQUFELENBQUMsQUEzRUQsSUEyRUMifQ==
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27309,14 +23566,14 @@ function stringifyEventTarget(eventTarget) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYWN0aW9uX2Rlc2NyaXB0b3IuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvY29yZS9zcmMvYWN0aW9uX2Rlc2NyaXB0b3IudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBT0EsMkRBQTJEO0FBQzNELElBQU0sT0FBTyxHQUFHLDZDQUE2QyxDQUFBO0FBRTdEO0lBa0RFLDBCQUFZLFVBQWtCLEVBQUUsU0FBaUIsRUFBRSxVQUFrQixFQUFFLFdBQXdCO1FBQzdGLElBQUksQ0FBQyxVQUFVLEdBQUcsVUFBVSxDQUFBO1FBQzVCLElBQUksQ0FBQyxTQUFTLEdBQUcsU0FBUyxDQUFBO1FBQzFCLElBQUksQ0FBQyxVQUFVLEdBQUcsVUFBVSxDQUFBO1FBQzVCLElBQUksQ0FBQyxXQUFXLEdBQUcsV0FBVyxDQUFBO0lBQ2hDLENBQUM7SUF4Q00sMkJBQVUsR0FBakIsVUFBa0IsT0FBZ0M7UUFDaEQsTUFBTSxDQUFDLElBQUksZ0JBQWdCLENBQ3pCLE9BQU8sQ0FBQyxVQUFVLElBQUssS0FBSyxDQUFDLHlDQUF5QyxDQUFDLEVBQ3ZFLE9BQU8sQ0FBQyxTQUFTLElBQU0sS0FBSyxDQUFDLHlDQUF5QyxDQUFDLEVBQ3ZFLE9BQU8sQ0FBQyxVQUFVLElBQUssS0FBSyxDQUFDLDBDQUEwQyxDQUFDLEVBQ3hFLE9BQU8sQ0FBQyxXQUFXLElBQUksS0FBSyxDQUFDLDJDQUEyQyxDQUFDLENBQzFFLENBQUE7SUFDSCxDQUFDO0lBRU0scURBQW9DLEdBQTNDLFVBQTRDLE9BQWdCLEVBQUUsZ0JBQXdCO1FBQ3BGLElBQUksQ0FBQztZQUNILElBQU0sT0FBTyxHQUFHLElBQUksQ0FBQyw0Q0FBNEMsQ0FBQyxnQkFBZ0IsQ0FBQyxDQUFBO1lBQ25GLE9BQU8sQ0FBQyxTQUFTLEdBQUcsT0FBTyxDQUFDLFNBQVMsSUFBSSxJQUFJLENBQUMsNkJBQTZCLENBQUMsT0FBTyxDQUFDLENBQUE7WUFDcEYsT0FBTyxDQUFDLFdBQVcsR0FBRyxPQUFPLENBQUMsV0FBVyxJQUFJLE9BQU8sQ0FBQTtZQUNwRCxNQUFNLENBQUMsZ0JBQWdCLENBQUMsVUFBVSxDQUFDLE9BQU8sQ0FBQyxDQUFBO1FBQzdDLENBQUM7UUFBQyxLQUFLLENBQUMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDO1lBQ2YsTUFBTSxJQUFJLEtBQUssQ0FBQyw2QkFBMEIsZ0JBQWdCLFlBQU0sS0FBSyxDQUFDLE9BQVMsQ0FBQyxDQUFBO1FBQ2xGLENBQUM7SUFDSCxDQUFDO0lBRWMsNkRBQTRDLEdBQTNELFVBQTRELGdCQUF3QjtRQUNsRixJQUFNLE1BQU0sR0FBRyxnQkFBZ0IsQ0FBQyxJQUFJLEVBQUUsQ0FBQTtRQUN0QyxJQUFNLE9BQU8sR0FBRyxNQUFNLENBQUMsS0FBSyxDQUFDLE9BQU8sQ0FBQyxJQUFJLEtBQUssQ0FBQyxrQ0FBa0MsQ0FBQyxDQUFBO1FBQ2xGLE1BQU0sQ0FBQztZQUNMLFVBQVUsRUFBRyxPQUFPLENBQUMsQ0FBQyxDQUFDO1lBQ3ZCLFNBQVMsRUFBSSxPQUFPLENBQUMsQ0FBQyxDQUFDO1lBQ3ZCLFVBQVUsRUFBRyxPQUFPLENBQUMsQ0FBQyxDQUFDO1lBQ3ZCLFdBQVcsRUFBRSxnQkFBZ0IsQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLENBQUM7U0FDMUMsQ0FBQTtJQUNILENBQUM7SUFFYyw4Q0FBNkIsR0FBNUMsVUFBNkMsT0FBTztRQUNsRCxNQUFNLENBQUMsSUFBSSxDQUFDLGlCQUFpQixDQUFDLE9BQU8sQ0FBQyxPQUFPLENBQUMsV0FBVyxFQUFFLENBQUMsQ0FBQyxPQUFPLENBQUMsQ0FBQTtJQUN2RSxDQUFDO0lBU0Qsc0JBQUksNkNBQWU7YUFBbkI7WUFDRSxNQUFNLENBQUMsb0JBQW9CLENBQUMsSUFBSSxDQUFDLFdBQVcsQ0FBQyxDQUFBO1FBQy9DLENBQUM7OztPQUFBO0lBRUQsb0NBQVMsR0FBVCxVQUFVLFVBQW1DO1FBQzNDLE1BQU0sQ0FBQyxVQUFVLElBQUksSUFBSTtZQUN2QixVQUFVLENBQUMsVUFBVSxJQUFJLElBQUksQ0FBQyxVQUFVO1lBQ3hDLFVBQVUsQ0FBQyxTQUFTLElBQUksSUFBSSxDQUFDLFNBQVM7WUFDdEMsVUFBVSxDQUFDLFVBQVUsSUFBSSxJQUFJLENBQUMsVUFBVTtZQUN4QyxVQUFVLENBQUMsV0FBVyxJQUFJLElBQUksQ0FBQyxXQUFXLENBQUE7SUFDOUMsQ0FBQztJQUVELG1DQUFRLEdBQVI7UUFDRSxJQUFNLGVBQWUsR0FBRyxJQUFJLENBQUMsZUFBZSxDQUFDLENBQUMsQ0FBQyxNQUFJLElBQUksQ0FBQyxlQUFpQixDQUFDLENBQUMsQ0FBQyxFQUFFLENBQUE7UUFDOUUsTUFBTSxDQUFDLEtBQUcsSUFBSSxDQUFDLFNBQVMsR0FBRyxlQUFlLFVBQUssSUFBSSxDQUFDLFVBQVUsU0FBSSxJQUFJLENBQUMsVUFBWSxDQUFBO0lBQ3JGLENBQUM7SUF2RWMsa0NBQWlCLEdBQXdEO1FBQ3RGLEdBQUcsRUFBUyxVQUFBLENBQUMsSUFBSSxPQUFBLE9BQU8sRUFBUCxDQUFPO1FBQ3hCLFFBQVEsRUFBSSxVQUFBLENBQUMsSUFBSSxPQUFBLE9BQU8sRUFBUCxDQUFPO1FBQ3hCLE1BQU0sRUFBTSxVQUFBLENBQUMsSUFBSSxPQUFBLFFBQVEsRUFBUixDQUFRO1FBQ3pCLE9BQU8sRUFBSyxVQUFBLENBQUMsSUFBSSxPQUFBLENBQUMsQ0FBQyxZQUFZLENBQUMsTUFBTSxDQUFDLElBQUksUUFBUSxDQUFDLENBQUMsQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLFFBQVEsRUFBdkQsQ0FBdUQ7UUFDeEUsUUFBUSxFQUFJLFVBQUEsQ0FBQyxJQUFJLE9BQUEsUUFBUSxFQUFSLENBQVE7UUFDekIsVUFBVSxFQUFFLFVBQUEsQ0FBQyxJQUFJLE9BQUEsUUFBUSxFQUFSLENBQVE7S0FDMUIsQ0FBQTtJQWlFSCx1QkFBQztDQUFBLEFBekVELElBeUVDO1NBekVZLGdCQUFnQjtBQTJFN0IsZUFBZSxPQUFlO0lBQzVCLE1BQU0sSUFBSSxLQUFLLENBQUMsT0FBTyxDQUFDLENBQUE7QUFDMUIsQ0FBQztBQUVELDBCQUEwQixlQUF1QjtJQUMvQyxFQUFFLENBQUMsQ0FBQyxlQUFlLElBQUksUUFBUSxDQUFDLENBQUMsQ0FBQztRQUNoQyxNQUFNLENBQUMsTUFBTSxDQUFBO0lBQ2YsQ0FBQztJQUFDLElBQUksQ0FBQyxFQUFFLENBQUMsQ0FBQyxlQUFlLElBQUksVUFBVSxDQUFDLENBQUMsQ0FBQztRQUN6QyxNQUFNLENBQUMsUUFBUSxDQUFBO0lBQ2pCLENBQUM7QUFDSCxDQUFDO0FBRUQsOEJBQThCLFdBQXlCO0lBQ3JELEVBQUUsQ0FBQyxDQUFDLFdBQVcsSUFBSSxNQUFNLENBQUMsQ0FBQyxDQUFDO1FBQzFCLE1BQU0sQ0FBQyxRQUFRLENBQUE7SUFDakIsQ0FBQztJQUFDLElBQUksQ0FBQyxFQUFFLENBQUMsQ0FBQyxXQUFXLElBQUksUUFBUSxDQUFDLENBQUMsQ0FBQztRQUNuQyxNQUFNLENBQUMsVUFBVSxDQUFBO0lBQ25CLENBQUM7QUFDSCxDQUFDIn0=
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Context; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__action_set__ = __webpack_require__(168);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__inline_action_observer__ = __webpack_require__(169);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scope__ = __webpack_require__(173);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__action_set__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__inline_action_observer__ = __webpack_require__(178);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scope__ = __webpack_require__(182);
 
 
 
@@ -27411,25 +23668,25 @@ var Context = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29udGV4dC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL0BzdGltdWx1cy9jb3JlL3NyYy9jb250ZXh0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUNBLE9BQU8sRUFBRSxTQUFTLEVBQUUsTUFBTSxjQUFjLENBQUE7QUFHeEMsT0FBTyxFQUFFLG9CQUFvQixFQUFnQyxNQUFNLDBCQUEwQixDQUFBO0FBRzdGLE9BQU8sRUFBRSxLQUFLLEVBQUUsTUFBTSxTQUFTLENBQUE7QUFFL0I7SUFPRSxpQkFBWSxNQUFjLEVBQUUsT0FBZ0I7UUFDMUMsSUFBSSxDQUFDLE1BQU0sR0FBRyxNQUFNLENBQUE7UUFDcEIsSUFBSSxDQUFDLEtBQUssR0FBRyxJQUFJLEtBQUssQ0FBQyxJQUFJLENBQUMsTUFBTSxFQUFFLElBQUksQ0FBQyxVQUFVLEVBQUUsT0FBTyxDQUFDLENBQUE7UUFDN0QsSUFBSSxDQUFDLE9BQU8sR0FBRyxJQUFJLFNBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQTtRQUNsQyxJQUFJLENBQUMsb0JBQW9CLEdBQUcsSUFBSSxvQkFBb0IsQ0FBQyxJQUFJLEVBQUUsSUFBSSxDQUFDLENBQUE7UUFFaEUsSUFBSSxDQUFDO1lBQ0gsSUFBSSxDQUFDLFVBQVUsR0FBRyxJQUFJLE1BQU0sQ0FBQyxxQkFBcUIsQ0FBQyxJQUFJLENBQUMsQ0FBQTtZQUN4RCxJQUFJLENBQUMsVUFBVSxDQUFDLFVBQVUsRUFBRSxDQUFBO1FBQzlCLENBQUM7UUFBQyxLQUFLLENBQUMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDO1lBQ2YsSUFBSSxDQUFDLFdBQVcsQ0FBQyxLQUFLLEVBQUUseUJBQXlCLENBQUMsQ0FBQTtRQUNwRCxDQUFDO0lBQ0gsQ0FBQztJQUVELHlCQUFPLEdBQVA7UUFDRSxJQUFJLENBQUMsT0FBTyxDQUFDLEtBQUssRUFBRSxDQUFBO1FBQ3BCLElBQUksQ0FBQyxvQkFBb0IsQ0FBQyxLQUFLLEVBQUUsQ0FBQTtRQUVqQyxJQUFJLENBQUM7WUFDSCxJQUFJLENBQUMsVUFBVSxDQUFDLE9BQU8sRUFBRSxDQUFBO1FBQzNCLENBQUM7UUFBQyxLQUFLLENBQUMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDO1lBQ2YsSUFBSSxDQUFDLFdBQVcsQ0FBQyxLQUFLLEVBQUUsdUJBQXVCLENBQUMsQ0FBQTtRQUNsRCxDQUFDO0lBQ0gsQ0FBQztJQUVELDRCQUFVLEdBQVY7UUFDRSxJQUFJLENBQUM7WUFDSCxJQUFJLENBQUMsVUFBVSxDQUFDLFVBQVUsRUFBRSxDQUFBO1FBQzlCLENBQUM7UUFBQyxLQUFLLENBQUMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDO1lBQ2YsSUFBSSxDQUFDLFdBQVcsQ0FBQyxLQUFLLEVBQUUsMEJBQTBCLENBQUMsQ0FBQTtRQUNyRCxDQUFDO1FBRUQsSUFBSSxDQUFDLG9CQUFvQixDQUFDLElBQUksRUFBRSxDQUFBO1FBQ2hDLElBQUksQ0FBQyxPQUFPLENBQUMsSUFBSSxFQUFFLENBQUE7SUFDckIsQ0FBQztJQUVELHNCQUFJLGdDQUFXO2FBQWY7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxXQUFXLENBQUE7UUFDaEMsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSwrQkFBVTthQUFkO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsVUFBVSxDQUFBO1FBQy9CLENBQUM7OztPQUFBO0lBRUQsc0JBQUksMkJBQU07YUFBVjtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsV0FBVyxDQUFDLE1BQU0sQ0FBQTtRQUNoQyxDQUFDOzs7T0FBQTtJQUVELHNCQUFJLDRCQUFPO2FBQVg7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxPQUFPLENBQUE7UUFDM0IsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSxrQ0FBYTthQUFqQjtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLGFBQWEsQ0FBQTtRQUNuQyxDQUFDOzs7T0FBQTtJQUVELGtDQUFrQztJQUVsQyxlQUFlO0lBQ2YsdUNBQXFCLEdBQXJCLFVBQXNCLE1BQWM7UUFDbEMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxHQUFHLENBQUMsTUFBTSxDQUFDLENBQUE7SUFDMUIsQ0FBQztJQUVELGVBQWU7SUFDZiwwQ0FBd0IsR0FBeEIsVUFBeUIsTUFBYztRQUNyQyxJQUFJLENBQUMsT0FBTyxDQUFDLE1BQU0sQ0FBQyxNQUFNLENBQUMsQ0FBQTtJQUM3QixDQUFDO0lBRUQsaUJBQWlCO0lBRWpCLDZCQUFXLEdBQVgsVUFBWSxLQUFZLEVBQUUsT0FBZSxFQUFFLE1BQW1CO1FBQW5CLHVCQUFBLEVBQUEsV0FBbUI7UUFDdEQsSUFBQSxTQUEwQyxFQUF4QywwQkFBVSxFQUFFLDBCQUFVLEVBQUUsb0JBQU8sQ0FBUztRQUNoRCxNQUFNLEdBQUcsTUFBTSxDQUFDLE1BQU0sQ0FBQyxFQUFFLFVBQVUsWUFBQSxFQUFFLFVBQVUsWUFBQSxFQUFFLE9BQU8sU0FBQSxFQUFFLEVBQUUsTUFBTSxDQUFDLENBQUE7UUFDbkUsSUFBSSxDQUFDLFdBQVcsQ0FBQyxXQUFXLENBQUMsS0FBSyxFQUFFLFdBQVMsT0FBUyxFQUFFLE1BQU0sQ0FBQyxDQUFBO0lBQ2pFLENBQUM7SUFDSCxjQUFDO0FBQUQsQ0FBQyxBQWxGRCxJQWtGQyJ9
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_multimap__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_multimap__ = __webpack_require__(21);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__src_multimap__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_indexed_multimap__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_indexed_multimap__ = __webpack_require__(179);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__src_indexed_multimap__["a"]; });
 
 
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvbXVsdGltYXAvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsY0FBYyxnQkFBZ0IsQ0FBQTtBQUM5QixjQUFjLHdCQUF3QixDQUFBIn0=
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Multimap; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__set_operations__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__set_operations__ = __webpack_require__(22);
 
 var Multimap = /** @class */ (function () {
     function Multimap() {
@@ -27489,7 +23746,7 @@ var Multimap = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibXVsdGltYXAuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvbXVsdGltYXAvc3JjL211bHRpbWFwLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBRSxHQUFHLEVBQUUsR0FBRyxFQUFFLE1BQU0sa0JBQWtCLENBQUE7QUFFM0M7SUFHRTtRQUNFLElBQUksQ0FBQyxXQUFXLEdBQUcsSUFBSSxHQUFHLEVBQWEsQ0FBQTtJQUN6QyxDQUFDO0lBRUQsc0JBQUksNEJBQU07YUFBVjtZQUNFLElBQU0sSUFBSSxHQUFHLEtBQUssQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLFdBQVcsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxDQUFBO1lBQ2xELE1BQU0sQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLFVBQUMsTUFBTSxFQUFFLEdBQUcsSUFBSyxPQUFBLE1BQU0sQ0FBQyxNQUFNLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQyxFQUE5QixDQUE4QixFQUFRLEVBQUUsQ0FBQyxDQUFBO1FBQy9FLENBQUM7OztPQUFBO0lBRUQsc0JBQUksMEJBQUk7YUFBUjtZQUNFLElBQU0sSUFBSSxHQUFHLEtBQUssQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLFdBQVcsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxDQUFBO1lBQ2xELE1BQU0sQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLFVBQUMsSUFBSSxFQUFFLEdBQUcsSUFBSyxPQUFBLElBQUksR0FBRyxHQUFHLENBQUMsSUFBSSxFQUFmLENBQWUsRUFBRSxDQUFDLENBQUMsQ0FBQTtRQUN2RCxDQUFDOzs7T0FBQTtJQUVELHNCQUFHLEdBQUgsVUFBSSxHQUFNLEVBQUUsS0FBUTtRQUNsQixHQUFHLENBQUMsSUFBSSxDQUFDLFdBQVcsRUFBRSxHQUFHLEVBQUUsS0FBSyxDQUFDLENBQUE7SUFDbkMsQ0FBQztJQUVELHlCQUFNLEdBQU4sVUFBTyxHQUFNLEVBQUUsS0FBUTtRQUNyQixHQUFHLENBQUMsSUFBSSxDQUFDLFdBQVcsRUFBRSxHQUFHLEVBQUUsS0FBSyxDQUFDLENBQUE7SUFDbkMsQ0FBQztJQUVELHNCQUFHLEdBQUgsVUFBSSxHQUFNLEVBQUUsS0FBUTtRQUNsQixJQUFNLE1BQU0sR0FBRyxJQUFJLENBQUMsV0FBVyxDQUFDLEdBQUcsQ0FBQyxHQUFHLENBQUMsQ0FBQTtRQUN4QyxNQUFNLENBQUMsTUFBTSxJQUFJLElBQUksSUFBSSxNQUFNLENBQUMsR0FBRyxDQUFDLEtBQUssQ0FBQyxDQUFBO0lBQzVDLENBQUM7SUFFRCx5QkFBTSxHQUFOLFVBQU8sR0FBTTtRQUNYLE1BQU0sQ0FBQyxJQUFJLENBQUMsV0FBVyxDQUFDLEdBQUcsQ0FBQyxHQUFHLENBQUMsQ0FBQTtJQUNsQyxDQUFDO0lBRUQsMkJBQVEsR0FBUixVQUFTLEtBQVE7UUFDZixJQUFNLElBQUksR0FBRyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxXQUFXLENBQUMsTUFBTSxFQUFFLENBQUMsQ0FBQTtRQUNsRCxNQUFNLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxVQUFBLEdBQUcsSUFBSSxPQUFBLEdBQUcsQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLEVBQWQsQ0FBYyxDQUFDLENBQUE7SUFDekMsQ0FBQztJQUVELGtDQUFlLEdBQWYsVUFBZ0IsR0FBTTtRQUNwQixJQUFNLE1BQU0sR0FBRyxJQUFJLENBQUMsV0FBVyxDQUFDLEdBQUcsQ0FBQyxHQUFHLENBQUMsQ0FBQTtRQUN4QyxNQUFNLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUMsQ0FBQyxFQUFFLENBQUE7SUFDekMsQ0FBQztJQUVELGtDQUFlLEdBQWYsVUFBZ0IsS0FBUTtRQUN0QixNQUFNLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsV0FBVyxDQUFDO2FBQ2hDLE1BQU0sQ0FBQyxVQUFDLEVBQWE7Z0JBQVosV0FBRyxFQUFFLGNBQU07WUFBTSxPQUFBLE1BQU0sQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDO1FBQWpCLENBQWlCLENBQUM7YUFDNUMsR0FBRyxDQUFDLFVBQUMsRUFBYTtnQkFBWixXQUFHLEVBQUUsY0FBTTtZQUFNLE9BQUEsR0FBRztRQUFILENBQUcsQ0FBQyxDQUFBO0lBQ2hDLENBQUM7SUFDSCxlQUFDO0FBQUQsQ0FBQyxBQWpERCxJQWlEQyJ9
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27521,15 +23778,15 @@ function prune(map, key) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2V0X29wZXJhdGlvbnMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvbXVsdGltYXAvc3JjL3NldF9vcGVyYXRpb25zLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE1BQU0sY0FBb0IsR0FBbUIsRUFBRSxHQUFNLEVBQUUsS0FBUTtJQUM3RCxLQUFLLENBQUMsR0FBRyxFQUFFLEdBQUcsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxLQUFLLENBQUMsQ0FBQTtBQUM1QixDQUFDO0FBRUQsTUFBTSxjQUFvQixHQUFtQixFQUFFLEdBQU0sRUFBRSxLQUFRO0lBQzdELEtBQUssQ0FBQyxHQUFHLEVBQUUsR0FBRyxDQUFDLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBQyxDQUFBO0lBQzdCLEtBQUssQ0FBQyxHQUFHLEVBQUUsR0FBRyxDQUFDLENBQUE7QUFDakIsQ0FBQztBQUVELE1BQU0sZ0JBQXNCLEdBQW1CLEVBQUUsR0FBTTtJQUNyRCxJQUFJLE1BQU0sR0FBRyxHQUFHLENBQUMsR0FBRyxDQUFDLEdBQUcsQ0FBQyxDQUFBO0lBQ3pCLEVBQUUsQ0FBQyxDQUFDLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQztRQUNaLE1BQU0sR0FBRyxJQUFJLEdBQUcsRUFBRSxDQUFBO1FBQ2xCLEdBQUcsQ0FBQyxHQUFHLENBQUMsR0FBRyxFQUFFLE1BQU0sQ0FBQyxDQUFBO0lBQ3RCLENBQUM7SUFDRCxNQUFNLENBQUMsTUFBTSxDQUFBO0FBQ2YsQ0FBQztBQUVELE1BQU0sZ0JBQXNCLEdBQW1CLEVBQUUsR0FBTTtJQUNyRCxJQUFNLE1BQU0sR0FBRyxHQUFHLENBQUMsR0FBRyxDQUFDLEdBQUcsQ0FBQyxDQUFBO0lBQzNCLEVBQUUsQ0FBQyxDQUFDLE1BQU0sSUFBSSxJQUFJLElBQUksTUFBTSxDQUFDLElBQUksSUFBSSxDQUFDLENBQUMsQ0FBQyxDQUFDO1FBQ3ZDLEdBQUcsQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUE7SUFDakIsQ0FBQztBQUNILENBQUMifQ==
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_attribute_observer__ = __webpack_require__(171);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_attribute_observer__ = __webpack_require__(180);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_element_observer__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_element_observer__ = __webpack_require__(9);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_token_list_observer__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_token_list_observer__ = __webpack_require__(181);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_2__src_token_list_observer__["a"]; });
 
 
@@ -27537,7 +23794,7 @@ function prune(map, key) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvbXV0YXRpb24tb2JzZXJ2ZXJzL2luZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGNBQWMsMEJBQTBCLENBQUE7QUFDeEMsY0FBYyx3QkFBd0IsQ0FBQTtBQUN0QyxjQUFjLDJCQUEyQixDQUFBIn0=
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27549,7 +23806,7 @@ function attributeValueContainsToken(attributeName, token) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2VsZWN0b3JzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vcGFja2FnZXMvQHN0aW11bHVzL2NvcmUvc3JjL3NlbGVjdG9ycy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxlQUFlO0FBQ2YsTUFBTSxzQ0FBc0MsYUFBcUIsRUFBRSxLQUFhO0lBQzlFLE1BQU0sQ0FBQyxNQUFJLGFBQWEsWUFBTSxLQUFLLFFBQUksQ0FBQTtBQUN6QyxDQUFDIn0=
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27562,7 +23819,7 @@ var defaultSchema = {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2NoZW1hLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vcGFja2FnZXMvQHN0aW11bHVzL2NvcmUvc3JjL3NjaGVtYS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFNQSxNQUFNLENBQUMsSUFBTSxhQUFhLEdBQVc7SUFDbkMsbUJBQW1CLEVBQUUsaUJBQWlCO0lBQ3RDLGVBQWUsRUFBRSxhQUFhO0lBQzlCLGVBQWUsRUFBRSxhQUFhO0NBQy9CLENBQUEifQ==
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27574,7 +23831,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _stimulus = __webpack_require__(5);
+var _stimulus = __webpack_require__(6);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -27699,17 +23956,17 @@ var _class = function (_Controller) {
 
 _class.targets = ['hover', 'template'];
 exports.default = _class;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(8)))
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var moment = __webpack_require__(0);
-var rome = __webpack_require__(186);
+var rome = __webpack_require__(196);
 
 rome.use(moment);
 
@@ -27717,7 +23974,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27794,7 +24051,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27933,7 +24190,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27996,7 +24253,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28059,7 +24316,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28185,7 +24442,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28248,7 +24505,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28356,7 +24613,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28419,7 +24676,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28528,7 +24785,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28664,7 +24921,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28758,7 +25015,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28820,7 +25077,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28943,7 +25200,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29066,7 +25323,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29178,7 +25435,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29333,7 +25590,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29425,7 +25682,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29608,7 +25865,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29675,7 +25932,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29759,7 +26016,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29823,7 +26080,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29903,7 +26160,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 48 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29983,7 +26240,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 49 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30063,7 +26320,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 50 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30166,7 +26423,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30270,7 +26527,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30341,7 +26598,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30408,7 +26665,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30479,7 +26736,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30550,7 +26807,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 56 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30616,7 +26873,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 57 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30687,7 +26944,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 58 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30762,7 +27019,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 59 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30858,7 +27115,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 60 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30954,7 +27211,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 61 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31041,7 +27298,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 62 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31125,7 +27382,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31195,7 +27452,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31305,7 +27562,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 65 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31418,7 +27675,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 66 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31482,7 +27739,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 67 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31569,7 +27826,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31647,7 +27904,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 69 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31729,7 +27986,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 70 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31808,7 +28065,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31888,7 +28145,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 72 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31969,7 +28226,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32096,7 +28353,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 74 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32224,7 +28481,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32325,7 +28582,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32453,7 +28710,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32611,7 +28868,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32725,7 +28982,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32824,7 +29081,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32910,7 +29167,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 81 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33046,7 +29303,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 82 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33119,7 +29376,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 83 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33215,7 +29472,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 84 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33301,7 +29558,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 85 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33394,7 +29651,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 86 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33485,7 +29742,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 87 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33599,7 +29856,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 88 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33729,7 +29986,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 89 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33814,7 +30071,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 90 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -33905,7 +30162,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 91 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34045,7 +30302,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 92 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34119,7 +30376,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 93 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34241,7 +30498,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 94 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34342,7 +30599,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 95 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34458,7 +30715,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 96 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34526,7 +30783,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 97 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34620,7 +30877,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 98 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34705,7 +30962,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 99 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34813,7 +31070,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 100 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -34977,7 +31234,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 101 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35063,7 +31320,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 102 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35149,7 +31406,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 103 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35213,7 +31470,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 104 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35310,7 +31567,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 105 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35376,7 +31633,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 106 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35503,7 +31760,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 107 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35594,7 +31851,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 108 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35685,7 +31942,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 109 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35749,7 +32006,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 110 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -35877,7 +32134,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 111 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36007,7 +32264,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 112 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36076,7 +32333,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 113 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36141,7 +32398,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 114 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36220,7 +32477,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 115 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36406,7 +32663,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 116 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36508,7 +32765,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 117 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36572,7 +32829,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 118 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36647,7 +32904,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 119 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36807,7 +33064,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 120 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -36984,7 +33241,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 121 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37056,7 +33313,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 122 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37171,7 +33428,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 123 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37286,7 +33543,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 124 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37378,7 +33635,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 125 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37451,7 +33708,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 126 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37514,7 +33771,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 127 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37647,7 +33904,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 128 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37740,7 +33997,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 129 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37811,7 +34068,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 130 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -37931,7 +34188,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 131 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -38002,7 +34259,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 132 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -38068,7 +34325,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 133 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -38194,7 +34451,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 134 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -38292,7 +34549,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 135 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -38387,7 +34644,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 136 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -38449,7 +34706,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 137 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -38511,7 +34768,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 138 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js language configuration
@@ -38634,7 +34891,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 139 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -38789,7 +35046,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 140 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -38891,7 +35148,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 141 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -38953,7 +35210,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 142 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -39015,7 +35272,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 143 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -39098,7 +35355,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 144 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -39170,7 +35427,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 145 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -39234,7 +35491,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 146 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -39348,7 +35605,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 147 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -39455,7 +35712,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 148 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -39562,7 +35819,7 @@ module.exports = rome;
 
 
 /***/ }),
-/* 149 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39596,7 +35853,7 @@ module.exports = throttle;
 
 
 /***/ }),
-/* 150 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39604,10 +35861,10 @@ module.exports = throttle;
 
 var getSelection;
 var doc = global.document;
-var getSelectionRaw = __webpack_require__(204);
-var getSelectionNullOp = __webpack_require__(205);
-var getSelectionSynthetic = __webpack_require__(206);
-var isHost = __webpack_require__(207);
+var getSelectionRaw = __webpack_require__(214);
+var getSelectionNullOp = __webpack_require__(215);
+var getSelectionSynthetic = __webpack_require__(216);
+var isHost = __webpack_require__(217);
 if (isHost.method(global, 'getSelection')) {
   getSelection = getSelectionRaw;
 } else if (typeof doc.selection === 'object' && doc.selection) {
@@ -39618,10 +35875,10 @@ if (isHost.method(global, 'getSelection')) {
 
 module.exports = getSelection;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 151 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39686,16 +35943,16 @@ function createBoundaryTextRange (p, starting) {
 
 module.exports = rangeToTextRange;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 152 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var momentum = __webpack_require__(4);
+var momentum = __webpack_require__(5);
 
 // naïve implementation, specifically meant to clone `options` objects
 function clone (thing) {
@@ -39723,15 +35980,15 @@ module.exports = clone;
 
 
 /***/ }),
-/* 153 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var parse = __webpack_require__(11);
-var isInput = __webpack_require__(12);
-var momentum = __webpack_require__(4);
+var parse = __webpack_require__(12);
+var isInput = __webpack_require__(13);
+var momentum = __webpack_require__(5);
 
 function defaults (options, cal) {
   var temp;
@@ -39836,22 +36093,22 @@ module.exports = defaults;
 
 
 /***/ }),
-/* 154 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var crossvent = __webpack_require__(6);
-var emitter = __webpack_require__(210);
-var dom = __webpack_require__(217);
-var text = __webpack_require__(218);
-var parse = __webpack_require__(11);
-var clone = __webpack_require__(152);
-var defaults = __webpack_require__(153);
-var momentum = __webpack_require__(4);
-var classes = __webpack_require__(155);
-var noop = __webpack_require__(219);
+var crossvent = __webpack_require__(7);
+var emitter = __webpack_require__(220);
+var dom = __webpack_require__(227);
+var text = __webpack_require__(228);
+var parse = __webpack_require__(12);
+var clone = __webpack_require__(154);
+var defaults = __webpack_require__(155);
+var momentum = __webpack_require__(5);
+var classes = __webpack_require__(157);
+var noop = __webpack_require__(229);
 var no;
 
 function calendar (calendarOptions) {
@@ -40505,7 +36762,7 @@ module.exports = calendar;
 
 
 /***/ }),
-/* 155 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40550,7 +36807,7 @@ module.exports = {
 
 
 /***/ }),
-/* 156 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -41419,7 +37676,938 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 }));
 
 /***/ }),
-/* 157 */
+/* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * JavaScript Cookie v2.2.0
+ * https://github.com/js-cookie/js-cookie
+ *
+ * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
+ * Released under the MIT license
+ */
+;(function (factory) {
+	var registeredInModuleLoader = false;
+	if (true) {
+		!(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		registeredInModuleLoader = true;
+	}
+	if (true) {
+		module.exports = factory();
+		registeredInModuleLoader = true;
+	}
+	if (!registeredInModuleLoader) {
+		var OldCookies = window.Cookies;
+		var api = window.Cookies = factory();
+		api.noConflict = function () {
+			window.Cookies = OldCookies;
+			return api;
+		};
+	}
+}(function () {
+	function extend () {
+		var i = 0;
+		var result = {};
+		for (; i < arguments.length; i++) {
+			var attributes = arguments[ i ];
+			for (var key in attributes) {
+				result[key] = attributes[key];
+			}
+		}
+		return result;
+	}
+
+	function init (converter) {
+		function api (key, value, attributes) {
+			var result;
+			if (typeof document === 'undefined') {
+				return;
+			}
+
+			// Write
+
+			if (arguments.length > 1) {
+				attributes = extend({
+					path: '/'
+				}, api.defaults, attributes);
+
+				if (typeof attributes.expires === 'number') {
+					var expires = new Date();
+					expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
+					attributes.expires = expires;
+				}
+
+				// We're using "expires" because "max-age" is not supported by IE
+				attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
+
+				try {
+					result = JSON.stringify(value);
+					if (/^[\{\[]/.test(result)) {
+						value = result;
+					}
+				} catch (e) {}
+
+				if (!converter.write) {
+					value = encodeURIComponent(String(value))
+						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+				} else {
+					value = converter.write(value, key);
+				}
+
+				key = encodeURIComponent(String(key));
+				key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
+				key = key.replace(/[\(\)]/g, escape);
+
+				var stringifiedAttributes = '';
+
+				for (var attributeName in attributes) {
+					if (!attributes[attributeName]) {
+						continue;
+					}
+					stringifiedAttributes += '; ' + attributeName;
+					if (attributes[attributeName] === true) {
+						continue;
+					}
+					stringifiedAttributes += '=' + attributes[attributeName];
+				}
+				return (document.cookie = key + '=' + value + stringifiedAttributes);
+			}
+
+			// Read
+
+			if (!key) {
+				result = {};
+			}
+
+			// To prevent the for loop in the first place assign an empty array
+			// in case there are no cookies at all. Also prevents odd result when
+			// calling "get()"
+			var cookies = document.cookie ? document.cookie.split('; ') : [];
+			var rdecode = /(%[0-9A-Z]{2})+/g;
+			var i = 0;
+
+			for (; i < cookies.length; i++) {
+				var parts = cookies[i].split('=');
+				var cookie = parts.slice(1).join('=');
+
+				if (!this.json && cookie.charAt(0) === '"') {
+					cookie = cookie.slice(1, -1);
+				}
+
+				try {
+					var name = parts[0].replace(rdecode, decodeURIComponent);
+					cookie = converter.read ?
+						converter.read(cookie, name) : converter(cookie, name) ||
+						cookie.replace(rdecode, decodeURIComponent);
+
+					if (this.json) {
+						try {
+							cookie = JSON.parse(cookie);
+						} catch (e) {}
+					}
+
+					if (key === name) {
+						result = cookie;
+						break;
+					}
+
+					if (!key) {
+						result[name] = cookie;
+					}
+				} catch (e) {}
+			}
+
+			return result;
+		}
+
+		api.set = api;
+		api.get = function (key) {
+			return api.call(api, key);
+		};
+		api.getJSON = function () {
+			return api.apply({
+				json: true
+			}, [].slice.call(arguments));
+		};
+		api.defaults = {};
+
+		api.remove = function (key, attributes) {
+			api(key, '', extend(attributes, {
+				expires: -1
+			}));
+		};
+
+		api.withConverter = init;
+
+		return api;
+	}
+
+	return init(function () {});
+}));
+
+
+/***/ }),
+/* 160 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * jQuery UI :data 1.12.1
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ */
+
+//>>label: :data Selector
+//>>group: Core
+//>>description: Selects elements which have data stored under the specified key.
+//>>docs: http://api.jqueryui.com/data-selector/
+
+( function( factory ) {
+	if ( true ) {
+
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1), __webpack_require__(4) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+} ( function( $ ) {
+return $.extend( $.expr[ ":" ], {
+	data: $.expr.createPseudo ?
+		$.expr.createPseudo( function( dataName ) {
+			return function( elem ) {
+				return !!$.data( elem, dataName );
+			};
+		} ) :
+
+		// Support: jQuery <1.8
+		function( elem, i, match ) {
+			return !!$.data( elem, match[ 3 ] );
+		}
+} );
+} ) );
+
+
+/***/ }),
+/* 161 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * jQuery UI Scroll Parent 1.12.1
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ */
+
+//>>label: scrollParent
+//>>group: Core
+//>>description: Get the closest ancestor element that is scrollable.
+//>>docs: http://api.jqueryui.com/scrollParent/
+
+( function( factory ) {
+	if ( true ) {
+
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1), __webpack_require__(4) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+} ( function( $ ) {
+
+return $.fn.scrollParent = function( includeHidden ) {
+	var position = this.css( "position" ),
+		excludeStaticParent = position === "absolute",
+		overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/,
+		scrollParent = this.parents().filter( function() {
+			var parent = $( this );
+			if ( excludeStaticParent && parent.css( "position" ) === "static" ) {
+				return false;
+			}
+			return overflowRegex.test( parent.css( "overflow" ) + parent.css( "overflow-y" ) +
+				parent.css( "overflow-x" ) );
+		} ).eq( 0 );
+
+	return position === "fixed" || !scrollParent.length ?
+		$( this[ 0 ].ownerDocument || document ) :
+		scrollParent;
+};
+
+} ) );
+
+
+/***/ }),
+/* 162 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * jQuery UI Mouse 1.12.1
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ */
+
+//>>label: Mouse
+//>>group: Widgets
+//>>description: Abstracts mouse-based interactions to assist in creating certain widgets.
+//>>docs: http://api.jqueryui.com/mouse/
+
+( function( factory ) {
+	if ( true ) {
+
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
+			__webpack_require__(1),
+			__webpack_require__(163),
+			__webpack_require__(4),
+			__webpack_require__(14)
+		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}( function( $ ) {
+
+var mouseHandled = false;
+$( document ).on( "mouseup", function() {
+	mouseHandled = false;
+} );
+
+return $.widget( "ui.mouse", {
+	version: "1.12.1",
+	options: {
+		cancel: "input, textarea, button, select, option",
+		distance: 1,
+		delay: 0
+	},
+	_mouseInit: function() {
+		var that = this;
+
+		this.element
+			.on( "mousedown." + this.widgetName, function( event ) {
+				return that._mouseDown( event );
+			} )
+			.on( "click." + this.widgetName, function( event ) {
+				if ( true === $.data( event.target, that.widgetName + ".preventClickEvent" ) ) {
+					$.removeData( event.target, that.widgetName + ".preventClickEvent" );
+					event.stopImmediatePropagation();
+					return false;
+				}
+			} );
+
+		this.started = false;
+	},
+
+	// TODO: make sure destroying one instance of mouse doesn't mess with
+	// other instances of mouse
+	_mouseDestroy: function() {
+		this.element.off( "." + this.widgetName );
+		if ( this._mouseMoveDelegate ) {
+			this.document
+				.off( "mousemove." + this.widgetName, this._mouseMoveDelegate )
+				.off( "mouseup." + this.widgetName, this._mouseUpDelegate );
+		}
+	},
+
+	_mouseDown: function( event ) {
+
+		// don't let more than one widget handle mouseStart
+		if ( mouseHandled ) {
+			return;
+		}
+
+		this._mouseMoved = false;
+
+		// We may have missed mouseup (out of window)
+		( this._mouseStarted && this._mouseUp( event ) );
+
+		this._mouseDownEvent = event;
+
+		var that = this,
+			btnIsLeft = ( event.which === 1 ),
+
+			// event.target.nodeName works around a bug in IE 8 with
+			// disabled inputs (#7620)
+			elIsCancel = ( typeof this.options.cancel === "string" && event.target.nodeName ?
+				$( event.target ).closest( this.options.cancel ).length : false );
+		if ( !btnIsLeft || elIsCancel || !this._mouseCapture( event ) ) {
+			return true;
+		}
+
+		this.mouseDelayMet = !this.options.delay;
+		if ( !this.mouseDelayMet ) {
+			this._mouseDelayTimer = setTimeout( function() {
+				that.mouseDelayMet = true;
+			}, this.options.delay );
+		}
+
+		if ( this._mouseDistanceMet( event ) && this._mouseDelayMet( event ) ) {
+			this._mouseStarted = ( this._mouseStart( event ) !== false );
+			if ( !this._mouseStarted ) {
+				event.preventDefault();
+				return true;
+			}
+		}
+
+		// Click event may never have fired (Gecko & Opera)
+		if ( true === $.data( event.target, this.widgetName + ".preventClickEvent" ) ) {
+			$.removeData( event.target, this.widgetName + ".preventClickEvent" );
+		}
+
+		// These delegates are required to keep context
+		this._mouseMoveDelegate = function( event ) {
+			return that._mouseMove( event );
+		};
+		this._mouseUpDelegate = function( event ) {
+			return that._mouseUp( event );
+		};
+
+		this.document
+			.on( "mousemove." + this.widgetName, this._mouseMoveDelegate )
+			.on( "mouseup." + this.widgetName, this._mouseUpDelegate );
+
+		event.preventDefault();
+
+		mouseHandled = true;
+		return true;
+	},
+
+	_mouseMove: function( event ) {
+
+		// Only check for mouseups outside the document if you've moved inside the document
+		// at least once. This prevents the firing of mouseup in the case of IE<9, which will
+		// fire a mousemove event if content is placed under the cursor. See #7778
+		// Support: IE <9
+		if ( this._mouseMoved ) {
+
+			// IE mouseup check - mouseup happened when mouse was out of window
+			if ( $.ui.ie && ( !document.documentMode || document.documentMode < 9 ) &&
+					!event.button ) {
+				return this._mouseUp( event );
+
+			// Iframe mouseup check - mouseup occurred in another document
+			} else if ( !event.which ) {
+
+				// Support: Safari <=8 - 9
+				// Safari sets which to 0 if you press any of the following keys
+				// during a drag (#14461)
+				if ( event.originalEvent.altKey || event.originalEvent.ctrlKey ||
+						event.originalEvent.metaKey || event.originalEvent.shiftKey ) {
+					this.ignoreMissingWhich = true;
+				} else if ( !this.ignoreMissingWhich ) {
+					return this._mouseUp( event );
+				}
+			}
+		}
+
+		if ( event.which || event.button ) {
+			this._mouseMoved = true;
+		}
+
+		if ( this._mouseStarted ) {
+			this._mouseDrag( event );
+			return event.preventDefault();
+		}
+
+		if ( this._mouseDistanceMet( event ) && this._mouseDelayMet( event ) ) {
+			this._mouseStarted =
+				( this._mouseStart( this._mouseDownEvent, event ) !== false );
+			( this._mouseStarted ? this._mouseDrag( event ) : this._mouseUp( event ) );
+		}
+
+		return !this._mouseStarted;
+	},
+
+	_mouseUp: function( event ) {
+		this.document
+			.off( "mousemove." + this.widgetName, this._mouseMoveDelegate )
+			.off( "mouseup." + this.widgetName, this._mouseUpDelegate );
+
+		if ( this._mouseStarted ) {
+			this._mouseStarted = false;
+
+			if ( event.target === this._mouseDownEvent.target ) {
+				$.data( event.target, this.widgetName + ".preventClickEvent", true );
+			}
+
+			this._mouseStop( event );
+		}
+
+		if ( this._mouseDelayTimer ) {
+			clearTimeout( this._mouseDelayTimer );
+			delete this._mouseDelayTimer;
+		}
+
+		this.ignoreMissingWhich = false;
+		mouseHandled = false;
+		event.preventDefault();
+	},
+
+	_mouseDistanceMet: function( event ) {
+		return ( Math.max(
+				Math.abs( this._mouseDownEvent.pageX - event.pageX ),
+				Math.abs( this._mouseDownEvent.pageY - event.pageY )
+			) >= this.options.distance
+		);
+	},
+
+	_mouseDelayMet: function( /* event */ ) {
+		return this.mouseDelayMet;
+	},
+
+	// These are placeholder methods, to be overriden by extending plugin
+	_mouseStart: function( /* event */ ) {},
+	_mouseDrag: function( /* event */ ) {},
+	_mouseStop: function( /* event */ ) {},
+	_mouseCapture: function( /* event */ ) { return true; }
+} );
+
+} ) );
+
+
+/***/ }),
+/* 163 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
+	if ( true ) {
+
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1), __webpack_require__(4) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+} ( function( $ ) {
+
+// This file is deprecated
+return $.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
+} ) );
+
+
+/***/ }),
+/* 164 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 165 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+var stylesInDom = {},
+	memoize = function(fn) {
+		var memo;
+		return function () {
+			if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+			return memo;
+		};
+	},
+	isOldIE = memoize(function() {
+		// Test for IE <= 9 as proposed by Browserhacks
+		// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+		// Tests for existence of standard globals is to allow style-loader 
+		// to operate correctly into non-standard environments
+		// @see https://github.com/webpack-contrib/style-loader/issues/177
+		return window && document && document.all && !window.atob;
+	}),
+	getElement = (function(fn) {
+		var memo = {};
+		return function(selector) {
+			if (typeof memo[selector] === "undefined") {
+				memo[selector] = fn.call(this, selector);
+			}
+			return memo[selector]
+		};
+	})(function (styleTarget) {
+		return document.querySelector(styleTarget)
+	}),
+	singletonElement = null,
+	singletonCounter = 0,
+	styleElementsInsertedAtTop = [],
+	fixUrls = __webpack_require__(245);
+
+module.exports = function(list, options) {
+	if(typeof DEBUG !== "undefined" && DEBUG) {
+		if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+	if (typeof options.insertInto === "undefined") options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+	addStylesToDom(styles, options);
+
+	return function update(newList) {
+		var mayRemove = [];
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+		for(var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+			if(domStyle.refs === 0) {
+				for(var j = 0; j < domStyle.parts.length; j++)
+					domStyle.parts[j]();
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom(styles, options) {
+	for(var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+		if(domStyle) {
+			domStyle.refs++;
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles(list, options) {
+	var styles = [];
+	var newStyles = {};
+	for(var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+		if(!newStyles[id])
+			styles.push(newStyles[id] = {id: id, parts: [part]});
+		else
+			newStyles[id].parts.push(part);
+	}
+	return styles;
+}
+
+function insertStyleElement(options, styleElement) {
+	var styleTarget = getElement(options.insertInto)
+	if (!styleTarget) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+	var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+	if (options.insertAt === "top") {
+		if(!lastStyleElementInsertedAtTop) {
+			styleTarget.insertBefore(styleElement, styleTarget.firstChild);
+		} else if(lastStyleElementInsertedAtTop.nextSibling) {
+			styleTarget.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			styleTarget.appendChild(styleElement);
+		}
+		styleElementsInsertedAtTop.push(styleElement);
+	} else if (options.insertAt === "bottom") {
+		styleTarget.appendChild(styleElement);
+	} else {
+		throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+	}
+}
+
+function removeStyleElement(styleElement) {
+	styleElement.parentNode.removeChild(styleElement);
+	var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+	if(idx >= 0) {
+		styleElementsInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement(options) {
+	var styleElement = document.createElement("style");
+	options.attrs.type = "text/css";
+
+	attachTagAttrs(styleElement, options.attrs);
+	insertStyleElement(options, styleElement);
+	return styleElement;
+}
+
+function createLinkElement(options) {
+	var linkElement = document.createElement("link");
+	options.attrs.type = "text/css";
+	options.attrs.rel = "stylesheet";
+
+	attachTagAttrs(linkElement, options.attrs);
+	insertStyleElement(options, linkElement);
+	return linkElement;
+}
+
+function attachTagAttrs(element, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		element.setAttribute(key, attrs[key]);
+	});
+}
+
+function addStyle(obj, options) {
+	var styleElement, update, remove, transformResult;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    transformResult = options.transform(obj.css);
+	    
+	    if (transformResult) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = transformResult;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css. 
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+		styleElement = singletonElement || (singletonElement = createStyleElement(options));
+		update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+	} else if(obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function") {
+		styleElement = createLinkElement(options);
+		update = updateLink.bind(null, styleElement, options);
+		remove = function() {
+			removeStyleElement(styleElement);
+			if(styleElement.href)
+				URL.revokeObjectURL(styleElement.href);
+		};
+	} else {
+		styleElement = createStyleElement(options);
+		update = applyToTag.bind(null, styleElement);
+		remove = function() {
+			removeStyleElement(styleElement);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle(newObj) {
+		if(newObj) {
+			if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+				return;
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag(styleElement, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (styleElement.styleSheet) {
+		styleElement.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = styleElement.childNodes;
+		if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+		if (childNodes.length) {
+			styleElement.insertBefore(cssNode, childNodes[index]);
+		} else {
+			styleElement.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag(styleElement, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		styleElement.setAttribute("media", media)
+	}
+
+	if(styleElement.styleSheet) {
+		styleElement.styleSheet.cssText = css;
+	} else {
+		while(styleElement.firstChild) {
+			styleElement.removeChild(styleElement.firstChild);
+		}
+		styleElement.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink(linkElement, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/* If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+	and there is no publicPath defined then lets turn convertToAbsoluteUrls
+	on by default.  Otherwise default to the convertToAbsoluteUrls option
+	directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls){
+		css = fixUrls(css);
+	}
+
+	if(sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = linkElement.href;
+
+	linkElement.href = URL.createObjectURL(blob);
+
+	if(oldSrc)
+		URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+/* 166 */
 /***/ (function(module, exports) {
 
 // Generated by CoffeeScript 1.6.2
@@ -41695,7 +38883,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 158 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41706,19 +38894,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.UI = exports.Sprinkles = exports.registerControllers = exports.Controllers = undefined;
 
-var _ui = __webpack_require__(2);
+var _ui = __webpack_require__(3);
 
 var UI = _interopRequireWildcard(_ui);
 
-var _controllers = __webpack_require__(162);
+var _controllers = __webpack_require__(171);
 
 var _controllers2 = _interopRequireDefault(_controllers);
 
-var _sprinkles = __webpack_require__(224);
+var _sprinkles = __webpack_require__(234);
 
 var Sprinkles = _interopRequireWildcard(_sprinkles);
 
-var _registerControllers = __webpack_require__(256);
+var _registerControllers = __webpack_require__(271);
 
 var _registerControllers2 = _interopRequireDefault(_registerControllers);
 
@@ -41732,21 +38920,21 @@ exports.Sprinkles = Sprinkles;
 exports.UI = UI;
 
 /***/ }),
-/* 159 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(160);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(169);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 160 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jquery"] = __webpack_require__(161);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jquery"] = __webpack_require__(170);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 161 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -52117,7 +49305,7 @@ return jQuery;
 
 
 /***/ }),
-/* 162 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52127,27 +49315,27 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _modals = __webpack_require__(163);
+var _modals = __webpack_require__(172);
 
 var _modals2 = _interopRequireDefault(_modals);
 
-var _accordianController = __webpack_require__(180);
+var _accordianController = __webpack_require__(189);
 
 var _accordianController2 = _interopRequireDefault(_accordianController);
 
-var _tooltipController = __webpack_require__(24);
+var _tooltipController = __webpack_require__(26);
 
 var _tooltipController2 = _interopRequireDefault(_tooltipController);
 
-var _popoverController = __webpack_require__(181);
+var _popoverController = __webpack_require__(190);
 
 var _popoverController2 = _interopRequireDefault(_popoverController);
 
-var _modalsController = __webpack_require__(182);
+var _modalsController = __webpack_require__(191);
 
 var _modalsController2 = _interopRequireDefault(_modalsController);
 
-var _datepickerController = __webpack_require__(184);
+var _datepickerController = __webpack_require__(193);
 
 var _datepickerController2 = _interopRequireDefault(_datepickerController);
 
@@ -52165,7 +49353,7 @@ var Controllers = {
 exports.default = Controllers;
 
 /***/ }),
-/* 163 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52175,11 +49363,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _modalController = __webpack_require__(13);
+var _modalController = __webpack_require__(15);
 
 var _modalController2 = _interopRequireDefault(_modalController);
 
-var _flyoutController = __webpack_require__(179);
+var _flyoutController = __webpack_require__(188);
 
 var _flyoutController2 = _interopRequireDefault(_flyoutController);
 
@@ -52193,21 +49381,21 @@ var Modals = {
 exports.default = Modals;
 
 /***/ }),
-/* 164 */
+/* 173 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_action__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_action__ = __webpack_require__(17);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__src_action__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_action_descriptor__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_action_descriptor__ = __webpack_require__(18);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__src_action_descriptor__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_application__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_application__ = __webpack_require__(174);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__src_application__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_context__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_context__ = __webpack_require__(19);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_3__src_context__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_controller__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__src_controller__ = __webpack_require__(186);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_4__src_controller__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_schema__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__src_schema__ = __webpack_require__(25);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_5__src_schema__["a"]; });
 
 
@@ -52218,13 +49406,13 @@ exports.default = Modals;
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvY29yZS9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLEVBQUUsTUFBTSxFQUFFLE1BQU0sY0FBYyxDQUFBO0FBQ3JDLE9BQU8sRUFBRSxnQkFBZ0IsRUFBRSxNQUFNLHlCQUF5QixDQUFBO0FBQzFELE9BQU8sRUFBRSxXQUFXLEVBQUUsTUFBTSxtQkFBbUIsQ0FBQTtBQUMvQyxPQUFPLEVBQUUsT0FBTyxFQUFFLE1BQU0sZUFBZSxDQUFBO0FBQ3ZDLE9BQU8sRUFBRSxVQUFVLEVBQXlCLE1BQU0sa0JBQWtCLENBQUE7QUFFcEUsT0FBTyxFQUFVLGFBQWEsRUFBRSxNQUFNLGNBQWMsQ0FBQSJ9
 
 /***/ }),
-/* 165 */
+/* 174 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Application; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(166);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__schema__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(175);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__schema__ = __webpack_require__(25);
 
 
 var Application = /** @class */ (function () {
@@ -52289,13 +49477,13 @@ var Application = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwbGljYXRpb24uanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvY29yZS9zcmMvYXBwbGljYXRpb24udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBRUEsT0FBTyxFQUFFLE1BQU0sRUFBRSxNQUFNLFVBQVUsQ0FBQTtBQUNqQyxPQUFPLEVBQVUsYUFBYSxFQUFFLE1BQU0sVUFBVSxDQUFBO0FBRWhEO0lBV0UscUJBQVksT0FBMkMsRUFBRSxNQUE4QjtRQUEzRSx3QkFBQSxFQUFBLFVBQW1CLFFBQVEsQ0FBQyxlQUFlO1FBQUUsdUJBQUEsRUFBQSxzQkFBOEI7UUFDckYsSUFBSSxDQUFDLE9BQU8sR0FBRyxPQUFPLENBQUE7UUFDdEIsSUFBSSxDQUFDLE1BQU0sR0FBRyxNQUFNLENBQUE7UUFDcEIsSUFBSSxDQUFDLE1BQU0sR0FBRyxJQUFJLE1BQU0sQ0FBQyxJQUFJLENBQUMsQ0FBQTtJQUNoQyxDQUFDO0lBVk0saUJBQUssR0FBWixVQUFhLE9BQWlCLEVBQUUsTUFBZTtRQUM3QyxJQUFNLFdBQVcsR0FBRyxJQUFJLFdBQVcsQ0FBQyxPQUFPLEVBQUUsTUFBTSxDQUFDLENBQUE7UUFDcEQsV0FBVyxDQUFDLEtBQUssRUFBRSxDQUFBO1FBQ25CLE1BQU0sQ0FBQyxXQUFXLENBQUE7SUFDcEIsQ0FBQztJQVFELDJCQUFLLEdBQUw7UUFDRSxJQUFJLENBQUMsTUFBTSxDQUFDLEtBQUssRUFBRSxDQUFBO0lBQ3JCLENBQUM7SUFFRCwwQkFBSSxHQUFKO1FBQ0UsSUFBSSxDQUFDLE1BQU0sQ0FBQyxJQUFJLEVBQUUsQ0FBQTtJQUNwQixDQUFDO0lBRUQsOEJBQVEsR0FBUixVQUFTLFVBQWtCLEVBQUUscUJBQTRDO1FBQ3ZFLElBQUksQ0FBQyxJQUFJLENBQUMsRUFBRSxVQUFVLFlBQUEsRUFBRSxxQkFBcUIsdUJBQUEsRUFBRSxDQUFDLENBQUE7SUFDbEQsQ0FBQztJQUlELDBCQUFJLEdBQUosVUFBSyxJQUErQjtRQUFwQyxpQkFHQztRQUhxQyxjQUFxQjthQUFyQixVQUFxQixFQUFyQixxQkFBcUIsRUFBckIsSUFBcUI7WUFBckIsNkJBQXFCOztRQUN6RCxJQUFNLFdBQVcsR0FBRyxLQUFLLENBQUMsT0FBTyxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsQ0FBQyxFQUFFLElBQUksU0FBSyxJQUFJLENBQUMsQ0FBQTtRQUNoRSxXQUFXLENBQUMsT0FBTyxDQUFDLFVBQUEsVUFBVSxJQUFJLE9BQUEsS0FBSSxDQUFDLE1BQU0sQ0FBQyxjQUFjLENBQUMsVUFBVSxDQUFDLEVBQXRDLENBQXNDLENBQUMsQ0FBQTtJQUMzRSxDQUFDO0lBSUQsNEJBQU0sR0FBTixVQUFPLElBQXVCO1FBQTlCLGlCQUdDO1FBSCtCLGNBQWlCO2FBQWpCLFVBQWlCLEVBQWpCLHFCQUFpQixFQUFqQixJQUFpQjtZQUFqQiw2QkFBaUI7O1FBQy9DLElBQU0sV0FBVyxHQUFHLEtBQUssQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxDQUFDLEVBQUUsSUFBSSxTQUFLLElBQUksQ0FBQyxDQUFBO1FBQ2hFLFdBQVcsQ0FBQyxPQUFPLENBQUMsVUFBQSxVQUFVLElBQUksT0FBQSxLQUFJLENBQUMsTUFBTSxDQUFDLGdCQUFnQixDQUFDLFVBQVUsQ0FBQyxFQUF4QyxDQUF3QyxDQUFDLENBQUE7SUFDN0UsQ0FBQztJQUlELHNCQUFJLG9DQUFXO1FBRmYsY0FBYzthQUVkO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsUUFBUSxDQUFDLEdBQUcsQ0FBQyxVQUFBLE9BQU8sSUFBSSxPQUFBLE9BQU8sQ0FBQyxVQUFVLEVBQWxCLENBQWtCLENBQUMsQ0FBQTtRQUNoRSxDQUFDOzs7T0FBQTtJQUVELDBEQUFvQyxHQUFwQyxVQUFxQyxPQUFnQixFQUFFLFVBQWtCO1FBQ3ZFLElBQU0sT0FBTyxHQUFHLElBQUksQ0FBQyxNQUFNLENBQUMsaUNBQWlDLENBQUMsT0FBTyxFQUFFLFVBQVUsQ0FBQyxDQUFBO1FBQ2xGLE1BQU0sQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLE9BQU8sQ0FBQyxVQUFVLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQTtJQUM1QyxDQUFDO0lBRUQsaUJBQWlCO0lBRWpCLGlDQUFXLEdBQVgsVUFBWSxLQUFZLEVBQUUsT0FBZSxFQUFFLE1BQWM7UUFDdkQsT0FBTyxDQUFDLEtBQUssQ0FBQyxnQkFBZ0IsRUFBRSxPQUFPLEVBQUUsS0FBSyxFQUFFLE1BQU0sQ0FBQyxDQUFBO0lBQ3pELENBQUM7SUFDSCxrQkFBQztBQUFELENBQUMsQUEzREQsSUEyREMifQ==
 
 /***/ }),
-/* 166 */
+/* 175 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Router; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__module__ = __webpack_require__(167);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stimulus_mutation_observers__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__module__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stimulus_mutation_observers__ = __webpack_require__(23);
 
 
 var Router = /** @class */ (function () {
@@ -52407,13 +49595,13 @@ var Router = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicm91dGVyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vcGFja2FnZXMvQHN0aW11bHVzL2NvcmUvc3JjL3JvdXRlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFHQSxPQUFPLEVBQUUsTUFBTSxFQUFFLE1BQU0sVUFBVSxDQUFBO0FBRWpDLE9BQU8sRUFBRSxpQkFBaUIsRUFBNkIsTUFBTSw4QkFBOEIsQ0FBQTtBQUUzRjtJQUtFLGdCQUFZLFdBQXdCO1FBQ2xDLElBQUksQ0FBQyxXQUFXLEdBQUcsV0FBVyxDQUFBO1FBQzlCLElBQUksQ0FBQyxpQkFBaUIsR0FBRyxJQUFJLGlCQUFpQixDQUFDLElBQUksQ0FBQyxPQUFPLEVBQUUsSUFBSSxDQUFDLG1CQUFtQixFQUFFLElBQUksQ0FBQyxDQUFBO1FBQzVGLElBQUksQ0FBQyxtQkFBbUIsR0FBRyxJQUFJLEdBQUcsQ0FBQTtJQUNwQyxDQUFDO0lBRUQsc0JBQUksMEJBQU07YUFBVjtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsV0FBVyxDQUFDLE1BQU0sQ0FBQTtRQUNoQyxDQUFDOzs7T0FBQTtJQUVELHNCQUFJLDJCQUFPO2FBQVg7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLFdBQVcsQ0FBQyxPQUFPLENBQUE7UUFDakMsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSx1Q0FBbUI7YUFBdkI7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxtQkFBbUIsQ0FBQTtRQUN4QyxDQUFDOzs7T0FBQTtJQUVELHNCQUFJLDJCQUFPO2FBQVg7WUFDRSxNQUFNLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsbUJBQW1CLENBQUMsTUFBTSxFQUFFLENBQUMsQ0FBQTtRQUN0RCxDQUFDOzs7T0FBQTtJQUVELHNCQUFLLEdBQUw7UUFDRSxJQUFJLENBQUMsaUJBQWlCLENBQUMsS0FBSyxFQUFFLENBQUE7SUFDaEMsQ0FBQztJQUVELHFCQUFJLEdBQUo7UUFDRSxJQUFJLENBQUMsaUJBQWlCLENBQUMsSUFBSSxFQUFFLENBQUE7SUFDL0IsQ0FBQztJQUVELCtCQUFjLEdBQWQsVUFBZSxVQUFzQjtRQUMzQixJQUFBLGtDQUFVLENBQWU7UUFDakMsSUFBSSxDQUFDLGdCQUFnQixDQUFDLFVBQVUsQ0FBQyxDQUFBO1FBRWpDLElBQU0sTUFBTSxHQUFHLElBQUksTUFBTSxDQUFDLElBQUksQ0FBQyxXQUFXLEVBQUUsVUFBVSxDQUFDLENBQUE7UUFDdkQsSUFBSSxDQUFDLG1CQUFtQixDQUFDLEdBQUcsQ0FBQyxVQUFVLEVBQUUsTUFBTSxDQUFDLENBQUE7UUFDaEQsSUFBSSxDQUFDLGFBQWEsQ0FBQyxNQUFNLENBQUMsQ0FBQTtJQUM1QixDQUFDO0lBRUQsaUNBQWdCLEdBQWhCLFVBQWlCLFVBQWtCO1FBQ2pDLElBQU0sTUFBTSxHQUFHLElBQUksQ0FBQyxtQkFBbUIsQ0FBQyxHQUFHLENBQUMsVUFBVSxDQUFDLENBQUE7UUFDdkQsRUFBRSxDQUFDLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQztZQUNYLElBQUksQ0FBQyxnQkFBZ0IsQ0FBQyxNQUFNLENBQUMsQ0FBQTtZQUM3QixJQUFJLENBQUMsbUJBQW1CLENBQUMsTUFBTSxDQUFDLFVBQVUsQ0FBQyxDQUFBO1FBQzdDLENBQUM7SUFDSCxDQUFDO0lBRUQsK0JBQStCO0lBRS9CLGVBQWU7SUFDZixnREFBK0IsR0FBL0IsVUFBZ0MsT0FBZ0IsRUFBRSxLQUFhLEVBQUUsYUFBcUI7UUFDcEYsSUFBSSxDQUFDLG1DQUFtQyxDQUFDLEtBQUssRUFBRSxPQUFPLENBQUMsQ0FBQTtJQUMxRCxDQUFDO0lBRUQsZUFBZTtJQUNmLGtEQUFpQyxHQUFqQyxVQUFrQyxPQUFnQixFQUFFLEtBQWEsRUFBRSxhQUFxQjtRQUN0RixJQUFJLENBQUMsd0NBQXdDLENBQUMsS0FBSyxFQUFFLE9BQU8sQ0FBQyxDQUFBO0lBQy9ELENBQUM7SUFJRCxzQkFBSSw0QkFBUTtRQUZaLFdBQVc7YUFFWDtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLE1BQU0sQ0FBQyxVQUFDLFFBQVEsRUFBRSxNQUFNLElBQUssT0FBQSxRQUFRLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLFFBQVEsQ0FBQyxDQUFDLEVBQTVDLENBQTRDLEVBQUUsRUFBRSxDQUFDLENBQUE7UUFDcEcsQ0FBQzs7O09BQUE7SUFFRCxrREFBaUMsR0FBakMsVUFBa0MsT0FBZ0IsRUFBRSxVQUFrQjtRQUNwRSxJQUFNLE1BQU0sR0FBRyxJQUFJLENBQUMsbUJBQW1CLENBQUMsR0FBRyxDQUFDLFVBQVUsQ0FBQyxDQUFBO1FBQ3ZELEVBQUUsQ0FBQyxDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUM7WUFDWCxNQUFNLENBQUMsTUFBTSxDQUFDLG9CQUFvQixDQUFDLE9BQU8sQ0FBQyxDQUFBO1FBQzdDLENBQUM7SUFDSCxDQUFDO0lBRU8sOEJBQWEsR0FBckIsVUFBc0IsTUFBYztRQUNsQyxJQUFNLFFBQVEsR0FBRyxJQUFJLENBQUMsaUJBQWlCLENBQUMsd0JBQXdCLENBQUMsTUFBTSxDQUFDLFVBQVUsQ0FBQyxDQUFBO1FBQ25GLEdBQUcsQ0FBQyxDQUFrQixVQUFRLEVBQVIscUJBQVEsRUFBUixzQkFBUSxFQUFSLElBQVE7WUFBekIsSUFBTSxPQUFPLGlCQUFBO1lBQ2hCLE1BQU0sQ0FBQyxjQUFjLENBQUMsT0FBTyxDQUFDLENBQUE7U0FDL0I7SUFDSCxDQUFDO0lBRU8saUNBQWdCLEdBQXhCLFVBQXlCLE1BQWM7UUFDckMsSUFBTSxRQUFRLEdBQUcsTUFBTSxDQUFDLFFBQVEsQ0FBQTtRQUNoQyxHQUFHLENBQUMsQ0FBc0IsVUFBUSxFQUFSLHFCQUFRLEVBQVIsc0JBQVEsRUFBUixJQUFRO1lBQXJCLElBQUEsZ0NBQU87WUFDbEIsTUFBTSxDQUFDLGlCQUFpQixDQUFDLE9BQU8sQ0FBQyxDQUFBO1NBQ2xDO0lBQ0gsQ0FBQztJQUVPLG9EQUFtQyxHQUEzQyxVQUE0QyxVQUFrQixFQUFFLE9BQWdCO1FBQzlFLElBQU0sTUFBTSxHQUFHLElBQUksQ0FBQyxtQkFBbUIsQ0FBQyxHQUFHLENBQUMsVUFBVSxDQUFDLENBQUE7UUFDdkQsRUFBRSxDQUFDLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQztZQUNYLE1BQU0sQ0FBQyxjQUFjLENBQUMsT0FBTyxDQUFDLENBQUE7UUFDaEMsQ0FBQztJQUNILENBQUM7SUFFTyx5REFBd0MsR0FBaEQsVUFBaUQsVUFBa0IsRUFBRSxPQUFnQjtRQUNuRixJQUFNLE1BQU0sR0FBRyxJQUFJLENBQUMsbUJBQW1CLENBQUMsR0FBRyxDQUFDLFVBQVUsQ0FBQyxDQUFBO1FBQ3ZELEVBQUUsQ0FBQyxDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUM7WUFDWCxNQUFNLENBQUMsaUJBQWlCLENBQUMsT0FBTyxDQUFDLENBQUE7UUFDbkMsQ0FBQztJQUNILENBQUM7SUFDSCxhQUFDO0FBQUQsQ0FBQyxBQXhHRCxJQXdHQyJ9
 
 /***/ }),
-/* 167 */
+/* 176 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Module; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__definition__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__context__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__definition__ = __webpack_require__(185);
 
 
 var Module = /** @class */ (function () {
@@ -52482,7 +49670,7 @@ var Module = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9kdWxlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vcGFja2FnZXMvQHN0aW11bHVzL2NvcmUvc3JjL21vZHVsZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDQSxPQUFPLEVBQUUsT0FBTyxFQUFFLE1BQU0sV0FBVyxDQUFBO0FBRW5DLE9BQU8sRUFBYyxlQUFlLEVBQUUsTUFBTSxjQUFjLENBQUE7QUFFMUQ7SUFPRSxnQkFBWSxXQUF3QixFQUFFLFVBQXNCO1FBQzFELElBQUksQ0FBQyxXQUFXLEdBQUcsV0FBVyxDQUFBO1FBQzlCLElBQUksQ0FBQyxVQUFVLEdBQUcsZUFBZSxDQUFDLFVBQVUsQ0FBQyxDQUFBO1FBQzdDLElBQUksQ0FBQyxpQkFBaUIsR0FBRyxJQUFJLE9BQU8sQ0FBQTtRQUNwQyxJQUFJLENBQUMsaUJBQWlCLEdBQUcsSUFBSSxHQUFHLENBQUE7SUFDbEMsQ0FBQztJQUVELHNCQUFJLDhCQUFVO2FBQWQ7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxVQUFVLENBQUE7UUFDbkMsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSx5Q0FBcUI7YUFBekI7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxxQkFBcUIsQ0FBQTtRQUM5QyxDQUFDOzs7T0FBQTtJQUVELHNCQUFJLDRCQUFRO2FBQVo7WUFDRSxNQUFNLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsaUJBQWlCLENBQUMsQ0FBQTtRQUMzQyxDQUFDOzs7T0FBQTtJQUVELHNCQUFJLHdCQUFJO2FBQVI7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLGlCQUFpQixDQUFDLElBQUksQ0FBQTtRQUNwQyxDQUFDOzs7T0FBQTtJQUVELCtCQUFjLEdBQWQsVUFBZSxPQUFnQjtRQUM3QixJQUFNLE9BQU8sR0FBRyxJQUFJLENBQUMsc0JBQXNCLENBQUMsT0FBTyxDQUFDLENBQUE7UUFDcEQsRUFBRSxDQUFDLENBQUMsT0FBTyxJQUFJLENBQUMsSUFBSSxDQUFDLGlCQUFpQixDQUFDLEdBQUcsQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFDcEQsSUFBSSxDQUFDLGlCQUFpQixDQUFDLEdBQUcsQ0FBQyxPQUFPLENBQUMsQ0FBQTtZQUNuQyxPQUFPLENBQUMsT0FBTyxFQUFFLENBQUE7UUFDbkIsQ0FBQztJQUNILENBQUM7SUFFRCxrQ0FBaUIsR0FBakIsVUFBa0IsT0FBZ0I7UUFDaEMsSUFBTSxPQUFPLEdBQUcsSUFBSSxDQUFDLHNCQUFzQixDQUFDLE9BQU8sQ0FBQyxDQUFBO1FBQ3BELEVBQUUsQ0FBQyxDQUFDLE9BQU8sSUFBSSxJQUFJLENBQUMsaUJBQWlCLENBQUMsR0FBRyxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUMsQ0FBQztZQUNuRCxJQUFJLENBQUMsaUJBQWlCLENBQUMsTUFBTSxDQUFDLE9BQU8sQ0FBQyxDQUFBO1lBQ3RDLE9BQU8sQ0FBQyxVQUFVLEVBQUUsQ0FBQTtRQUN0QixDQUFDO0lBQ0gsQ0FBQztJQUVELHFDQUFvQixHQUFwQixVQUFxQixPQUFnQjtRQUNuQyxNQUFNLENBQUMsSUFBSSxDQUFDLGlCQUFpQixDQUFDLEdBQUcsQ0FBQyxPQUFPLENBQUMsQ0FBQTtJQUM1QyxDQUFDO0lBRU8sdUNBQXNCLEdBQTlCLFVBQStCLE9BQWdCO1FBQzdDLElBQUksT0FBTyxHQUFHLElBQUksQ0FBQyxpQkFBaUIsQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLENBQUE7UUFDakQsRUFBRSxDQUFDLENBQUMsQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDO1lBQ2IsT0FBTyxHQUFHLElBQUksT0FBTyxDQUFDLElBQUksRUFBRSxPQUFPLENBQUMsQ0FBQTtZQUNwQyxJQUFJLENBQUMsaUJBQWlCLENBQUMsR0FBRyxDQUFDLE9BQU8sRUFBRSxPQUFPLENBQUMsQ0FBQTtRQUM5QyxDQUFDO1FBQ0QsTUFBTSxDQUFDLE9BQU8sQ0FBQTtJQUNoQixDQUFDO0lBQ0gsYUFBQztBQUFELENBQUMsQUExREQsSUEwREMifQ==
 
 /***/ }),
-/* 168 */
+/* 177 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -52529,15 +49717,15 @@ var ActionSet = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYWN0aW9uX3NldC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL0BzdGltdWx1cy9jb3JlL3NyYy9hY3Rpb25fc2V0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUdBO0lBS0UsbUJBQVksT0FBZ0I7UUFDMUIsSUFBSSxDQUFDLE9BQU8sR0FBRyxPQUFPLENBQUE7UUFDdEIsSUFBSSxDQUFDLE9BQU8sR0FBRyxLQUFLLENBQUE7UUFDcEIsSUFBSSxDQUFDLE9BQU8sR0FBRyxJQUFJLEdBQUcsQ0FBQTtJQUN4QixDQUFDO0lBRUQseUJBQUssR0FBTDtRQUNFLEVBQUUsQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUM7WUFDbEIsSUFBSSxDQUFDLE9BQU8sR0FBRyxJQUFJLENBQUE7WUFDbkIsSUFBSSxDQUFDLGNBQWMsRUFBRSxDQUFBO1FBQ3ZCLENBQUM7SUFDSCxDQUFDO0lBRUQsd0JBQUksR0FBSjtRQUNFLEVBQUUsQ0FBQyxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDO1lBQ2pCLElBQUksQ0FBQyxpQkFBaUIsRUFBRSxDQUFBO1lBQ3hCLElBQUksQ0FBQyxPQUFPLEdBQUcsS0FBSyxDQUFBO1FBQ3RCLENBQUM7SUFDSCxDQUFDO0lBRUQsdUJBQUcsR0FBSCxVQUFJLE1BQWM7UUFDaEIsRUFBRSxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxNQUFNLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFDOUIsTUFBTSxDQUFDLE9BQU8sRUFBRSxDQUFBO1lBQ2hCLElBQUksQ0FBQyxPQUFPLENBQUMsR0FBRyxDQUFDLE1BQU0sQ0FBQyxDQUFBO1FBQzFCLENBQUM7SUFDSCxDQUFDO0lBRUQsMEJBQU0sR0FBTixVQUFPLE1BQWM7UUFDbkIsRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxHQUFHLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQyxDQUFDO1lBQzdCLElBQUksQ0FBQyxPQUFPLENBQUMsTUFBTSxDQUFDLE1BQU0sQ0FBQyxDQUFBO1lBQzNCLE1BQU0sQ0FBQyxVQUFVLEVBQUUsQ0FBQTtRQUNyQixDQUFDO0lBQ0gsQ0FBQztJQUVPLGtDQUFjLEdBQXRCO1FBQ0UsSUFBSSxDQUFDLE9BQU8sQ0FBQyxPQUFPLENBQUMsVUFBQSxNQUFNLElBQUksT0FBQSxNQUFNLENBQUMsT0FBTyxFQUFFLEVBQWhCLENBQWdCLENBQUMsQ0FBQTtJQUNsRCxDQUFDO0lBRU8scUNBQWlCLEdBQXpCO1FBQ0UsSUFBSSxDQUFDLE9BQU8sQ0FBQyxPQUFPLENBQUMsVUFBQSxNQUFNLElBQUksT0FBQSxNQUFNLENBQUMsVUFBVSxFQUFFLEVBQW5CLENBQW1CLENBQUMsQ0FBQTtJQUNyRCxDQUFDO0lBQ0gsZ0JBQUM7QUFBRCxDQUFDLEFBOUNELElBOENDIn0=
 
 /***/ }),
-/* 169 */
+/* 178 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return InlineActionObserver; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__action__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__action_descriptor__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__stimulus_multimap__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__stimulus_mutation_observers__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__action__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__action_descriptor__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__stimulus_multimap__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__stimulus_mutation_observers__ = __webpack_require__(23);
 
 
 
@@ -52633,13 +49821,13 @@ var InlineActionObserver = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5saW5lX2FjdGlvbl9vYnNlcnZlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL0BzdGltdWx1cy9jb3JlL3NyYy9pbmxpbmVfYWN0aW9uX29ic2VydmVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBRSxNQUFNLEVBQUUsTUFBTSxVQUFVLENBQUE7QUFDakMsT0FBTyxFQUFFLGdCQUFnQixFQUFFLE1BQU0scUJBQXFCLENBQUE7QUFFdEQsT0FBTyxFQUFFLFFBQVEsRUFBRSxNQUFNLG9CQUFvQixDQUFBO0FBRzdDLE9BQU8sRUFBRSxpQkFBaUIsRUFBNkIsTUFBTSw4QkFBOEIsQ0FBQTtBQU8zRjtJQU1FLDhCQUFZLE9BQWdCLEVBQUUsUUFBc0M7UUFDbEUsSUFBSSxDQUFDLE9BQU8sR0FBRyxPQUFPLENBQUE7UUFDdEIsSUFBSSxDQUFDLFFBQVEsR0FBRyxRQUFRLENBQUE7UUFDeEIsSUFBSSxDQUFDLGlCQUFpQixHQUFHLElBQUksaUJBQWlCLENBQUMsSUFBSSxDQUFDLE9BQU8sRUFBRSxJQUFJLENBQUMsYUFBYSxFQUFFLElBQUksQ0FBQyxDQUFBO1FBQ3RGLElBQUksQ0FBQyxnQkFBZ0IsR0FBRyxJQUFJLFFBQVEsRUFBbUIsQ0FBQTtJQUN6RCxDQUFDO0lBRUQsc0JBQUksdUNBQUs7YUFBVDtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLEtBQUssQ0FBQTtRQUMzQixDQUFDOzs7T0FBQTtJQUVELHNCQUFJLHdDQUFNO2FBQVY7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxNQUFNLENBQUE7UUFDNUIsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSwrQ0FBYTthQUFqQjtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLGVBQWUsQ0FBQTtRQUNwQyxDQUFDOzs7T0FBQTtJQUVELHNCQUFJLHlDQUFPO2FBQVg7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxPQUFPLENBQUE7UUFDM0IsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSw0Q0FBVTthQUFkO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsVUFBVSxDQUFBO1FBQzlCLENBQUM7OztPQUFBO0lBRUQsb0NBQUssR0FBTDtRQUNFLElBQUksQ0FBQyxpQkFBaUIsQ0FBQyxLQUFLLEVBQUUsQ0FBQTtJQUNoQyxDQUFDO0lBRUQsbUNBQUksR0FBSjtRQUNFLElBQUksQ0FBQyxpQkFBaUIsQ0FBQyxJQUFJLEVBQUUsQ0FBQTtJQUMvQixDQUFDO0lBRUQsK0JBQStCO0lBRS9CLGVBQWU7SUFDZiw4REFBK0IsR0FBL0IsVUFBZ0MsT0FBZ0IsRUFBRSxLQUFhLEVBQUUsYUFBcUI7UUFDcEYsRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxlQUFlLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQyxDQUFDO1lBQ3hDLElBQU0sTUFBTSxHQUFHLElBQUksQ0FBQyx5Q0FBeUMsQ0FBQyxPQUFPLEVBQUUsS0FBSyxDQUFDLENBQUE7WUFDN0UsRUFBRSxDQUFDLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQztnQkFDWCxJQUFJLENBQUMsZ0JBQWdCLENBQUMsR0FBRyxDQUFDLE9BQU8sRUFBRSxNQUFNLENBQUMsQ0FBQTtnQkFDMUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxxQkFBcUIsQ0FBQyxNQUFNLENBQUMsQ0FBQTtZQUM3QyxDQUFDO1FBQ0gsQ0FBQztJQUNILENBQUM7SUFFRCxlQUFlO0lBQ2YsZ0VBQWlDLEdBQWpDLFVBQWtDLE9BQWdCLEVBQUUsS0FBYSxFQUFFLGFBQXFCO1FBQ3RGLElBQU0sTUFBTSxHQUFHLElBQUksQ0FBQyxnREFBZ0QsQ0FBQyxPQUFPLEVBQUUsS0FBSyxDQUFDLENBQUE7UUFDcEYsRUFBRSxDQUFDLENBQUMsTUFBTSxDQUFDLENBQUMsQ0FBQztZQUNYLElBQUksQ0FBQyxnQkFBZ0IsQ0FBQyxNQUFNLENBQUMsT0FBTyxFQUFFLE1BQU0sQ0FBQyxDQUFBO1lBQzdDLElBQUksQ0FBQyxRQUFRLENBQUMsd0JBQXdCLENBQUMsTUFBTSxDQUFDLENBQUE7UUFDaEQsQ0FBQztJQUNILENBQUM7SUFFTywrRUFBZ0QsR0FBeEQsVUFBeUQsT0FBZ0IsRUFBRSxnQkFBd0I7UUFDakcsSUFBTSxTQUFTLEdBQUcsSUFBSSxDQUFDLHlDQUF5QyxDQUFDLE9BQU8sRUFBRSxnQkFBZ0IsQ0FBQyxDQUFBO1FBQzNGLEVBQUUsQ0FBQyxDQUFDLFNBQVMsQ0FBQyxDQUFDLENBQUM7WUFDZCxJQUFNLE9BQU8sR0FBRyxJQUFJLENBQUMsZ0JBQWdCLENBQUMsZUFBZSxDQUFDLE9BQU8sQ0FBQyxDQUFBO1lBQzlELE1BQU0sQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLFVBQUEsTUFBTSxJQUFJLE9BQUEsTUFBTSxDQUFDLG1CQUFtQixDQUFDLFNBQVMsQ0FBQyxFQUFyQyxDQUFxQyxDQUFDLENBQUE7UUFDdEUsQ0FBQztJQUNILENBQUM7SUFFTyx3RUFBeUMsR0FBakQsVUFBa0QsT0FBZ0IsRUFBRSxnQkFBd0I7UUFDMUYsSUFBSSxDQUFDO1lBQ0gsSUFBTSxVQUFVLEdBQUcsZ0JBQWdCLENBQUMsb0NBQW9DLENBQUMsT0FBTyxFQUFFLGdCQUFnQixDQUFDLENBQUE7WUFDbkcsRUFBRSxDQUFDLENBQUMsVUFBVSxDQUFDLFVBQVUsSUFBSSxJQUFJLENBQUMsVUFBVSxDQUFDLENBQUMsQ0FBQztnQkFDN0MsTUFBTSxDQUFDLElBQUksTUFBTSxDQUFDLElBQUksQ0FBQyxPQUFPLEVBQUUsVUFBVSxFQUFFLFVBQVUsQ0FBQyxXQUFXLENBQUMsQ0FBQTtZQUNyRSxDQUFDO1FBQ0gsQ0FBQztRQUFDLEtBQUssQ0FBQyxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUM7WUFDZixJQUFJLENBQUMsT0FBTyxDQUFDLFdBQVcsQ0FBQyxLQUFLLEVBQUUsaUNBQThCLGdCQUFnQixPQUFHLEVBQUUsRUFBRSxPQUFPLFNBQUEsRUFBRSxDQUFDLENBQUE7UUFDakcsQ0FBQztJQUNILENBQUM7SUFDSCwyQkFBQztBQUFELENBQUMsQUFqRkQsSUFpRkMifQ==
 
 /***/ }),
-/* 170 */
+/* 179 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return IndexedMultimap; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__multimap__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__set_operations__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__multimap__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__set_operations__ = __webpack_require__(22);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -52687,12 +49875,12 @@ var IndexedMultimap = /** @class */ (function (_super) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXhlZF9tdWx0aW1hcC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL0BzdGltdWx1cy9tdWx0aW1hcC9zcmMvaW5kZXhlZF9tdWx0aW1hcC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7O0FBQUEsT0FBTyxFQUFFLFFBQVEsRUFBRSxNQUFNLFlBQVksQ0FBQTtBQUNyQyxPQUFPLEVBQUUsR0FBRyxFQUFFLEdBQUcsRUFBRSxNQUFNLGtCQUFrQixDQUFBO0FBRTNDO0lBQTJDLG1DQUFjO0lBR3ZEO1FBQUEsWUFDRSxpQkFBTyxTQUVSO1FBREMsS0FBSSxDQUFDLFdBQVcsR0FBRyxJQUFJLEdBQUcsQ0FBQTs7SUFDNUIsQ0FBQztJQUVELHNCQUFJLG1DQUFNO2FBQVY7WUFDRSxNQUFNLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsV0FBVyxDQUFDLElBQUksRUFBRSxDQUFDLENBQUE7UUFDNUMsQ0FBQzs7O09BQUE7SUFFRCw2QkFBRyxHQUFILFVBQUksR0FBTSxFQUFFLEtBQVE7UUFDbEIsaUJBQU0sR0FBRyxZQUFDLEdBQUcsRUFBRSxLQUFLLENBQUMsQ0FBQTtRQUNyQixHQUFHLENBQUMsSUFBSSxDQUFDLFdBQVcsRUFBRSxLQUFLLEVBQUUsR0FBRyxDQUFDLENBQUE7SUFDbkMsQ0FBQztJQUVELGdDQUFNLEdBQU4sVUFBTyxHQUFNLEVBQUUsS0FBUTtRQUNyQixpQkFBTSxNQUFNLFlBQUMsR0FBRyxFQUFFLEtBQUssQ0FBQyxDQUFBO1FBQ3hCLEdBQUcsQ0FBQyxJQUFJLENBQUMsV0FBVyxFQUFFLEtBQUssRUFBRSxHQUFHLENBQUMsQ0FBQTtJQUNuQyxDQUFDO0lBRUQsa0NBQVEsR0FBUixVQUFTLEtBQVE7UUFDZixNQUFNLENBQUMsSUFBSSxDQUFDLFdBQVcsQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLENBQUE7SUFDcEMsQ0FBQztJQUVELHlDQUFlLEdBQWYsVUFBZ0IsS0FBUTtRQUN0QixJQUFNLEdBQUcsR0FBRyxJQUFJLENBQUMsV0FBVyxDQUFDLEdBQUcsQ0FBQyxLQUFLLENBQUMsQ0FBQTtRQUN2QyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyxFQUFFLENBQUE7SUFDbkMsQ0FBQztJQUNILHNCQUFDO0FBQUQsQ0FBQyxBQTlCRCxDQUEyQyxRQUFRLEdBOEJsRCJ9
 
 /***/ }),
-/* 171 */
+/* 180 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export AttributeObserver */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__element_observer__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__element_observer__ = __webpack_require__(9);
 
 var AttributeObserver = /** @class */ (function () {
     function AttributeObserver(element, attributeName, delegate) {
@@ -52750,13 +49938,13 @@ var AttributeObserver = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXR0cmlidXRlX29ic2VydmVyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vcGFja2FnZXMvQHN0aW11bHVzL211dGF0aW9uLW9ic2VydmVycy9zcmMvYXR0cmlidXRlX29ic2VydmVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBRSxlQUFlLEVBQTJCLE1BQU0sb0JBQW9CLENBQUE7QUFRN0U7SUFNRSwyQkFBWSxPQUFnQixFQUFFLGFBQXFCLEVBQUUsUUFBbUM7UUFDdEYsSUFBSSxDQUFDLGFBQWEsR0FBRyxhQUFhLENBQUE7UUFDbEMsSUFBSSxDQUFDLFFBQVEsR0FBRyxRQUFRLENBQUE7UUFFeEIsSUFBSSxDQUFDLGVBQWUsR0FBRyxJQUFJLGVBQWUsQ0FBQyxPQUFPLEVBQUUsSUFBSSxDQUFDLENBQUE7SUFDM0QsQ0FBQztJQUVELHNCQUFJLHNDQUFPO2FBQVg7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLGVBQWUsQ0FBQyxPQUFPLENBQUE7UUFDckMsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSx1Q0FBUTthQUFaO1lBQ0UsTUFBTSxDQUFDLE1BQUksSUFBSSxDQUFDLGFBQWEsTUFBRyxDQUFBO1FBQ2xDLENBQUM7OztPQUFBO0lBRUQsaUNBQUssR0FBTDtRQUNFLElBQUksQ0FBQyxlQUFlLENBQUMsS0FBSyxFQUFFLENBQUE7SUFDOUIsQ0FBQztJQUVELGdDQUFJLEdBQUo7UUFDRSxJQUFJLENBQUMsZUFBZSxDQUFDLElBQUksRUFBRSxDQUFBO0lBQzdCLENBQUM7SUFFRCw0QkFBNEI7SUFFNUIsd0NBQVksR0FBWixVQUFhLE9BQWdCO1FBQzNCLE1BQU0sQ0FBQyxPQUFPLENBQUMsWUFBWSxDQUFDLElBQUksQ0FBQyxhQUFhLENBQUMsQ0FBQTtJQUNqRCxDQUFDO0lBRUQsK0NBQW1CLEdBQW5CLFVBQW9CLElBQWE7UUFDL0IsSUFBTSxLQUFLLEdBQUcsSUFBSSxDQUFDLFlBQVksQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFBO1FBQ25ELElBQU0sT0FBTyxHQUFHLEtBQUssQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLGdCQUFnQixDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFBO1FBQ2hFLE1BQU0sQ0FBQyxLQUFLLENBQUMsTUFBTSxDQUFDLE9BQU8sQ0FBQyxDQUFBO0lBQzlCLENBQUM7SUFFRCwwQ0FBYyxHQUFkLFVBQWUsT0FBZ0I7UUFDN0IsRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyx1QkFBdUIsQ0FBQyxDQUFDLENBQUM7WUFDMUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyx1QkFBdUIsQ0FBQyxPQUFPLEVBQUUsSUFBSSxDQUFDLGFBQWEsQ0FBQyxDQUFBO1FBQ3BFLENBQUM7SUFDSCxDQUFDO0lBRUQsNENBQWdCLEdBQWhCLFVBQWlCLE9BQWdCO1FBQy9CLEVBQUUsQ0FBQyxDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMseUJBQXlCLENBQUMsQ0FBQyxDQUFDO1lBQzVDLElBQUksQ0FBQyxRQUFRLENBQUMseUJBQXlCLENBQUMsT0FBTyxFQUFFLElBQUksQ0FBQyxhQUFhLENBQUMsQ0FBQTtRQUN0RSxDQUFDO0lBQ0gsQ0FBQztJQUVELG1EQUF1QixHQUF2QixVQUF3QixPQUFnQixFQUFFLGFBQXFCO1FBQzdELEVBQUUsQ0FBQyxDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsNEJBQTRCLElBQUksSUFBSSxDQUFDLGFBQWEsSUFBSSxhQUFhLENBQUMsQ0FBQyxDQUFDO1lBQ3RGLElBQUksQ0FBQyxRQUFRLENBQUMsNEJBQTRCLENBQUMsT0FBTyxFQUFFLGFBQWEsQ0FBQyxDQUFBO1FBQ3BFLENBQUM7SUFDSCxDQUFDO0lBQ0gsd0JBQUM7QUFBRCxDQUFDLEFBMURELElBMERDIn0=
 
 /***/ }),
-/* 172 */
+/* 181 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TokenListObserver; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__element_observer__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stimulus_multimap__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__element_observer__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stimulus_multimap__ = __webpack_require__(20);
 
 
 var TokenListObserver = /** @class */ (function () {
@@ -52872,14 +50060,14 @@ var TokenListObserver = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidG9rZW5fbGlzdF9vYnNlcnZlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL0BzdGltdWx1cy9tdXRhdGlvbi1vYnNlcnZlcnMvc3JjL3Rva2VuX2xpc3Rfb2JzZXJ2ZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLGVBQWUsRUFBMkIsTUFBTSxvQkFBb0IsQ0FBQTtBQUM3RSxPQUFPLEVBQUUsZUFBZSxFQUFFLE1BQU0sb0JBQW9CLENBQUE7QUFPcEQ7SUFPRSwyQkFBWSxPQUFnQixFQUFFLGFBQXFCLEVBQUUsUUFBbUM7UUFDdEYsSUFBSSxDQUFDLGFBQWEsR0FBRyxhQUFhLENBQUE7UUFDbEMsSUFBSSxDQUFDLFFBQVEsR0FBRyxRQUFRLENBQUE7UUFFeEIsSUFBSSxDQUFDLGVBQWUsR0FBRyxJQUFJLGVBQWUsQ0FBQyxPQUFPLEVBQUUsSUFBSSxDQUFDLENBQUE7UUFDekQsSUFBSSxDQUFDLGVBQWUsR0FBRyxJQUFJLGVBQWUsQ0FBQTtJQUM1QyxDQUFDO0lBRUQsc0JBQUksc0NBQU87YUFBWDtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsZUFBZSxDQUFDLE9BQU8sQ0FBQTtRQUNyQyxDQUFDOzs7T0FBQTtJQUVELGlDQUFLLEdBQUw7UUFDRSxJQUFJLENBQUMsZUFBZSxDQUFDLEtBQUssRUFBRSxDQUFBO0lBQzlCLENBQUM7SUFFRCxnQ0FBSSxHQUFKO1FBQ0UsSUFBSSxDQUFDLGVBQWUsQ0FBQyxJQUFJLEVBQUUsQ0FBQTtJQUM3QixDQUFDO0lBRUQsbUNBQU8sR0FBUDtRQUNFLElBQUksQ0FBQyxlQUFlLENBQUMsT0FBTyxFQUFFLENBQUE7SUFDaEMsQ0FBQztJQUVELHNCQUFJLHNDQUFPO2FBQVg7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLGVBQWUsQ0FBQyxPQUFPLENBQUE7UUFDckMsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSx1Q0FBUTthQUFaO1lBQ0UsTUFBTSxDQUFDLE1BQUksSUFBSSxDQUFDLGFBQWEsTUFBRyxDQUFBO1FBQ2xDLENBQUM7OztPQUFBO0lBRUQsb0RBQXdCLEdBQXhCLFVBQXlCLEtBQWE7UUFDcEMsTUFBTSxDQUFDLElBQUksQ0FBQyxlQUFlLENBQUMsZUFBZSxDQUFDLEtBQUssQ0FBQyxDQUFBO0lBQ3BELENBQUM7SUFFRCw0QkFBNEI7SUFFNUIsd0NBQVksR0FBWixVQUFhLE9BQWdCO1FBQzNCLE1BQU0sQ0FBQyxPQUFPLENBQUMsWUFBWSxDQUFDLElBQUksQ0FBQyxhQUFhLENBQUMsQ0FBQTtJQUNqRCxDQUFDO0lBRUQsK0NBQW1CLEdBQW5CLFVBQW9CLElBQWE7UUFDL0IsSUFBTSxLQUFLLEdBQUcsSUFBSSxDQUFDLFlBQVksQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFBO1FBQ25ELElBQU0sT0FBTyxHQUFHLEtBQUssQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLGdCQUFnQixDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFBO1FBQ2hFLE1BQU0sQ0FBQyxLQUFLLENBQUMsTUFBTSxDQUFDLE9BQU8sQ0FBQyxDQUFBO0lBQzlCLENBQUM7SUFFRCwwQ0FBYyxHQUFkLFVBQWUsT0FBZ0I7UUFDN0IsSUFBTSxTQUFTLEdBQUcsS0FBSyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsc0JBQXNCLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQTtRQUNsRSxHQUFHLENBQUMsQ0FBZ0IsVUFBUyxFQUFULHVCQUFTLEVBQVQsdUJBQVMsRUFBVCxJQUFTO1lBQXhCLElBQU0sS0FBSyxrQkFBQTtZQUNkLElBQUksQ0FBQyxtQkFBbUIsQ0FBQyxPQUFPLEVBQUUsS0FBSyxDQUFDLENBQUE7U0FDekM7SUFDSCxDQUFDO0lBRUQsNENBQWdCLEdBQWhCLFVBQWlCLE9BQWdCO1FBQy9CLElBQU0sTUFBTSxHQUFHLElBQUksQ0FBQyxtQkFBbUIsQ0FBQyxPQUFPLENBQUMsQ0FBQTtRQUNoRCxHQUFHLENBQUMsQ0FBZ0IsVUFBTSxFQUFOLGlCQUFNLEVBQU4sb0JBQU0sRUFBTixJQUFNO1lBQXJCLElBQU0sS0FBSyxlQUFBO1lBQ2QsSUFBSSxDQUFDLHFCQUFxQixDQUFDLE9BQU8sRUFBRSxLQUFLLENBQUMsQ0FBQTtTQUMzQztJQUNILENBQUM7SUFFRCxtREFBdUIsR0FBdkIsVUFBd0IsT0FBZ0I7UUFDdEMsSUFBTSxXQUFXLEdBQUcsSUFBSSxDQUFDLHNCQUFzQixDQUFDLE9BQU8sQ0FBQyxDQUFBO1FBRXhELEdBQUcsQ0FBQyxDQUFnQixVQUF1QixFQUF2QixLQUFBLEtBQUssQ0FBQyxJQUFJLENBQUMsV0FBVyxDQUFDLEVBQXZCLGNBQXVCLEVBQXZCLElBQXVCO1lBQXRDLElBQU0sS0FBSyxTQUFBO1lBQ2QsSUFBSSxDQUFDLG1CQUFtQixDQUFDLE9BQU8sRUFBRSxLQUFLLENBQUMsQ0FBQTtTQUN6QztRQUVELEdBQUcsQ0FBQyxDQUFnQixVQUFpQyxFQUFqQyxLQUFBLElBQUksQ0FBQyxtQkFBbUIsQ0FBQyxPQUFPLENBQUMsRUFBakMsY0FBaUMsRUFBakMsSUFBaUM7WUFBaEQsSUFBTSxLQUFLLFNBQUE7WUFDZCxFQUFFLENBQUMsQ0FBQyxDQUFDLFdBQVcsQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxDQUFDO2dCQUM1QixJQUFJLENBQUMscUJBQXFCLENBQUMsT0FBTyxFQUFFLEtBQUssQ0FBQyxDQUFBO1lBQzVDLENBQUM7U0FDRjtJQUNILENBQUM7SUFFRCxVQUFVO0lBRUYsK0NBQW1CLEdBQTNCLFVBQTRCLE9BQWdCLEVBQUUsS0FBYTtRQUN6RCxFQUFFLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxlQUFlLENBQUMsR0FBRyxDQUFDLE9BQU8sRUFBRSxLQUFLLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFDOUMsSUFBSSxDQUFDLGVBQWUsQ0FBQyxHQUFHLENBQUMsT0FBTyxFQUFFLEtBQUssQ0FBQyxDQUFBO1lBQ3hDLEVBQUUsQ0FBQyxDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsK0JBQStCLENBQUMsQ0FBQyxDQUFDO2dCQUNsRCxJQUFJLENBQUMsUUFBUSxDQUFDLCtCQUErQixDQUFDLE9BQU8sRUFBRSxLQUFLLEVBQUUsSUFBSSxDQUFDLGFBQWEsQ0FBQyxDQUFBO1lBQ25GLENBQUM7UUFDSCxDQUFDO0lBQ0gsQ0FBQztJQUVPLGlEQUFxQixHQUE3QixVQUE4QixPQUFnQixFQUFFLEtBQWE7UUFDM0QsRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLGVBQWUsQ0FBQyxHQUFHLENBQUMsT0FBTyxFQUFFLEtBQUssQ0FBQyxDQUFDLENBQUMsQ0FBQztZQUM3QyxJQUFJLENBQUMsZUFBZSxDQUFDLE1BQU0sQ0FBQyxPQUFPLEVBQUUsS0FBSyxDQUFDLENBQUE7WUFDM0MsRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxpQ0FBaUMsQ0FBQyxDQUFDLENBQUM7Z0JBQ3BELElBQUksQ0FBQyxRQUFRLENBQUMsaUNBQWlDLENBQUMsT0FBTyxFQUFFLEtBQUssRUFBRSxJQUFJLENBQUMsYUFBYSxDQUFDLENBQUE7WUFDckYsQ0FBQztRQUNILENBQUM7SUFDSCxDQUFDO0lBRU8sK0NBQW1CLEdBQTNCLFVBQTRCLE9BQWdCO1FBQzFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsZUFBZSxDQUFDLGVBQWUsQ0FBQyxPQUFPLENBQUMsQ0FBQTtJQUN0RCxDQUFDO0lBRU8sa0RBQXNCLEdBQTlCLFVBQStCLE9BQWdCO1FBQzdDLElBQU0sTUFBTSxHQUFHLElBQUksR0FBRyxDQUFBO1FBQ3RCLElBQU0sS0FBSyxHQUFHLE9BQU8sQ0FBQyxZQUFZLENBQUMsSUFBSSxDQUFDLGFBQWEsQ0FBQyxJQUFJLEVBQUUsQ0FBQTtRQUM1RCxHQUFHLENBQUMsQ0FBZ0IsVUFBa0IsRUFBbEIsS0FBQSxLQUFLLENBQUMsS0FBSyxDQUFDLEtBQUssQ0FBQyxFQUFsQixjQUFrQixFQUFsQixJQUFrQjtZQUFqQyxJQUFNLEtBQUssU0FBQTtZQUNkLEVBQUUsQ0FBQyxDQUFDLEtBQUssQ0FBQyxNQUFNLENBQUMsQ0FBQyxDQUFDO2dCQUNqQixNQUFNLENBQUMsR0FBRyxDQUFDLEtBQUssQ0FBQyxDQUFBO1lBQ25CLENBQUM7U0FDRjtRQUVELE1BQU0sQ0FBQyxNQUFNLENBQUE7SUFDZixDQUFDO0lBQ0gsd0JBQUM7QUFBRCxDQUFDLEFBdEhELElBc0hDIn0=
 
 /***/ }),
-/* 173 */
+/* 182 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Scope; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__data_map__ = __webpack_require__(174);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__target_set__ = __webpack_require__(175);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__selectors__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__data_map__ = __webpack_require__(183);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__target_set__ = __webpack_require__(184);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__selectors__ = __webpack_require__(24);
 
 
 
@@ -52919,7 +50107,7 @@ var Scope = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2NvcGUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvY29yZS9zcmMvc2NvcGUudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLE9BQU8sRUFBRSxNQUFNLFlBQVksQ0FBQTtBQUVwQyxPQUFPLEVBQUUsU0FBUyxFQUFFLE1BQU0sY0FBYyxDQUFBO0FBQ3hDLE9BQU8sRUFBRSwyQkFBMkIsRUFBRSxNQUFNLGFBQWEsQ0FBQTtBQUV6RDtJQU9FLGVBQVksTUFBYyxFQUFFLFVBQWtCLEVBQUUsT0FBZ0I7UUFDOUQsSUFBSSxDQUFDLE1BQU0sR0FBRyxNQUFNLENBQUE7UUFDcEIsSUFBSSxDQUFDLFVBQVUsR0FBRyxVQUFVLENBQUE7UUFDNUIsSUFBSSxDQUFDLE9BQU8sR0FBRyxPQUFPLENBQUE7UUFDdEIsSUFBSSxDQUFDLE9BQU8sR0FBRyxJQUFJLFNBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQTtRQUNsQyxJQUFJLENBQUMsSUFBSSxHQUFHLElBQUksT0FBTyxDQUFDLElBQUksQ0FBQyxDQUFBO0lBQy9CLENBQUM7SUFFRCwyQkFBVyxHQUFYLFVBQVksUUFBZ0I7UUFDMUIsTUFBTSxDQUFDLElBQUksQ0FBQyxlQUFlLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUE7SUFDMUMsQ0FBQztJQUVELCtCQUFlLEdBQWYsVUFBZ0IsUUFBZ0I7UUFDOUIsSUFBTSxJQUFJLEdBQUcsSUFBSSxDQUFDLE9BQU8sQ0FBQyxPQUFPLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUMsQ0FBQyxFQUFFLENBQUE7UUFDakUsSUFBTSxJQUFJLEdBQUcsSUFBSSxDQUFDLGNBQWMsQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsZ0JBQWdCLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFBO1FBQ3JGLE1BQU0sQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLElBQUksQ0FBQyxDQUFBO0lBQzFCLENBQUM7SUFFRCw4QkFBYyxHQUFkLFVBQWUsUUFBbUI7UUFBbEMsaUJBRUM7UUFEQyxNQUFNLENBQUMsUUFBUSxDQUFDLE1BQU0sQ0FBQyxVQUFBLE9BQU8sSUFBSSxPQUFBLEtBQUksQ0FBQyxlQUFlLENBQUMsT0FBTyxDQUFDLEVBQTdCLENBQTZCLENBQUMsQ0FBQTtJQUNsRSxDQUFDO0lBRUQsK0JBQWUsR0FBZixVQUFnQixPQUFnQjtRQUM5QixNQUFNLENBQUMsT0FBTyxDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQUMsa0JBQWtCLENBQUMsS0FBSyxJQUFJLENBQUMsT0FBTyxDQUFBO0lBQ2xFLENBQUM7SUFFRCxzQkFBWSxxQ0FBa0I7YUFBOUI7WUFDRSxNQUFNLENBQUMsMkJBQTJCLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxtQkFBbUIsRUFBRSxJQUFJLENBQUMsVUFBVSxDQUFDLENBQUE7UUFDdEYsQ0FBQzs7O09BQUE7SUFDSCxZQUFDO0FBQUQsQ0FBQyxBQXBDRCxJQW9DQyJ9
 
 /***/ }),
-/* 174 */
+/* 183 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -52977,12 +50165,12 @@ function dasherize(value) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGF0YV9tYXAuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvY29yZS9zcmMvZGF0YV9tYXAudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBRUE7SUFHRSxpQkFBWSxLQUFZO1FBQ3RCLElBQUksQ0FBQyxLQUFLLEdBQUcsS0FBSyxDQUFBO0lBQ3BCLENBQUM7SUFFRCxzQkFBSSw0QkFBTzthQUFYO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsT0FBTyxDQUFBO1FBQzNCLENBQUM7OztPQUFBO0lBRUQsc0JBQUksK0JBQVU7YUFBZDtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLFVBQVUsQ0FBQTtRQUM5QixDQUFDOzs7T0FBQTtJQUVELHFCQUFHLEdBQUgsVUFBSSxHQUFXO1FBQ2IsR0FBRyxHQUFHLElBQUksQ0FBQyxlQUFlLENBQUMsR0FBRyxDQUFDLENBQUE7UUFDL0IsTUFBTSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsWUFBWSxDQUFDLEdBQUcsQ0FBQyxDQUFBO0lBQ3ZDLENBQUM7SUFFRCxxQkFBRyxHQUFILFVBQUksR0FBVyxFQUFFLEtBQUs7UUFDcEIsR0FBRyxHQUFHLElBQUksQ0FBQyxlQUFlLENBQUMsR0FBRyxDQUFDLENBQUE7UUFDL0IsSUFBSSxDQUFDLE9BQU8sQ0FBQyxZQUFZLENBQUMsR0FBRyxFQUFFLEtBQUssQ0FBQyxDQUFBO1FBQ3JDLE1BQU0sQ0FBQyxJQUFJLENBQUMsR0FBRyxDQUFDLEdBQUcsQ0FBQyxDQUFBO0lBQ3RCLENBQUM7SUFFRCxxQkFBRyxHQUFILFVBQUksR0FBVztRQUNiLEdBQUcsR0FBRyxJQUFJLENBQUMsZUFBZSxDQUFDLEdBQUcsQ0FBQyxDQUFBO1FBQy9CLE1BQU0sQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLFlBQVksQ0FBQyxHQUFHLENBQUMsQ0FBQTtJQUN2QyxDQUFDO0lBRUQsd0JBQU0sR0FBTixVQUFPLEdBQVc7UUFDaEIsRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLEdBQUcsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFDbEIsR0FBRyxHQUFHLElBQUksQ0FBQyxlQUFlLENBQUMsR0FBRyxDQUFDLENBQUE7WUFDL0IsSUFBSSxDQUFDLE9BQU8sQ0FBQyxlQUFlLENBQUMsR0FBRyxDQUFDLENBQUE7WUFDakMsTUFBTSxDQUFDLElBQUksQ0FBQTtRQUNiLENBQUM7UUFBQyxJQUFJLENBQUMsQ0FBQztZQUNOLE1BQU0sQ0FBQyxLQUFLLENBQUE7UUFDZCxDQUFDO0lBQ0gsQ0FBQztJQUVPLGlDQUFlLEdBQXZCLFVBQXdCLEdBQUc7UUFDekIsTUFBTSxDQUFDLFVBQVEsSUFBSSxDQUFDLFVBQVUsU0FBSSxTQUFTLENBQUMsR0FBRyxDQUFHLENBQUE7SUFDcEQsQ0FBQztJQUNILGNBQUM7QUFBRCxDQUFDLEFBNUNELElBNENDOztBQUVELG1CQUFtQixLQUFLO0lBQ3RCLE1BQU0sQ0FBQyxLQUFLLENBQUMsUUFBUSxFQUFFLENBQUMsT0FBTyxDQUFDLFVBQVUsRUFBRSxVQUFDLENBQUMsRUFBRSxJQUFJLElBQUssT0FBQSxNQUFJLElBQUksQ0FBQyxXQUFXLEVBQUksRUFBeEIsQ0FBd0IsQ0FBQyxDQUFBO0FBQ3BGLENBQUMifQ==
 
 /***/ }),
-/* 175 */
+/* 184 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TargetSet; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__selectors__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__selectors__ = __webpack_require__(24);
 
 var TargetSet = /** @class */ (function () {
     function TargetSet(scope) {
@@ -53042,7 +50230,7 @@ var TargetSet = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGFyZ2V0X3NldC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL0BzdGltdWx1cy9jb3JlL3NyYy90YXJnZXRfc2V0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUVBLE9BQU8sRUFBRSwyQkFBMkIsRUFBRSxNQUFNLGFBQWEsQ0FBQTtBQUV6RDtJQUdFLG1CQUFZLEtBQVk7UUFDdEIsSUFBSSxDQUFDLEtBQUssR0FBRyxLQUFLLENBQUE7SUFDcEIsQ0FBQztJQUVELHNCQUFJLDhCQUFPO2FBQVg7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxPQUFPLENBQUE7UUFDM0IsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSxpQ0FBVTthQUFkO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsVUFBVSxDQUFBO1FBQzlCLENBQUM7OztPQUFBO0lBRUQsc0JBQUksNkJBQU07YUFBVjtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLE1BQU0sQ0FBQTtRQUMxQixDQUFDOzs7T0FBQTtJQUVELHVCQUFHLEdBQUgsVUFBSSxVQUFrQjtRQUNwQixNQUFNLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsSUFBSSxJQUFJLENBQUE7SUFDdEMsQ0FBQztJQUVELHdCQUFJLEdBQUo7UUFBSyxxQkFBd0I7YUFBeEIsVUFBd0IsRUFBeEIscUJBQXdCLEVBQXhCLElBQXdCO1lBQXhCLGdDQUF3Qjs7UUFDM0IsSUFBTSxRQUFRLEdBQUcsSUFBSSxDQUFDLHlCQUF5QixDQUFDLFdBQVcsQ0FBQyxDQUFBO1FBQzVELE1BQU0sQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLFdBQVcsQ0FBQyxRQUFRLENBQUMsQ0FBQTtJQUN6QyxDQUFDO0lBRUQsMkJBQU8sR0FBUDtRQUFRLHFCQUF3QjthQUF4QixVQUF3QixFQUF4QixxQkFBd0IsRUFBeEIsSUFBd0I7WUFBeEIsZ0NBQXdCOztRQUM5QixJQUFNLFFBQVEsR0FBRyxJQUFJLENBQUMseUJBQXlCLENBQUMsV0FBVyxDQUFDLENBQUE7UUFDNUQsTUFBTSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsZUFBZSxDQUFDLFFBQVEsQ0FBQyxDQUFBO0lBQzdDLENBQUM7SUFFTyw2Q0FBeUIsR0FBakMsVUFBa0MsV0FBcUI7UUFBdkQsaUJBRUM7UUFEQyxNQUFNLENBQUMsV0FBVyxDQUFDLEdBQUcsQ0FBQyxVQUFBLFVBQVUsSUFBSSxPQUFBLEtBQUksQ0FBQyx3QkFBd0IsQ0FBQyxVQUFVLENBQUMsRUFBekMsQ0FBeUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQTtJQUM1RixDQUFDO0lBRU8sNENBQXdCLEdBQWhDLFVBQWlDLFVBQWtCO1FBQ2pELElBQU0sZ0JBQWdCLEdBQU0sSUFBSSxDQUFDLFVBQVUsU0FBSSxVQUFZLENBQUE7UUFDM0QsTUFBTSxDQUFDLDJCQUEyQixDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsZUFBZSxFQUFFLGdCQUFnQixDQUFDLENBQUE7SUFDbkYsQ0FBQztJQUNILGdCQUFDO0FBQUQsQ0FBQyxBQXpDRCxJQXlDQyJ9
 
 /***/ }),
-/* 176 */
+/* 185 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -53103,12 +50291,12 @@ var extend = (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGVmaW5pdGlvbi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL0BzdGltdWx1cy9jb3JlL3NyYy9kZWZpbml0aW9uLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7QUFPQSxNQUFNLDBCQUEwQixVQUFzQjtJQUNwRCxNQUFNLENBQUM7UUFDTCxVQUFVLEVBQUUsVUFBVSxDQUFDLFVBQVU7UUFDakMscUJBQXFCLEVBQUUsMEJBQTBCLENBQUMsVUFBVSxDQUFDLHFCQUFxQixDQUFDO0tBQ3BGLENBQUE7QUFDSCxDQUFDO0FBRUQsb0NBQW9DLHFCQUE0QztJQUM5RSxJQUFNLFdBQVcsR0FBRyxNQUFNLENBQUMscUJBQXFCLENBQUMsQ0FBQTtJQUNqRCxXQUFXLENBQUMsS0FBSyxFQUFFLENBQUE7SUFDbkIsTUFBTSxDQUFDLFdBQVcsQ0FBQTtBQUNwQixDQUFDO0FBRUQsSUFBTSxNQUFNLEdBQUcsQ0FBQztJQUNkLDJCQUEyQixXQUFXO1FBQ3BDOztZQUNFLE1BQU0sQ0FBQyxPQUFPLENBQUMsU0FBUyxDQUFDLFdBQVcsRUFBRSxTQUFTLGFBQWEsQ0FBQTtRQUM5RCxDQUFDO1FBRUQsVUFBVSxDQUFDLFNBQVMsR0FBRyxNQUFNLENBQUMsTUFBTSxDQUFDLFdBQVcsQ0FBQyxTQUFTLEVBQUU7WUFDMUQsV0FBVyxFQUFFLEVBQUUsS0FBSyxFQUFFLFVBQVUsRUFBRTtTQUNuQyxDQUFDLENBQUE7UUFFRixPQUFPLENBQUMsY0FBYyxDQUFDLFVBQVUsRUFBRSxXQUFXLENBQUMsQ0FBQTtRQUMvQyxNQUFNLENBQUMsVUFBaUIsQ0FBQTtJQUMxQixDQUFDO0lBRUQ7UUFDRSxJQUFNLENBQUMsR0FBRyxjQUFhLElBQUksQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxDQUFBLENBQUMsQ0FBQyxDQUFBO1FBQzFDLElBQU0sQ0FBQyxHQUFHLGlCQUFpQixDQUFDLENBQUMsQ0FBQyxDQUFBO1FBQzlCLENBQUMsQ0FBQyxTQUFTLENBQUMsQ0FBQyxHQUFHLGNBQVksQ0FBQyxDQUFBO1FBQzdCLE1BQU0sQ0FBQyxJQUFJLENBQUMsQ0FBQTtJQUNkLENBQUM7SUFFRCxJQUFJLENBQUM7UUFDSCxvQkFBb0IsRUFBRSxDQUFBO1FBQ3RCLE1BQU0sQ0FBQyxpQkFBaUIsQ0FBQTtJQUMxQixDQUFDO0lBQUMsS0FBSyxDQUFDLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQztRQUNmLE1BQU0sQ0FBQyxVQUFDLFdBQVcsSUFBSztZQUF5Qiw4QkFBVztZQUFwQzs7WUFBc0MsQ0FBQztZQUFELGlCQUFDO1FBQUQsQ0FBQyxBQUF2QyxDQUF5QixXQUFXLElBQXBDLENBQXVDLENBQUE7SUFDakUsQ0FBQztBQUNILENBQUMsQ0FBQyxFQUFFLENBQUEifQ==
 
 /***/ }),
-/* 177 */
+/* 186 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Controller; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__target_properties__ = __webpack_require__(178);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__target_properties__ = __webpack_require__(187);
 
 var Controller = /** @class */ (function () {
     function Controller(context) {
@@ -53175,7 +50363,7 @@ var Controller = /** @class */ (function () {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29udHJvbGxlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL0BzdGltdWx1cy9jb3JlL3NyYy9jb250cm9sbGVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUtBLE9BQU8sRUFBRSxzQkFBc0IsRUFBRSxNQUFNLHFCQUFxQixDQUFBO0FBTzVEO0lBU0Usb0JBQVksT0FBZ0I7UUFDMUIsSUFBSSxDQUFDLE9BQU8sR0FBRyxPQUFPLENBQUE7SUFDeEIsQ0FBQztJQU5NLGdCQUFLLEdBQVo7UUFDRSxzQkFBc0IsQ0FBQyxJQUFJLENBQUMsQ0FBQTtJQUM5QixDQUFDO0lBTUQsc0JBQUksbUNBQVc7YUFBZjtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLFdBQVcsQ0FBQTtRQUNqQyxDQUFDOzs7T0FBQTtJQUVELHNCQUFJLDZCQUFLO2FBQVQ7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxLQUFLLENBQUE7UUFDM0IsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSwrQkFBTzthQUFYO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsT0FBTyxDQUFBO1FBQzNCLENBQUM7OztPQUFBO0lBRUQsc0JBQUksa0NBQVU7YUFBZDtZQUNFLE1BQU0sQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLFVBQVUsQ0FBQTtRQUM5QixDQUFDOzs7T0FBQTtJQUVELHNCQUFJLCtCQUFPO2FBQVg7WUFDRSxNQUFNLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxPQUFPLENBQUE7UUFDM0IsQ0FBQzs7O09BQUE7SUFFRCxzQkFBSSw0QkFBSTthQUFSO1lBQ0UsTUFBTSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFBO1FBQ3hCLENBQUM7OztPQUFBO0lBRUQsK0JBQVUsR0FBVjtRQUNFLCtEQUErRDtJQUNqRSxDQUFDO0lBRUQsNEJBQU8sR0FBUDtRQUNFLG1GQUFtRjtJQUNyRixDQUFDO0lBRUQsK0JBQVUsR0FBVjtRQUNFLHdGQUF3RjtJQUMxRixDQUFDO0lBOUNNLGtCQUFPLEdBQWEsRUFBRSxDQUFBO0lBK0MvQixpQkFBQztDQUFBLEFBaERELElBZ0RDO1NBaERZLFVBQVUifQ==
 
 /***/ }),
-/* 178 */
+/* 187 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -53243,7 +50431,7 @@ function capitalize(name) {
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGFyZ2V0X3Byb3BlcnRpZXMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvY29yZS9zcmMvdGFyZ2V0X3Byb3BlcnRpZXMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsTUFBTSxpQ0FBaUMsV0FBcUI7SUFDMUQsSUFBTSxTQUFTLEdBQUcsV0FBVyxDQUFDLFNBQVMsQ0FBQTtJQUN2QyxJQUFNLFdBQVcsR0FBRyw0QkFBNEIsQ0FBQyxXQUFXLENBQUMsQ0FBQTtJQUM3RCxXQUFXLENBQUMsT0FBTyxDQUFDLFVBQUEsSUFBSTtRQUFJLE9BQUEsc0JBQXNCLENBQUMsU0FBUztZQUMxRCxHQUFJLElBQUksV0FBUSxJQUFHO2dCQUNqQixHQUFHO29CQUNELElBQU0sTUFBTSxHQUFHLElBQUksQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxDQUFBO29CQUN0QyxFQUFFLENBQUMsQ0FBQyxNQUFNLENBQUMsQ0FBQyxDQUFDO3dCQUNYLE1BQU0sQ0FBQyxNQUFNLENBQUE7b0JBQ2YsQ0FBQztvQkFBQyxJQUFJLENBQUMsQ0FBQzt3QkFDTixNQUFNLElBQUksS0FBSyxDQUFDLDhCQUEyQixJQUFJLENBQUMsVUFBVSxTQUFJLElBQUksT0FBRyxDQUFDLENBQUE7b0JBQ3hFLENBQUM7Z0JBQ0gsQ0FBQzthQUNGO1lBQ0QsR0FBSSxJQUFJLFlBQVMsSUFBRztnQkFDbEIsR0FBRztvQkFDRCxNQUFNLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLENBQUE7Z0JBQ25DLENBQUM7YUFDRjtZQUNELEdBQUMsUUFBTSxVQUFVLENBQUMsSUFBSSxDQUFDLFdBQVEsSUFBRztnQkFDaEMsR0FBRztvQkFDRCxNQUFNLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLENBQUE7Z0JBQy9CLENBQUM7YUFDRjtnQkFDRDs7SUFyQjBCLENBcUIxQixDQUFDLENBQUE7QUFDTCxDQUFDO0FBRUQsc0NBQXNDLFdBQXFCO0lBQ3pELElBQU0sU0FBUyxHQUFHLDBCQUEwQixDQUFDLFdBQVcsQ0FBQyxDQUFBO0lBQ3pELE1BQU0sQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxNQUFNLENBQUMsVUFBQyxXQUFXLEVBQUUsV0FBVztRQUMxRCwrQkFBK0IsQ0FBQyxXQUFXLENBQUMsQ0FBQyxPQUFPLENBQUMsVUFBQSxJQUFJLElBQUksT0FBQSxXQUFXLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxFQUFyQixDQUFxQixDQUFDLENBQUE7UUFDbkYsTUFBTSxDQUFDLFdBQVcsQ0FBQTtJQUNwQixDQUFDLEVBQUUsSUFBSSxHQUFrQixDQUFDLENBQUMsQ0FBQTtBQUM3QixDQUFDO0FBRUQsb0NBQW9DLFdBQXFCO0lBQ3ZELElBQU0sU0FBUyxHQUFlLEVBQUUsQ0FBQTtJQUNoQyxPQUFPLFdBQVcsRUFBRSxDQUFDO1FBQ25CLFNBQVMsQ0FBQyxJQUFJLENBQUMsV0FBVyxDQUFDLENBQUE7UUFDM0IsV0FBVyxHQUFHLE1BQU0sQ0FBQyxjQUFjLENBQUMsV0FBVyxDQUFDLENBQUE7SUFDbEQsQ0FBQztJQUNELE1BQU0sQ0FBQyxTQUFTLENBQUE7QUFDbEIsQ0FBQztBQUVELHlDQUF5QyxXQUFxQjtJQUM1RCxJQUFNLFVBQVUsR0FBRyxXQUFXLENBQUMsU0FBUyxDQUFDLENBQUE7SUFDekMsTUFBTSxDQUFDLEtBQUssQ0FBQyxPQUFPLENBQUMsVUFBVSxDQUFDLENBQUMsQ0FBQyxDQUFDLFVBQVUsQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFBO0FBQ3BELENBQUM7QUFFRCxnQ0FBZ0MsTUFBVyxFQUFFLFVBQWlDO0lBQzVFLE1BQU0sQ0FBQyxJQUFJLENBQUMsVUFBVSxDQUFDLENBQUMsT0FBTyxDQUFDLFVBQUMsSUFBSTtRQUNuQyxFQUFFLENBQUMsQ0FBQyxDQUFDLENBQUMsSUFBSSxJQUFJLE1BQU0sQ0FBQyxDQUFDLENBQUMsQ0FBQztZQUN0QixJQUFNLFVBQVUsR0FBRyxVQUFVLENBQUMsSUFBSSxDQUFDLENBQUE7WUFDbkMsTUFBTSxDQUFDLGNBQWMsQ0FBQyxNQUFNLEVBQUUsSUFBSSxFQUFFLFVBQVUsQ0FBQyxDQUFBO1FBQ2pELENBQUM7SUFDSCxDQUFDLENBQUMsQ0FBQTtBQUNKLENBQUM7QUFFRCxvQkFBb0IsSUFBWTtJQUM5QixNQUFNLENBQUMsSUFBSSxDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUMsQ0FBQyxXQUFXLEVBQUUsR0FBRyxJQUFJLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxDQUFBO0FBQ3JELENBQUMifQ==
 
 /***/ }),
-/* 179 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53257,7 +50445,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _modalController = __webpack_require__(13);
+var _modalController = __webpack_require__(15);
 
 var _modalController2 = _interopRequireDefault(_modalController);
 
@@ -53315,10 +50503,10 @@ var _class = function (_ModalController) {
 }(_modalController2.default);
 
 exports.default = _class;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(8)))
 
 /***/ }),
-/* 180 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53330,9 +50518,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _stimulus = __webpack_require__(5);
+var _stimulus = __webpack_require__(6);
 
-var _velocityAnimate = __webpack_require__(9);
+var _velocityAnimate = __webpack_require__(10);
 
 var _velocityAnimate2 = _interopRequireDefault(_velocityAnimate);
 
@@ -53357,10 +50545,11 @@ var _class = function (_Controller) {
     key: 'toggle',
     value: function toggle(e) {
       var target = e.currentTarget;
-      if (target.classList.contains('item-open')) {
-        this.close(target);
+      var item = target.parentNode;
+      if (item.classList.contains('item-open')) {
+        this.close(item);
       } else {
-        this.open(target);
+        this.open(item);
       }
     }
   }, {
@@ -53369,7 +50558,7 @@ var _class = function (_Controller) {
       item.classList.add('item-open');
       (0, _velocityAnimate2.default)(item.querySelector('.item-content'), 'slideDown', {
         easing: 'easeInOutQuad',
-        duration: 200
+        duration: 300
       });
     }
   }, {
@@ -53378,7 +50567,7 @@ var _class = function (_Controller) {
       item.classList.remove('item-open');
       (0, _velocityAnimate2.default)(item.querySelector('.item-content'), 'slideUp', {
         easing: 'easeInOutQuad',
-        duration: 200
+        duration: 300
       });
     }
   }, {
@@ -53399,7 +50588,7 @@ var _class = function (_Controller) {
 exports.default = _class;
 
 /***/ }),
-/* 181 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53411,7 +50600,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _tooltipController = __webpack_require__(24);
+var _tooltipController = __webpack_require__(26);
 
 var _tooltipController2 = _interopRequireDefault(_tooltipController);
 
@@ -53488,7 +50677,7 @@ exports.default = _class;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 182 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53500,11 +50689,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-__webpack_require__(183);
+__webpack_require__(192);
 
-var _stimulus = __webpack_require__(5);
+var _stimulus = __webpack_require__(6);
 
-var _velocityAnimate = __webpack_require__(9);
+var _velocityAnimate = __webpack_require__(10);
 
 var _velocityAnimate2 = _interopRequireDefault(_velocityAnimate);
 
@@ -53590,7 +50779,7 @@ exports.default = _class;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 183 */
+/* 192 */
 /***/ (function(module, exports) {
 
 (function(self) {
@@ -54062,7 +51251,7 @@ exports.default = _class;
 
 
 /***/ }),
-/* 184 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54074,9 +51263,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _stimulus = __webpack_require__(5);
+var _stimulus = __webpack_require__(6);
 
-var _rome = __webpack_require__(25);
+var _rome = __webpack_require__(27);
 
 var _rome2 = _interopRequireDefault(_rome);
 
@@ -54205,256 +51394,4769 @@ function findRangeAndToggle(calendar, startDate, finishDate, index) {
 }
 
 /***/ }),
-/* 185 */
+/* 194 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(module) {var require;//! moment.js
+
+;(function (global, factory) {
+     true ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    global.moment = factory()
+}(this, (function () { 'use strict';
+
+    var hookCallback;
+
+    function hooks () {
+        return hookCallback.apply(null, arguments);
+    }
+
+    // This is done to register the method called with moment()
+    // without creating circular dependencies.
+    function setHookCallback (callback) {
+        hookCallback = callback;
+    }
+
+    function isArray(input) {
+        return input instanceof Array || Object.prototype.toString.call(input) === '[object Array]';
+    }
+
+    function isObject(input) {
+        // IE8 will treat undefined and null as object if it wasn't for
+        // input != null
+        return input != null && Object.prototype.toString.call(input) === '[object Object]';
+    }
+
+    function isObjectEmpty(obj) {
+        if (Object.getOwnPropertyNames) {
+            return (Object.getOwnPropertyNames(obj).length === 0);
+        } else {
+            var k;
+            for (k in obj) {
+                if (obj.hasOwnProperty(k)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    function isUndefined(input) {
+        return input === void 0;
+    }
+
+    function isNumber(input) {
+        return typeof input === 'number' || Object.prototype.toString.call(input) === '[object Number]';
+    }
+
+    function isDate(input) {
+        return input instanceof Date || Object.prototype.toString.call(input) === '[object Date]';
+    }
+
+    function map(arr, fn) {
+        var res = [], i;
+        for (i = 0; i < arr.length; ++i) {
+            res.push(fn(arr[i], i));
+        }
+        return res;
+    }
+
+    function hasOwnProp(a, b) {
+        return Object.prototype.hasOwnProperty.call(a, b);
+    }
+
+    function extend(a, b) {
+        for (var i in b) {
+            if (hasOwnProp(b, i)) {
+                a[i] = b[i];
+            }
+        }
+
+        if (hasOwnProp(b, 'toString')) {
+            a.toString = b.toString;
+        }
+
+        if (hasOwnProp(b, 'valueOf')) {
+            a.valueOf = b.valueOf;
+        }
+
+        return a;
+    }
+
+    function createUTC (input, format, locale, strict) {
+        return createLocalOrUTC(input, format, locale, strict, true).utc();
+    }
+
+    function defaultParsingFlags() {
+        // We need to deep clone this object.
+        return {
+            empty           : false,
+            unusedTokens    : [],
+            unusedInput     : [],
+            overflow        : -2,
+            charsLeftOver   : 0,
+            nullInput       : false,
+            invalidMonth    : null,
+            invalidFormat   : false,
+            userInvalidated : false,
+            iso             : false,
+            parsedDateParts : [],
+            meridiem        : null,
+            rfc2822         : false,
+            weekdayMismatch : false
+        };
+    }
+
+    function getParsingFlags(m) {
+        if (m._pf == null) {
+            m._pf = defaultParsingFlags();
+        }
+        return m._pf;
+    }
+
+    var some;
+    if (Array.prototype.some) {
+        some = Array.prototype.some;
+    } else {
+        some = function (fun) {
+            var t = Object(this);
+            var len = t.length >>> 0;
+
+            for (var i = 0; i < len; i++) {
+                if (i in t && fun.call(this, t[i], i, t)) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+    }
+
+    function isValid(m) {
+        if (m._isValid == null) {
+            var flags = getParsingFlags(m);
+            var parsedParts = some.call(flags.parsedDateParts, function (i) {
+                return i != null;
+            });
+            var isNowValid = !isNaN(m._d.getTime()) &&
+                flags.overflow < 0 &&
+                !flags.empty &&
+                !flags.invalidMonth &&
+                !flags.invalidWeekday &&
+                !flags.weekdayMismatch &&
+                !flags.nullInput &&
+                !flags.invalidFormat &&
+                !flags.userInvalidated &&
+                (!flags.meridiem || (flags.meridiem && parsedParts));
+
+            if (m._strict) {
+                isNowValid = isNowValid &&
+                    flags.charsLeftOver === 0 &&
+                    flags.unusedTokens.length === 0 &&
+                    flags.bigHour === undefined;
+            }
+
+            if (Object.isFrozen == null || !Object.isFrozen(m)) {
+                m._isValid = isNowValid;
+            }
+            else {
+                return isNowValid;
+            }
+        }
+        return m._isValid;
+    }
+
+    function createInvalid (flags) {
+        var m = createUTC(NaN);
+        if (flags != null) {
+            extend(getParsingFlags(m), flags);
+        }
+        else {
+            getParsingFlags(m).userInvalidated = true;
+        }
+
+        return m;
+    }
+
+    // Plugins that add properties should also add the key here (null value),
+    // so we can properly clone ourselves.
+    var momentProperties = hooks.momentProperties = [];
+
+    function copyConfig(to, from) {
+        var i, prop, val;
+
+        if (!isUndefined(from._isAMomentObject)) {
+            to._isAMomentObject = from._isAMomentObject;
+        }
+        if (!isUndefined(from._i)) {
+            to._i = from._i;
+        }
+        if (!isUndefined(from._f)) {
+            to._f = from._f;
+        }
+        if (!isUndefined(from._l)) {
+            to._l = from._l;
+        }
+        if (!isUndefined(from._strict)) {
+            to._strict = from._strict;
+        }
+        if (!isUndefined(from._tzm)) {
+            to._tzm = from._tzm;
+        }
+        if (!isUndefined(from._isUTC)) {
+            to._isUTC = from._isUTC;
+        }
+        if (!isUndefined(from._offset)) {
+            to._offset = from._offset;
+        }
+        if (!isUndefined(from._pf)) {
+            to._pf = getParsingFlags(from);
+        }
+        if (!isUndefined(from._locale)) {
+            to._locale = from._locale;
+        }
+
+        if (momentProperties.length > 0) {
+            for (i = 0; i < momentProperties.length; i++) {
+                prop = momentProperties[i];
+                val = from[prop];
+                if (!isUndefined(val)) {
+                    to[prop] = val;
+                }
+            }
+        }
+
+        return to;
+    }
+
+    var updateInProgress = false;
+
+    // Moment prototype object
+    function Moment(config) {
+        copyConfig(this, config);
+        this._d = new Date(config._d != null ? config._d.getTime() : NaN);
+        if (!this.isValid()) {
+            this._d = new Date(NaN);
+        }
+        // Prevent infinite loop in case updateOffset creates new moment
+        // objects.
+        if (updateInProgress === false) {
+            updateInProgress = true;
+            hooks.updateOffset(this);
+            updateInProgress = false;
+        }
+    }
+
+    function isMoment (obj) {
+        return obj instanceof Moment || (obj != null && obj._isAMomentObject != null);
+    }
+
+    function absFloor (number) {
+        if (number < 0) {
+            // -0 -> 0
+            return Math.ceil(number) || 0;
+        } else {
+            return Math.floor(number);
+        }
+    }
+
+    function toInt(argumentForCoercion) {
+        var coercedNumber = +argumentForCoercion,
+            value = 0;
+
+        if (coercedNumber !== 0 && isFinite(coercedNumber)) {
+            value = absFloor(coercedNumber);
+        }
+
+        return value;
+    }
+
+    // compare two arrays, return the number of differences
+    function compareArrays(array1, array2, dontConvert) {
+        var len = Math.min(array1.length, array2.length),
+            lengthDiff = Math.abs(array1.length - array2.length),
+            diffs = 0,
+            i;
+        for (i = 0; i < len; i++) {
+            if ((dontConvert && array1[i] !== array2[i]) ||
+                (!dontConvert && toInt(array1[i]) !== toInt(array2[i]))) {
+                diffs++;
+            }
+        }
+        return diffs + lengthDiff;
+    }
+
+    function warn(msg) {
+        if (hooks.suppressDeprecationWarnings === false &&
+                (typeof console !==  'undefined') && console.warn) {
+            console.warn('Deprecation warning: ' + msg);
+        }
+    }
+
+    function deprecate(msg, fn) {
+        var firstTime = true;
+
+        return extend(function () {
+            if (hooks.deprecationHandler != null) {
+                hooks.deprecationHandler(null, msg);
+            }
+            if (firstTime) {
+                var args = [];
+                var arg;
+                for (var i = 0; i < arguments.length; i++) {
+                    arg = '';
+                    if (typeof arguments[i] === 'object') {
+                        arg += '\n[' + i + '] ';
+                        for (var key in arguments[0]) {
+                            arg += key + ': ' + arguments[0][key] + ', ';
+                        }
+                        arg = arg.slice(0, -2); // Remove trailing comma and space
+                    } else {
+                        arg = arguments[i];
+                    }
+                    args.push(arg);
+                }
+                warn(msg + '\nArguments: ' + Array.prototype.slice.call(args).join('') + '\n' + (new Error()).stack);
+                firstTime = false;
+            }
+            return fn.apply(this, arguments);
+        }, fn);
+    }
+
+    var deprecations = {};
+
+    function deprecateSimple(name, msg) {
+        if (hooks.deprecationHandler != null) {
+            hooks.deprecationHandler(name, msg);
+        }
+        if (!deprecations[name]) {
+            warn(msg);
+            deprecations[name] = true;
+        }
+    }
+
+    hooks.suppressDeprecationWarnings = false;
+    hooks.deprecationHandler = null;
+
+    function isFunction(input) {
+        return input instanceof Function || Object.prototype.toString.call(input) === '[object Function]';
+    }
+
+    function set (config) {
+        var prop, i;
+        for (i in config) {
+            prop = config[i];
+            if (isFunction(prop)) {
+                this[i] = prop;
+            } else {
+                this['_' + i] = prop;
+            }
+        }
+        this._config = config;
+        // Lenient ordinal parsing accepts just a number in addition to
+        // number + (possibly) stuff coming from _dayOfMonthOrdinalParse.
+        // TODO: Remove "ordinalParse" fallback in next major release.
+        this._dayOfMonthOrdinalParseLenient = new RegExp(
+            (this._dayOfMonthOrdinalParse.source || this._ordinalParse.source) +
+                '|' + (/\d{1,2}/).source);
+    }
+
+    function mergeConfigs(parentConfig, childConfig) {
+        var res = extend({}, parentConfig), prop;
+        for (prop in childConfig) {
+            if (hasOwnProp(childConfig, prop)) {
+                if (isObject(parentConfig[prop]) && isObject(childConfig[prop])) {
+                    res[prop] = {};
+                    extend(res[prop], parentConfig[prop]);
+                    extend(res[prop], childConfig[prop]);
+                } else if (childConfig[prop] != null) {
+                    res[prop] = childConfig[prop];
+                } else {
+                    delete res[prop];
+                }
+            }
+        }
+        for (prop in parentConfig) {
+            if (hasOwnProp(parentConfig, prop) &&
+                    !hasOwnProp(childConfig, prop) &&
+                    isObject(parentConfig[prop])) {
+                // make sure changes to properties don't modify parent config
+                res[prop] = extend({}, res[prop]);
+            }
+        }
+        return res;
+    }
+
+    function Locale(config) {
+        if (config != null) {
+            this.set(config);
+        }
+    }
+
+    var keys;
+
+    if (Object.keys) {
+        keys = Object.keys;
+    } else {
+        keys = function (obj) {
+            var i, res = [];
+            for (i in obj) {
+                if (hasOwnProp(obj, i)) {
+                    res.push(i);
+                }
+            }
+            return res;
+        };
+    }
+
+    var defaultCalendar = {
+        sameDay : '[Today at] LT',
+        nextDay : '[Tomorrow at] LT',
+        nextWeek : 'dddd [at] LT',
+        lastDay : '[Yesterday at] LT',
+        lastWeek : '[Last] dddd [at] LT',
+        sameElse : 'L'
+    };
+
+    function calendar (key, mom, now) {
+        var output = this._calendar[key] || this._calendar['sameElse'];
+        return isFunction(output) ? output.call(mom, now) : output;
+    }
+
+    var defaultLongDateFormat = {
+        LTS  : 'h:mm:ss A',
+        LT   : 'h:mm A',
+        L    : 'MM/DD/YYYY',
+        LL   : 'MMMM D, YYYY',
+        LLL  : 'MMMM D, YYYY h:mm A',
+        LLLL : 'dddd, MMMM D, YYYY h:mm A'
+    };
+
+    function longDateFormat (key) {
+        var format = this._longDateFormat[key],
+            formatUpper = this._longDateFormat[key.toUpperCase()];
+
+        if (format || !formatUpper) {
+            return format;
+        }
+
+        this._longDateFormat[key] = formatUpper.replace(/MMMM|MM|DD|dddd/g, function (val) {
+            return val.slice(1);
+        });
+
+        return this._longDateFormat[key];
+    }
+
+    var defaultInvalidDate = 'Invalid date';
+
+    function invalidDate () {
+        return this._invalidDate;
+    }
+
+    var defaultOrdinal = '%d';
+    var defaultDayOfMonthOrdinalParse = /\d{1,2}/;
+
+    function ordinal (number) {
+        return this._ordinal.replace('%d', number);
+    }
+
+    var defaultRelativeTime = {
+        future : 'in %s',
+        past   : '%s ago',
+        s  : 'a few seconds',
+        ss : '%d seconds',
+        m  : 'a minute',
+        mm : '%d minutes',
+        h  : 'an hour',
+        hh : '%d hours',
+        d  : 'a day',
+        dd : '%d days',
+        M  : 'a month',
+        MM : '%d months',
+        y  : 'a year',
+        yy : '%d years'
+    };
+
+    function relativeTime (number, withoutSuffix, string, isFuture) {
+        var output = this._relativeTime[string];
+        return (isFunction(output)) ?
+            output(number, withoutSuffix, string, isFuture) :
+            output.replace(/%d/i, number);
+    }
+
+    function pastFuture (diff, output) {
+        var format = this._relativeTime[diff > 0 ? 'future' : 'past'];
+        return isFunction(format) ? format(output) : format.replace(/%s/i, output);
+    }
+
+    var aliases = {};
+
+    function addUnitAlias (unit, shorthand) {
+        var lowerCase = unit.toLowerCase();
+        aliases[lowerCase] = aliases[lowerCase + 's'] = aliases[shorthand] = unit;
+    }
+
+    function normalizeUnits(units) {
+        return typeof units === 'string' ? aliases[units] || aliases[units.toLowerCase()] : undefined;
+    }
+
+    function normalizeObjectUnits(inputObject) {
+        var normalizedInput = {},
+            normalizedProp,
+            prop;
+
+        for (prop in inputObject) {
+            if (hasOwnProp(inputObject, prop)) {
+                normalizedProp = normalizeUnits(prop);
+                if (normalizedProp) {
+                    normalizedInput[normalizedProp] = inputObject[prop];
+                }
+            }
+        }
+
+        return normalizedInput;
+    }
+
+    var priorities = {};
+
+    function addUnitPriority(unit, priority) {
+        priorities[unit] = priority;
+    }
+
+    function getPrioritizedUnits(unitsObj) {
+        var units = [];
+        for (var u in unitsObj) {
+            units.push({unit: u, priority: priorities[u]});
+        }
+        units.sort(function (a, b) {
+            return a.priority - b.priority;
+        });
+        return units;
+    }
+
+    function zeroFill(number, targetLength, forceSign) {
+        var absNumber = '' + Math.abs(number),
+            zerosToFill = targetLength - absNumber.length,
+            sign = number >= 0;
+        return (sign ? (forceSign ? '+' : '') : '-') +
+            Math.pow(10, Math.max(0, zerosToFill)).toString().substr(1) + absNumber;
+    }
+
+    var formattingTokens = /(\[[^\[]*\])|(\\)?([Hh]mm(ss)?|Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Qo?|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g;
+
+    var localFormattingTokens = /(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g;
+
+    var formatFunctions = {};
+
+    var formatTokenFunctions = {};
+
+    // token:    'M'
+    // padded:   ['MM', 2]
+    // ordinal:  'Mo'
+    // callback: function () { this.month() + 1 }
+    function addFormatToken (token, padded, ordinal, callback) {
+        var func = callback;
+        if (typeof callback === 'string') {
+            func = function () {
+                return this[callback]();
+            };
+        }
+        if (token) {
+            formatTokenFunctions[token] = func;
+        }
+        if (padded) {
+            formatTokenFunctions[padded[0]] = function () {
+                return zeroFill(func.apply(this, arguments), padded[1], padded[2]);
+            };
+        }
+        if (ordinal) {
+            formatTokenFunctions[ordinal] = function () {
+                return this.localeData().ordinal(func.apply(this, arguments), token);
+            };
+        }
+    }
+
+    function removeFormattingTokens(input) {
+        if (input.match(/\[[\s\S]/)) {
+            return input.replace(/^\[|\]$/g, '');
+        }
+        return input.replace(/\\/g, '');
+    }
+
+    function makeFormatFunction(format) {
+        var array = format.match(formattingTokens), i, length;
+
+        for (i = 0, length = array.length; i < length; i++) {
+            if (formatTokenFunctions[array[i]]) {
+                array[i] = formatTokenFunctions[array[i]];
+            } else {
+                array[i] = removeFormattingTokens(array[i]);
+            }
+        }
+
+        return function (mom) {
+            var output = '', i;
+            for (i = 0; i < length; i++) {
+                output += isFunction(array[i]) ? array[i].call(mom, format) : array[i];
+            }
+            return output;
+        };
+    }
+
+    // format date using native date object
+    function formatMoment(m, format) {
+        if (!m.isValid()) {
+            return m.localeData().invalidDate();
+        }
+
+        format = expandFormat(format, m.localeData());
+        formatFunctions[format] = formatFunctions[format] || makeFormatFunction(format);
+
+        return formatFunctions[format](m);
+    }
+
+    function expandFormat(format, locale) {
+        var i = 5;
+
+        function replaceLongDateFormatTokens(input) {
+            return locale.longDateFormat(input) || input;
+        }
+
+        localFormattingTokens.lastIndex = 0;
+        while (i >= 0 && localFormattingTokens.test(format)) {
+            format = format.replace(localFormattingTokens, replaceLongDateFormatTokens);
+            localFormattingTokens.lastIndex = 0;
+            i -= 1;
+        }
+
+        return format;
+    }
+
+    var match1         = /\d/;            //       0 - 9
+    var match2         = /\d\d/;          //      00 - 99
+    var match3         = /\d{3}/;         //     000 - 999
+    var match4         = /\d{4}/;         //    0000 - 9999
+    var match6         = /[+-]?\d{6}/;    // -999999 - 999999
+    var match1to2      = /\d\d?/;         //       0 - 99
+    var match3to4      = /\d\d\d\d?/;     //     999 - 9999
+    var match5to6      = /\d\d\d\d\d\d?/; //   99999 - 999999
+    var match1to3      = /\d{1,3}/;       //       0 - 999
+    var match1to4      = /\d{1,4}/;       //       0 - 9999
+    var match1to6      = /[+-]?\d{1,6}/;  // -999999 - 999999
+
+    var matchUnsigned  = /\d+/;           //       0 - inf
+    var matchSigned    = /[+-]?\d+/;      //    -inf - inf
+
+    var matchOffset    = /Z|[+-]\d\d:?\d\d/gi; // +00:00 -00:00 +0000 -0000 or Z
+    var matchShortOffset = /Z|[+-]\d\d(?::?\d\d)?/gi; // +00 -00 +00:00 -00:00 +0000 -0000 or Z
+
+    var matchTimestamp = /[+-]?\d+(\.\d{1,3})?/; // 123456789 123456789.123
+
+    // any word (or two) characters or numbers including two/three word month in arabic.
+    // includes scottish gaelic two word and hyphenated months
+    var matchWord = /[0-9]{0,256}['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFF07\uFF10-\uFFEF]{1,256}|[\u0600-\u06FF\/]{1,256}(\s*?[\u0600-\u06FF]{1,256}){1,2}/i;
+
+    var regexes = {};
+
+    function addRegexToken (token, regex, strictRegex) {
+        regexes[token] = isFunction(regex) ? regex : function (isStrict, localeData) {
+            return (isStrict && strictRegex) ? strictRegex : regex;
+        };
+    }
+
+    function getParseRegexForToken (token, config) {
+        if (!hasOwnProp(regexes, token)) {
+            return new RegExp(unescapeFormat(token));
+        }
+
+        return regexes[token](config._strict, config._locale);
+    }
+
+    // Code from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
+    function unescapeFormat(s) {
+        return regexEscape(s.replace('\\', '').replace(/\\(\[)|\\(\])|\[([^\]\[]*)\]|\\(.)/g, function (matched, p1, p2, p3, p4) {
+            return p1 || p2 || p3 || p4;
+        }));
+    }
+
+    function regexEscape(s) {
+        return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    }
+
+    var tokens = {};
+
+    function addParseToken (token, callback) {
+        var i, func = callback;
+        if (typeof token === 'string') {
+            token = [token];
+        }
+        if (isNumber(callback)) {
+            func = function (input, array) {
+                array[callback] = toInt(input);
+            };
+        }
+        for (i = 0; i < token.length; i++) {
+            tokens[token[i]] = func;
+        }
+    }
+
+    function addWeekParseToken (token, callback) {
+        addParseToken(token, function (input, array, config, token) {
+            config._w = config._w || {};
+            callback(input, config._w, config, token);
+        });
+    }
+
+    function addTimeToArrayFromToken(token, input, config) {
+        if (input != null && hasOwnProp(tokens, token)) {
+            tokens[token](input, config._a, config, token);
+        }
+    }
+
+    var YEAR = 0;
+    var MONTH = 1;
+    var DATE = 2;
+    var HOUR = 3;
+    var MINUTE = 4;
+    var SECOND = 5;
+    var MILLISECOND = 6;
+    var WEEK = 7;
+    var WEEKDAY = 8;
+
+    // FORMATTING
+
+    addFormatToken('Y', 0, 0, function () {
+        var y = this.year();
+        return y <= 9999 ? '' + y : '+' + y;
+    });
+
+    addFormatToken(0, ['YY', 2], 0, function () {
+        return this.year() % 100;
+    });
+
+    addFormatToken(0, ['YYYY',   4],       0, 'year');
+    addFormatToken(0, ['YYYYY',  5],       0, 'year');
+    addFormatToken(0, ['YYYYYY', 6, true], 0, 'year');
+
+    // ALIASES
+
+    addUnitAlias('year', 'y');
+
+    // PRIORITIES
+
+    addUnitPriority('year', 1);
+
+    // PARSING
+
+    addRegexToken('Y',      matchSigned);
+    addRegexToken('YY',     match1to2, match2);
+    addRegexToken('YYYY',   match1to4, match4);
+    addRegexToken('YYYYY',  match1to6, match6);
+    addRegexToken('YYYYYY', match1to6, match6);
+
+    addParseToken(['YYYYY', 'YYYYYY'], YEAR);
+    addParseToken('YYYY', function (input, array) {
+        array[YEAR] = input.length === 2 ? hooks.parseTwoDigitYear(input) : toInt(input);
+    });
+    addParseToken('YY', function (input, array) {
+        array[YEAR] = hooks.parseTwoDigitYear(input);
+    });
+    addParseToken('Y', function (input, array) {
+        array[YEAR] = parseInt(input, 10);
+    });
+
+    // HELPERS
+
+    function daysInYear(year) {
+        return isLeapYear(year) ? 366 : 365;
+    }
+
+    function isLeapYear(year) {
+        return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+    }
+
+    // HOOKS
+
+    hooks.parseTwoDigitYear = function (input) {
+        return toInt(input) + (toInt(input) > 68 ? 1900 : 2000);
+    };
+
+    // MOMENTS
+
+    var getSetYear = makeGetSet('FullYear', true);
+
+    function getIsLeapYear () {
+        return isLeapYear(this.year());
+    }
+
+    function makeGetSet (unit, keepTime) {
+        return function (value) {
+            if (value != null) {
+                set$1(this, unit, value);
+                hooks.updateOffset(this, keepTime);
+                return this;
+            } else {
+                return get(this, unit);
+            }
+        };
+    }
+
+    function get (mom, unit) {
+        return mom.isValid() ?
+            mom._d['get' + (mom._isUTC ? 'UTC' : '') + unit]() : NaN;
+    }
+
+    function set$1 (mom, unit, value) {
+        if (mom.isValid() && !isNaN(value)) {
+            if (unit === 'FullYear' && isLeapYear(mom.year()) && mom.month() === 1 && mom.date() === 29) {
+                mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value, mom.month(), daysInMonth(value, mom.month()));
+            }
+            else {
+                mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value);
+            }
+        }
+    }
+
+    // MOMENTS
+
+    function stringGet (units) {
+        units = normalizeUnits(units);
+        if (isFunction(this[units])) {
+            return this[units]();
+        }
+        return this;
+    }
+
+
+    function stringSet (units, value) {
+        if (typeof units === 'object') {
+            units = normalizeObjectUnits(units);
+            var prioritized = getPrioritizedUnits(units);
+            for (var i = 0; i < prioritized.length; i++) {
+                this[prioritized[i].unit](units[prioritized[i].unit]);
+            }
+        } else {
+            units = normalizeUnits(units);
+            if (isFunction(this[units])) {
+                return this[units](value);
+            }
+        }
+        return this;
+    }
+
+    function mod(n, x) {
+        return ((n % x) + x) % x;
+    }
+
+    var indexOf;
+
+    if (Array.prototype.indexOf) {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function (o) {
+            // I know
+            var i;
+            for (i = 0; i < this.length; ++i) {
+                if (this[i] === o) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+    }
+
+    function daysInMonth(year, month) {
+        if (isNaN(year) || isNaN(month)) {
+            return NaN;
+        }
+        var modMonth = mod(month, 12);
+        year += (month - modMonth) / 12;
+        return modMonth === 1 ? (isLeapYear(year) ? 29 : 28) : (31 - modMonth % 7 % 2);
+    }
+
+    // FORMATTING
+
+    addFormatToken('M', ['MM', 2], 'Mo', function () {
+        return this.month() + 1;
+    });
+
+    addFormatToken('MMM', 0, 0, function (format) {
+        return this.localeData().monthsShort(this, format);
+    });
+
+    addFormatToken('MMMM', 0, 0, function (format) {
+        return this.localeData().months(this, format);
+    });
+
+    // ALIASES
+
+    addUnitAlias('month', 'M');
+
+    // PRIORITY
+
+    addUnitPriority('month', 8);
+
+    // PARSING
+
+    addRegexToken('M',    match1to2);
+    addRegexToken('MM',   match1to2, match2);
+    addRegexToken('MMM',  function (isStrict, locale) {
+        return locale.monthsShortRegex(isStrict);
+    });
+    addRegexToken('MMMM', function (isStrict, locale) {
+        return locale.monthsRegex(isStrict);
+    });
+
+    addParseToken(['M', 'MM'], function (input, array) {
+        array[MONTH] = toInt(input) - 1;
+    });
+
+    addParseToken(['MMM', 'MMMM'], function (input, array, config, token) {
+        var month = config._locale.monthsParse(input, token, config._strict);
+        // if we didn't find a month name, mark the date as invalid.
+        if (month != null) {
+            array[MONTH] = month;
+        } else {
+            getParsingFlags(config).invalidMonth = input;
+        }
+    });
+
+    // LOCALES
+
+    var MONTHS_IN_FORMAT = /D[oD]?(\[[^\[\]]*\]|\s)+MMMM?/;
+    var defaultLocaleMonths = 'January_February_March_April_May_June_July_August_September_October_November_December'.split('_');
+    function localeMonths (m, format) {
+        if (!m) {
+            return isArray(this._months) ? this._months :
+                this._months['standalone'];
+        }
+        return isArray(this._months) ? this._months[m.month()] :
+            this._months[(this._months.isFormat || MONTHS_IN_FORMAT).test(format) ? 'format' : 'standalone'][m.month()];
+    }
+
+    var defaultLocaleMonthsShort = 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_');
+    function localeMonthsShort (m, format) {
+        if (!m) {
+            return isArray(this._monthsShort) ? this._monthsShort :
+                this._monthsShort['standalone'];
+        }
+        return isArray(this._monthsShort) ? this._monthsShort[m.month()] :
+            this._monthsShort[MONTHS_IN_FORMAT.test(format) ? 'format' : 'standalone'][m.month()];
+    }
+
+    function handleStrictParse(monthName, format, strict) {
+        var i, ii, mom, llc = monthName.toLocaleLowerCase();
+        if (!this._monthsParse) {
+            // this is not used
+            this._monthsParse = [];
+            this._longMonthsParse = [];
+            this._shortMonthsParse = [];
+            for (i = 0; i < 12; ++i) {
+                mom = createUTC([2000, i]);
+                this._shortMonthsParse[i] = this.monthsShort(mom, '').toLocaleLowerCase();
+                this._longMonthsParse[i] = this.months(mom, '').toLocaleLowerCase();
+            }
+        }
+
+        if (strict) {
+            if (format === 'MMM') {
+                ii = indexOf.call(this._shortMonthsParse, llc);
+                return ii !== -1 ? ii : null;
+            } else {
+                ii = indexOf.call(this._longMonthsParse, llc);
+                return ii !== -1 ? ii : null;
+            }
+        } else {
+            if (format === 'MMM') {
+                ii = indexOf.call(this._shortMonthsParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._longMonthsParse, llc);
+                return ii !== -1 ? ii : null;
+            } else {
+                ii = indexOf.call(this._longMonthsParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._shortMonthsParse, llc);
+                return ii !== -1 ? ii : null;
+            }
+        }
+    }
+
+    function localeMonthsParse (monthName, format, strict) {
+        var i, mom, regex;
+
+        if (this._monthsParseExact) {
+            return handleStrictParse.call(this, monthName, format, strict);
+        }
+
+        if (!this._monthsParse) {
+            this._monthsParse = [];
+            this._longMonthsParse = [];
+            this._shortMonthsParse = [];
+        }
+
+        // TODO: add sorting
+        // Sorting makes sure if one month (or abbr) is a prefix of another
+        // see sorting in computeMonthsParse
+        for (i = 0; i < 12; i++) {
+            // make the regex if we don't have it already
+            mom = createUTC([2000, i]);
+            if (strict && !this._longMonthsParse[i]) {
+                this._longMonthsParse[i] = new RegExp('^' + this.months(mom, '').replace('.', '') + '$', 'i');
+                this._shortMonthsParse[i] = new RegExp('^' + this.monthsShort(mom, '').replace('.', '') + '$', 'i');
+            }
+            if (!strict && !this._monthsParse[i]) {
+                regex = '^' + this.months(mom, '') + '|^' + this.monthsShort(mom, '');
+                this._monthsParse[i] = new RegExp(regex.replace('.', ''), 'i');
+            }
+            // test the regex
+            if (strict && format === 'MMMM' && this._longMonthsParse[i].test(monthName)) {
+                return i;
+            } else if (strict && format === 'MMM' && this._shortMonthsParse[i].test(monthName)) {
+                return i;
+            } else if (!strict && this._monthsParse[i].test(monthName)) {
+                return i;
+            }
+        }
+    }
+
+    // MOMENTS
+
+    function setMonth (mom, value) {
+        var dayOfMonth;
+
+        if (!mom.isValid()) {
+            // No op
+            return mom;
+        }
+
+        if (typeof value === 'string') {
+            if (/^\d+$/.test(value)) {
+                value = toInt(value);
+            } else {
+                value = mom.localeData().monthsParse(value);
+                // TODO: Another silent failure?
+                if (!isNumber(value)) {
+                    return mom;
+                }
+            }
+        }
+
+        dayOfMonth = Math.min(mom.date(), daysInMonth(mom.year(), value));
+        mom._d['set' + (mom._isUTC ? 'UTC' : '') + 'Month'](value, dayOfMonth);
+        return mom;
+    }
+
+    function getSetMonth (value) {
+        if (value != null) {
+            setMonth(this, value);
+            hooks.updateOffset(this, true);
+            return this;
+        } else {
+            return get(this, 'Month');
+        }
+    }
+
+    function getDaysInMonth () {
+        return daysInMonth(this.year(), this.month());
+    }
+
+    var defaultMonthsShortRegex = matchWord;
+    function monthsShortRegex (isStrict) {
+        if (this._monthsParseExact) {
+            if (!hasOwnProp(this, '_monthsRegex')) {
+                computeMonthsParse.call(this);
+            }
+            if (isStrict) {
+                return this._monthsShortStrictRegex;
+            } else {
+                return this._monthsShortRegex;
+            }
+        } else {
+            if (!hasOwnProp(this, '_monthsShortRegex')) {
+                this._monthsShortRegex = defaultMonthsShortRegex;
+            }
+            return this._monthsShortStrictRegex && isStrict ?
+                this._monthsShortStrictRegex : this._monthsShortRegex;
+        }
+    }
+
+    var defaultMonthsRegex = matchWord;
+    function monthsRegex (isStrict) {
+        if (this._monthsParseExact) {
+            if (!hasOwnProp(this, '_monthsRegex')) {
+                computeMonthsParse.call(this);
+            }
+            if (isStrict) {
+                return this._monthsStrictRegex;
+            } else {
+                return this._monthsRegex;
+            }
+        } else {
+            if (!hasOwnProp(this, '_monthsRegex')) {
+                this._monthsRegex = defaultMonthsRegex;
+            }
+            return this._monthsStrictRegex && isStrict ?
+                this._monthsStrictRegex : this._monthsRegex;
+        }
+    }
+
+    function computeMonthsParse () {
+        function cmpLenRev(a, b) {
+            return b.length - a.length;
+        }
+
+        var shortPieces = [], longPieces = [], mixedPieces = [],
+            i, mom;
+        for (i = 0; i < 12; i++) {
+            // make the regex if we don't have it already
+            mom = createUTC([2000, i]);
+            shortPieces.push(this.monthsShort(mom, ''));
+            longPieces.push(this.months(mom, ''));
+            mixedPieces.push(this.months(mom, ''));
+            mixedPieces.push(this.monthsShort(mom, ''));
+        }
+        // Sorting makes sure if one month (or abbr) is a prefix of another it
+        // will match the longer piece.
+        shortPieces.sort(cmpLenRev);
+        longPieces.sort(cmpLenRev);
+        mixedPieces.sort(cmpLenRev);
+        for (i = 0; i < 12; i++) {
+            shortPieces[i] = regexEscape(shortPieces[i]);
+            longPieces[i] = regexEscape(longPieces[i]);
+        }
+        for (i = 0; i < 24; i++) {
+            mixedPieces[i] = regexEscape(mixedPieces[i]);
+        }
+
+        this._monthsRegex = new RegExp('^(' + mixedPieces.join('|') + ')', 'i');
+        this._monthsShortRegex = this._monthsRegex;
+        this._monthsStrictRegex = new RegExp('^(' + longPieces.join('|') + ')', 'i');
+        this._monthsShortStrictRegex = new RegExp('^(' + shortPieces.join('|') + ')', 'i');
+    }
+
+    function createDate (y, m, d, h, M, s, ms) {
+        // can't just apply() to create a date:
+        // https://stackoverflow.com/q/181348
+        var date = new Date(y, m, d, h, M, s, ms);
+
+        // the date constructor remaps years 0-99 to 1900-1999
+        if (y < 100 && y >= 0 && isFinite(date.getFullYear())) {
+            date.setFullYear(y);
+        }
+        return date;
+    }
+
+    function createUTCDate (y) {
+        var date = new Date(Date.UTC.apply(null, arguments));
+
+        // the Date.UTC function remaps years 0-99 to 1900-1999
+        if (y < 100 && y >= 0 && isFinite(date.getUTCFullYear())) {
+            date.setUTCFullYear(y);
+        }
+        return date;
+    }
+
+    // start-of-first-week - start-of-year
+    function firstWeekOffset(year, dow, doy) {
+        var // first-week day -- which january is always in the first week (4 for iso, 1 for other)
+            fwd = 7 + dow - doy,
+            // first-week day local weekday -- which local weekday is fwd
+            fwdlw = (7 + createUTCDate(year, 0, fwd).getUTCDay() - dow) % 7;
+
+        return -fwdlw + fwd - 1;
+    }
+
+    // https://en.wikipedia.org/wiki/ISO_week_date#Calculating_a_date_given_the_year.2C_week_number_and_weekday
+    function dayOfYearFromWeeks(year, week, weekday, dow, doy) {
+        var localWeekday = (7 + weekday - dow) % 7,
+            weekOffset = firstWeekOffset(year, dow, doy),
+            dayOfYear = 1 + 7 * (week - 1) + localWeekday + weekOffset,
+            resYear, resDayOfYear;
+
+        if (dayOfYear <= 0) {
+            resYear = year - 1;
+            resDayOfYear = daysInYear(resYear) + dayOfYear;
+        } else if (dayOfYear > daysInYear(year)) {
+            resYear = year + 1;
+            resDayOfYear = dayOfYear - daysInYear(year);
+        } else {
+            resYear = year;
+            resDayOfYear = dayOfYear;
+        }
+
+        return {
+            year: resYear,
+            dayOfYear: resDayOfYear
+        };
+    }
+
+    function weekOfYear(mom, dow, doy) {
+        var weekOffset = firstWeekOffset(mom.year(), dow, doy),
+            week = Math.floor((mom.dayOfYear() - weekOffset - 1) / 7) + 1,
+            resWeek, resYear;
+
+        if (week < 1) {
+            resYear = mom.year() - 1;
+            resWeek = week + weeksInYear(resYear, dow, doy);
+        } else if (week > weeksInYear(mom.year(), dow, doy)) {
+            resWeek = week - weeksInYear(mom.year(), dow, doy);
+            resYear = mom.year() + 1;
+        } else {
+            resYear = mom.year();
+            resWeek = week;
+        }
+
+        return {
+            week: resWeek,
+            year: resYear
+        };
+    }
+
+    function weeksInYear(year, dow, doy) {
+        var weekOffset = firstWeekOffset(year, dow, doy),
+            weekOffsetNext = firstWeekOffset(year + 1, dow, doy);
+        return (daysInYear(year) - weekOffset + weekOffsetNext) / 7;
+    }
+
+    // FORMATTING
+
+    addFormatToken('w', ['ww', 2], 'wo', 'week');
+    addFormatToken('W', ['WW', 2], 'Wo', 'isoWeek');
+
+    // ALIASES
+
+    addUnitAlias('week', 'w');
+    addUnitAlias('isoWeek', 'W');
+
+    // PRIORITIES
+
+    addUnitPriority('week', 5);
+    addUnitPriority('isoWeek', 5);
+
+    // PARSING
+
+    addRegexToken('w',  match1to2);
+    addRegexToken('ww', match1to2, match2);
+    addRegexToken('W',  match1to2);
+    addRegexToken('WW', match1to2, match2);
+
+    addWeekParseToken(['w', 'ww', 'W', 'WW'], function (input, week, config, token) {
+        week[token.substr(0, 1)] = toInt(input);
+    });
+
+    // HELPERS
+
+    // LOCALES
+
+    function localeWeek (mom) {
+        return weekOfYear(mom, this._week.dow, this._week.doy).week;
+    }
+
+    var defaultLocaleWeek = {
+        dow : 0, // Sunday is the first day of the week.
+        doy : 6  // The week that contains Jan 1st is the first week of the year.
+    };
+
+    function localeFirstDayOfWeek () {
+        return this._week.dow;
+    }
+
+    function localeFirstDayOfYear () {
+        return this._week.doy;
+    }
+
+    // MOMENTS
+
+    function getSetWeek (input) {
+        var week = this.localeData().week(this);
+        return input == null ? week : this.add((input - week) * 7, 'd');
+    }
+
+    function getSetISOWeek (input) {
+        var week = weekOfYear(this, 1, 4).week;
+        return input == null ? week : this.add((input - week) * 7, 'd');
+    }
+
+    // FORMATTING
+
+    addFormatToken('d', 0, 'do', 'day');
+
+    addFormatToken('dd', 0, 0, function (format) {
+        return this.localeData().weekdaysMin(this, format);
+    });
+
+    addFormatToken('ddd', 0, 0, function (format) {
+        return this.localeData().weekdaysShort(this, format);
+    });
+
+    addFormatToken('dddd', 0, 0, function (format) {
+        return this.localeData().weekdays(this, format);
+    });
+
+    addFormatToken('e', 0, 0, 'weekday');
+    addFormatToken('E', 0, 0, 'isoWeekday');
+
+    // ALIASES
+
+    addUnitAlias('day', 'd');
+    addUnitAlias('weekday', 'e');
+    addUnitAlias('isoWeekday', 'E');
+
+    // PRIORITY
+    addUnitPriority('day', 11);
+    addUnitPriority('weekday', 11);
+    addUnitPriority('isoWeekday', 11);
+
+    // PARSING
+
+    addRegexToken('d',    match1to2);
+    addRegexToken('e',    match1to2);
+    addRegexToken('E',    match1to2);
+    addRegexToken('dd',   function (isStrict, locale) {
+        return locale.weekdaysMinRegex(isStrict);
+    });
+    addRegexToken('ddd',   function (isStrict, locale) {
+        return locale.weekdaysShortRegex(isStrict);
+    });
+    addRegexToken('dddd',   function (isStrict, locale) {
+        return locale.weekdaysRegex(isStrict);
+    });
+
+    addWeekParseToken(['dd', 'ddd', 'dddd'], function (input, week, config, token) {
+        var weekday = config._locale.weekdaysParse(input, token, config._strict);
+        // if we didn't get a weekday name, mark the date as invalid
+        if (weekday != null) {
+            week.d = weekday;
+        } else {
+            getParsingFlags(config).invalidWeekday = input;
+        }
+    });
+
+    addWeekParseToken(['d', 'e', 'E'], function (input, week, config, token) {
+        week[token] = toInt(input);
+    });
+
+    // HELPERS
+
+    function parseWeekday(input, locale) {
+        if (typeof input !== 'string') {
+            return input;
+        }
+
+        if (!isNaN(input)) {
+            return parseInt(input, 10);
+        }
+
+        input = locale.weekdaysParse(input);
+        if (typeof input === 'number') {
+            return input;
+        }
+
+        return null;
+    }
+
+    function parseIsoWeekday(input, locale) {
+        if (typeof input === 'string') {
+            return locale.weekdaysParse(input) % 7 || 7;
+        }
+        return isNaN(input) ? null : input;
+    }
+
+    // LOCALES
+
+    var defaultLocaleWeekdays = 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_');
+    function localeWeekdays (m, format) {
+        if (!m) {
+            return isArray(this._weekdays) ? this._weekdays :
+                this._weekdays['standalone'];
+        }
+        return isArray(this._weekdays) ? this._weekdays[m.day()] :
+            this._weekdays[this._weekdays.isFormat.test(format) ? 'format' : 'standalone'][m.day()];
+    }
+
+    var defaultLocaleWeekdaysShort = 'Sun_Mon_Tue_Wed_Thu_Fri_Sat'.split('_');
+    function localeWeekdaysShort (m) {
+        return (m) ? this._weekdaysShort[m.day()] : this._weekdaysShort;
+    }
+
+    var defaultLocaleWeekdaysMin = 'Su_Mo_Tu_We_Th_Fr_Sa'.split('_');
+    function localeWeekdaysMin (m) {
+        return (m) ? this._weekdaysMin[m.day()] : this._weekdaysMin;
+    }
+
+    function handleStrictParse$1(weekdayName, format, strict) {
+        var i, ii, mom, llc = weekdayName.toLocaleLowerCase();
+        if (!this._weekdaysParse) {
+            this._weekdaysParse = [];
+            this._shortWeekdaysParse = [];
+            this._minWeekdaysParse = [];
+
+            for (i = 0; i < 7; ++i) {
+                mom = createUTC([2000, 1]).day(i);
+                this._minWeekdaysParse[i] = this.weekdaysMin(mom, '').toLocaleLowerCase();
+                this._shortWeekdaysParse[i] = this.weekdaysShort(mom, '').toLocaleLowerCase();
+                this._weekdaysParse[i] = this.weekdays(mom, '').toLocaleLowerCase();
+            }
+        }
+
+        if (strict) {
+            if (format === 'dddd') {
+                ii = indexOf.call(this._weekdaysParse, llc);
+                return ii !== -1 ? ii : null;
+            } else if (format === 'ddd') {
+                ii = indexOf.call(this._shortWeekdaysParse, llc);
+                return ii !== -1 ? ii : null;
+            } else {
+                ii = indexOf.call(this._minWeekdaysParse, llc);
+                return ii !== -1 ? ii : null;
+            }
+        } else {
+            if (format === 'dddd') {
+                ii = indexOf.call(this._weekdaysParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._shortWeekdaysParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._minWeekdaysParse, llc);
+                return ii !== -1 ? ii : null;
+            } else if (format === 'ddd') {
+                ii = indexOf.call(this._shortWeekdaysParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._weekdaysParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._minWeekdaysParse, llc);
+                return ii !== -1 ? ii : null;
+            } else {
+                ii = indexOf.call(this._minWeekdaysParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._weekdaysParse, llc);
+                if (ii !== -1) {
+                    return ii;
+                }
+                ii = indexOf.call(this._shortWeekdaysParse, llc);
+                return ii !== -1 ? ii : null;
+            }
+        }
+    }
+
+    function localeWeekdaysParse (weekdayName, format, strict) {
+        var i, mom, regex;
+
+        if (this._weekdaysParseExact) {
+            return handleStrictParse$1.call(this, weekdayName, format, strict);
+        }
+
+        if (!this._weekdaysParse) {
+            this._weekdaysParse = [];
+            this._minWeekdaysParse = [];
+            this._shortWeekdaysParse = [];
+            this._fullWeekdaysParse = [];
+        }
+
+        for (i = 0; i < 7; i++) {
+            // make the regex if we don't have it already
+
+            mom = createUTC([2000, 1]).day(i);
+            if (strict && !this._fullWeekdaysParse[i]) {
+                this._fullWeekdaysParse[i] = new RegExp('^' + this.weekdays(mom, '').replace('.', '\.?') + '$', 'i');
+                this._shortWeekdaysParse[i] = new RegExp('^' + this.weekdaysShort(mom, '').replace('.', '\.?') + '$', 'i');
+                this._minWeekdaysParse[i] = new RegExp('^' + this.weekdaysMin(mom, '').replace('.', '\.?') + '$', 'i');
+            }
+            if (!this._weekdaysParse[i]) {
+                regex = '^' + this.weekdays(mom, '') + '|^' + this.weekdaysShort(mom, '') + '|^' + this.weekdaysMin(mom, '');
+                this._weekdaysParse[i] = new RegExp(regex.replace('.', ''), 'i');
+            }
+            // test the regex
+            if (strict && format === 'dddd' && this._fullWeekdaysParse[i].test(weekdayName)) {
+                return i;
+            } else if (strict && format === 'ddd' && this._shortWeekdaysParse[i].test(weekdayName)) {
+                return i;
+            } else if (strict && format === 'dd' && this._minWeekdaysParse[i].test(weekdayName)) {
+                return i;
+            } else if (!strict && this._weekdaysParse[i].test(weekdayName)) {
+                return i;
+            }
+        }
+    }
+
+    // MOMENTS
+
+    function getSetDayOfWeek (input) {
+        if (!this.isValid()) {
+            return input != null ? this : NaN;
+        }
+        var day = this._isUTC ? this._d.getUTCDay() : this._d.getDay();
+        if (input != null) {
+            input = parseWeekday(input, this.localeData());
+            return this.add(input - day, 'd');
+        } else {
+            return day;
+        }
+    }
+
+    function getSetLocaleDayOfWeek (input) {
+        if (!this.isValid()) {
+            return input != null ? this : NaN;
+        }
+        var weekday = (this.day() + 7 - this.localeData()._week.dow) % 7;
+        return input == null ? weekday : this.add(input - weekday, 'd');
+    }
+
+    function getSetISODayOfWeek (input) {
+        if (!this.isValid()) {
+            return input != null ? this : NaN;
+        }
+
+        // behaves the same as moment#day except
+        // as a getter, returns 7 instead of 0 (1-7 range instead of 0-6)
+        // as a setter, sunday should belong to the previous week.
+
+        if (input != null) {
+            var weekday = parseIsoWeekday(input, this.localeData());
+            return this.day(this.day() % 7 ? weekday : weekday - 7);
+        } else {
+            return this.day() || 7;
+        }
+    }
+
+    var defaultWeekdaysRegex = matchWord;
+    function weekdaysRegex (isStrict) {
+        if (this._weekdaysParseExact) {
+            if (!hasOwnProp(this, '_weekdaysRegex')) {
+                computeWeekdaysParse.call(this);
+            }
+            if (isStrict) {
+                return this._weekdaysStrictRegex;
+            } else {
+                return this._weekdaysRegex;
+            }
+        } else {
+            if (!hasOwnProp(this, '_weekdaysRegex')) {
+                this._weekdaysRegex = defaultWeekdaysRegex;
+            }
+            return this._weekdaysStrictRegex && isStrict ?
+                this._weekdaysStrictRegex : this._weekdaysRegex;
+        }
+    }
+
+    var defaultWeekdaysShortRegex = matchWord;
+    function weekdaysShortRegex (isStrict) {
+        if (this._weekdaysParseExact) {
+            if (!hasOwnProp(this, '_weekdaysRegex')) {
+                computeWeekdaysParse.call(this);
+            }
+            if (isStrict) {
+                return this._weekdaysShortStrictRegex;
+            } else {
+                return this._weekdaysShortRegex;
+            }
+        } else {
+            if (!hasOwnProp(this, '_weekdaysShortRegex')) {
+                this._weekdaysShortRegex = defaultWeekdaysShortRegex;
+            }
+            return this._weekdaysShortStrictRegex && isStrict ?
+                this._weekdaysShortStrictRegex : this._weekdaysShortRegex;
+        }
+    }
+
+    var defaultWeekdaysMinRegex = matchWord;
+    function weekdaysMinRegex (isStrict) {
+        if (this._weekdaysParseExact) {
+            if (!hasOwnProp(this, '_weekdaysRegex')) {
+                computeWeekdaysParse.call(this);
+            }
+            if (isStrict) {
+                return this._weekdaysMinStrictRegex;
+            } else {
+                return this._weekdaysMinRegex;
+            }
+        } else {
+            if (!hasOwnProp(this, '_weekdaysMinRegex')) {
+                this._weekdaysMinRegex = defaultWeekdaysMinRegex;
+            }
+            return this._weekdaysMinStrictRegex && isStrict ?
+                this._weekdaysMinStrictRegex : this._weekdaysMinRegex;
+        }
+    }
+
+
+    function computeWeekdaysParse () {
+        function cmpLenRev(a, b) {
+            return b.length - a.length;
+        }
+
+        var minPieces = [], shortPieces = [], longPieces = [], mixedPieces = [],
+            i, mom, minp, shortp, longp;
+        for (i = 0; i < 7; i++) {
+            // make the regex if we don't have it already
+            mom = createUTC([2000, 1]).day(i);
+            minp = this.weekdaysMin(mom, '');
+            shortp = this.weekdaysShort(mom, '');
+            longp = this.weekdays(mom, '');
+            minPieces.push(minp);
+            shortPieces.push(shortp);
+            longPieces.push(longp);
+            mixedPieces.push(minp);
+            mixedPieces.push(shortp);
+            mixedPieces.push(longp);
+        }
+        // Sorting makes sure if one weekday (or abbr) is a prefix of another it
+        // will match the longer piece.
+        minPieces.sort(cmpLenRev);
+        shortPieces.sort(cmpLenRev);
+        longPieces.sort(cmpLenRev);
+        mixedPieces.sort(cmpLenRev);
+        for (i = 0; i < 7; i++) {
+            shortPieces[i] = regexEscape(shortPieces[i]);
+            longPieces[i] = regexEscape(longPieces[i]);
+            mixedPieces[i] = regexEscape(mixedPieces[i]);
+        }
+
+        this._weekdaysRegex = new RegExp('^(' + mixedPieces.join('|') + ')', 'i');
+        this._weekdaysShortRegex = this._weekdaysRegex;
+        this._weekdaysMinRegex = this._weekdaysRegex;
+
+        this._weekdaysStrictRegex = new RegExp('^(' + longPieces.join('|') + ')', 'i');
+        this._weekdaysShortStrictRegex = new RegExp('^(' + shortPieces.join('|') + ')', 'i');
+        this._weekdaysMinStrictRegex = new RegExp('^(' + minPieces.join('|') + ')', 'i');
+    }
+
+    // FORMATTING
+
+    function hFormat() {
+        return this.hours() % 12 || 12;
+    }
+
+    function kFormat() {
+        return this.hours() || 24;
+    }
+
+    addFormatToken('H', ['HH', 2], 0, 'hour');
+    addFormatToken('h', ['hh', 2], 0, hFormat);
+    addFormatToken('k', ['kk', 2], 0, kFormat);
+
+    addFormatToken('hmm', 0, 0, function () {
+        return '' + hFormat.apply(this) + zeroFill(this.minutes(), 2);
+    });
+
+    addFormatToken('hmmss', 0, 0, function () {
+        return '' + hFormat.apply(this) + zeroFill(this.minutes(), 2) +
+            zeroFill(this.seconds(), 2);
+    });
+
+    addFormatToken('Hmm', 0, 0, function () {
+        return '' + this.hours() + zeroFill(this.minutes(), 2);
+    });
+
+    addFormatToken('Hmmss', 0, 0, function () {
+        return '' + this.hours() + zeroFill(this.minutes(), 2) +
+            zeroFill(this.seconds(), 2);
+    });
+
+    function meridiem (token, lowercase) {
+        addFormatToken(token, 0, 0, function () {
+            return this.localeData().meridiem(this.hours(), this.minutes(), lowercase);
+        });
+    }
+
+    meridiem('a', true);
+    meridiem('A', false);
+
+    // ALIASES
+
+    addUnitAlias('hour', 'h');
+
+    // PRIORITY
+    addUnitPriority('hour', 13);
+
+    // PARSING
+
+    function matchMeridiem (isStrict, locale) {
+        return locale._meridiemParse;
+    }
+
+    addRegexToken('a',  matchMeridiem);
+    addRegexToken('A',  matchMeridiem);
+    addRegexToken('H',  match1to2);
+    addRegexToken('h',  match1to2);
+    addRegexToken('k',  match1to2);
+    addRegexToken('HH', match1to2, match2);
+    addRegexToken('hh', match1to2, match2);
+    addRegexToken('kk', match1to2, match2);
+
+    addRegexToken('hmm', match3to4);
+    addRegexToken('hmmss', match5to6);
+    addRegexToken('Hmm', match3to4);
+    addRegexToken('Hmmss', match5to6);
+
+    addParseToken(['H', 'HH'], HOUR);
+    addParseToken(['k', 'kk'], function (input, array, config) {
+        var kInput = toInt(input);
+        array[HOUR] = kInput === 24 ? 0 : kInput;
+    });
+    addParseToken(['a', 'A'], function (input, array, config) {
+        config._isPm = config._locale.isPM(input);
+        config._meridiem = input;
+    });
+    addParseToken(['h', 'hh'], function (input, array, config) {
+        array[HOUR] = toInt(input);
+        getParsingFlags(config).bigHour = true;
+    });
+    addParseToken('hmm', function (input, array, config) {
+        var pos = input.length - 2;
+        array[HOUR] = toInt(input.substr(0, pos));
+        array[MINUTE] = toInt(input.substr(pos));
+        getParsingFlags(config).bigHour = true;
+    });
+    addParseToken('hmmss', function (input, array, config) {
+        var pos1 = input.length - 4;
+        var pos2 = input.length - 2;
+        array[HOUR] = toInt(input.substr(0, pos1));
+        array[MINUTE] = toInt(input.substr(pos1, 2));
+        array[SECOND] = toInt(input.substr(pos2));
+        getParsingFlags(config).bigHour = true;
+    });
+    addParseToken('Hmm', function (input, array, config) {
+        var pos = input.length - 2;
+        array[HOUR] = toInt(input.substr(0, pos));
+        array[MINUTE] = toInt(input.substr(pos));
+    });
+    addParseToken('Hmmss', function (input, array, config) {
+        var pos1 = input.length - 4;
+        var pos2 = input.length - 2;
+        array[HOUR] = toInt(input.substr(0, pos1));
+        array[MINUTE] = toInt(input.substr(pos1, 2));
+        array[SECOND] = toInt(input.substr(pos2));
+    });
+
+    // LOCALES
+
+    function localeIsPM (input) {
+        // IE8 Quirks Mode & IE7 Standards Mode do not allow accessing strings like arrays
+        // Using charAt should be more compatible.
+        return ((input + '').toLowerCase().charAt(0) === 'p');
+    }
+
+    var defaultLocaleMeridiemParse = /[ap]\.?m?\.?/i;
+    function localeMeridiem (hours, minutes, isLower) {
+        if (hours > 11) {
+            return isLower ? 'pm' : 'PM';
+        } else {
+            return isLower ? 'am' : 'AM';
+        }
+    }
+
+
+    // MOMENTS
+
+    // Setting the hour should keep the time, because the user explicitly
+    // specified which hour they want. So trying to maintain the same hour (in
+    // a new timezone) makes sense. Adding/subtracting hours does not follow
+    // this rule.
+    var getSetHour = makeGetSet('Hours', true);
+
+    var baseConfig = {
+        calendar: defaultCalendar,
+        longDateFormat: defaultLongDateFormat,
+        invalidDate: defaultInvalidDate,
+        ordinal: defaultOrdinal,
+        dayOfMonthOrdinalParse: defaultDayOfMonthOrdinalParse,
+        relativeTime: defaultRelativeTime,
+
+        months: defaultLocaleMonths,
+        monthsShort: defaultLocaleMonthsShort,
+
+        week: defaultLocaleWeek,
+
+        weekdays: defaultLocaleWeekdays,
+        weekdaysMin: defaultLocaleWeekdaysMin,
+        weekdaysShort: defaultLocaleWeekdaysShort,
+
+        meridiemParse: defaultLocaleMeridiemParse
+    };
+
+    // internal storage for locale config files
+    var locales = {};
+    var localeFamilies = {};
+    var globalLocale;
+
+    function normalizeLocale(key) {
+        return key ? key.toLowerCase().replace('_', '-') : key;
+    }
+
+    // pick the locale from the array
+    // try ['en-au', 'en-gb'] as 'en-au', 'en-gb', 'en', as in move through the list trying each
+    // substring from most specific to least, but move to the next array item if it's a more specific variant than the current root
+    function chooseLocale(names) {
+        var i = 0, j, next, locale, split;
+
+        while (i < names.length) {
+            split = normalizeLocale(names[i]).split('-');
+            j = split.length;
+            next = normalizeLocale(names[i + 1]);
+            next = next ? next.split('-') : null;
+            while (j > 0) {
+                locale = loadLocale(split.slice(0, j).join('-'));
+                if (locale) {
+                    return locale;
+                }
+                if (next && next.length >= j && compareArrays(split, next, true) >= j - 1) {
+                    //the next array item is better than a shallower substring of this one
+                    break;
+                }
+                j--;
+            }
+            i++;
+        }
+        return globalLocale;
+    }
+
+    function loadLocale(name) {
+        var oldLocale = null;
+        // TODO: Find a better way to register and load all the locales in Node
+        if (!locales[name] && (typeof module !== 'undefined') &&
+                module && module.exports) {
+            try {
+                oldLocale = globalLocale._abbr;
+                var aliasedRequire = require;
+                __webpack_require__(195)("./" + name);
+                getSetGlobalLocale(oldLocale);
+            } catch (e) {}
+        }
+        return locales[name];
+    }
+
+    // This function will load locale and then set the global locale.  If
+    // no arguments are passed in, it will simply return the current global
+    // locale key.
+    function getSetGlobalLocale (key, values) {
+        var data;
+        if (key) {
+            if (isUndefined(values)) {
+                data = getLocale(key);
+            }
+            else {
+                data = defineLocale(key, values);
+            }
+
+            if (data) {
+                // moment.duration._locale = moment._locale = data;
+                globalLocale = data;
+            }
+            else {
+                if ((typeof console !==  'undefined') && console.warn) {
+                    //warn user if arguments are passed but the locale could not be set
+                    console.warn('Locale ' + key +  ' not found. Did you forget to load it?');
+                }
+            }
+        }
+
+        return globalLocale._abbr;
+    }
+
+    function defineLocale (name, config) {
+        if (config !== null) {
+            var locale, parentConfig = baseConfig;
+            config.abbr = name;
+            if (locales[name] != null) {
+                deprecateSimple('defineLocaleOverride',
+                        'use moment.updateLocale(localeName, config) to change ' +
+                        'an existing locale. moment.defineLocale(localeName, ' +
+                        'config) should only be used for creating a new locale ' +
+                        'See http://momentjs.com/guides/#/warnings/define-locale/ for more info.');
+                parentConfig = locales[name]._config;
+            } else if (config.parentLocale != null) {
+                if (locales[config.parentLocale] != null) {
+                    parentConfig = locales[config.parentLocale]._config;
+                } else {
+                    locale = loadLocale(config.parentLocale);
+                    if (locale != null) {
+                        parentConfig = locale._config;
+                    } else {
+                        if (!localeFamilies[config.parentLocale]) {
+                            localeFamilies[config.parentLocale] = [];
+                        }
+                        localeFamilies[config.parentLocale].push({
+                            name: name,
+                            config: config
+                        });
+                        return null;
+                    }
+                }
+            }
+            locales[name] = new Locale(mergeConfigs(parentConfig, config));
+
+            if (localeFamilies[name]) {
+                localeFamilies[name].forEach(function (x) {
+                    defineLocale(x.name, x.config);
+                });
+            }
+
+            // backwards compat for now: also set the locale
+            // make sure we set the locale AFTER all child locales have been
+            // created, so we won't end up with the child locale set.
+            getSetGlobalLocale(name);
+
+
+            return locales[name];
+        } else {
+            // useful for testing
+            delete locales[name];
+            return null;
+        }
+    }
+
+    function updateLocale(name, config) {
+        if (config != null) {
+            var locale, tmpLocale, parentConfig = baseConfig;
+            // MERGE
+            tmpLocale = loadLocale(name);
+            if (tmpLocale != null) {
+                parentConfig = tmpLocale._config;
+            }
+            config = mergeConfigs(parentConfig, config);
+            locale = new Locale(config);
+            locale.parentLocale = locales[name];
+            locales[name] = locale;
+
+            // backwards compat for now: also set the locale
+            getSetGlobalLocale(name);
+        } else {
+            // pass null for config to unupdate, useful for tests
+            if (locales[name] != null) {
+                if (locales[name].parentLocale != null) {
+                    locales[name] = locales[name].parentLocale;
+                } else if (locales[name] != null) {
+                    delete locales[name];
+                }
+            }
+        }
+        return locales[name];
+    }
+
+    // returns locale data
+    function getLocale (key) {
+        var locale;
+
+        if (key && key._locale && key._locale._abbr) {
+            key = key._locale._abbr;
+        }
+
+        if (!key) {
+            return globalLocale;
+        }
+
+        if (!isArray(key)) {
+            //short-circuit everything else
+            locale = loadLocale(key);
+            if (locale) {
+                return locale;
+            }
+            key = [key];
+        }
+
+        return chooseLocale(key);
+    }
+
+    function listLocales() {
+        return keys(locales);
+    }
+
+    function checkOverflow (m) {
+        var overflow;
+        var a = m._a;
+
+        if (a && getParsingFlags(m).overflow === -2) {
+            overflow =
+                a[MONTH]       < 0 || a[MONTH]       > 11  ? MONTH :
+                a[DATE]        < 1 || a[DATE]        > daysInMonth(a[YEAR], a[MONTH]) ? DATE :
+                a[HOUR]        < 0 || a[HOUR]        > 24 || (a[HOUR] === 24 && (a[MINUTE] !== 0 || a[SECOND] !== 0 || a[MILLISECOND] !== 0)) ? HOUR :
+                a[MINUTE]      < 0 || a[MINUTE]      > 59  ? MINUTE :
+                a[SECOND]      < 0 || a[SECOND]      > 59  ? SECOND :
+                a[MILLISECOND] < 0 || a[MILLISECOND] > 999 ? MILLISECOND :
+                -1;
+
+            if (getParsingFlags(m)._overflowDayOfYear && (overflow < YEAR || overflow > DATE)) {
+                overflow = DATE;
+            }
+            if (getParsingFlags(m)._overflowWeeks && overflow === -1) {
+                overflow = WEEK;
+            }
+            if (getParsingFlags(m)._overflowWeekday && overflow === -1) {
+                overflow = WEEKDAY;
+            }
+
+            getParsingFlags(m).overflow = overflow;
+        }
+
+        return m;
+    }
+
+    // Pick the first defined of two or three arguments.
+    function defaults(a, b, c) {
+        if (a != null) {
+            return a;
+        }
+        if (b != null) {
+            return b;
+        }
+        return c;
+    }
+
+    function currentDateArray(config) {
+        // hooks is actually the exported moment object
+        var nowValue = new Date(hooks.now());
+        if (config._useUTC) {
+            return [nowValue.getUTCFullYear(), nowValue.getUTCMonth(), nowValue.getUTCDate()];
+        }
+        return [nowValue.getFullYear(), nowValue.getMonth(), nowValue.getDate()];
+    }
+
+    // convert an array to a date.
+    // the array should mirror the parameters below
+    // note: all values past the year are optional and will default to the lowest possible value.
+    // [year, month, day , hour, minute, second, millisecond]
+    function configFromArray (config) {
+        var i, date, input = [], currentDate, expectedWeekday, yearToUse;
+
+        if (config._d) {
+            return;
+        }
+
+        currentDate = currentDateArray(config);
+
+        //compute day of the year from weeks and weekdays
+        if (config._w && config._a[DATE] == null && config._a[MONTH] == null) {
+            dayOfYearFromWeekInfo(config);
+        }
+
+        //if the day of the year is set, figure out what it is
+        if (config._dayOfYear != null) {
+            yearToUse = defaults(config._a[YEAR], currentDate[YEAR]);
+
+            if (config._dayOfYear > daysInYear(yearToUse) || config._dayOfYear === 0) {
+                getParsingFlags(config)._overflowDayOfYear = true;
+            }
+
+            date = createUTCDate(yearToUse, 0, config._dayOfYear);
+            config._a[MONTH] = date.getUTCMonth();
+            config._a[DATE] = date.getUTCDate();
+        }
+
+        // Default to current date.
+        // * if no year, month, day of month are given, default to today
+        // * if day of month is given, default month and year
+        // * if month is given, default only year
+        // * if year is given, don't default anything
+        for (i = 0; i < 3 && config._a[i] == null; ++i) {
+            config._a[i] = input[i] = currentDate[i];
+        }
+
+        // Zero out whatever was not defaulted, including time
+        for (; i < 7; i++) {
+            config._a[i] = input[i] = (config._a[i] == null) ? (i === 2 ? 1 : 0) : config._a[i];
+        }
+
+        // Check for 24:00:00.000
+        if (config._a[HOUR] === 24 &&
+                config._a[MINUTE] === 0 &&
+                config._a[SECOND] === 0 &&
+                config._a[MILLISECOND] === 0) {
+            config._nextDay = true;
+            config._a[HOUR] = 0;
+        }
+
+        config._d = (config._useUTC ? createUTCDate : createDate).apply(null, input);
+        expectedWeekday = config._useUTC ? config._d.getUTCDay() : config._d.getDay();
+
+        // Apply timezone offset from input. The actual utcOffset can be changed
+        // with parseZone.
+        if (config._tzm != null) {
+            config._d.setUTCMinutes(config._d.getUTCMinutes() - config._tzm);
+        }
+
+        if (config._nextDay) {
+            config._a[HOUR] = 24;
+        }
+
+        // check for mismatching day of week
+        if (config._w && typeof config._w.d !== 'undefined' && config._w.d !== expectedWeekday) {
+            getParsingFlags(config).weekdayMismatch = true;
+        }
+    }
+
+    function dayOfYearFromWeekInfo(config) {
+        var w, weekYear, week, weekday, dow, doy, temp, weekdayOverflow;
+
+        w = config._w;
+        if (w.GG != null || w.W != null || w.E != null) {
+            dow = 1;
+            doy = 4;
+
+            // TODO: We need to take the current isoWeekYear, but that depends on
+            // how we interpret now (local, utc, fixed offset). So create
+            // a now version of current config (take local/utc/offset flags, and
+            // create now).
+            weekYear = defaults(w.GG, config._a[YEAR], weekOfYear(createLocal(), 1, 4).year);
+            week = defaults(w.W, 1);
+            weekday = defaults(w.E, 1);
+            if (weekday < 1 || weekday > 7) {
+                weekdayOverflow = true;
+            }
+        } else {
+            dow = config._locale._week.dow;
+            doy = config._locale._week.doy;
+
+            var curWeek = weekOfYear(createLocal(), dow, doy);
+
+            weekYear = defaults(w.gg, config._a[YEAR], curWeek.year);
+
+            // Default to current week.
+            week = defaults(w.w, curWeek.week);
+
+            if (w.d != null) {
+                // weekday -- low day numbers are considered next week
+                weekday = w.d;
+                if (weekday < 0 || weekday > 6) {
+                    weekdayOverflow = true;
+                }
+            } else if (w.e != null) {
+                // local weekday -- counting starts from begining of week
+                weekday = w.e + dow;
+                if (w.e < 0 || w.e > 6) {
+                    weekdayOverflow = true;
+                }
+            } else {
+                // default to begining of week
+                weekday = dow;
+            }
+        }
+        if (week < 1 || week > weeksInYear(weekYear, dow, doy)) {
+            getParsingFlags(config)._overflowWeeks = true;
+        } else if (weekdayOverflow != null) {
+            getParsingFlags(config)._overflowWeekday = true;
+        } else {
+            temp = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy);
+            config._a[YEAR] = temp.year;
+            config._dayOfYear = temp.dayOfYear;
+        }
+    }
+
+    // iso 8601 regex
+    // 0000-00-00 0000-W00 or 0000-W00-0 + T + 00 or 00:00 or 00:00:00 or 00:00:00.000 + +00:00 or +0000 or +00)
+    var extendedIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})-(?:\d\d-\d\d|W\d\d-\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?::\d\d(?::\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/;
+    var basicIsoRegex = /^\s*((?:[+-]\d{6}|\d{4})(?:\d\d\d\d|W\d\d\d|W\d\d|\d\d\d|\d\d))(?:(T| )(\d\d(?:\d\d(?:\d\d(?:[.,]\d+)?)?)?)([\+\-]\d\d(?::?\d\d)?|\s*Z)?)?$/;
+
+    var tzRegex = /Z|[+-]\d\d(?::?\d\d)?/;
+
+    var isoDates = [
+        ['YYYYYY-MM-DD', /[+-]\d{6}-\d\d-\d\d/],
+        ['YYYY-MM-DD', /\d{4}-\d\d-\d\d/],
+        ['GGGG-[W]WW-E', /\d{4}-W\d\d-\d/],
+        ['GGGG-[W]WW', /\d{4}-W\d\d/, false],
+        ['YYYY-DDD', /\d{4}-\d{3}/],
+        ['YYYY-MM', /\d{4}-\d\d/, false],
+        ['YYYYYYMMDD', /[+-]\d{10}/],
+        ['YYYYMMDD', /\d{8}/],
+        // YYYYMM is NOT allowed by the standard
+        ['GGGG[W]WWE', /\d{4}W\d{3}/],
+        ['GGGG[W]WW', /\d{4}W\d{2}/, false],
+        ['YYYYDDD', /\d{7}/]
+    ];
+
+    // iso time formats and regexes
+    var isoTimes = [
+        ['HH:mm:ss.SSSS', /\d\d:\d\d:\d\d\.\d+/],
+        ['HH:mm:ss,SSSS', /\d\d:\d\d:\d\d,\d+/],
+        ['HH:mm:ss', /\d\d:\d\d:\d\d/],
+        ['HH:mm', /\d\d:\d\d/],
+        ['HHmmss.SSSS', /\d\d\d\d\d\d\.\d+/],
+        ['HHmmss,SSSS', /\d\d\d\d\d\d,\d+/],
+        ['HHmmss', /\d\d\d\d\d\d/],
+        ['HHmm', /\d\d\d\d/],
+        ['HH', /\d\d/]
+    ];
+
+    var aspNetJsonRegex = /^\/?Date\((\-?\d+)/i;
+
+    // date from iso format
+    function configFromISO(config) {
+        var i, l,
+            string = config._i,
+            match = extendedIsoRegex.exec(string) || basicIsoRegex.exec(string),
+            allowTime, dateFormat, timeFormat, tzFormat;
+
+        if (match) {
+            getParsingFlags(config).iso = true;
+
+            for (i = 0, l = isoDates.length; i < l; i++) {
+                if (isoDates[i][1].exec(match[1])) {
+                    dateFormat = isoDates[i][0];
+                    allowTime = isoDates[i][2] !== false;
+                    break;
+                }
+            }
+            if (dateFormat == null) {
+                config._isValid = false;
+                return;
+            }
+            if (match[3]) {
+                for (i = 0, l = isoTimes.length; i < l; i++) {
+                    if (isoTimes[i][1].exec(match[3])) {
+                        // match[2] should be 'T' or space
+                        timeFormat = (match[2] || ' ') + isoTimes[i][0];
+                        break;
+                    }
+                }
+                if (timeFormat == null) {
+                    config._isValid = false;
+                    return;
+                }
+            }
+            if (!allowTime && timeFormat != null) {
+                config._isValid = false;
+                return;
+            }
+            if (match[4]) {
+                if (tzRegex.exec(match[4])) {
+                    tzFormat = 'Z';
+                } else {
+                    config._isValid = false;
+                    return;
+                }
+            }
+            config._f = dateFormat + (timeFormat || '') + (tzFormat || '');
+            configFromStringAndFormat(config);
+        } else {
+            config._isValid = false;
+        }
+    }
+
+    // RFC 2822 regex: For details see https://tools.ietf.org/html/rfc2822#section-3.3
+    var rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|([+-]\d{4}))$/;
+
+    function extractFromRFC2822Strings(yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr) {
+        var result = [
+            untruncateYear(yearStr),
+            defaultLocaleMonthsShort.indexOf(monthStr),
+            parseInt(dayStr, 10),
+            parseInt(hourStr, 10),
+            parseInt(minuteStr, 10)
+        ];
+
+        if (secondStr) {
+            result.push(parseInt(secondStr, 10));
+        }
+
+        return result;
+    }
+
+    function untruncateYear(yearStr) {
+        var year = parseInt(yearStr, 10);
+        if (year <= 49) {
+            return 2000 + year;
+        } else if (year <= 999) {
+            return 1900 + year;
+        }
+        return year;
+    }
+
+    function preprocessRFC2822(s) {
+        // Remove comments and folding whitespace and replace multiple-spaces with a single space
+        return s.replace(/\([^)]*\)|[\n\t]/g, ' ').replace(/(\s\s+)/g, ' ').trim();
+    }
+
+    function checkWeekday(weekdayStr, parsedInput, config) {
+        if (weekdayStr) {
+            // TODO: Replace the vanilla JS Date object with an indepentent day-of-week check.
+            var weekdayProvided = defaultLocaleWeekdaysShort.indexOf(weekdayStr),
+                weekdayActual = new Date(parsedInput[0], parsedInput[1], parsedInput[2]).getDay();
+            if (weekdayProvided !== weekdayActual) {
+                getParsingFlags(config).weekdayMismatch = true;
+                config._isValid = false;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    var obsOffsets = {
+        UT: 0,
+        GMT: 0,
+        EDT: -4 * 60,
+        EST: -5 * 60,
+        CDT: -5 * 60,
+        CST: -6 * 60,
+        MDT: -6 * 60,
+        MST: -7 * 60,
+        PDT: -7 * 60,
+        PST: -8 * 60
+    };
+
+    function calculateOffset(obsOffset, militaryOffset, numOffset) {
+        if (obsOffset) {
+            return obsOffsets[obsOffset];
+        } else if (militaryOffset) {
+            // the only allowed military tz is Z
+            return 0;
+        } else {
+            var hm = parseInt(numOffset, 10);
+            var m = hm % 100, h = (hm - m) / 100;
+            return h * 60 + m;
+        }
+    }
+
+    // date and time from ref 2822 format
+    function configFromRFC2822(config) {
+        var match = rfc2822.exec(preprocessRFC2822(config._i));
+        if (match) {
+            var parsedArray = extractFromRFC2822Strings(match[4], match[3], match[2], match[5], match[6], match[7]);
+            if (!checkWeekday(match[1], parsedArray, config)) {
+                return;
+            }
+
+            config._a = parsedArray;
+            config._tzm = calculateOffset(match[8], match[9], match[10]);
+
+            config._d = createUTCDate.apply(null, config._a);
+            config._d.setUTCMinutes(config._d.getUTCMinutes() - config._tzm);
+
+            getParsingFlags(config).rfc2822 = true;
+        } else {
+            config._isValid = false;
+        }
+    }
+
+    // date from iso format or fallback
+    function configFromString(config) {
+        var matched = aspNetJsonRegex.exec(config._i);
+
+        if (matched !== null) {
+            config._d = new Date(+matched[1]);
+            return;
+        }
+
+        configFromISO(config);
+        if (config._isValid === false) {
+            delete config._isValid;
+        } else {
+            return;
+        }
+
+        configFromRFC2822(config);
+        if (config._isValid === false) {
+            delete config._isValid;
+        } else {
+            return;
+        }
+
+        // Final attempt, use Input Fallback
+        hooks.createFromInputFallback(config);
+    }
+
+    hooks.createFromInputFallback = deprecate(
+        'value provided is not in a recognized RFC2822 or ISO format. moment construction falls back to js Date(), ' +
+        'which is not reliable across all browsers and versions. Non RFC2822/ISO date formats are ' +
+        'discouraged and will be removed in an upcoming major release. Please refer to ' +
+        'http://momentjs.com/guides/#/warnings/js-date/ for more info.',
+        function (config) {
+            config._d = new Date(config._i + (config._useUTC ? ' UTC' : ''));
+        }
+    );
+
+    // constant that refers to the ISO standard
+    hooks.ISO_8601 = function () {};
+
+    // constant that refers to the RFC 2822 form
+    hooks.RFC_2822 = function () {};
+
+    // date from string and format string
+    function configFromStringAndFormat(config) {
+        // TODO: Move this to another part of the creation flow to prevent circular deps
+        if (config._f === hooks.ISO_8601) {
+            configFromISO(config);
+            return;
+        }
+        if (config._f === hooks.RFC_2822) {
+            configFromRFC2822(config);
+            return;
+        }
+        config._a = [];
+        getParsingFlags(config).empty = true;
+
+        // This array is used to make a Date, either with `new Date` or `Date.UTC`
+        var string = '' + config._i,
+            i, parsedInput, tokens, token, skipped,
+            stringLength = string.length,
+            totalParsedInputLength = 0;
+
+        tokens = expandFormat(config._f, config._locale).match(formattingTokens) || [];
+
+        for (i = 0; i < tokens.length; i++) {
+            token = tokens[i];
+            parsedInput = (string.match(getParseRegexForToken(token, config)) || [])[0];
+            // console.log('token', token, 'parsedInput', parsedInput,
+            //         'regex', getParseRegexForToken(token, config));
+            if (parsedInput) {
+                skipped = string.substr(0, string.indexOf(parsedInput));
+                if (skipped.length > 0) {
+                    getParsingFlags(config).unusedInput.push(skipped);
+                }
+                string = string.slice(string.indexOf(parsedInput) + parsedInput.length);
+                totalParsedInputLength += parsedInput.length;
+            }
+            // don't parse if it's not a known token
+            if (formatTokenFunctions[token]) {
+                if (parsedInput) {
+                    getParsingFlags(config).empty = false;
+                }
+                else {
+                    getParsingFlags(config).unusedTokens.push(token);
+                }
+                addTimeToArrayFromToken(token, parsedInput, config);
+            }
+            else if (config._strict && !parsedInput) {
+                getParsingFlags(config).unusedTokens.push(token);
+            }
+        }
+
+        // add remaining unparsed input length to the string
+        getParsingFlags(config).charsLeftOver = stringLength - totalParsedInputLength;
+        if (string.length > 0) {
+            getParsingFlags(config).unusedInput.push(string);
+        }
+
+        // clear _12h flag if hour is <= 12
+        if (config._a[HOUR] <= 12 &&
+            getParsingFlags(config).bigHour === true &&
+            config._a[HOUR] > 0) {
+            getParsingFlags(config).bigHour = undefined;
+        }
+
+        getParsingFlags(config).parsedDateParts = config._a.slice(0);
+        getParsingFlags(config).meridiem = config._meridiem;
+        // handle meridiem
+        config._a[HOUR] = meridiemFixWrap(config._locale, config._a[HOUR], config._meridiem);
+
+        configFromArray(config);
+        checkOverflow(config);
+    }
+
+
+    function meridiemFixWrap (locale, hour, meridiem) {
+        var isPm;
+
+        if (meridiem == null) {
+            // nothing to do
+            return hour;
+        }
+        if (locale.meridiemHour != null) {
+            return locale.meridiemHour(hour, meridiem);
+        } else if (locale.isPM != null) {
+            // Fallback
+            isPm = locale.isPM(meridiem);
+            if (isPm && hour < 12) {
+                hour += 12;
+            }
+            if (!isPm && hour === 12) {
+                hour = 0;
+            }
+            return hour;
+        } else {
+            // this is not supposed to happen
+            return hour;
+        }
+    }
+
+    // date from string and array of format strings
+    function configFromStringAndArray(config) {
+        var tempConfig,
+            bestMoment,
+
+            scoreToBeat,
+            i,
+            currentScore;
+
+        if (config._f.length === 0) {
+            getParsingFlags(config).invalidFormat = true;
+            config._d = new Date(NaN);
+            return;
+        }
+
+        for (i = 0; i < config._f.length; i++) {
+            currentScore = 0;
+            tempConfig = copyConfig({}, config);
+            if (config._useUTC != null) {
+                tempConfig._useUTC = config._useUTC;
+            }
+            tempConfig._f = config._f[i];
+            configFromStringAndFormat(tempConfig);
+
+            if (!isValid(tempConfig)) {
+                continue;
+            }
+
+            // if there is any input that was not parsed add a penalty for that format
+            currentScore += getParsingFlags(tempConfig).charsLeftOver;
+
+            //or tokens
+            currentScore += getParsingFlags(tempConfig).unusedTokens.length * 10;
+
+            getParsingFlags(tempConfig).score = currentScore;
+
+            if (scoreToBeat == null || currentScore < scoreToBeat) {
+                scoreToBeat = currentScore;
+                bestMoment = tempConfig;
+            }
+        }
+
+        extend(config, bestMoment || tempConfig);
+    }
+
+    function configFromObject(config) {
+        if (config._d) {
+            return;
+        }
+
+        var i = normalizeObjectUnits(config._i);
+        config._a = map([i.year, i.month, i.day || i.date, i.hour, i.minute, i.second, i.millisecond], function (obj) {
+            return obj && parseInt(obj, 10);
+        });
+
+        configFromArray(config);
+    }
+
+    function createFromConfig (config) {
+        var res = new Moment(checkOverflow(prepareConfig(config)));
+        if (res._nextDay) {
+            // Adding is smart enough around DST
+            res.add(1, 'd');
+            res._nextDay = undefined;
+        }
+
+        return res;
+    }
+
+    function prepareConfig (config) {
+        var input = config._i,
+            format = config._f;
+
+        config._locale = config._locale || getLocale(config._l);
+
+        if (input === null || (format === undefined && input === '')) {
+            return createInvalid({nullInput: true});
+        }
+
+        if (typeof input === 'string') {
+            config._i = input = config._locale.preparse(input);
+        }
+
+        if (isMoment(input)) {
+            return new Moment(checkOverflow(input));
+        } else if (isDate(input)) {
+            config._d = input;
+        } else if (isArray(format)) {
+            configFromStringAndArray(config);
+        } else if (format) {
+            configFromStringAndFormat(config);
+        }  else {
+            configFromInput(config);
+        }
+
+        if (!isValid(config)) {
+            config._d = null;
+        }
+
+        return config;
+    }
+
+    function configFromInput(config) {
+        var input = config._i;
+        if (isUndefined(input)) {
+            config._d = new Date(hooks.now());
+        } else if (isDate(input)) {
+            config._d = new Date(input.valueOf());
+        } else if (typeof input === 'string') {
+            configFromString(config);
+        } else if (isArray(input)) {
+            config._a = map(input.slice(0), function (obj) {
+                return parseInt(obj, 10);
+            });
+            configFromArray(config);
+        } else if (isObject(input)) {
+            configFromObject(config);
+        } else if (isNumber(input)) {
+            // from milliseconds
+            config._d = new Date(input);
+        } else {
+            hooks.createFromInputFallback(config);
+        }
+    }
+
+    function createLocalOrUTC (input, format, locale, strict, isUTC) {
+        var c = {};
+
+        if (locale === true || locale === false) {
+            strict = locale;
+            locale = undefined;
+        }
+
+        if ((isObject(input) && isObjectEmpty(input)) ||
+                (isArray(input) && input.length === 0)) {
+            input = undefined;
+        }
+        // object construction must be done this way.
+        // https://github.com/moment/moment/issues/1423
+        c._isAMomentObject = true;
+        c._useUTC = c._isUTC = isUTC;
+        c._l = locale;
+        c._i = input;
+        c._f = format;
+        c._strict = strict;
+
+        return createFromConfig(c);
+    }
+
+    function createLocal (input, format, locale, strict) {
+        return createLocalOrUTC(input, format, locale, strict, false);
+    }
+
+    var prototypeMin = deprecate(
+        'moment().min is deprecated, use moment.max instead. http://momentjs.com/guides/#/warnings/min-max/',
+        function () {
+            var other = createLocal.apply(null, arguments);
+            if (this.isValid() && other.isValid()) {
+                return other < this ? this : other;
+            } else {
+                return createInvalid();
+            }
+        }
+    );
+
+    var prototypeMax = deprecate(
+        'moment().max is deprecated, use moment.min instead. http://momentjs.com/guides/#/warnings/min-max/',
+        function () {
+            var other = createLocal.apply(null, arguments);
+            if (this.isValid() && other.isValid()) {
+                return other > this ? this : other;
+            } else {
+                return createInvalid();
+            }
+        }
+    );
+
+    // Pick a moment m from moments so that m[fn](other) is true for all
+    // other. This relies on the function fn to be transitive.
+    //
+    // moments should either be an array of moment objects or an array, whose
+    // first element is an array of moment objects.
+    function pickBy(fn, moments) {
+        var res, i;
+        if (moments.length === 1 && isArray(moments[0])) {
+            moments = moments[0];
+        }
+        if (!moments.length) {
+            return createLocal();
+        }
+        res = moments[0];
+        for (i = 1; i < moments.length; ++i) {
+            if (!moments[i].isValid() || moments[i][fn](res)) {
+                res = moments[i];
+            }
+        }
+        return res;
+    }
+
+    // TODO: Use [].sort instead?
+    function min () {
+        var args = [].slice.call(arguments, 0);
+
+        return pickBy('isBefore', args);
+    }
+
+    function max () {
+        var args = [].slice.call(arguments, 0);
+
+        return pickBy('isAfter', args);
+    }
+
+    var now = function () {
+        return Date.now ? Date.now() : +(new Date());
+    };
+
+    var ordering = ['year', 'quarter', 'month', 'week', 'day', 'hour', 'minute', 'second', 'millisecond'];
+
+    function isDurationValid(m) {
+        for (var key in m) {
+            if (!(indexOf.call(ordering, key) !== -1 && (m[key] == null || !isNaN(m[key])))) {
+                return false;
+            }
+        }
+
+        var unitHasDecimal = false;
+        for (var i = 0; i < ordering.length; ++i) {
+            if (m[ordering[i]]) {
+                if (unitHasDecimal) {
+                    return false; // only allow non-integers for smallest unit
+                }
+                if (parseFloat(m[ordering[i]]) !== toInt(m[ordering[i]])) {
+                    unitHasDecimal = true;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    function isValid$1() {
+        return this._isValid;
+    }
+
+    function createInvalid$1() {
+        return createDuration(NaN);
+    }
+
+    function Duration (duration) {
+        var normalizedInput = normalizeObjectUnits(duration),
+            years = normalizedInput.year || 0,
+            quarters = normalizedInput.quarter || 0,
+            months = normalizedInput.month || 0,
+            weeks = normalizedInput.week || 0,
+            days = normalizedInput.day || 0,
+            hours = normalizedInput.hour || 0,
+            minutes = normalizedInput.minute || 0,
+            seconds = normalizedInput.second || 0,
+            milliseconds = normalizedInput.millisecond || 0;
+
+        this._isValid = isDurationValid(normalizedInput);
+
+        // representation for dateAddRemove
+        this._milliseconds = +milliseconds +
+            seconds * 1e3 + // 1000
+            minutes * 6e4 + // 1000 * 60
+            hours * 1000 * 60 * 60; //using 1000 * 60 * 60 instead of 36e5 to avoid floating point rounding errors https://github.com/moment/moment/issues/2978
+        // Because of dateAddRemove treats 24 hours as different from a
+        // day when working around DST, we need to store them separately
+        this._days = +days +
+            weeks * 7;
+        // It is impossible to translate months into days without knowing
+        // which months you are are talking about, so we have to store
+        // it separately.
+        this._months = +months +
+            quarters * 3 +
+            years * 12;
+
+        this._data = {};
+
+        this._locale = getLocale();
+
+        this._bubble();
+    }
+
+    function isDuration (obj) {
+        return obj instanceof Duration;
+    }
+
+    function absRound (number) {
+        if (number < 0) {
+            return Math.round(-1 * number) * -1;
+        } else {
+            return Math.round(number);
+        }
+    }
+
+    // FORMATTING
+
+    function offset (token, separator) {
+        addFormatToken(token, 0, 0, function () {
+            var offset = this.utcOffset();
+            var sign = '+';
+            if (offset < 0) {
+                offset = -offset;
+                sign = '-';
+            }
+            return sign + zeroFill(~~(offset / 60), 2) + separator + zeroFill(~~(offset) % 60, 2);
+        });
+    }
+
+    offset('Z', ':');
+    offset('ZZ', '');
+
+    // PARSING
+
+    addRegexToken('Z',  matchShortOffset);
+    addRegexToken('ZZ', matchShortOffset);
+    addParseToken(['Z', 'ZZ'], function (input, array, config) {
+        config._useUTC = true;
+        config._tzm = offsetFromString(matchShortOffset, input);
+    });
+
+    // HELPERS
+
+    // timezone chunker
+    // '+10:00' > ['10',  '00']
+    // '-1530'  > ['-15', '30']
+    var chunkOffset = /([\+\-]|\d\d)/gi;
+
+    function offsetFromString(matcher, string) {
+        var matches = (string || '').match(matcher);
+
+        if (matches === null) {
+            return null;
+        }
+
+        var chunk   = matches[matches.length - 1] || [];
+        var parts   = (chunk + '').match(chunkOffset) || ['-', 0, 0];
+        var minutes = +(parts[1] * 60) + toInt(parts[2]);
+
+        return minutes === 0 ?
+          0 :
+          parts[0] === '+' ? minutes : -minutes;
+    }
+
+    // Return a moment from input, that is local/utc/zone equivalent to model.
+    function cloneWithOffset(input, model) {
+        var res, diff;
+        if (model._isUTC) {
+            res = model.clone();
+            diff = (isMoment(input) || isDate(input) ? input.valueOf() : createLocal(input).valueOf()) - res.valueOf();
+            // Use low-level api, because this fn is low-level api.
+            res._d.setTime(res._d.valueOf() + diff);
+            hooks.updateOffset(res, false);
+            return res;
+        } else {
+            return createLocal(input).local();
+        }
+    }
+
+    function getDateOffset (m) {
+        // On Firefox.24 Date#getTimezoneOffset returns a floating point.
+        // https://github.com/moment/moment/pull/1871
+        return -Math.round(m._d.getTimezoneOffset() / 15) * 15;
+    }
+
+    // HOOKS
+
+    // This function will be called whenever a moment is mutated.
+    // It is intended to keep the offset in sync with the timezone.
+    hooks.updateOffset = function () {};
+
+    // MOMENTS
+
+    // keepLocalTime = true means only change the timezone, without
+    // affecting the local hour. So 5:31:26 +0300 --[utcOffset(2, true)]-->
+    // 5:31:26 +0200 It is possible that 5:31:26 doesn't exist with offset
+    // +0200, so we adjust the time as needed, to be valid.
+    //
+    // Keeping the time actually adds/subtracts (one hour)
+    // from the actual represented time. That is why we call updateOffset
+    // a second time. In case it wants us to change the offset again
+    // _changeInProgress == true case, then we have to adjust, because
+    // there is no such time in the given timezone.
+    function getSetOffset (input, keepLocalTime, keepMinutes) {
+        var offset = this._offset || 0,
+            localAdjust;
+        if (!this.isValid()) {
+            return input != null ? this : NaN;
+        }
+        if (input != null) {
+            if (typeof input === 'string') {
+                input = offsetFromString(matchShortOffset, input);
+                if (input === null) {
+                    return this;
+                }
+            } else if (Math.abs(input) < 16 && !keepMinutes) {
+                input = input * 60;
+            }
+            if (!this._isUTC && keepLocalTime) {
+                localAdjust = getDateOffset(this);
+            }
+            this._offset = input;
+            this._isUTC = true;
+            if (localAdjust != null) {
+                this.add(localAdjust, 'm');
+            }
+            if (offset !== input) {
+                if (!keepLocalTime || this._changeInProgress) {
+                    addSubtract(this, createDuration(input - offset, 'm'), 1, false);
+                } else if (!this._changeInProgress) {
+                    this._changeInProgress = true;
+                    hooks.updateOffset(this, true);
+                    this._changeInProgress = null;
+                }
+            }
+            return this;
+        } else {
+            return this._isUTC ? offset : getDateOffset(this);
+        }
+    }
+
+    function getSetZone (input, keepLocalTime) {
+        if (input != null) {
+            if (typeof input !== 'string') {
+                input = -input;
+            }
+
+            this.utcOffset(input, keepLocalTime);
+
+            return this;
+        } else {
+            return -this.utcOffset();
+        }
+    }
+
+    function setOffsetToUTC (keepLocalTime) {
+        return this.utcOffset(0, keepLocalTime);
+    }
+
+    function setOffsetToLocal (keepLocalTime) {
+        if (this._isUTC) {
+            this.utcOffset(0, keepLocalTime);
+            this._isUTC = false;
+
+            if (keepLocalTime) {
+                this.subtract(getDateOffset(this), 'm');
+            }
+        }
+        return this;
+    }
+
+    function setOffsetToParsedOffset () {
+        if (this._tzm != null) {
+            this.utcOffset(this._tzm, false, true);
+        } else if (typeof this._i === 'string') {
+            var tZone = offsetFromString(matchOffset, this._i);
+            if (tZone != null) {
+                this.utcOffset(tZone);
+            }
+            else {
+                this.utcOffset(0, true);
+            }
+        }
+        return this;
+    }
+
+    function hasAlignedHourOffset (input) {
+        if (!this.isValid()) {
+            return false;
+        }
+        input = input ? createLocal(input).utcOffset() : 0;
+
+        return (this.utcOffset() - input) % 60 === 0;
+    }
+
+    function isDaylightSavingTime () {
+        return (
+            this.utcOffset() > this.clone().month(0).utcOffset() ||
+            this.utcOffset() > this.clone().month(5).utcOffset()
+        );
+    }
+
+    function isDaylightSavingTimeShifted () {
+        if (!isUndefined(this._isDSTShifted)) {
+            return this._isDSTShifted;
+        }
+
+        var c = {};
+
+        copyConfig(c, this);
+        c = prepareConfig(c);
+
+        if (c._a) {
+            var other = c._isUTC ? createUTC(c._a) : createLocal(c._a);
+            this._isDSTShifted = this.isValid() &&
+                compareArrays(c._a, other.toArray()) > 0;
+        } else {
+            this._isDSTShifted = false;
+        }
+
+        return this._isDSTShifted;
+    }
+
+    function isLocal () {
+        return this.isValid() ? !this._isUTC : false;
+    }
+
+    function isUtcOffset () {
+        return this.isValid() ? this._isUTC : false;
+    }
+
+    function isUtc () {
+        return this.isValid() ? this._isUTC && this._offset === 0 : false;
+    }
+
+    // ASP.NET json date format regex
+    var aspNetRegex = /^(\-|\+)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)(\.\d*)?)?$/;
+
+    // from http://docs.closure-library.googlecode.com/git/closure_goog_date_date.js.source.html
+    // somewhat more in line with 4.4.3.2 2004 spec, but allows decimal anywhere
+    // and further modified to allow for strings containing both week and day
+    var isoRegex = /^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)W)?(?:([-+]?[0-9,.]*)D)?(?:T(?:([-+]?[0-9,.]*)H)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)S)?)?$/;
+
+    function createDuration (input, key) {
+        var duration = input,
+            // matching against regexp is expensive, do it on demand
+            match = null,
+            sign,
+            ret,
+            diffRes;
+
+        if (isDuration(input)) {
+            duration = {
+                ms : input._milliseconds,
+                d  : input._days,
+                M  : input._months
+            };
+        } else if (isNumber(input)) {
+            duration = {};
+            if (key) {
+                duration[key] = input;
+            } else {
+                duration.milliseconds = input;
+            }
+        } else if (!!(match = aspNetRegex.exec(input))) {
+            sign = (match[1] === '-') ? -1 : 1;
+            duration = {
+                y  : 0,
+                d  : toInt(match[DATE])                         * sign,
+                h  : toInt(match[HOUR])                         * sign,
+                m  : toInt(match[MINUTE])                       * sign,
+                s  : toInt(match[SECOND])                       * sign,
+                ms : toInt(absRound(match[MILLISECOND] * 1000)) * sign // the millisecond decimal point is included in the match
+            };
+        } else if (!!(match = isoRegex.exec(input))) {
+            sign = (match[1] === '-') ? -1 : (match[1] === '+') ? 1 : 1;
+            duration = {
+                y : parseIso(match[2], sign),
+                M : parseIso(match[3], sign),
+                w : parseIso(match[4], sign),
+                d : parseIso(match[5], sign),
+                h : parseIso(match[6], sign),
+                m : parseIso(match[7], sign),
+                s : parseIso(match[8], sign)
+            };
+        } else if (duration == null) {// checks for null or undefined
+            duration = {};
+        } else if (typeof duration === 'object' && ('from' in duration || 'to' in duration)) {
+            diffRes = momentsDifference(createLocal(duration.from), createLocal(duration.to));
+
+            duration = {};
+            duration.ms = diffRes.milliseconds;
+            duration.M = diffRes.months;
+        }
+
+        ret = new Duration(duration);
+
+        if (isDuration(input) && hasOwnProp(input, '_locale')) {
+            ret._locale = input._locale;
+        }
+
+        return ret;
+    }
+
+    createDuration.fn = Duration.prototype;
+    createDuration.invalid = createInvalid$1;
+
+    function parseIso (inp, sign) {
+        // We'd normally use ~~inp for this, but unfortunately it also
+        // converts floats to ints.
+        // inp may be undefined, so careful calling replace on it.
+        var res = inp && parseFloat(inp.replace(',', '.'));
+        // apply sign while we're at it
+        return (isNaN(res) ? 0 : res) * sign;
+    }
+
+    function positiveMomentsDifference(base, other) {
+        var res = {milliseconds: 0, months: 0};
+
+        res.months = other.month() - base.month() +
+            (other.year() - base.year()) * 12;
+        if (base.clone().add(res.months, 'M').isAfter(other)) {
+            --res.months;
+        }
+
+        res.milliseconds = +other - +(base.clone().add(res.months, 'M'));
+
+        return res;
+    }
+
+    function momentsDifference(base, other) {
+        var res;
+        if (!(base.isValid() && other.isValid())) {
+            return {milliseconds: 0, months: 0};
+        }
+
+        other = cloneWithOffset(other, base);
+        if (base.isBefore(other)) {
+            res = positiveMomentsDifference(base, other);
+        } else {
+            res = positiveMomentsDifference(other, base);
+            res.milliseconds = -res.milliseconds;
+            res.months = -res.months;
+        }
+
+        return res;
+    }
+
+    // TODO: remove 'name' arg after deprecation is removed
+    function createAdder(direction, name) {
+        return function (val, period) {
+            var dur, tmp;
+            //invert the arguments, but complain about it
+            if (period !== null && !isNaN(+period)) {
+                deprecateSimple(name, 'moment().' + name  + '(period, number) is deprecated. Please use moment().' + name + '(number, period). ' +
+                'See http://momentjs.com/guides/#/warnings/add-inverted-param/ for more info.');
+                tmp = val; val = period; period = tmp;
+            }
+
+            val = typeof val === 'string' ? +val : val;
+            dur = createDuration(val, period);
+            addSubtract(this, dur, direction);
+            return this;
+        };
+    }
+
+    function addSubtract (mom, duration, isAdding, updateOffset) {
+        var milliseconds = duration._milliseconds,
+            days = absRound(duration._days),
+            months = absRound(duration._months);
+
+        if (!mom.isValid()) {
+            // No op
+            return;
+        }
+
+        updateOffset = updateOffset == null ? true : updateOffset;
+
+        if (months) {
+            setMonth(mom, get(mom, 'Month') + months * isAdding);
+        }
+        if (days) {
+            set$1(mom, 'Date', get(mom, 'Date') + days * isAdding);
+        }
+        if (milliseconds) {
+            mom._d.setTime(mom._d.valueOf() + milliseconds * isAdding);
+        }
+        if (updateOffset) {
+            hooks.updateOffset(mom, days || months);
+        }
+    }
+
+    var add      = createAdder(1, 'add');
+    var subtract = createAdder(-1, 'subtract');
+
+    function getCalendarFormat(myMoment, now) {
+        var diff = myMoment.diff(now, 'days', true);
+        return diff < -6 ? 'sameElse' :
+                diff < -1 ? 'lastWeek' :
+                diff < 0 ? 'lastDay' :
+                diff < 1 ? 'sameDay' :
+                diff < 2 ? 'nextDay' :
+                diff < 7 ? 'nextWeek' : 'sameElse';
+    }
+
+    function calendar$1 (time, formats) {
+        // We want to compare the start of today, vs this.
+        // Getting start-of-today depends on whether we're local/utc/offset or not.
+        var now = time || createLocal(),
+            sod = cloneWithOffset(now, this).startOf('day'),
+            format = hooks.calendarFormat(this, sod) || 'sameElse';
+
+        var output = formats && (isFunction(formats[format]) ? formats[format].call(this, now) : formats[format]);
+
+        return this.format(output || this.localeData().calendar(format, this, createLocal(now)));
+    }
+
+    function clone () {
+        return new Moment(this);
+    }
+
+    function isAfter (input, units) {
+        var localInput = isMoment(input) ? input : createLocal(input);
+        if (!(this.isValid() && localInput.isValid())) {
+            return false;
+        }
+        units = normalizeUnits(!isUndefined(units) ? units : 'millisecond');
+        if (units === 'millisecond') {
+            return this.valueOf() > localInput.valueOf();
+        } else {
+            return localInput.valueOf() < this.clone().startOf(units).valueOf();
+        }
+    }
+
+    function isBefore (input, units) {
+        var localInput = isMoment(input) ? input : createLocal(input);
+        if (!(this.isValid() && localInput.isValid())) {
+            return false;
+        }
+        units = normalizeUnits(!isUndefined(units) ? units : 'millisecond');
+        if (units === 'millisecond') {
+            return this.valueOf() < localInput.valueOf();
+        } else {
+            return this.clone().endOf(units).valueOf() < localInput.valueOf();
+        }
+    }
+
+    function isBetween (from, to, units, inclusivity) {
+        inclusivity = inclusivity || '()';
+        return (inclusivity[0] === '(' ? this.isAfter(from, units) : !this.isBefore(from, units)) &&
+            (inclusivity[1] === ')' ? this.isBefore(to, units) : !this.isAfter(to, units));
+    }
+
+    function isSame (input, units) {
+        var localInput = isMoment(input) ? input : createLocal(input),
+            inputMs;
+        if (!(this.isValid() && localInput.isValid())) {
+            return false;
+        }
+        units = normalizeUnits(units || 'millisecond');
+        if (units === 'millisecond') {
+            return this.valueOf() === localInput.valueOf();
+        } else {
+            inputMs = localInput.valueOf();
+            return this.clone().startOf(units).valueOf() <= inputMs && inputMs <= this.clone().endOf(units).valueOf();
+        }
+    }
+
+    function isSameOrAfter (input, units) {
+        return this.isSame(input, units) || this.isAfter(input,units);
+    }
+
+    function isSameOrBefore (input, units) {
+        return this.isSame(input, units) || this.isBefore(input,units);
+    }
+
+    function diff (input, units, asFloat) {
+        var that,
+            zoneDelta,
+            output;
+
+        if (!this.isValid()) {
+            return NaN;
+        }
+
+        that = cloneWithOffset(input, this);
+
+        if (!that.isValid()) {
+            return NaN;
+        }
+
+        zoneDelta = (that.utcOffset() - this.utcOffset()) * 6e4;
+
+        units = normalizeUnits(units);
+
+        switch (units) {
+            case 'year': output = monthDiff(this, that) / 12; break;
+            case 'month': output = monthDiff(this, that); break;
+            case 'quarter': output = monthDiff(this, that) / 3; break;
+            case 'second': output = (this - that) / 1e3; break; // 1000
+            case 'minute': output = (this - that) / 6e4; break; // 1000 * 60
+            case 'hour': output = (this - that) / 36e5; break; // 1000 * 60 * 60
+            case 'day': output = (this - that - zoneDelta) / 864e5; break; // 1000 * 60 * 60 * 24, negate dst
+            case 'week': output = (this - that - zoneDelta) / 6048e5; break; // 1000 * 60 * 60 * 24 * 7, negate dst
+            default: output = this - that;
+        }
+
+        return asFloat ? output : absFloor(output);
+    }
+
+    function monthDiff (a, b) {
+        // difference in months
+        var wholeMonthDiff = ((b.year() - a.year()) * 12) + (b.month() - a.month()),
+            // b is in (anchor - 1 month, anchor + 1 month)
+            anchor = a.clone().add(wholeMonthDiff, 'months'),
+            anchor2, adjust;
+
+        if (b - anchor < 0) {
+            anchor2 = a.clone().add(wholeMonthDiff - 1, 'months');
+            // linear across the month
+            adjust = (b - anchor) / (anchor - anchor2);
+        } else {
+            anchor2 = a.clone().add(wholeMonthDiff + 1, 'months');
+            // linear across the month
+            adjust = (b - anchor) / (anchor2 - anchor);
+        }
+
+        //check for negative zero, return zero if negative zero
+        return -(wholeMonthDiff + adjust) || 0;
+    }
+
+    hooks.defaultFormat = 'YYYY-MM-DDTHH:mm:ssZ';
+    hooks.defaultFormatUtc = 'YYYY-MM-DDTHH:mm:ss[Z]';
+
+    function toString () {
+        return this.clone().locale('en').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
+    }
+
+    function toISOString(keepOffset) {
+        if (!this.isValid()) {
+            return null;
+        }
+        var utc = keepOffset !== true;
+        var m = utc ? this.clone().utc() : this;
+        if (m.year() < 0 || m.year() > 9999) {
+            return formatMoment(m, utc ? 'YYYYYY-MM-DD[T]HH:mm:ss.SSS[Z]' : 'YYYYYY-MM-DD[T]HH:mm:ss.SSSZ');
+        }
+        if (isFunction(Date.prototype.toISOString)) {
+            // native implementation is ~50x faster, use it when we can
+            if (utc) {
+                return this.toDate().toISOString();
+            } else {
+                return new Date(this.valueOf() + this.utcOffset() * 60 * 1000).toISOString().replace('Z', formatMoment(m, 'Z'));
+            }
+        }
+        return formatMoment(m, utc ? 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]' : 'YYYY-MM-DD[T]HH:mm:ss.SSSZ');
+    }
+
+    /**
+     * Return a human readable representation of a moment that can
+     * also be evaluated to get a new moment which is the same
+     *
+     * @link https://nodejs.org/dist/latest/docs/api/util.html#util_custom_inspect_function_on_objects
+     */
+    function inspect () {
+        if (!this.isValid()) {
+            return 'moment.invalid(/* ' + this._i + ' */)';
+        }
+        var func = 'moment';
+        var zone = '';
+        if (!this.isLocal()) {
+            func = this.utcOffset() === 0 ? 'moment.utc' : 'moment.parseZone';
+            zone = 'Z';
+        }
+        var prefix = '[' + func + '("]';
+        var year = (0 <= this.year() && this.year() <= 9999) ? 'YYYY' : 'YYYYYY';
+        var datetime = '-MM-DD[T]HH:mm:ss.SSS';
+        var suffix = zone + '[")]';
+
+        return this.format(prefix + year + datetime + suffix);
+    }
+
+    function format (inputString) {
+        if (!inputString) {
+            inputString = this.isUtc() ? hooks.defaultFormatUtc : hooks.defaultFormat;
+        }
+        var output = formatMoment(this, inputString);
+        return this.localeData().postformat(output);
+    }
+
+    function from (time, withoutSuffix) {
+        if (this.isValid() &&
+                ((isMoment(time) && time.isValid()) ||
+                 createLocal(time).isValid())) {
+            return createDuration({to: this, from: time}).locale(this.locale()).humanize(!withoutSuffix);
+        } else {
+            return this.localeData().invalidDate();
+        }
+    }
+
+    function fromNow (withoutSuffix) {
+        return this.from(createLocal(), withoutSuffix);
+    }
+
+    function to (time, withoutSuffix) {
+        if (this.isValid() &&
+                ((isMoment(time) && time.isValid()) ||
+                 createLocal(time).isValid())) {
+            return createDuration({from: this, to: time}).locale(this.locale()).humanize(!withoutSuffix);
+        } else {
+            return this.localeData().invalidDate();
+        }
+    }
+
+    function toNow (withoutSuffix) {
+        return this.to(createLocal(), withoutSuffix);
+    }
+
+    // If passed a locale key, it will set the locale for this
+    // instance.  Otherwise, it will return the locale configuration
+    // variables for this instance.
+    function locale (key) {
+        var newLocaleData;
+
+        if (key === undefined) {
+            return this._locale._abbr;
+        } else {
+            newLocaleData = getLocale(key);
+            if (newLocaleData != null) {
+                this._locale = newLocaleData;
+            }
+            return this;
+        }
+    }
+
+    var lang = deprecate(
+        'moment().lang() is deprecated. Instead, use moment().localeData() to get the language configuration. Use moment().locale() to change languages.',
+        function (key) {
+            if (key === undefined) {
+                return this.localeData();
+            } else {
+                return this.locale(key);
+            }
+        }
+    );
+
+    function localeData () {
+        return this._locale;
+    }
+
+    function startOf (units) {
+        units = normalizeUnits(units);
+        // the following switch intentionally omits break keywords
+        // to utilize falling through the cases.
+        switch (units) {
+            case 'year':
+                this.month(0);
+                /* falls through */
+            case 'quarter':
+            case 'month':
+                this.date(1);
+                /* falls through */
+            case 'week':
+            case 'isoWeek':
+            case 'day':
+            case 'date':
+                this.hours(0);
+                /* falls through */
+            case 'hour':
+                this.minutes(0);
+                /* falls through */
+            case 'minute':
+                this.seconds(0);
+                /* falls through */
+            case 'second':
+                this.milliseconds(0);
+        }
+
+        // weeks are a special case
+        if (units === 'week') {
+            this.weekday(0);
+        }
+        if (units === 'isoWeek') {
+            this.isoWeekday(1);
+        }
+
+        // quarters are also special
+        if (units === 'quarter') {
+            this.month(Math.floor(this.month() / 3) * 3);
+        }
+
+        return this;
+    }
+
+    function endOf (units) {
+        units = normalizeUnits(units);
+        if (units === undefined || units === 'millisecond') {
+            return this;
+        }
+
+        // 'date' is an alias for 'day', so it should be considered as such.
+        if (units === 'date') {
+            units = 'day';
+        }
+
+        return this.startOf(units).add(1, (units === 'isoWeek' ? 'week' : units)).subtract(1, 'ms');
+    }
+
+    function valueOf () {
+        return this._d.valueOf() - ((this._offset || 0) * 60000);
+    }
+
+    function unix () {
+        return Math.floor(this.valueOf() / 1000);
+    }
+
+    function toDate () {
+        return new Date(this.valueOf());
+    }
+
+    function toArray () {
+        var m = this;
+        return [m.year(), m.month(), m.date(), m.hour(), m.minute(), m.second(), m.millisecond()];
+    }
+
+    function toObject () {
+        var m = this;
+        return {
+            years: m.year(),
+            months: m.month(),
+            date: m.date(),
+            hours: m.hours(),
+            minutes: m.minutes(),
+            seconds: m.seconds(),
+            milliseconds: m.milliseconds()
+        };
+    }
+
+    function toJSON () {
+        // new Date(NaN).toJSON() === null
+        return this.isValid() ? this.toISOString() : null;
+    }
+
+    function isValid$2 () {
+        return isValid(this);
+    }
+
+    function parsingFlags () {
+        return extend({}, getParsingFlags(this));
+    }
+
+    function invalidAt () {
+        return getParsingFlags(this).overflow;
+    }
+
+    function creationData() {
+        return {
+            input: this._i,
+            format: this._f,
+            locale: this._locale,
+            isUTC: this._isUTC,
+            strict: this._strict
+        };
+    }
+
+    // FORMATTING
+
+    addFormatToken(0, ['gg', 2], 0, function () {
+        return this.weekYear() % 100;
+    });
+
+    addFormatToken(0, ['GG', 2], 0, function () {
+        return this.isoWeekYear() % 100;
+    });
+
+    function addWeekYearFormatToken (token, getter) {
+        addFormatToken(0, [token, token.length], 0, getter);
+    }
+
+    addWeekYearFormatToken('gggg',     'weekYear');
+    addWeekYearFormatToken('ggggg',    'weekYear');
+    addWeekYearFormatToken('GGGG',  'isoWeekYear');
+    addWeekYearFormatToken('GGGGG', 'isoWeekYear');
+
+    // ALIASES
+
+    addUnitAlias('weekYear', 'gg');
+    addUnitAlias('isoWeekYear', 'GG');
+
+    // PRIORITY
+
+    addUnitPriority('weekYear', 1);
+    addUnitPriority('isoWeekYear', 1);
+
+
+    // PARSING
+
+    addRegexToken('G',      matchSigned);
+    addRegexToken('g',      matchSigned);
+    addRegexToken('GG',     match1to2, match2);
+    addRegexToken('gg',     match1to2, match2);
+    addRegexToken('GGGG',   match1to4, match4);
+    addRegexToken('gggg',   match1to4, match4);
+    addRegexToken('GGGGG',  match1to6, match6);
+    addRegexToken('ggggg',  match1to6, match6);
+
+    addWeekParseToken(['gggg', 'ggggg', 'GGGG', 'GGGGG'], function (input, week, config, token) {
+        week[token.substr(0, 2)] = toInt(input);
+    });
+
+    addWeekParseToken(['gg', 'GG'], function (input, week, config, token) {
+        week[token] = hooks.parseTwoDigitYear(input);
+    });
+
+    // MOMENTS
+
+    function getSetWeekYear (input) {
+        return getSetWeekYearHelper.call(this,
+                input,
+                this.week(),
+                this.weekday(),
+                this.localeData()._week.dow,
+                this.localeData()._week.doy);
+    }
+
+    function getSetISOWeekYear (input) {
+        return getSetWeekYearHelper.call(this,
+                input, this.isoWeek(), this.isoWeekday(), 1, 4);
+    }
+
+    function getISOWeeksInYear () {
+        return weeksInYear(this.year(), 1, 4);
+    }
+
+    function getWeeksInYear () {
+        var weekInfo = this.localeData()._week;
+        return weeksInYear(this.year(), weekInfo.dow, weekInfo.doy);
+    }
+
+    function getSetWeekYearHelper(input, week, weekday, dow, doy) {
+        var weeksTarget;
+        if (input == null) {
+            return weekOfYear(this, dow, doy).year;
+        } else {
+            weeksTarget = weeksInYear(input, dow, doy);
+            if (week > weeksTarget) {
+                week = weeksTarget;
+            }
+            return setWeekAll.call(this, input, week, weekday, dow, doy);
+        }
+    }
+
+    function setWeekAll(weekYear, week, weekday, dow, doy) {
+        var dayOfYearData = dayOfYearFromWeeks(weekYear, week, weekday, dow, doy),
+            date = createUTCDate(dayOfYearData.year, 0, dayOfYearData.dayOfYear);
+
+        this.year(date.getUTCFullYear());
+        this.month(date.getUTCMonth());
+        this.date(date.getUTCDate());
+        return this;
+    }
+
+    // FORMATTING
+
+    addFormatToken('Q', 0, 'Qo', 'quarter');
+
+    // ALIASES
+
+    addUnitAlias('quarter', 'Q');
+
+    // PRIORITY
+
+    addUnitPriority('quarter', 7);
+
+    // PARSING
+
+    addRegexToken('Q', match1);
+    addParseToken('Q', function (input, array) {
+        array[MONTH] = (toInt(input) - 1) * 3;
+    });
+
+    // MOMENTS
+
+    function getSetQuarter (input) {
+        return input == null ? Math.ceil((this.month() + 1) / 3) : this.month((input - 1) * 3 + this.month() % 3);
+    }
+
+    // FORMATTING
+
+    addFormatToken('D', ['DD', 2], 'Do', 'date');
+
+    // ALIASES
+
+    addUnitAlias('date', 'D');
+
+    // PRIORITY
+    addUnitPriority('date', 9);
+
+    // PARSING
+
+    addRegexToken('D',  match1to2);
+    addRegexToken('DD', match1to2, match2);
+    addRegexToken('Do', function (isStrict, locale) {
+        // TODO: Remove "ordinalParse" fallback in next major release.
+        return isStrict ?
+          (locale._dayOfMonthOrdinalParse || locale._ordinalParse) :
+          locale._dayOfMonthOrdinalParseLenient;
+    });
+
+    addParseToken(['D', 'DD'], DATE);
+    addParseToken('Do', function (input, array) {
+        array[DATE] = toInt(input.match(match1to2)[0]);
+    });
+
+    // MOMENTS
+
+    var getSetDayOfMonth = makeGetSet('Date', true);
+
+    // FORMATTING
+
+    addFormatToken('DDD', ['DDDD', 3], 'DDDo', 'dayOfYear');
+
+    // ALIASES
+
+    addUnitAlias('dayOfYear', 'DDD');
+
+    // PRIORITY
+    addUnitPriority('dayOfYear', 4);
+
+    // PARSING
+
+    addRegexToken('DDD',  match1to3);
+    addRegexToken('DDDD', match3);
+    addParseToken(['DDD', 'DDDD'], function (input, array, config) {
+        config._dayOfYear = toInt(input);
+    });
+
+    // HELPERS
+
+    // MOMENTS
+
+    function getSetDayOfYear (input) {
+        var dayOfYear = Math.round((this.clone().startOf('day') - this.clone().startOf('year')) / 864e5) + 1;
+        return input == null ? dayOfYear : this.add((input - dayOfYear), 'd');
+    }
+
+    // FORMATTING
+
+    addFormatToken('m', ['mm', 2], 0, 'minute');
+
+    // ALIASES
+
+    addUnitAlias('minute', 'm');
+
+    // PRIORITY
+
+    addUnitPriority('minute', 14);
+
+    // PARSING
+
+    addRegexToken('m',  match1to2);
+    addRegexToken('mm', match1to2, match2);
+    addParseToken(['m', 'mm'], MINUTE);
+
+    // MOMENTS
+
+    var getSetMinute = makeGetSet('Minutes', false);
+
+    // FORMATTING
+
+    addFormatToken('s', ['ss', 2], 0, 'second');
+
+    // ALIASES
+
+    addUnitAlias('second', 's');
+
+    // PRIORITY
+
+    addUnitPriority('second', 15);
+
+    // PARSING
+
+    addRegexToken('s',  match1to2);
+    addRegexToken('ss', match1to2, match2);
+    addParseToken(['s', 'ss'], SECOND);
+
+    // MOMENTS
+
+    var getSetSecond = makeGetSet('Seconds', false);
+
+    // FORMATTING
+
+    addFormatToken('S', 0, 0, function () {
+        return ~~(this.millisecond() / 100);
+    });
+
+    addFormatToken(0, ['SS', 2], 0, function () {
+        return ~~(this.millisecond() / 10);
+    });
+
+    addFormatToken(0, ['SSS', 3], 0, 'millisecond');
+    addFormatToken(0, ['SSSS', 4], 0, function () {
+        return this.millisecond() * 10;
+    });
+    addFormatToken(0, ['SSSSS', 5], 0, function () {
+        return this.millisecond() * 100;
+    });
+    addFormatToken(0, ['SSSSSS', 6], 0, function () {
+        return this.millisecond() * 1000;
+    });
+    addFormatToken(0, ['SSSSSSS', 7], 0, function () {
+        return this.millisecond() * 10000;
+    });
+    addFormatToken(0, ['SSSSSSSS', 8], 0, function () {
+        return this.millisecond() * 100000;
+    });
+    addFormatToken(0, ['SSSSSSSSS', 9], 0, function () {
+        return this.millisecond() * 1000000;
+    });
+
+
+    // ALIASES
+
+    addUnitAlias('millisecond', 'ms');
+
+    // PRIORITY
+
+    addUnitPriority('millisecond', 16);
+
+    // PARSING
+
+    addRegexToken('S',    match1to3, match1);
+    addRegexToken('SS',   match1to3, match2);
+    addRegexToken('SSS',  match1to3, match3);
+
+    var token;
+    for (token = 'SSSS'; token.length <= 9; token += 'S') {
+        addRegexToken(token, matchUnsigned);
+    }
+
+    function parseMs(input, array) {
+        array[MILLISECOND] = toInt(('0.' + input) * 1000);
+    }
+
+    for (token = 'S'; token.length <= 9; token += 'S') {
+        addParseToken(token, parseMs);
+    }
+    // MOMENTS
+
+    var getSetMillisecond = makeGetSet('Milliseconds', false);
+
+    // FORMATTING
+
+    addFormatToken('z',  0, 0, 'zoneAbbr');
+    addFormatToken('zz', 0, 0, 'zoneName');
+
+    // MOMENTS
+
+    function getZoneAbbr () {
+        return this._isUTC ? 'UTC' : '';
+    }
+
+    function getZoneName () {
+        return this._isUTC ? 'Coordinated Universal Time' : '';
+    }
+
+    var proto = Moment.prototype;
+
+    proto.add               = add;
+    proto.calendar          = calendar$1;
+    proto.clone             = clone;
+    proto.diff              = diff;
+    proto.endOf             = endOf;
+    proto.format            = format;
+    proto.from              = from;
+    proto.fromNow           = fromNow;
+    proto.to                = to;
+    proto.toNow             = toNow;
+    proto.get               = stringGet;
+    proto.invalidAt         = invalidAt;
+    proto.isAfter           = isAfter;
+    proto.isBefore          = isBefore;
+    proto.isBetween         = isBetween;
+    proto.isSame            = isSame;
+    proto.isSameOrAfter     = isSameOrAfter;
+    proto.isSameOrBefore    = isSameOrBefore;
+    proto.isValid           = isValid$2;
+    proto.lang              = lang;
+    proto.locale            = locale;
+    proto.localeData        = localeData;
+    proto.max               = prototypeMax;
+    proto.min               = prototypeMin;
+    proto.parsingFlags      = parsingFlags;
+    proto.set               = stringSet;
+    proto.startOf           = startOf;
+    proto.subtract          = subtract;
+    proto.toArray           = toArray;
+    proto.toObject          = toObject;
+    proto.toDate            = toDate;
+    proto.toISOString       = toISOString;
+    proto.inspect           = inspect;
+    proto.toJSON            = toJSON;
+    proto.toString          = toString;
+    proto.unix              = unix;
+    proto.valueOf           = valueOf;
+    proto.creationData      = creationData;
+    proto.year       = getSetYear;
+    proto.isLeapYear = getIsLeapYear;
+    proto.weekYear    = getSetWeekYear;
+    proto.isoWeekYear = getSetISOWeekYear;
+    proto.quarter = proto.quarters = getSetQuarter;
+    proto.month       = getSetMonth;
+    proto.daysInMonth = getDaysInMonth;
+    proto.week           = proto.weeks        = getSetWeek;
+    proto.isoWeek        = proto.isoWeeks     = getSetISOWeek;
+    proto.weeksInYear    = getWeeksInYear;
+    proto.isoWeeksInYear = getISOWeeksInYear;
+    proto.date       = getSetDayOfMonth;
+    proto.day        = proto.days             = getSetDayOfWeek;
+    proto.weekday    = getSetLocaleDayOfWeek;
+    proto.isoWeekday = getSetISODayOfWeek;
+    proto.dayOfYear  = getSetDayOfYear;
+    proto.hour = proto.hours = getSetHour;
+    proto.minute = proto.minutes = getSetMinute;
+    proto.second = proto.seconds = getSetSecond;
+    proto.millisecond = proto.milliseconds = getSetMillisecond;
+    proto.utcOffset            = getSetOffset;
+    proto.utc                  = setOffsetToUTC;
+    proto.local                = setOffsetToLocal;
+    proto.parseZone            = setOffsetToParsedOffset;
+    proto.hasAlignedHourOffset = hasAlignedHourOffset;
+    proto.isDST                = isDaylightSavingTime;
+    proto.isLocal              = isLocal;
+    proto.isUtcOffset          = isUtcOffset;
+    proto.isUtc                = isUtc;
+    proto.isUTC                = isUtc;
+    proto.zoneAbbr = getZoneAbbr;
+    proto.zoneName = getZoneName;
+    proto.dates  = deprecate('dates accessor is deprecated. Use date instead.', getSetDayOfMonth);
+    proto.months = deprecate('months accessor is deprecated. Use month instead', getSetMonth);
+    proto.years  = deprecate('years accessor is deprecated. Use year instead', getSetYear);
+    proto.zone   = deprecate('moment().zone is deprecated, use moment().utcOffset instead. http://momentjs.com/guides/#/warnings/zone/', getSetZone);
+    proto.isDSTShifted = deprecate('isDSTShifted is deprecated. See http://momentjs.com/guides/#/warnings/dst-shifted/ for more information', isDaylightSavingTimeShifted);
+
+    function createUnix (input) {
+        return createLocal(input * 1000);
+    }
+
+    function createInZone () {
+        return createLocal.apply(null, arguments).parseZone();
+    }
+
+    function preParsePostFormat (string) {
+        return string;
+    }
+
+    var proto$1 = Locale.prototype;
+
+    proto$1.calendar        = calendar;
+    proto$1.longDateFormat  = longDateFormat;
+    proto$1.invalidDate     = invalidDate;
+    proto$1.ordinal         = ordinal;
+    proto$1.preparse        = preParsePostFormat;
+    proto$1.postformat      = preParsePostFormat;
+    proto$1.relativeTime    = relativeTime;
+    proto$1.pastFuture      = pastFuture;
+    proto$1.set             = set;
+
+    proto$1.months            =        localeMonths;
+    proto$1.monthsShort       =        localeMonthsShort;
+    proto$1.monthsParse       =        localeMonthsParse;
+    proto$1.monthsRegex       = monthsRegex;
+    proto$1.monthsShortRegex  = monthsShortRegex;
+    proto$1.week = localeWeek;
+    proto$1.firstDayOfYear = localeFirstDayOfYear;
+    proto$1.firstDayOfWeek = localeFirstDayOfWeek;
+
+    proto$1.weekdays       =        localeWeekdays;
+    proto$1.weekdaysMin    =        localeWeekdaysMin;
+    proto$1.weekdaysShort  =        localeWeekdaysShort;
+    proto$1.weekdaysParse  =        localeWeekdaysParse;
+
+    proto$1.weekdaysRegex       =        weekdaysRegex;
+    proto$1.weekdaysShortRegex  =        weekdaysShortRegex;
+    proto$1.weekdaysMinRegex    =        weekdaysMinRegex;
+
+    proto$1.isPM = localeIsPM;
+    proto$1.meridiem = localeMeridiem;
+
+    function get$1 (format, index, field, setter) {
+        var locale = getLocale();
+        var utc = createUTC().set(setter, index);
+        return locale[field](utc, format);
+    }
+
+    function listMonthsImpl (format, index, field) {
+        if (isNumber(format)) {
+            index = format;
+            format = undefined;
+        }
+
+        format = format || '';
+
+        if (index != null) {
+            return get$1(format, index, field, 'month');
+        }
+
+        var i;
+        var out = [];
+        for (i = 0; i < 12; i++) {
+            out[i] = get$1(format, i, field, 'month');
+        }
+        return out;
+    }
+
+    // ()
+    // (5)
+    // (fmt, 5)
+    // (fmt)
+    // (true)
+    // (true, 5)
+    // (true, fmt, 5)
+    // (true, fmt)
+    function listWeekdaysImpl (localeSorted, format, index, field) {
+        if (typeof localeSorted === 'boolean') {
+            if (isNumber(format)) {
+                index = format;
+                format = undefined;
+            }
+
+            format = format || '';
+        } else {
+            format = localeSorted;
+            index = format;
+            localeSorted = false;
+
+            if (isNumber(format)) {
+                index = format;
+                format = undefined;
+            }
+
+            format = format || '';
+        }
+
+        var locale = getLocale(),
+            shift = localeSorted ? locale._week.dow : 0;
+
+        if (index != null) {
+            return get$1(format, (index + shift) % 7, field, 'day');
+        }
+
+        var i;
+        var out = [];
+        for (i = 0; i < 7; i++) {
+            out[i] = get$1(format, (i + shift) % 7, field, 'day');
+        }
+        return out;
+    }
+
+    function listMonths (format, index) {
+        return listMonthsImpl(format, index, 'months');
+    }
+
+    function listMonthsShort (format, index) {
+        return listMonthsImpl(format, index, 'monthsShort');
+    }
+
+    function listWeekdays (localeSorted, format, index) {
+        return listWeekdaysImpl(localeSorted, format, index, 'weekdays');
+    }
+
+    function listWeekdaysShort (localeSorted, format, index) {
+        return listWeekdaysImpl(localeSorted, format, index, 'weekdaysShort');
+    }
+
+    function listWeekdaysMin (localeSorted, format, index) {
+        return listWeekdaysImpl(localeSorted, format, index, 'weekdaysMin');
+    }
+
+    getSetGlobalLocale('en', {
+        dayOfMonthOrdinalParse: /\d{1,2}(th|st|nd|rd)/,
+        ordinal : function (number) {
+            var b = number % 10,
+                output = (toInt(number % 100 / 10) === 1) ? 'th' :
+                (b === 1) ? 'st' :
+                (b === 2) ? 'nd' :
+                (b === 3) ? 'rd' : 'th';
+            return number + output;
+        }
+    });
+
+    // Side effect imports
+
+    hooks.lang = deprecate('moment.lang is deprecated. Use moment.locale instead.', getSetGlobalLocale);
+    hooks.langData = deprecate('moment.langData is deprecated. Use moment.localeData instead.', getLocale);
+
+    var mathAbs = Math.abs;
+
+    function abs () {
+        var data           = this._data;
+
+        this._milliseconds = mathAbs(this._milliseconds);
+        this._days         = mathAbs(this._days);
+        this._months       = mathAbs(this._months);
+
+        data.milliseconds  = mathAbs(data.milliseconds);
+        data.seconds       = mathAbs(data.seconds);
+        data.minutes       = mathAbs(data.minutes);
+        data.hours         = mathAbs(data.hours);
+        data.months        = mathAbs(data.months);
+        data.years         = mathAbs(data.years);
+
+        return this;
+    }
+
+    function addSubtract$1 (duration, input, value, direction) {
+        var other = createDuration(input, value);
+
+        duration._milliseconds += direction * other._milliseconds;
+        duration._days         += direction * other._days;
+        duration._months       += direction * other._months;
+
+        return duration._bubble();
+    }
+
+    // supports only 2.0-style add(1, 's') or add(duration)
+    function add$1 (input, value) {
+        return addSubtract$1(this, input, value, 1);
+    }
+
+    // supports only 2.0-style subtract(1, 's') or subtract(duration)
+    function subtract$1 (input, value) {
+        return addSubtract$1(this, input, value, -1);
+    }
+
+    function absCeil (number) {
+        if (number < 0) {
+            return Math.floor(number);
+        } else {
+            return Math.ceil(number);
+        }
+    }
+
+    function bubble () {
+        var milliseconds = this._milliseconds;
+        var days         = this._days;
+        var months       = this._months;
+        var data         = this._data;
+        var seconds, minutes, hours, years, monthsFromDays;
+
+        // if we have a mix of positive and negative values, bubble down first
+        // check: https://github.com/moment/moment/issues/2166
+        if (!((milliseconds >= 0 && days >= 0 && months >= 0) ||
+                (milliseconds <= 0 && days <= 0 && months <= 0))) {
+            milliseconds += absCeil(monthsToDays(months) + days) * 864e5;
+            days = 0;
+            months = 0;
+        }
+
+        // The following code bubbles up values, see the tests for
+        // examples of what that means.
+        data.milliseconds = milliseconds % 1000;
+
+        seconds           = absFloor(milliseconds / 1000);
+        data.seconds      = seconds % 60;
+
+        minutes           = absFloor(seconds / 60);
+        data.minutes      = minutes % 60;
+
+        hours             = absFloor(minutes / 60);
+        data.hours        = hours % 24;
+
+        days += absFloor(hours / 24);
+
+        // convert days to months
+        monthsFromDays = absFloor(daysToMonths(days));
+        months += monthsFromDays;
+        days -= absCeil(monthsToDays(monthsFromDays));
+
+        // 12 months -> 1 year
+        years = absFloor(months / 12);
+        months %= 12;
+
+        data.days   = days;
+        data.months = months;
+        data.years  = years;
+
+        return this;
+    }
+
+    function daysToMonths (days) {
+        // 400 years have 146097 days (taking into account leap year rules)
+        // 400 years have 12 months === 4800
+        return days * 4800 / 146097;
+    }
+
+    function monthsToDays (months) {
+        // the reverse of daysToMonths
+        return months * 146097 / 4800;
+    }
+
+    function as (units) {
+        if (!this.isValid()) {
+            return NaN;
+        }
+        var days;
+        var months;
+        var milliseconds = this._milliseconds;
+
+        units = normalizeUnits(units);
+
+        if (units === 'month' || units === 'year') {
+            days   = this._days   + milliseconds / 864e5;
+            months = this._months + daysToMonths(days);
+            return units === 'month' ? months : months / 12;
+        } else {
+            // handle milliseconds separately because of floating point math errors (issue #1867)
+            days = this._days + Math.round(monthsToDays(this._months));
+            switch (units) {
+                case 'week'   : return days / 7     + milliseconds / 6048e5;
+                case 'day'    : return days         + milliseconds / 864e5;
+                case 'hour'   : return days * 24    + milliseconds / 36e5;
+                case 'minute' : return days * 1440  + milliseconds / 6e4;
+                case 'second' : return days * 86400 + milliseconds / 1000;
+                // Math.floor prevents floating point math errors here
+                case 'millisecond': return Math.floor(days * 864e5) + milliseconds;
+                default: throw new Error('Unknown unit ' + units);
+            }
+        }
+    }
+
+    // TODO: Use this.as('ms')?
+    function valueOf$1 () {
+        if (!this.isValid()) {
+            return NaN;
+        }
+        return (
+            this._milliseconds +
+            this._days * 864e5 +
+            (this._months % 12) * 2592e6 +
+            toInt(this._months / 12) * 31536e6
+        );
+    }
+
+    function makeAs (alias) {
+        return function () {
+            return this.as(alias);
+        };
+    }
+
+    var asMilliseconds = makeAs('ms');
+    var asSeconds      = makeAs('s');
+    var asMinutes      = makeAs('m');
+    var asHours        = makeAs('h');
+    var asDays         = makeAs('d');
+    var asWeeks        = makeAs('w');
+    var asMonths       = makeAs('M');
+    var asYears        = makeAs('y');
+
+    function clone$1 () {
+        return createDuration(this);
+    }
+
+    function get$2 (units) {
+        units = normalizeUnits(units);
+        return this.isValid() ? this[units + 's']() : NaN;
+    }
+
+    function makeGetter(name) {
+        return function () {
+            return this.isValid() ? this._data[name] : NaN;
+        };
+    }
+
+    var milliseconds = makeGetter('milliseconds');
+    var seconds      = makeGetter('seconds');
+    var minutes      = makeGetter('minutes');
+    var hours        = makeGetter('hours');
+    var days         = makeGetter('days');
+    var months       = makeGetter('months');
+    var years        = makeGetter('years');
+
+    function weeks () {
+        return absFloor(this.days() / 7);
+    }
+
+    var round = Math.round;
+    var thresholds = {
+        ss: 44,         // a few seconds to seconds
+        s : 45,         // seconds to minute
+        m : 45,         // minutes to hour
+        h : 22,         // hours to day
+        d : 26,         // days to month
+        M : 11          // months to year
+    };
+
+    // helper function for moment.fn.from, moment.fn.fromNow, and moment.duration.fn.humanize
+    function substituteTimeAgo(string, number, withoutSuffix, isFuture, locale) {
+        return locale.relativeTime(number || 1, !!withoutSuffix, string, isFuture);
+    }
+
+    function relativeTime$1 (posNegDuration, withoutSuffix, locale) {
+        var duration = createDuration(posNegDuration).abs();
+        var seconds  = round(duration.as('s'));
+        var minutes  = round(duration.as('m'));
+        var hours    = round(duration.as('h'));
+        var days     = round(duration.as('d'));
+        var months   = round(duration.as('M'));
+        var years    = round(duration.as('y'));
+
+        var a = seconds <= thresholds.ss && ['s', seconds]  ||
+                seconds < thresholds.s   && ['ss', seconds] ||
+                minutes <= 1             && ['m']           ||
+                minutes < thresholds.m   && ['mm', minutes] ||
+                hours   <= 1             && ['h']           ||
+                hours   < thresholds.h   && ['hh', hours]   ||
+                days    <= 1             && ['d']           ||
+                days    < thresholds.d   && ['dd', days]    ||
+                months  <= 1             && ['M']           ||
+                months  < thresholds.M   && ['MM', months]  ||
+                years   <= 1             && ['y']           || ['yy', years];
+
+        a[2] = withoutSuffix;
+        a[3] = +posNegDuration > 0;
+        a[4] = locale;
+        return substituteTimeAgo.apply(null, a);
+    }
+
+    // This function allows you to set the rounding function for relative time strings
+    function getSetRelativeTimeRounding (roundingFunction) {
+        if (roundingFunction === undefined) {
+            return round;
+        }
+        if (typeof(roundingFunction) === 'function') {
+            round = roundingFunction;
+            return true;
+        }
+        return false;
+    }
+
+    // This function allows you to set a threshold for relative time strings
+    function getSetRelativeTimeThreshold (threshold, limit) {
+        if (thresholds[threshold] === undefined) {
+            return false;
+        }
+        if (limit === undefined) {
+            return thresholds[threshold];
+        }
+        thresholds[threshold] = limit;
+        if (threshold === 's') {
+            thresholds.ss = limit - 1;
+        }
+        return true;
+    }
+
+    function humanize (withSuffix) {
+        if (!this.isValid()) {
+            return this.localeData().invalidDate();
+        }
+
+        var locale = this.localeData();
+        var output = relativeTime$1(this, !withSuffix, locale);
+
+        if (withSuffix) {
+            output = locale.pastFuture(+this, output);
+        }
+
+        return locale.postformat(output);
+    }
+
+    var abs$1 = Math.abs;
+
+    function sign(x) {
+        return ((x > 0) - (x < 0)) || +x;
+    }
+
+    function toISOString$1() {
+        // for ISO strings we do not use the normal bubbling rules:
+        //  * milliseconds bubble up until they become hours
+        //  * days do not bubble at all
+        //  * months bubble up until they become years
+        // This is because there is no context-free conversion between hours and days
+        // (think of clock changes)
+        // and also not between days and months (28-31 days per month)
+        if (!this.isValid()) {
+            return this.localeData().invalidDate();
+        }
+
+        var seconds = abs$1(this._milliseconds) / 1000;
+        var days         = abs$1(this._days);
+        var months       = abs$1(this._months);
+        var minutes, hours, years;
+
+        // 3600 seconds -> 60 minutes -> 1 hour
+        minutes           = absFloor(seconds / 60);
+        hours             = absFloor(minutes / 60);
+        seconds %= 60;
+        minutes %= 60;
+
+        // 12 months -> 1 year
+        years  = absFloor(months / 12);
+        months %= 12;
+
+
+        // inspired by https://github.com/dordille/moment-isoduration/blob/master/moment.isoduration.js
+        var Y = years;
+        var M = months;
+        var D = days;
+        var h = hours;
+        var m = minutes;
+        var s = seconds ? seconds.toFixed(3).replace(/\.?0+$/, '') : '';
+        var total = this.asSeconds();
+
+        if (!total) {
+            // this is the same as C#'s (Noda) and python (isodate)...
+            // but not other JS (goog.date)
+            return 'P0D';
+        }
+
+        var totalSign = total < 0 ? '-' : '';
+        var ymSign = sign(this._months) !== sign(total) ? '-' : '';
+        var daysSign = sign(this._days) !== sign(total) ? '-' : '';
+        var hmsSign = sign(this._milliseconds) !== sign(total) ? '-' : '';
+
+        return totalSign + 'P' +
+            (Y ? ymSign + Y + 'Y' : '') +
+            (M ? ymSign + M + 'M' : '') +
+            (D ? daysSign + D + 'D' : '') +
+            ((h || m || s) ? 'T' : '') +
+            (h ? hmsSign + h + 'H' : '') +
+            (m ? hmsSign + m + 'M' : '') +
+            (s ? hmsSign + s + 'S' : '');
+    }
+
+    var proto$2 = Duration.prototype;
+
+    proto$2.isValid        = isValid$1;
+    proto$2.abs            = abs;
+    proto$2.add            = add$1;
+    proto$2.subtract       = subtract$1;
+    proto$2.as             = as;
+    proto$2.asMilliseconds = asMilliseconds;
+    proto$2.asSeconds      = asSeconds;
+    proto$2.asMinutes      = asMinutes;
+    proto$2.asHours        = asHours;
+    proto$2.asDays         = asDays;
+    proto$2.asWeeks        = asWeeks;
+    proto$2.asMonths       = asMonths;
+    proto$2.asYears        = asYears;
+    proto$2.valueOf        = valueOf$1;
+    proto$2._bubble        = bubble;
+    proto$2.clone          = clone$1;
+    proto$2.get            = get$2;
+    proto$2.milliseconds   = milliseconds;
+    proto$2.seconds        = seconds;
+    proto$2.minutes        = minutes;
+    proto$2.hours          = hours;
+    proto$2.days           = days;
+    proto$2.weeks          = weeks;
+    proto$2.months         = months;
+    proto$2.years          = years;
+    proto$2.humanize       = humanize;
+    proto$2.toISOString    = toISOString$1;
+    proto$2.toString       = toISOString$1;
+    proto$2.toJSON         = toISOString$1;
+    proto$2.locale         = locale;
+    proto$2.localeData     = localeData;
+
+    proto$2.toIsoString = deprecate('toIsoString() is deprecated. Please use toISOString() instead (notice the capitals)', toISOString$1);
+    proto$2.lang = lang;
+
+    // Side effect imports
+
+    // FORMATTING
+
+    addFormatToken('X', 0, 0, 'unix');
+    addFormatToken('x', 0, 0, 'valueOf');
+
+    // PARSING
+
+    addRegexToken('x', matchSigned);
+    addRegexToken('X', matchTimestamp);
+    addParseToken('X', function (input, array, config) {
+        config._d = new Date(parseFloat(input, 10) * 1000);
+    });
+    addParseToken('x', function (input, array, config) {
+        config._d = new Date(toInt(input));
+    });
+
+    // Side effect imports
+
+
+    hooks.version = '2.22.1';
+
+    setHookCallback(createLocal);
+
+    hooks.fn                    = proto;
+    hooks.min                   = min;
+    hooks.max                   = max;
+    hooks.now                   = now;
+    hooks.utc                   = createUTC;
+    hooks.unix                  = createUnix;
+    hooks.months                = listMonths;
+    hooks.isDate                = isDate;
+    hooks.locale                = getSetGlobalLocale;
+    hooks.invalid               = createInvalid;
+    hooks.duration              = createDuration;
+    hooks.isMoment              = isMoment;
+    hooks.weekdays              = listWeekdays;
+    hooks.parseZone             = createInZone;
+    hooks.localeData            = getLocale;
+    hooks.isDuration            = isDuration;
+    hooks.monthsShort           = listMonthsShort;
+    hooks.weekdaysMin           = listWeekdaysMin;
+    hooks.defineLocale          = defineLocale;
+    hooks.updateLocale          = updateLocale;
+    hooks.locales               = listLocales;
+    hooks.weekdaysShort         = listWeekdaysShort;
+    hooks.normalizeUnits        = normalizeUnits;
+    hooks.relativeTimeRounding  = getSetRelativeTimeRounding;
+    hooks.relativeTimeThreshold = getSetRelativeTimeThreshold;
+    hooks.calendarFormat        = getCalendarFormat;
+    hooks.prototype             = proto;
+
+    // currently HTML5 input type only supports 24-hour formats
+    hooks.HTML5_FMT = {
+        DATETIME_LOCAL: 'YYYY-MM-DDTHH:mm',             // <input type="datetime-local" />
+        DATETIME_LOCAL_SECONDS: 'YYYY-MM-DDTHH:mm:ss',  // <input type="datetime-local" step="1" />
+        DATETIME_LOCAL_MS: 'YYYY-MM-DDTHH:mm:ss.SSS',   // <input type="datetime-local" step="0.001" />
+        DATE: 'YYYY-MM-DD',                             // <input type="date" />
+        TIME: 'HH:mm',                                  // <input type="time" />
+        TIME_SECONDS: 'HH:mm:ss',                       // <input type="time" step="1" />
+        TIME_MS: 'HH:mm:ss.SSS',                        // <input type="time" step="0.001" />
+        WEEK: 'YYYY-[W]WW',                             // <input type="week" />
+        MONTH: 'YYYY-MM'                                // <input type="month" />
+    };
+
+    return hooks;
+
+})));
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)(module)))
+
+/***/ }),
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./af": 26,
-	"./af.js": 26,
-	"./ar": 27,
-	"./ar-dz": 28,
-	"./ar-dz.js": 28,
-	"./ar-kw": 29,
-	"./ar-kw.js": 29,
-	"./ar-ly": 30,
-	"./ar-ly.js": 30,
-	"./ar-ma": 31,
-	"./ar-ma.js": 31,
-	"./ar-sa": 32,
-	"./ar-sa.js": 32,
-	"./ar-tn": 33,
-	"./ar-tn.js": 33,
-	"./ar.js": 27,
-	"./az": 34,
-	"./az.js": 34,
-	"./be": 35,
-	"./be.js": 35,
-	"./bg": 36,
-	"./bg.js": 36,
-	"./bm": 37,
-	"./bm.js": 37,
-	"./bn": 38,
-	"./bn.js": 38,
-	"./bo": 39,
-	"./bo.js": 39,
-	"./br": 40,
-	"./br.js": 40,
-	"./bs": 41,
-	"./bs.js": 41,
-	"./ca": 42,
-	"./ca.js": 42,
-	"./cs": 43,
-	"./cs.js": 43,
-	"./cv": 44,
-	"./cv.js": 44,
-	"./cy": 45,
-	"./cy.js": 45,
-	"./da": 46,
-	"./da.js": 46,
-	"./de": 47,
-	"./de-at": 48,
-	"./de-at.js": 48,
-	"./de-ch": 49,
-	"./de-ch.js": 49,
-	"./de.js": 47,
-	"./dv": 50,
-	"./dv.js": 50,
-	"./el": 51,
-	"./el.js": 51,
-	"./en-au": 52,
-	"./en-au.js": 52,
-	"./en-ca": 53,
-	"./en-ca.js": 53,
-	"./en-gb": 54,
-	"./en-gb.js": 54,
-	"./en-ie": 55,
-	"./en-ie.js": 55,
-	"./en-il": 56,
-	"./en-il.js": 56,
-	"./en-nz": 57,
-	"./en-nz.js": 57,
-	"./eo": 58,
-	"./eo.js": 58,
-	"./es": 59,
-	"./es-do": 60,
-	"./es-do.js": 60,
-	"./es-us": 61,
-	"./es-us.js": 61,
-	"./es.js": 59,
-	"./et": 62,
-	"./et.js": 62,
-	"./eu": 63,
-	"./eu.js": 63,
-	"./fa": 64,
-	"./fa.js": 64,
-	"./fi": 65,
-	"./fi.js": 65,
-	"./fo": 66,
-	"./fo.js": 66,
-	"./fr": 67,
-	"./fr-ca": 68,
-	"./fr-ca.js": 68,
-	"./fr-ch": 69,
-	"./fr-ch.js": 69,
-	"./fr.js": 67,
-	"./fy": 70,
-	"./fy.js": 70,
-	"./gd": 71,
-	"./gd.js": 71,
-	"./gl": 72,
-	"./gl.js": 72,
-	"./gom-latn": 73,
-	"./gom-latn.js": 73,
-	"./gu": 74,
-	"./gu.js": 74,
-	"./he": 75,
-	"./he.js": 75,
-	"./hi": 76,
-	"./hi.js": 76,
-	"./hr": 77,
-	"./hr.js": 77,
-	"./hu": 78,
-	"./hu.js": 78,
-	"./hy-am": 79,
-	"./hy-am.js": 79,
-	"./id": 80,
-	"./id.js": 80,
-	"./is": 81,
-	"./is.js": 81,
-	"./it": 82,
-	"./it.js": 82,
-	"./ja": 83,
-	"./ja.js": 83,
-	"./jv": 84,
-	"./jv.js": 84,
-	"./ka": 85,
-	"./ka.js": 85,
-	"./kk": 86,
-	"./kk.js": 86,
-	"./km": 87,
-	"./km.js": 87,
-	"./kn": 88,
-	"./kn.js": 88,
-	"./ko": 89,
-	"./ko.js": 89,
-	"./ky": 90,
-	"./ky.js": 90,
-	"./lb": 91,
-	"./lb.js": 91,
-	"./lo": 92,
-	"./lo.js": 92,
-	"./lt": 93,
-	"./lt.js": 93,
-	"./lv": 94,
-	"./lv.js": 94,
-	"./me": 95,
-	"./me.js": 95,
-	"./mi": 96,
-	"./mi.js": 96,
-	"./mk": 97,
-	"./mk.js": 97,
-	"./ml": 98,
-	"./ml.js": 98,
-	"./mn": 99,
-	"./mn.js": 99,
-	"./mr": 100,
-	"./mr.js": 100,
-	"./ms": 101,
-	"./ms-my": 102,
-	"./ms-my.js": 102,
-	"./ms.js": 101,
-	"./mt": 103,
-	"./mt.js": 103,
-	"./my": 104,
-	"./my.js": 104,
-	"./nb": 105,
-	"./nb.js": 105,
-	"./ne": 106,
-	"./ne.js": 106,
-	"./nl": 107,
-	"./nl-be": 108,
-	"./nl-be.js": 108,
-	"./nl.js": 107,
-	"./nn": 109,
-	"./nn.js": 109,
-	"./pa-in": 110,
-	"./pa-in.js": 110,
-	"./pl": 111,
-	"./pl.js": 111,
-	"./pt": 112,
-	"./pt-br": 113,
-	"./pt-br.js": 113,
-	"./pt.js": 112,
-	"./ro": 114,
-	"./ro.js": 114,
-	"./ru": 115,
-	"./ru.js": 115,
-	"./sd": 116,
-	"./sd.js": 116,
-	"./se": 117,
-	"./se.js": 117,
-	"./si": 118,
-	"./si.js": 118,
-	"./sk": 119,
-	"./sk.js": 119,
-	"./sl": 120,
-	"./sl.js": 120,
-	"./sq": 121,
-	"./sq.js": 121,
-	"./sr": 122,
-	"./sr-cyrl": 123,
-	"./sr-cyrl.js": 123,
-	"./sr.js": 122,
-	"./ss": 124,
-	"./ss.js": 124,
-	"./sv": 125,
-	"./sv.js": 125,
-	"./sw": 126,
-	"./sw.js": 126,
-	"./ta": 127,
-	"./ta.js": 127,
-	"./te": 128,
-	"./te.js": 128,
-	"./tet": 129,
-	"./tet.js": 129,
-	"./tg": 130,
-	"./tg.js": 130,
-	"./th": 131,
-	"./th.js": 131,
-	"./tl-ph": 132,
-	"./tl-ph.js": 132,
-	"./tlh": 133,
-	"./tlh.js": 133,
-	"./tr": 134,
-	"./tr.js": 134,
-	"./tzl": 135,
-	"./tzl.js": 135,
-	"./tzm": 136,
-	"./tzm-latn": 137,
-	"./tzm-latn.js": 137,
-	"./tzm.js": 136,
-	"./ug-cn": 138,
-	"./ug-cn.js": 138,
-	"./uk": 139,
-	"./uk.js": 139,
-	"./ur": 140,
-	"./ur.js": 140,
-	"./uz": 141,
-	"./uz-latn": 142,
-	"./uz-latn.js": 142,
-	"./uz.js": 141,
-	"./vi": 143,
-	"./vi.js": 143,
-	"./x-pseudo": 144,
-	"./x-pseudo.js": 144,
-	"./yo": 145,
-	"./yo.js": 145,
-	"./zh-cn": 146,
-	"./zh-cn.js": 146,
-	"./zh-hk": 147,
-	"./zh-hk.js": 147,
-	"./zh-tw": 148,
-	"./zh-tw.js": 148
+	"./af": 28,
+	"./af.js": 28,
+	"./ar": 29,
+	"./ar-dz": 30,
+	"./ar-dz.js": 30,
+	"./ar-kw": 31,
+	"./ar-kw.js": 31,
+	"./ar-ly": 32,
+	"./ar-ly.js": 32,
+	"./ar-ma": 33,
+	"./ar-ma.js": 33,
+	"./ar-sa": 34,
+	"./ar-sa.js": 34,
+	"./ar-tn": 35,
+	"./ar-tn.js": 35,
+	"./ar.js": 29,
+	"./az": 36,
+	"./az.js": 36,
+	"./be": 37,
+	"./be.js": 37,
+	"./bg": 38,
+	"./bg.js": 38,
+	"./bm": 39,
+	"./bm.js": 39,
+	"./bn": 40,
+	"./bn.js": 40,
+	"./bo": 41,
+	"./bo.js": 41,
+	"./br": 42,
+	"./br.js": 42,
+	"./bs": 43,
+	"./bs.js": 43,
+	"./ca": 44,
+	"./ca.js": 44,
+	"./cs": 45,
+	"./cs.js": 45,
+	"./cv": 46,
+	"./cv.js": 46,
+	"./cy": 47,
+	"./cy.js": 47,
+	"./da": 48,
+	"./da.js": 48,
+	"./de": 49,
+	"./de-at": 50,
+	"./de-at.js": 50,
+	"./de-ch": 51,
+	"./de-ch.js": 51,
+	"./de.js": 49,
+	"./dv": 52,
+	"./dv.js": 52,
+	"./el": 53,
+	"./el.js": 53,
+	"./en-au": 54,
+	"./en-au.js": 54,
+	"./en-ca": 55,
+	"./en-ca.js": 55,
+	"./en-gb": 56,
+	"./en-gb.js": 56,
+	"./en-ie": 57,
+	"./en-ie.js": 57,
+	"./en-il": 58,
+	"./en-il.js": 58,
+	"./en-nz": 59,
+	"./en-nz.js": 59,
+	"./eo": 60,
+	"./eo.js": 60,
+	"./es": 61,
+	"./es-do": 62,
+	"./es-do.js": 62,
+	"./es-us": 63,
+	"./es-us.js": 63,
+	"./es.js": 61,
+	"./et": 64,
+	"./et.js": 64,
+	"./eu": 65,
+	"./eu.js": 65,
+	"./fa": 66,
+	"./fa.js": 66,
+	"./fi": 67,
+	"./fi.js": 67,
+	"./fo": 68,
+	"./fo.js": 68,
+	"./fr": 69,
+	"./fr-ca": 70,
+	"./fr-ca.js": 70,
+	"./fr-ch": 71,
+	"./fr-ch.js": 71,
+	"./fr.js": 69,
+	"./fy": 72,
+	"./fy.js": 72,
+	"./gd": 73,
+	"./gd.js": 73,
+	"./gl": 74,
+	"./gl.js": 74,
+	"./gom-latn": 75,
+	"./gom-latn.js": 75,
+	"./gu": 76,
+	"./gu.js": 76,
+	"./he": 77,
+	"./he.js": 77,
+	"./hi": 78,
+	"./hi.js": 78,
+	"./hr": 79,
+	"./hr.js": 79,
+	"./hu": 80,
+	"./hu.js": 80,
+	"./hy-am": 81,
+	"./hy-am.js": 81,
+	"./id": 82,
+	"./id.js": 82,
+	"./is": 83,
+	"./is.js": 83,
+	"./it": 84,
+	"./it.js": 84,
+	"./ja": 85,
+	"./ja.js": 85,
+	"./jv": 86,
+	"./jv.js": 86,
+	"./ka": 87,
+	"./ka.js": 87,
+	"./kk": 88,
+	"./kk.js": 88,
+	"./km": 89,
+	"./km.js": 89,
+	"./kn": 90,
+	"./kn.js": 90,
+	"./ko": 91,
+	"./ko.js": 91,
+	"./ky": 92,
+	"./ky.js": 92,
+	"./lb": 93,
+	"./lb.js": 93,
+	"./lo": 94,
+	"./lo.js": 94,
+	"./lt": 95,
+	"./lt.js": 95,
+	"./lv": 96,
+	"./lv.js": 96,
+	"./me": 97,
+	"./me.js": 97,
+	"./mi": 98,
+	"./mi.js": 98,
+	"./mk": 99,
+	"./mk.js": 99,
+	"./ml": 100,
+	"./ml.js": 100,
+	"./mn": 101,
+	"./mn.js": 101,
+	"./mr": 102,
+	"./mr.js": 102,
+	"./ms": 103,
+	"./ms-my": 104,
+	"./ms-my.js": 104,
+	"./ms.js": 103,
+	"./mt": 105,
+	"./mt.js": 105,
+	"./my": 106,
+	"./my.js": 106,
+	"./nb": 107,
+	"./nb.js": 107,
+	"./ne": 108,
+	"./ne.js": 108,
+	"./nl": 109,
+	"./nl-be": 110,
+	"./nl-be.js": 110,
+	"./nl.js": 109,
+	"./nn": 111,
+	"./nn.js": 111,
+	"./pa-in": 112,
+	"./pa-in.js": 112,
+	"./pl": 113,
+	"./pl.js": 113,
+	"./pt": 114,
+	"./pt-br": 115,
+	"./pt-br.js": 115,
+	"./pt.js": 114,
+	"./ro": 116,
+	"./ro.js": 116,
+	"./ru": 117,
+	"./ru.js": 117,
+	"./sd": 118,
+	"./sd.js": 118,
+	"./se": 119,
+	"./se.js": 119,
+	"./si": 120,
+	"./si.js": 120,
+	"./sk": 121,
+	"./sk.js": 121,
+	"./sl": 122,
+	"./sl.js": 122,
+	"./sq": 123,
+	"./sq.js": 123,
+	"./sr": 124,
+	"./sr-cyrl": 125,
+	"./sr-cyrl.js": 125,
+	"./sr.js": 124,
+	"./ss": 126,
+	"./ss.js": 126,
+	"./sv": 127,
+	"./sv.js": 127,
+	"./sw": 128,
+	"./sw.js": 128,
+	"./ta": 129,
+	"./ta.js": 129,
+	"./te": 130,
+	"./te.js": 130,
+	"./tet": 131,
+	"./tet.js": 131,
+	"./tg": 132,
+	"./tg.js": 132,
+	"./th": 133,
+	"./th.js": 133,
+	"./tl-ph": 134,
+	"./tl-ph.js": 134,
+	"./tlh": 135,
+	"./tlh.js": 135,
+	"./tr": 136,
+	"./tr.js": 136,
+	"./tzl": 137,
+	"./tzl.js": 137,
+	"./tzm": 138,
+	"./tzm-latn": 139,
+	"./tzm-latn.js": 139,
+	"./tzm.js": 138,
+	"./ug-cn": 140,
+	"./ug-cn.js": 140,
+	"./uk": 141,
+	"./uk.js": 141,
+	"./ur": 142,
+	"./ur.js": 142,
+	"./uz": 143,
+	"./uz-latn": 144,
+	"./uz-latn.js": 144,
+	"./uz.js": 143,
+	"./vi": 145,
+	"./vi.js": 145,
+	"./x-pseudo": 146,
+	"./x-pseudo.js": 146,
+	"./yo": 147,
+	"./yo.js": 147,
+	"./zh-cn": 148,
+	"./zh-cn.js": 148,
+	"./zh-hk": 149,
+	"./zh-hk.js": 149,
+	"./zh-tw": 150,
+	"./zh-tw.js": 150
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -54470,10 +56172,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 185;
+webpackContext.id = 195;
 
 /***/ }),
-/* 186 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54481,29 +56183,29 @@ webpackContext.id = 185;
 
 // these are only required for IE < 9
 // maybe move to IE-specific distro?
-__webpack_require__(187);
-__webpack_require__(188);
-__webpack_require__(189);
-__webpack_require__(190);
-__webpack_require__(191);
-__webpack_require__(192);
-__webpack_require__(193);
-__webpack_require__(194);
-__webpack_require__(195);
+__webpack_require__(197);
+__webpack_require__(198);
+__webpack_require__(199);
+__webpack_require__(200);
+__webpack_require__(201);
+__webpack_require__(202);
+__webpack_require__(203);
+__webpack_require__(204);
+__webpack_require__(205);
 
-var core = __webpack_require__(196);
-var index = __webpack_require__(10);
-var use = __webpack_require__(221);
+var core = __webpack_require__(206);
+var index = __webpack_require__(11);
+var use = __webpack_require__(231);
 
 core.use = use.bind(core);
 core.find = index.find;
-core.val = __webpack_require__(222);
+core.val = __webpack_require__(232);
 
 module.exports = core;
 
 
 /***/ }),
-/* 187 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54530,7 +56232,7 @@ if (!Function.prototype.bind) {
 
 
 /***/ }),
-/* 188 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54551,7 +56253,7 @@ if (!Array.prototype.forEach) {
 
 
 /***/ }),
-/* 189 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54591,7 +56293,7 @@ if (!Array.prototype.map) {
 
 
 /***/ }),
-/* 190 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54609,7 +56311,7 @@ if (!Array.prototype.filter) {
 
 
 /***/ }),
-/* 191 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54621,7 +56323,7 @@ Array.isArray || (Array.isArray = function (a) {
 
 
 /***/ }),
-/* 192 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54651,7 +56353,7 @@ if (!Array.prototype.indexOf) {
 
 
 /***/ }),
-/* 193 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54693,7 +56395,7 @@ if (!Array.prototype.some) {
 
 
 /***/ }),
-/* 194 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54707,7 +56409,7 @@ if (!String.prototype.trim) {
 
 
 /***/ }),
-/* 195 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54753,16 +56455,16 @@ if (!Object.keys) {
 
 
 /***/ }),
-/* 196 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var index = __webpack_require__(10);
-var input = __webpack_require__(197);
-var inline = __webpack_require__(220);
-var isInput = __webpack_require__(12);
+var index = __webpack_require__(11);
+var input = __webpack_require__(207);
+var inline = __webpack_require__(230);
+var isInput = __webpack_require__(13);
 
 function core (elem, options) {
   var cal;
@@ -54785,20 +56487,20 @@ module.exports = core;
 
 
 /***/ }),
-/* 197 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var crossvent = __webpack_require__(6);
-var bullseye = __webpack_require__(200);
-var throttle = __webpack_require__(209);
-var clone = __webpack_require__(152);
-var defaults = __webpack_require__(153);
-var calendar = __webpack_require__(154);
-var momentum = __webpack_require__(4);
-var classes = __webpack_require__(155);
+var crossvent = __webpack_require__(7);
+var bullseye = __webpack_require__(210);
+var throttle = __webpack_require__(219);
+var clone = __webpack_require__(154);
+var defaults = __webpack_require__(155);
+var calendar = __webpack_require__(156);
+var momentum = __webpack_require__(5);
+var classes = __webpack_require__(157);
 
 function inputCalendar (input, calendarOptions) {
   var o = calendarOptions || {};
@@ -54920,7 +56622,7 @@ module.exports = inputCalendar;
 
 
 /***/ }),
-/* 198 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -54972,10 +56674,10 @@ function CustomEvent (type, params) {
   return e;
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 199 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54993,18 +56695,18 @@ for (eventname in global) {
 
 module.exports = eventmap;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 200 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var crossvent = __webpack_require__(6);
-var throttle = __webpack_require__(149);
-var tailormade = __webpack_require__(201);
+var crossvent = __webpack_require__(7);
+var throttle = __webpack_require__(151);
+var tailormade = __webpack_require__(211);
 
 function bullseye (el, target, options) {
   var o = options;
@@ -55090,16 +56792,16 @@ module.exports = bullseye;
 
 
 /***/ }),
-/* 201 */
+/* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-var sell = __webpack_require__(202);
-var crossvent = __webpack_require__(6);
-var seleccion = __webpack_require__(203);
-var throttle = __webpack_require__(149);
+var sell = __webpack_require__(212);
+var crossvent = __webpack_require__(7);
+var seleccion = __webpack_require__(213);
+var throttle = __webpack_require__(151);
 var getSelection = seleccion.get;
 var props = [
   'direction',
@@ -55271,10 +56973,10 @@ function tailormade (el, options) {
 
 module.exports = tailormade;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 202 */
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55377,14 +57079,14 @@ module.exports = sell;
 
 
 /***/ }),
-/* 203 */
+/* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var getSelection = __webpack_require__(150);
-var setSelection = __webpack_require__(208);
+var getSelection = __webpack_require__(152);
+var setSelection = __webpack_require__(218);
 
 module.exports = {
   get: getSelection,
@@ -55393,7 +57095,7 @@ module.exports = {
 
 
 /***/ }),
-/* 204 */
+/* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55405,10 +57107,10 @@ function getSelectionRaw () {
 
 module.exports = getSelectionRaw;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 205 */
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55427,13 +57129,13 @@ module.exports = getSelectionNullOp;
 
 
 /***/ }),
-/* 206 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-var rangeToTextRange = __webpack_require__(151);
+var rangeToTextRange = __webpack_require__(153);
 var doc = global.document;
 var body = doc.body;
 var GetSelectionProto = GetSelection.prototype;
@@ -55682,10 +57384,10 @@ function getSelection () {
 
 module.exports = getSelection;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 207 */
+/* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55721,14 +57423,14 @@ module.exports = {
 
 
 /***/ }),
-/* 208 */
+/* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-var getSelection = __webpack_require__(150);
-var rangeToTextRange = __webpack_require__(151);
+var getSelection = __webpack_require__(152);
+var rangeToTextRange = __webpack_require__(153);
 var doc = global.document;
 
 function setSelection (p) {
@@ -55761,10 +57463,10 @@ function setSelection (p) {
 
 module.exports = setSelection;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 209 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55796,14 +57498,14 @@ module.exports = function throttle (fn, boundary) {
 
 
 /***/ }),
-/* 210 */
+/* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var atoa = __webpack_require__(211);
-var debounce = __webpack_require__(212);
+var atoa = __webpack_require__(221);
+var debounce = __webpack_require__(222);
 
 module.exports = function emitter (thing, options) {
   var opts = options || {};
@@ -55857,20 +57559,20 @@ module.exports = function emitter (thing, options) {
 
 
 /***/ }),
-/* 211 */
+/* 221 */
 /***/ (function(module, exports) {
 
 module.exports = function atoa (a, n) { return Array.prototype.slice.call(a, n); }
 
 
 /***/ }),
-/* 212 */
+/* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var ticky = __webpack_require__(213);
+var ticky = __webpack_require__(223);
 
 module.exports = function debounce (fn, args, ctx) {
   if (!fn) { return; }
@@ -55881,7 +57583,7 @@ module.exports = function debounce (fn, args, ctx) {
 
 
 /***/ }),
-/* 213 */
+/* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {var si = typeof setImmediate === 'function', tick;
@@ -55892,10 +57594,10 @@ if (si) {
 }
 
 module.exports = tick;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(214).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(224).setImmediate))
 
 /***/ }),
-/* 214 */
+/* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var apply = Function.prototype.apply;
@@ -55948,7 +57650,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(215);
+__webpack_require__(225);
 // On some exotic environments, it's not clear which object `setimmeidate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -55959,10 +57661,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 215 */
+/* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -56152,10 +57854,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(216)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(226)))
 
 /***/ }),
-/* 216 */
+/* 226 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -56345,7 +58047,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 217 */
+/* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -56370,7 +58072,7 @@ module.exports = dom;
 
 
 /***/ }),
-/* 218 */
+/* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -56387,7 +58089,7 @@ module.exports = text;
 
 
 /***/ }),
-/* 219 */
+/* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -56399,13 +58101,13 @@ module.exports = noop;
 
 
 /***/ }),
-/* 220 */
+/* 230 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var calendar = __webpack_require__(154);
+var calendar = __webpack_require__(156);
 
 function inline (elem, calendarOptions) {
   var o = calendarOptions || {};
@@ -56422,13 +58124,13 @@ module.exports = inline;
 
 
 /***/ }),
-/* 221 */
+/* 231 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var momentum = __webpack_require__(4);
+var momentum = __webpack_require__(5);
 
 function use (moment) {
   this.moment = momentum.moment = moment;
@@ -56438,15 +58140,15 @@ module.exports = use;
 
 
 /***/ }),
-/* 222 */
+/* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var index = __webpack_require__(10);
-var parse = __webpack_require__(11);
-var association = __webpack_require__(223);
+var index = __webpack_require__(11);
+var parse = __webpack_require__(12);
+var association = __webpack_require__(233);
 
 function compareBuilder (compare) {
   return function factory (value) {
@@ -56526,13 +58228,13 @@ module.exports = {
 
 
 /***/ }),
-/* 223 */
+/* 233 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var isInput = __webpack_require__(12);
+var isInput = __webpack_require__(13);
 var bindings = {};
 
 function has (source, target) {
@@ -56581,7 +58283,7 @@ module.exports = {
 
 
 /***/ }),
-/* 224 */
+/* 234 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -56591,44 +58293,2965 @@ module.exports = {
  * Load sprinkle dependencies
  */
 
-__webpack_require__(225);
-__webpack_require__(232);
+__webpack_require__(235);
+__webpack_require__(248);
 
 /**
  * Load sprinkles
  */
-__webpack_require__(236);
-__webpack_require__(237);
-__webpack_require__(238);
-__webpack_require__(240);
-__webpack_require__(241);
-__webpack_require__(242);
-__webpack_require__(243);
-__webpack_require__(244);
-__webpack_require__(245);
-__webpack_require__(246);
-__webpack_require__(247);
-__webpack_require__(248);
-__webpack_require__(249);
-__webpack_require__(255);
+__webpack_require__(252);
+__webpack_require__(253);
+__webpack_require__(254);
+__webpack_require__(256);
+__webpack_require__(257);
+__webpack_require__(258);
+__webpack_require__(259);
+__webpack_require__(260);
+__webpack_require__(261);
+__webpack_require__(262);
+__webpack_require__(263);
+__webpack_require__(264);
+__webpack_require__(265);
+__webpack_require__(270);
 
 /***/ }),
-/* 225 */
+/* 235 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(226);
-__webpack_require__(227);
-__webpack_require__(156);
-__webpack_require__(228);
-__webpack_require__(229);
-__webpack_require__(25);
-__webpack_require__(231);
+__webpack_require__(236);
+__webpack_require__(237);
+__webpack_require__(238);
+__webpack_require__(158);
+__webpack_require__(239);
+__webpack_require__(159);
+__webpack_require__(27);
+__webpack_require__(240);
 
 /***/ }),
-/* 226 */
+/* 236 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * fullPage 2.9.6
+ * https://github.com/alvarotrigo/fullPage.js
+ * @license MIT licensed
+ *
+ * Copyright (C) 2015 alvarotrigo.com - A project by Alvaro Trigo
+ */
+(function(global, factory) {
+    'use strict';
+    if (true) {
+        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1)], __WEBPACK_AMD_DEFINE_RESULT__ = (function($) {
+          return factory($, global, global.document, global.Math);
+        }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else if (typeof exports === "object" && exports) {
+        module.exports = factory(require('jquery'), global, global.document, global.Math);
+    } else {
+        factory(jQuery, global, global.document, global.Math);
+    }
+})(typeof window !== 'undefined' ? window : this, function($, window, document, Math, undefined) {
+    'use strict';
+
+    // keeping central set of classnames and selectors
+    var WRAPPER =               'fullpage-wrapper';
+    var WRAPPER_SEL =           '.' + WRAPPER;
+
+    // slimscroll
+    var SCROLLABLE =            'fp-scrollable';
+    var SCROLLABLE_SEL =        '.' + SCROLLABLE;
+
+    // util
+    var RESPONSIVE =            'fp-responsive';
+    var NO_TRANSITION =         'fp-notransition';
+    var DESTROYED =             'fp-destroyed';
+    var ENABLED =               'fp-enabled';
+    var VIEWING_PREFIX =        'fp-viewing';
+    var ACTIVE =                'active';
+    var ACTIVE_SEL =            '.' + ACTIVE;
+    var COMPLETELY =            'fp-completely';
+    var COMPLETELY_SEL =        '.' + COMPLETELY;
+
+    // section
+    var SECTION_DEFAULT_SEL =   '.section';
+    var SECTION =               'fp-section';
+    var SECTION_SEL =           '.' + SECTION;
+    var SECTION_ACTIVE_SEL =    SECTION_SEL + ACTIVE_SEL;
+    var SECTION_FIRST_SEL =     SECTION_SEL + ':first';
+    var SECTION_LAST_SEL =      SECTION_SEL + ':last';
+    var TABLE_CELL =            'fp-tableCell';
+    var TABLE_CELL_SEL =        '.' + TABLE_CELL;
+    var AUTO_HEIGHT =           'fp-auto-height';
+    var AUTO_HEIGHT_SEL =       '.fp-auto-height';
+    var NORMAL_SCROLL =         'fp-normal-scroll';
+    var NORMAL_SCROLL_SEL =     '.fp-normal-scroll';
+
+    // section nav
+    var SECTION_NAV =           'fp-nav';
+    var SECTION_NAV_SEL =       '#' + SECTION_NAV;
+    var SECTION_NAV_TOOLTIP =   'fp-tooltip';
+    var SECTION_NAV_TOOLTIP_SEL='.'+SECTION_NAV_TOOLTIP;
+    var SHOW_ACTIVE_TOOLTIP =   'fp-show-active';
+
+    // slide
+    var SLIDE_DEFAULT_SEL =     '.slide';
+    var SLIDE =                 'fp-slide';
+    var SLIDE_SEL =             '.' + SLIDE;
+    var SLIDE_ACTIVE_SEL =      SLIDE_SEL + ACTIVE_SEL;
+    var SLIDES_WRAPPER =        'fp-slides';
+    var SLIDES_WRAPPER_SEL =    '.' + SLIDES_WRAPPER;
+    var SLIDES_CONTAINER =      'fp-slidesContainer';
+    var SLIDES_CONTAINER_SEL =  '.' + SLIDES_CONTAINER;
+    var TABLE =                 'fp-table';
+
+    // slide nav
+    var SLIDES_NAV =            'fp-slidesNav';
+    var SLIDES_NAV_SEL =        '.' + SLIDES_NAV;
+    var SLIDES_NAV_LINK_SEL =   SLIDES_NAV_SEL + ' a';
+    var SLIDES_ARROW =          'fp-controlArrow';
+    var SLIDES_ARROW_SEL =      '.' + SLIDES_ARROW;
+    var SLIDES_PREV =           'fp-prev';
+    var SLIDES_PREV_SEL =       '.' + SLIDES_PREV;
+    var SLIDES_ARROW_PREV =     SLIDES_ARROW + ' ' + SLIDES_PREV;
+    var SLIDES_ARROW_PREV_SEL = SLIDES_ARROW_SEL + SLIDES_PREV_SEL;
+    var SLIDES_NEXT =           'fp-next';
+    var SLIDES_NEXT_SEL =       '.' + SLIDES_NEXT;
+    var SLIDES_ARROW_NEXT =     SLIDES_ARROW + ' ' + SLIDES_NEXT;
+    var SLIDES_ARROW_NEXT_SEL = SLIDES_ARROW_SEL + SLIDES_NEXT_SEL;
+
+    var $window = $(window);
+    var $document = $(document);
+
+    $.fn.fullpage = function(options) {
+        //only once my friend!
+        if($('html').hasClass(ENABLED)){ displayWarnings(); return; }
+
+        // common jQuery objects
+        var $htmlBody = $('html, body');
+        var $body = $('body');
+
+        var FP = $.fn.fullpage;
+
+        // Creating some defaults, extending them with any options that were provided
+        options = $.extend({
+            //navigation
+            menu: false,
+            anchors:[],
+            lockAnchors: false,
+            navigation: false,
+            navigationPosition: 'right',
+            navigationTooltips: [],
+            showActiveTooltip: false,
+            slidesNavigation: false,
+            slidesNavPosition: 'bottom',
+            scrollBar: false,
+            hybrid: false,
+
+            //scrolling
+            css3: true,
+            scrollingSpeed: 700,
+            autoScrolling: true,
+            fitToSection: true,
+            fitToSectionDelay: 1000,
+            easing: 'easeInOutCubic',
+            easingcss3: 'ease',
+            loopBottom: false,
+            loopTop: false,
+            loopHorizontal: true,
+            continuousVertical: false,
+            continuousHorizontal: false,
+            scrollHorizontally: false,
+            interlockedSlides: false,
+            dragAndMove: false,
+            offsetSections: false,
+            resetSliders: false,
+            fadingEffect: false,
+            normalScrollElements: null,
+            scrollOverflow: false,
+            scrollOverflowReset: false,
+            scrollOverflowHandler: $.fn.fp_scrolloverflow ? $.fn.fp_scrolloverflow.iscrollHandler : null,
+            scrollOverflowOptions: null,
+            touchSensitivity: 5,
+            normalScrollElementTouchThreshold: 5,
+            bigSectionsDestination: null,
+
+            //Accessibility
+            keyboardScrolling: true,
+            animateAnchor: true,
+            recordHistory: true,
+
+            //design
+            controlArrows: true,
+            controlArrowColor: '#fff',
+            verticalCentered: true,
+            sectionsColor : [],
+            paddingTop: 0,
+            paddingBottom: 0,
+            fixedElements: null,
+            responsive: 0, //backwards compabitility with responsiveWiddth
+            responsiveWidth: 0,
+            responsiveHeight: 0,
+            responsiveSlides: false,
+            parallax: false,
+            parallaxOptions: {
+                type: 'reveal',
+                percentage: 62,
+                property: 'translate'
+            },
+
+            //Custom selectors
+            sectionSelector: SECTION_DEFAULT_SEL,
+            slideSelector: SLIDE_DEFAULT_SEL,
+
+            //events
+            afterLoad: null,
+            onLeave: null,
+            afterRender: null,
+            afterResize: null,
+            afterReBuild: null,
+            afterSlideLoad: null,
+            onSlideLeave: null,
+            afterResponsive: null,
+
+            lazyLoading: true
+        }, options);
+
+        //flag to avoid very fast sliding for landscape sliders
+        var slideMoving = false;
+
+        var isTouchDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|playbook|silk|BlackBerry|BB10|Windows Phone|Tizen|Bada|webOS|IEMobile|Opera Mini)/);
+        var isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0) || (navigator.maxTouchPoints));
+        var container = $(this);
+        var windowsHeight = $window.height();
+        var isResizing = false;
+        var isWindowFocused = true;
+        var lastScrolledDestiny;
+        var lastScrolledSlide;
+        var canScroll = true;
+        var scrollings = [];
+        var controlPressed;
+        var startingSection;
+        var isScrollAllowed = {};
+        isScrollAllowed.m = {  'up':true, 'down':true, 'left':true, 'right':true };
+        isScrollAllowed.k = $.extend(true,{}, isScrollAllowed.m);
+        var MSPointer = getMSPointer();
+        var events = {
+            touchmove: 'ontouchmove' in window ? 'touchmove' :  MSPointer.move,
+            touchstart: 'ontouchstart' in window ? 'touchstart' :  MSPointer.down
+        };
+        var scrollBarHandler;
+
+        // taken from https://github.com/udacity/ud891/blob/gh-pages/lesson2-focus/07-modals-and-keyboard-traps/solution/modal.js
+        var focusableElementsString = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]';
+
+        //timeouts
+        var resizeId;
+        var afterSectionLoadsId;
+        var afterSlideLoadsId;
+        var scrollId;
+        var scrollId2;
+        var keydownId;
+        var originals = $.extend(true, {}, options); //deep copy
+
+        displayWarnings();
+
+        //easeInOutCubic animation included in the plugin
+        $.extend($.easing,{ easeInOutCubic: function (x, t, b, c, d) {if ((t/=d/2) < 1) return c/2*t*t*t + b;return c/2*((t-=2)*t*t + 2) + b;}});
+
+        /**
+        * Sets the autoScroll option.
+        * It changes the scroll bar visibility and the history of the site as a result.
+        */
+        function setAutoScrolling(value, type){
+            //removing the transformation
+            if(!value){
+                silentScroll(0);
+            }
+
+            setVariableState('autoScrolling', value, type);
+
+            var element = $(SECTION_ACTIVE_SEL);
+
+            if(options.autoScrolling && !options.scrollBar){
+                $htmlBody.css({
+                    'overflow' : 'hidden',
+                    'height' : '100%'
+                });
+
+                setRecordHistory(originals.recordHistory, 'internal');
+
+                //for IE touch devices
+                container.css({
+                    '-ms-touch-action': 'none',
+                    'touch-action': 'none'
+                });
+
+                if(element.length){
+                    //moving the container up
+                    silentScroll(element.position().top);
+                }
+
+            }else{
+                $htmlBody.css({
+                    'overflow' : 'visible',
+                    'height' : 'initial'
+                });
+
+                setRecordHistory(false, 'internal');
+
+                //for IE touch devices
+                container.css({
+                    '-ms-touch-action': '',
+                    'touch-action': ''
+                });
+
+                //scrolling the page to the section with no animation
+                if (element.length) {
+                    $htmlBody.scrollTop(element.position().top);
+                }
+            }
+        }
+
+        /**
+        * Defines wheter to record the history for each hash change in the URL.
+        */
+        function setRecordHistory(value, type){
+            setVariableState('recordHistory', value, type);
+        }
+
+        /**
+        * Defines the scrolling speed
+        */
+        function setScrollingSpeed(value, type){
+            setVariableState('scrollingSpeed', value, type);
+        }
+
+        /**
+        * Sets fitToSection
+        */
+        function setFitToSection(value, type){
+            setVariableState('fitToSection', value, type);
+        }
+
+        /**
+        * Sets lockAnchors
+        */
+        function setLockAnchors(value){
+            options.lockAnchors = value;
+        }
+
+        /**
+        * Adds or remove the possibility of scrolling through sections by using the mouse wheel or the trackpad.
+        */
+        function setMouseWheelScrolling(value){
+            if(value){
+                addMouseWheelHandler();
+                addMiddleWheelHandler();
+            }else{
+                removeMouseWheelHandler();
+                removeMiddleWheelHandler();
+            }
+        }
+
+        /**
+        * Adds or remove the possibility of scrolling through sections by using the mouse wheel/trackpad or touch gestures.
+        * Optionally a second parameter can be used to specify the direction for which the action will be applied.
+        *
+        * @param directions string containing the direction or directions separated by comma.
+        */
+        function setAllowScrolling(value, directions){
+            if(typeof directions !== 'undefined'){
+                directions = directions.replace(/ /g,'').split(',');
+
+                $.each(directions, function (index, direction){
+                    setIsScrollAllowed(value, direction, 'm');
+                });
+            }
+            else{
+                setIsScrollAllowed(value, 'all', 'm');
+
+                if(value){
+                    setMouseWheelScrolling(true);
+                    addTouchHandler();
+                }else{
+                    setMouseWheelScrolling(false);
+                    removeTouchHandler();
+                }
+            }
+        }
+
+        /**
+        * Adds or remove the possibility of scrolling through sections by using the keyboard arrow keys
+        */
+        function setKeyboardScrolling(value, directions){
+            if(typeof directions !== 'undefined'){
+                directions = directions.replace(/ /g,'').split(',');
+
+                $.each(directions, function (index, direction){
+                    setIsScrollAllowed(value, direction, 'k');
+                });
+            }else{
+                setIsScrollAllowed(value, 'all', 'k');
+                options.keyboardScrolling = value;
+            }
+        }
+
+        /**
+        * Moves the page up one section.
+        */
+        function moveSectionUp(){
+            var prev = $(SECTION_ACTIVE_SEL).prev(SECTION_SEL);
+
+            //looping to the bottom if there's no more sections above
+            if (!prev.length && (options.loopTop || options.continuousVertical)) {
+                prev = $(SECTION_SEL).last();
+            }
+
+            if (prev.length) {
+                scrollPage(prev, null, true);
+            }
+        }
+
+        /**
+        * Moves the page down one section.
+        */
+        function moveSectionDown(){
+            var next = $(SECTION_ACTIVE_SEL).next(SECTION_SEL);
+
+            //looping to the top if there's no more sections below
+            if(!next.length &&
+                (options.loopBottom || options.continuousVertical)){
+                next = $(SECTION_SEL).first();
+            }
+
+            if(next.length){
+                scrollPage(next, null, false);
+            }
+        }
+
+        /**
+        * Moves the page to the given section and slide with no animation.
+        * Anchors or index positions can be used as params.
+        */
+        function silentMoveTo(sectionAnchor, slideAnchor){
+            setScrollingSpeed (0, 'internal');
+            moveTo(sectionAnchor, slideAnchor);
+            setScrollingSpeed (originals.scrollingSpeed, 'internal');
+        }
+
+        /**
+        * Moves the page to the given section and slide.
+        * Anchors or index positions can be used as params.
+        */
+        function moveTo(sectionAnchor, slideAnchor){
+            var destiny = getSectionByAnchor(sectionAnchor);
+
+            if (typeof slideAnchor !== 'undefined'){
+                scrollPageAndSlide(sectionAnchor, slideAnchor);
+            }else if(destiny.length > 0){
+                scrollPage(destiny);
+            }
+        }
+
+        /**
+        * Slides right the slider of the active section.
+        * Optional `section` param.
+        */
+        function moveSlideRight(section){
+            moveSlide('right', section);
+        }
+
+        /**
+        * Slides left the slider of the active section.
+        * Optional `section` param.
+        */
+        function moveSlideLeft(section){
+            moveSlide('left', section);
+        }
+
+        /**
+         * When resizing is finished, we adjust the slides sizes and positions
+         */
+        function reBuild(resizing){
+            if(container.hasClass(DESTROYED)){ return; }  //nothing to do if the plugin was destroyed
+
+            isResizing = true;
+
+            windowsHeight = $window.height();  //updating global var
+
+            $(SECTION_SEL).each(function(){
+                var slidesWrap = $(this).find(SLIDES_WRAPPER_SEL);
+                var slides = $(this).find(SLIDE_SEL);
+
+                //adjusting the height of the table-cell for IE and Firefox
+                if(options.verticalCentered){
+                    $(this).find(TABLE_CELL_SEL).css('height', getTableHeight($(this)) + 'px');
+                }
+
+                $(this).css('height', windowsHeight + 'px');
+
+                //adjusting the position fo the FULL WIDTH slides...
+                if (slides.length > 1) {
+                    landscapeScroll(slidesWrap, slidesWrap.find(SLIDE_ACTIVE_SEL));
+                }
+            });
+
+            if(options.scrollOverflow){
+                scrollBarHandler.createScrollBarForAll();
+            }
+
+            var activeSection = $(SECTION_ACTIVE_SEL);
+            var sectionIndex = activeSection.index(SECTION_SEL);
+
+            //isn't it the first section?
+            if(sectionIndex){
+                //adjusting the position for the current section
+                silentMoveTo(sectionIndex + 1);
+            }
+
+            isResizing = false;
+            $.isFunction( options.afterResize ) && resizing && options.afterResize.call(container);
+            $.isFunction( options.afterReBuild ) && !resizing && options.afterReBuild.call(container);
+        }
+
+        /**
+        * Turns fullPage.js to normal scrolling mode when the viewport `width` or `height`
+        * are smaller than the set limit values.
+        */
+        function setResponsive(active){
+            var isResponsive = $body.hasClass(RESPONSIVE);
+
+            if(active){
+                if(!isResponsive){
+                    setAutoScrolling(false, 'internal');
+                    setFitToSection(false, 'internal');
+                    $(SECTION_NAV_SEL).hide();
+                    $body.addClass(RESPONSIVE);
+                    $.isFunction( options.afterResponsive ) && options.afterResponsive.call( container, active);
+                }
+            }
+            else if(isResponsive){
+                setAutoScrolling(originals.autoScrolling, 'internal');
+                setFitToSection(originals.autoScrolling, 'internal');
+                $(SECTION_NAV_SEL).show();
+                $body.removeClass(RESPONSIVE);
+                $.isFunction( options.afterResponsive ) && options.afterResponsive.call( container, active);
+            }
+        }
+
+        if($(this).length){
+            //public functions
+            FP.version = '2.9.5';
+            FP.setAutoScrolling = setAutoScrolling;
+            FP.setRecordHistory = setRecordHistory;
+            FP.setScrollingSpeed = setScrollingSpeed;
+            FP.setFitToSection = setFitToSection;
+            FP.setLockAnchors = setLockAnchors;
+            FP.setMouseWheelScrolling = setMouseWheelScrolling;
+            FP.setAllowScrolling = setAllowScrolling;
+            FP.setKeyboardScrolling = setKeyboardScrolling;
+            FP.moveSectionUp = moveSectionUp;
+            FP.moveSectionDown = moveSectionDown;
+            FP.silentMoveTo = silentMoveTo;
+            FP.moveTo = moveTo;
+            FP.moveSlideRight = moveSlideRight;
+            FP.moveSlideLeft = moveSlideLeft;
+            FP.fitToSection = fitToSection;
+            FP.reBuild = reBuild;
+            FP.setResponsive = setResponsive;
+            FP.destroy = destroy;
+
+            //functions we want to share across files but which are not
+            //mean to be used on their own by developers
+            FP.shared ={
+                afterRenderActions: afterRenderActions
+            };
+
+            init();
+
+            bindEvents();
+        }
+
+        function init(){
+            //if css3 is not supported, it will use jQuery animations
+            if(options.css3){
+                options.css3 = support3d();
+            }
+
+            options.scrollBar = options.scrollBar || options.hybrid;
+
+            setOptionsFromDOM();
+            prepareDom();
+            setAllowScrolling(true);
+            setAutoScrolling(options.autoScrolling, 'internal');
+            responsive();
+
+            //setting the class for the body element
+            setBodyClass();
+
+            if(document.readyState === 'complete'){
+                scrollToAnchor();
+            }
+            $window.on('load', scrollToAnchor);
+        }
+
+        function bindEvents(){
+            $window
+                //when scrolling...
+                .on('scroll', scrollHandler)
+
+                //detecting any change on the URL to scroll to the given anchor link
+                //(a way to detect back history button as we play with the hashes on the URL)
+                .on('hashchange', hashChangeHandler)
+
+                //when opening a new tab (ctrl + t), `control` won't be pressed when coming back.
+                .blur(blurHandler)
+
+                //when resizing the site, we adjust the heights of the sections, slimScroll...
+                .resize(resizeHandler);
+
+            $document
+                //Sliding with arrow keys, both, vertical and horizontal
+                .keydown(keydownHandler)
+
+                //to prevent scrolling while zooming
+                .keyup(keyUpHandler)
+
+                //Scrolls to the section when clicking the navigation bullet
+                .on('click touchstart', SECTION_NAV_SEL + ' a', sectionBulletHandler)
+
+                //Scrolls the slider to the given slide destination for the given section
+                .on('click touchstart', SLIDES_NAV_LINK_SEL, slideBulletHandler)
+
+                .on('click', SECTION_NAV_TOOLTIP_SEL, tooltipTextHandler);
+
+            //Scrolling horizontally when clicking on the slider controls.
+            $(SECTION_SEL).on('click touchstart', SLIDES_ARROW_SEL, slideArrowHandler);
+
+            /**
+            * Applying normalScroll elements.
+            * Ignoring the scrolls over the specified selectors.
+            */
+            if(options.normalScrollElements){
+                $document.on('mouseenter touchstart', options.normalScrollElements, function () {
+                    setAllowScrolling(false);
+                });
+
+                $document.on('mouseleave touchend', options.normalScrollElements, function(){
+                    setAllowScrolling(true);
+                });
+            }
+        }
+
+        /**
+        * Setting options from DOM elements if they are not provided.
+        */
+        function setOptionsFromDOM(){
+            var sections = container.find(options.sectionSelector);
+
+            //no anchors option? Checking for them in the DOM attributes
+            if(!options.anchors.length){
+                options.anchors = sections.filter('[data-anchor]').map(function(){
+                    return $(this).data('anchor').toString();
+                }).get();
+            }
+
+            //no tooltips option? Checking for them in the DOM attributes
+            if(!options.navigationTooltips.length){
+                options.navigationTooltips = sections.filter('[data-tooltip]').map(function(){
+                    return $(this).data('tooltip').toString();
+                }).get();
+            }
+        }
+
+        /**
+        * Works over the DOM structure to set it up for the current fullpage options.
+        */
+        function prepareDom(){
+            container.css({
+                'height': '100%',
+                'position': 'relative'
+            });
+
+            //adding a class to recognize the container internally in the code
+            container.addClass(WRAPPER);
+            $('html').addClass(ENABLED);
+
+            //due to https://github.com/alvarotrigo/fullPage.js/issues/1502
+            windowsHeight = $window.height();
+
+            container.removeClass(DESTROYED); //in case it was destroyed before initializing it again
+
+            addInternalSelectors();
+
+            //styling the sections / slides / menu
+            $(SECTION_SEL).each(function(index){
+                var section = $(this);
+                var slides = section.find(SLIDE_SEL);
+                var numSlides = slides.length;
+
+                //caching the original styles to add them back on destroy('all')
+                section.data('fp-styles', section.attr('style'));
+
+                styleSection(section, index);
+                styleMenu(section, index);
+
+                // if there's any slide
+                if (numSlides > 0) {
+                    styleSlides(section, slides, numSlides);
+                }else{
+                    if(options.verticalCentered){
+                        addTableClass(section);
+                    }
+                }
+            });
+
+            //fixed elements need to be moved out of the plugin container due to problems with CSS3.
+            if(options.fixedElements && options.css3){
+                $(options.fixedElements).appendTo($body);
+            }
+
+            //vertical centered of the navigation + active bullet
+            if(options.navigation){
+                addVerticalNavigation();
+            }
+
+            enableYoutubeAPI();
+
+            if(options.scrollOverflow){
+                scrollBarHandler = options.scrollOverflowHandler.init(options);
+            }else{
+                afterRenderActions();
+            }
+        }
+
+        /**
+        * Styles the horizontal slides for a section.
+        */
+        function styleSlides(section, slides, numSlides){
+            var sliderWidth = numSlides * 100;
+            var slideWidth = 100 / numSlides;
+
+            slides.wrapAll('<div class="' + SLIDES_CONTAINER + '" />');
+            slides.parent().wrap('<div class="' + SLIDES_WRAPPER + '" />');
+
+            section.find(SLIDES_CONTAINER_SEL).css('width', sliderWidth + '%');
+
+            if(numSlides > 1){
+                if(options.controlArrows){
+                    createSlideArrows(section);
+                }
+
+                if(options.slidesNavigation){
+                    addSlidesNavigation(section, numSlides);
+                }
+            }
+
+            slides.each(function(index) {
+                $(this).css('width', slideWidth + '%');
+
+                if(options.verticalCentered){
+                    addTableClass($(this));
+                }
+            });
+
+            var startingSlide = section.find(SLIDE_ACTIVE_SEL);
+
+            //if the slide won't be an starting point, the default will be the first one
+            //the active section isn't the first one? Is not the first slide of the first section? Then we load that section/slide by default.
+            if( startingSlide.length &&  ($(SECTION_ACTIVE_SEL).index(SECTION_SEL) !== 0 || ($(SECTION_ACTIVE_SEL).index(SECTION_SEL) === 0 && startingSlide.index() !== 0))){
+                silentLandscapeScroll(startingSlide, 'internal');
+            }else{
+                slides.eq(0).addClass(ACTIVE);
+            }
+        }
+
+        /**
+        * Styling vertical sections
+        */
+        function styleSection(section, index){
+            //if no active section is defined, the 1st one will be the default one
+            if(!index && $(SECTION_ACTIVE_SEL).length === 0) {
+                section.addClass(ACTIVE);
+            }
+            startingSection = $(SECTION_ACTIVE_SEL);
+
+            section.css('height', windowsHeight + 'px');
+
+            if(options.paddingTop){
+                section.css('padding-top', options.paddingTop);
+            }
+
+            if(options.paddingBottom){
+                section.css('padding-bottom', options.paddingBottom);
+            }
+
+            if (typeof options.sectionsColor[index] !==  'undefined') {
+                section.css('background-color', options.sectionsColor[index]);
+            }
+
+            if (typeof options.anchors[index] !== 'undefined') {
+                section.attr('data-anchor', options.anchors[index]);
+            }
+        }
+
+        /**
+        * Sets the data-anchor attributes to the menu elements and activates the current one.
+        */
+        function styleMenu(section, index){
+            if (typeof options.anchors[index] !== 'undefined') {
+                //activating the menu / nav element on load
+                if(section.hasClass(ACTIVE)){
+                    activateMenuAndNav(options.anchors[index], index);
+                }
+            }
+
+            //moving the menu outside the main container if it is inside (avoid problems with fixed positions when using CSS3 tranforms)
+            if(options.menu && options.css3 && $(options.menu).closest(WRAPPER_SEL).length){
+                $(options.menu).appendTo($body);
+            }
+        }
+
+        /**
+        * Adds internal classes to be able to provide customizable selectors
+        * keeping the link with the style sheet.
+        */
+        function addInternalSelectors(){
+            container.find(options.sectionSelector).addClass(SECTION);
+            container.find(options.slideSelector).addClass(SLIDE);
+        }
+
+        /**
+        * Creates the control arrows for the given section
+        */
+        function createSlideArrows(section){
+            section.find(SLIDES_WRAPPER_SEL).after('<div class="' + SLIDES_ARROW_PREV + '"></div><div class="' + SLIDES_ARROW_NEXT + '"></div>');
+
+            if(options.controlArrowColor!='#fff'){
+                section.find(SLIDES_ARROW_NEXT_SEL).css('border-color', 'transparent transparent transparent '+options.controlArrowColor);
+                section.find(SLIDES_ARROW_PREV_SEL).css('border-color', 'transparent '+ options.controlArrowColor + ' transparent transparent');
+            }
+
+            if(!options.loopHorizontal){
+                section.find(SLIDES_ARROW_PREV_SEL).hide();
+            }
+        }
+
+        /**
+        * Creates a vertical navigation bar.
+        */
+        function addVerticalNavigation(){
+            $body.append('<div id="' + SECTION_NAV + '"><ul></ul></div>');
+            var nav = $(SECTION_NAV_SEL);
+
+            nav.addClass(function() {
+                return options.showActiveTooltip ? SHOW_ACTIVE_TOOLTIP + ' ' + options.navigationPosition : options.navigationPosition;
+            });
+
+            for (var i = 0; i < $(SECTION_SEL).length; i++) {
+                var link = '';
+                if (options.anchors.length) {
+                    link = options.anchors[i];
+                }
+
+                var li = '<li><a href="#' + link + '"><span></span></a>';
+
+                // Only add tooltip if needed (defined by user)
+                var tooltip = options.navigationTooltips[i];
+
+                if (typeof tooltip !== 'undefined' && tooltip !== '') {
+                    li += '<div class="' + SECTION_NAV_TOOLTIP + ' ' + options.navigationPosition + '">' + tooltip + '</div>';
+                }
+
+                li += '</li>';
+
+                nav.find('ul').append(li);
+            }
+
+            //centering it vertically
+            $(SECTION_NAV_SEL).css('margin-top', '-' + ($(SECTION_NAV_SEL).height()/2) + 'px');
+
+            //activating the current active section
+            $(SECTION_NAV_SEL).find('li').eq($(SECTION_ACTIVE_SEL).index(SECTION_SEL)).find('a').addClass(ACTIVE);
+        }
+
+        /*
+        * Enables the Youtube videos API so we can control their flow if necessary.
+        */
+        function enableYoutubeAPI(){
+            container.find('iframe[src*="youtube.com/embed/"]').each(function(){
+                addURLParam($(this), 'enablejsapi=1');
+            });
+        }
+
+        /**
+        * Adds a new parameter and its value to the `src` of a given element
+        */
+        function addURLParam(element, newParam){
+            var originalSrc = element.attr('src');
+            element.attr('src', originalSrc + getUrlParamSign(originalSrc) + newParam);
+        }
+
+        /*
+        * Returns the prefix sign to use for a new parameter in an existen URL.
+        *
+        * @return {String}  ? | &
+        */
+        function getUrlParamSign(url){
+            return ( !/\?/.test( url ) ) ? '?' : '&';
+        }
+
+        /**
+        * Actions and callbacks to fire afterRender
+        */
+        function afterRenderActions(){
+            var section = $(SECTION_ACTIVE_SEL);
+
+            section.addClass(COMPLETELY);
+
+            lazyLoad(section);
+            playMedia(section);
+
+            if(options.scrollOverflow){
+                options.scrollOverflowHandler.afterLoad();
+            }
+
+            if(isDestinyTheStartingSection()){
+                $.isFunction( options.afterLoad ) && options.afterLoad.call(section, section.data('anchor'), (section.index(SECTION_SEL) + 1));
+            }
+
+            $.isFunction( options.afterRender ) && options.afterRender.call(container);
+        }
+
+        /**
+        * Determines if the URL anchor destiny is the starting section (the one using 'active' class before initialization)
+        */
+        function isDestinyTheStartingSection(){
+            var destinationSection = getSectionByAnchor(getAnchorsURL().section);
+            return !destinationSection || destinationSection.length && destinationSection.index() === startingSection.index();
+        }
+
+
+        var isScrolling = false;
+        var lastScroll = 0;
+
+        //when scrolling...
+        function scrollHandler(){
+            var currentSection;
+
+            if(!options.autoScrolling || options.scrollBar){
+                var currentScroll = $window.scrollTop();
+                var scrollDirection = getScrollDirection(currentScroll);
+                var visibleSectionIndex = 0;
+                var screen_mid = currentScroll + ($window.height() / 2.0);
+                var isAtBottom = $body.height() - $window.height() === currentScroll;
+                var sections =  document.querySelectorAll(SECTION_SEL);
+
+                //when using `auto-height` for a small last section it won't be centered in the viewport
+                if(isAtBottom){
+                    visibleSectionIndex = sections.length - 1;
+                }
+                //is at top? when using `auto-height` for a small first section it won't be centered in the viewport
+                else if(!currentScroll){
+                    visibleSectionIndex = 0;
+                }
+
+                //taking the section which is showing more content in the viewport
+                else{
+                    for (var i = 0; i < sections.length; ++i) {
+                        var section = sections[i];
+
+                        // Pick the the last section which passes the middle line of the screen.
+                        if (section.offsetTop <= screen_mid)
+                        {
+                            visibleSectionIndex = i;
+                        }
+                    }
+                }
+
+                if(isCompletelyInViewPort(scrollDirection)){
+                    if(!$(SECTION_ACTIVE_SEL).hasClass(COMPLETELY)){
+                        $(SECTION_ACTIVE_SEL).addClass(COMPLETELY).siblings().removeClass(COMPLETELY);
+                    }
+                }
+
+                //geting the last one, the current one on the screen
+                currentSection = $(sections).eq(visibleSectionIndex);
+
+                //setting the visible section as active when manually scrolling
+                //executing only once the first time we reach the section
+                if(!currentSection.hasClass(ACTIVE)){
+                    isScrolling = true;
+                    var leavingSection = $(SECTION_ACTIVE_SEL);
+                    var leavingSectionIndex = leavingSection.index(SECTION_SEL) + 1;
+                    var yMovement = getYmovement(currentSection);
+                    var anchorLink  = currentSection.data('anchor');
+                    var sectionIndex = currentSection.index(SECTION_SEL) + 1;
+                    var activeSlide = currentSection.find(SLIDE_ACTIVE_SEL);
+                    var slideIndex;
+                    var slideAnchorLink;
+
+                    if(activeSlide.length){
+                        slideAnchorLink = activeSlide.data('anchor');
+                        slideIndex = activeSlide.index();
+                    }
+
+                    if(canScroll){
+                        currentSection.addClass(ACTIVE).siblings().removeClass(ACTIVE);
+
+                        $.isFunction( options.onLeave ) && options.onLeave.call( leavingSection, leavingSectionIndex, sectionIndex, yMovement);
+                        $.isFunction( options.afterLoad ) && options.afterLoad.call( currentSection, anchorLink, sectionIndex);
+
+                        stopMedia(leavingSection);
+                        lazyLoad(currentSection);
+                        playMedia(currentSection);
+
+                        activateMenuAndNav(anchorLink, sectionIndex - 1);
+
+                        if(options.anchors.length){
+                            //needed to enter in hashChange event when using the menu with anchor links
+                            lastScrolledDestiny = anchorLink;
+                        }
+                        setState(slideIndex, slideAnchorLink, anchorLink, sectionIndex);
+                    }
+
+                    //small timeout in order to avoid entering in hashChange event when scrolling is not finished yet
+                    clearTimeout(scrollId);
+                    scrollId = setTimeout(function(){
+                        isScrolling = false;
+                    }, 100);
+                }
+
+                if(options.fitToSection){
+                    //for the auto adjust of the viewport to fit a whole section
+                    clearTimeout(scrollId2);
+
+                    scrollId2 = setTimeout(function(){
+                        //checking it again in case it changed during the delay
+                        if(options.fitToSection &&
+
+                            //is the destination element bigger than the viewport?
+                            $(SECTION_ACTIVE_SEL).outerHeight() <= windowsHeight
+                        ){
+                            fitToSection();
+                        }
+                    }, options.fitToSectionDelay);
+                }
+            }
+        }
+
+        /**
+        * Fits the site to the nearest active section
+        */
+        function fitToSection(){
+            //checking fitToSection again in case it was set to false before the timeout delay
+            if(canScroll){
+                //allows to scroll to an active section and
+                //if the section is already active, we prevent firing callbacks
+                isResizing = true;
+
+                scrollPage($(SECTION_ACTIVE_SEL));
+                isResizing = false;
+            }
+        }
+
+        /**
+        * Determines whether the active section has seen in its whole or not.
+        */
+        function isCompletelyInViewPort(movement){
+            var top = $(SECTION_ACTIVE_SEL).position().top;
+            var bottom = top + $window.height();
+
+            if(movement == 'up'){
+                return bottom >= ($window.scrollTop() + $window.height());
+            }
+            return top <= $window.scrollTop();
+        }
+
+        /**
+        * Gets the directon of the the scrolling fired by the scroll event.
+        */
+        function getScrollDirection(currentScroll){
+            var direction = currentScroll > lastScroll ? 'down' : 'up';
+
+            lastScroll = currentScroll;
+
+            //needed for auto-height sections to determine if we want to scroll to the top or bottom of the destination
+            previousDestTop = currentScroll;
+
+            return direction;
+        }
+
+        /**
+        * Determines the way of scrolling up or down:
+        * by 'automatically' scrolling a section or by using the default and normal scrolling.
+        */
+        function scrolling(type){
+            if (!isScrollAllowed.m[type]){
+                return;
+            }
+
+            var scrollSection = (type === 'down') ? moveSectionDown : moveSectionUp;
+
+            if(options.scrollOverflow){
+                var scrollable = options.scrollOverflowHandler.scrollable($(SECTION_ACTIVE_SEL));
+                var check = (type === 'down') ? 'bottom' : 'top';
+
+                if(scrollable.length > 0 ){
+                    //is the scrollbar at the start/end of the scroll?
+                    if(options.scrollOverflowHandler.isScrolled(check, scrollable)){
+                        scrollSection();
+                    }else{
+                        return true;
+                    }
+                }else{
+                    // moved up/down
+                    scrollSection();
+                }
+            }else{
+                // moved up/down
+                scrollSection();
+            }
+        }
+
+        /*
+        * Preventing bouncing in iOS #2285
+        */
+        function preventBouncing(event){
+            var e = event.originalEvent;
+            if(options.autoScrolling && isReallyTouch(e)){
+                //preventing the easing on iOS devices
+                event.preventDefault();
+            }
+        }
+
+        var touchStartY = 0;
+        var touchStartX = 0;
+        var touchEndY = 0;
+        var touchEndX = 0;
+
+        /* Detecting touch events
+
+        * As we are changing the top property of the page on scrolling, we can not use the traditional way to detect it.
+        * This way, the touchstart and the touch moves shows an small difference between them which is the
+        * used one to determine the direction.
+        */
+        function touchMoveHandler(event){
+            var e = event.originalEvent;
+            var activeSection = $(e.target).closest(SECTION_SEL);
+
+            // additional: if one of the normalScrollElements isn't within options.normalScrollElementTouchThreshold hops up the DOM chain
+            if (isReallyTouch(e) ) {
+
+                if(options.autoScrolling){
+                    //preventing the easing on iOS devices
+                    event.preventDefault();
+                }
+
+                var touchEvents = getEventsPage(e);
+
+                touchEndY = touchEvents.y;
+                touchEndX = touchEvents.x;
+
+                //if movement in the X axys is greater than in the Y and the currect section has slides...
+                if (activeSection.find(SLIDES_WRAPPER_SEL).length && Math.abs(touchStartX - touchEndX) > (Math.abs(touchStartY - touchEndY))) {
+
+                    //is the movement greater than the minimum resistance to scroll?
+                    if (!slideMoving && Math.abs(touchStartX - touchEndX) > ($window.outerWidth() / 100 * options.touchSensitivity)) {
+                        if (touchStartX > touchEndX) {
+                            if(isScrollAllowed.m.right){
+                                moveSlideRight(activeSection); //next
+                            }
+                        } else {
+                            if(isScrollAllowed.m.left){
+                                moveSlideLeft(activeSection); //prev
+                            }
+                        }
+                    }
+                }
+
+                //vertical scrolling (only when autoScrolling is enabled)
+                else if(options.autoScrolling && canScroll){
+
+                    //is the movement greater than the minimum resistance to scroll?
+                    if (Math.abs(touchStartY - touchEndY) > ($window.height() / 100 * options.touchSensitivity)) {
+                        if (touchStartY > touchEndY) {
+                            scrolling('down');
+                        } else if (touchEndY > touchStartY) {
+                            scrolling('up');
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+        * As IE >= 10 fires both touch and mouse events when using a mouse in a touchscreen
+        * this way we make sure that is really a touch event what IE is detecting.
+        */
+        function isReallyTouch(e){
+            //if is not IE   ||  IE is detecting `touch` or `pen`
+            return typeof e.pointerType === 'undefined' || e.pointerType != 'mouse';
+        }
+
+        /**
+        * Handler for the touch start event.
+        */
+        function touchStartHandler(event){
+            var e = event.originalEvent;
+
+            //stopping the auto scroll to adjust to a section
+            if(options.fitToSection){
+                $htmlBody.stop();
+            }
+
+            if(isReallyTouch(e)){
+                var touchEvents = getEventsPage(e);
+                touchStartY = touchEvents.y;
+                touchStartX = touchEvents.x;
+            }
+        }
+
+        /**
+        * Gets the average of the last `number` elements of the given array.
+        */
+        function getAverage(elements, number){
+            var sum = 0;
+
+            //taking `number` elements from the end to make the average, if there are not enought, 1
+            var lastElements = elements.slice(Math.max(elements.length - number, 1));
+
+            for(var i = 0; i < lastElements.length; i++){
+                sum = sum + lastElements[i];
+            }
+
+            return Math.ceil(sum/number);
+        }
+
+        /**
+         * Detecting mousewheel scrolling
+         *
+         * http://blogs.sitepointstatic.com/examples/tech/mouse-wheel/index.html
+         * http://www.sitepoint.com/html5-javascript-mouse-wheel/
+         */
+        var prevTime = new Date().getTime();
+
+        function MouseWheelHandler(e) {
+            var curTime = new Date().getTime();
+            var isNormalScroll = $(COMPLETELY_SEL).hasClass(NORMAL_SCROLL);
+
+            //autoscrolling and not zooming?
+            if(options.autoScrolling && !controlPressed && !isNormalScroll){
+                // cross-browser wheel delta
+                e = e || window.event;
+                var value = e.wheelDelta || -e.deltaY || -e.detail;
+                var delta = Math.max(-1, Math.min(1, value));
+
+                var horizontalDetection = typeof e.wheelDeltaX !== 'undefined' || typeof e.deltaX !== 'undefined';
+                var isScrollingVertically = (Math.abs(e.wheelDeltaX) < Math.abs(e.wheelDelta)) || (Math.abs(e.deltaX ) < Math.abs(e.deltaY) || !horizontalDetection);
+
+                //Limiting the array to 150 (lets not waste memory!)
+                if(scrollings.length > 149){
+                    scrollings.shift();
+                }
+
+                //keeping record of the previous scrollings
+                scrollings.push(Math.abs(value));
+
+                //preventing to scroll the site on mouse wheel when scrollbar is present
+                if(options.scrollBar){
+                    e.preventDefault ? e.preventDefault() : e.returnValue = false;
+                }
+
+                //time difference between the last scroll and the current one
+                var timeDiff = curTime-prevTime;
+                prevTime = curTime;
+
+                //haven't they scrolled in a while?
+                //(enough to be consider a different scrolling action to scroll another section)
+                if(timeDiff > 200){
+                    //emptying the array, we dont care about old scrollings for our averages
+                    scrollings = [];
+                }
+
+                if(canScroll){
+                    var averageEnd = getAverage(scrollings, 10);
+                    var averageMiddle = getAverage(scrollings, 70);
+                    var isAccelerating = averageEnd >= averageMiddle;
+
+                    //to avoid double swipes...
+                    if(isAccelerating && isScrollingVertically){
+                        //scrolling down?
+                        if (delta < 0) {
+                            scrolling('down');
+
+                        //scrolling up?
+                        }else {
+                            scrolling('up');
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+            if(options.fitToSection){
+                //stopping the auto scroll to adjust to a section
+                $htmlBody.stop();
+            }
+        }
+
+        /**
+        * Slides a slider to the given direction.
+        * Optional `section` param.
+        */
+        function moveSlide(direction, section){
+            var activeSection = typeof section === 'undefined' ? $(SECTION_ACTIVE_SEL) : section;
+            var slides = activeSection.find(SLIDES_WRAPPER_SEL);
+            var numSlides = slides.find(SLIDE_SEL).length;
+
+            // more than one slide needed and nothing should be sliding
+            if (!slides.length || slideMoving || numSlides < 2) {
+                return;
+            }
+
+            var currentSlide = slides.find(SLIDE_ACTIVE_SEL);
+            var destiny = null;
+
+            if(direction === 'left'){
+                destiny = currentSlide.prev(SLIDE_SEL);
+            }else{
+                destiny = currentSlide.next(SLIDE_SEL);
+            }
+
+            //isn't there a next slide in the secuence?
+            if(!destiny.length){
+                //respect loopHorizontal settin
+                if (!options.loopHorizontal) return;
+
+                if(direction === 'left'){
+                    destiny = currentSlide.siblings(':last');
+                }else{
+                    destiny = currentSlide.siblings(':first');
+                }
+            }
+
+            slideMoving = true;
+
+            landscapeScroll(slides, destiny, direction);
+        }
+
+        /**
+        * Maintains the active slides in the viewport
+        * (Because the `scroll` animation might get lost with some actions, such as when using continuousVertical)
+        */
+        function keepSlidesPosition(){
+            $(SLIDE_ACTIVE_SEL).each(function(){
+                silentLandscapeScroll($(this), 'internal');
+            });
+        }
+
+        var previousDestTop = 0;
+        /**
+        * Returns the destination Y position based on the scrolling direction and
+        * the height of the section.
+        */
+        function getDestinationPosition(element){
+            var elemPosition = element.position();
+
+            //top of the desination will be at the top of the viewport
+            var position = elemPosition.top;
+            var isScrollingDown =  elemPosition.top > previousDestTop;
+            var sectionBottom = position - windowsHeight + element.outerHeight();
+            var bigSectionsDestination = options.bigSectionsDestination;
+
+            //is the destination element bigger than the viewport?
+            if(element.outerHeight() > windowsHeight){
+                //scrolling up?
+                if(!isScrollingDown && !bigSectionsDestination || bigSectionsDestination === 'bottom' ){
+                    position = sectionBottom;
+                }
+            }
+
+            //sections equal or smaller than the viewport height && scrolling down? ||  is resizing and its in the last section
+            else if(isScrollingDown || (isResizing && element.is(':last-child')) ){
+                //The bottom of the destination will be at the bottom of the viewport
+                position = sectionBottom;
+            }
+
+            /*
+            Keeping record of the last scrolled position to determine the scrolling direction.
+            No conventional methods can be used as the scroll bar might not be present
+            AND the section might not be active if it is auto-height and didnt reach the middle
+            of the viewport.
+            */
+            previousDestTop = position;
+            return position;
+        }
+
+        /**
+        * Scrolls the site to the given element and scrolls to the slide if a callback is given.
+        */
+        function scrollPage(element, callback, isMovementUp){
+            if(typeof element === 'undefined'){ return; } //there's no element to scroll, leaving the function
+
+            var dtop = getDestinationPosition(element);
+            var slideAnchorLink;
+            var slideIndex;
+
+            //local variables
+            var v = {
+                element: element,
+                callback: callback,
+                isMovementUp: isMovementUp,
+                dtop: dtop,
+                yMovement: getYmovement(element),
+                anchorLink: element.data('anchor'),
+                sectionIndex: element.index(SECTION_SEL),
+                activeSlide: element.find(SLIDE_ACTIVE_SEL),
+                activeSection: $(SECTION_ACTIVE_SEL),
+                leavingSection: $(SECTION_ACTIVE_SEL).index(SECTION_SEL) + 1,
+
+                //caching the value of isResizing at the momment the function is called
+                //because it will be checked later inside a setTimeout and the value might change
+                localIsResizing: isResizing
+            };
+
+            //quiting when destination scroll is the same as the current one
+            if((v.activeSection.is(element) && !isResizing) || (options.scrollBar && $window.scrollTop() === v.dtop && !element.hasClass(AUTO_HEIGHT) )){ return; }
+
+            if(v.activeSlide.length){
+                slideAnchorLink = v.activeSlide.data('anchor');
+                slideIndex = v.activeSlide.index();
+            }
+
+            //callback (onLeave) if the site is not just resizing and readjusting the slides
+            if($.isFunction(options.onLeave) && !v.localIsResizing){
+                if(options.onLeave.call(v.activeSection, v.leavingSection, (v.sectionIndex + 1), v.yMovement) === false){
+                    return;
+                }
+            }
+
+            // If continuousVertical && we need to wrap around
+            if (options.autoScrolling && options.continuousVertical && typeof (v.isMovementUp) !== "undefined" &&
+                ((!v.isMovementUp && v.yMovement == 'up') || // Intending to scroll down but about to go up or
+                (v.isMovementUp && v.yMovement == 'down'))) { // intending to scroll up but about to go down
+
+                v = createInfiniteSections(v);
+            }
+
+            //pausing media of the leaving section (if we are not just resizing, as destinatino will be the same one)
+            if(!v.localIsResizing){
+                stopMedia(v.activeSection);
+            }
+
+            if(options.scrollOverflow){
+                options.scrollOverflowHandler.beforeLeave();
+            }
+
+            element.addClass(ACTIVE).siblings().removeClass(ACTIVE);
+            lazyLoad(element);
+
+            if(options.scrollOverflow){
+                options.scrollOverflowHandler.onLeave();
+            }
+
+            //preventing from activating the MouseWheelHandler event
+            //more than once if the page is scrolling
+            canScroll = false;
+
+            setState(slideIndex, slideAnchorLink, v.anchorLink, v.sectionIndex);
+
+            performMovement(v);
+
+            //flag to avoid callingn `scrollPage()` twice in case of using anchor links
+            lastScrolledDestiny = v.anchorLink;
+
+            //avoid firing it twice (as it does also on scroll)
+            activateMenuAndNav(v.anchorLink, v.sectionIndex);
+        }
+
+        /**
+        * Performs the vertical movement (by CSS3 or by jQuery)
+        */
+        function performMovement(v){
+            // using CSS3 translate functionality
+            if (options.css3 && options.autoScrolling && !options.scrollBar) {
+
+                // The first section can have a negative value in iOS 10. Not quite sure why: -0.0142822265625
+                // that's why we round it to 0.
+                var translate3d = 'translate3d(0px, -' + Math.round(v.dtop) + 'px, 0px)';
+                transformContainer(translate3d, true);
+
+                //even when the scrollingSpeed is 0 there's a little delay, which might cause the
+                //scrollingSpeed to change in case of using silentMoveTo();
+                if(options.scrollingSpeed){
+                    clearTimeout(afterSectionLoadsId);
+                    afterSectionLoadsId = setTimeout(function () {
+                        afterSectionLoads(v);
+                    }, options.scrollingSpeed);
+                }else{
+                    afterSectionLoads(v);
+                }
+            }
+
+            // using jQuery animate
+            else{
+                var scrollSettings = getScrollSettings(v);
+
+                $(scrollSettings.element).animate(
+                    scrollSettings.options,
+                options.scrollingSpeed, options.easing).promise().done(function () { //only one single callback in case of animating  `html, body`
+                    if(options.scrollBar){
+
+                        /* Hack!
+                        The timeout prevents setting the most dominant section in the viewport as "active" when the user
+                        scrolled to a smaller section by using the mousewheel (auto scrolling) rather than draging the scroll bar.
+
+                        When using scrollBar:true It seems like the scroll events still getting propagated even after the scrolling animation has finished.
+                        */
+                        setTimeout(function(){
+                            afterSectionLoads(v);
+                        },30);
+                    }else{
+                        afterSectionLoads(v);
+                    }
+                });
+            }
+        }
+
+        /**
+        * Gets the scrolling settings depending on the plugin autoScrolling option
+        */
+        function getScrollSettings(v){
+            var scroll = {};
+
+            if(options.autoScrolling && !options.scrollBar){
+                scroll.options = { 'top': -v.dtop};
+                scroll.element = WRAPPER_SEL;
+            }else{
+                scroll.options = { 'scrollTop': v.dtop};
+                scroll.element = 'html, body';
+            }
+
+            return scroll;
+        }
+
+        /**
+        * Adds sections before or after the current one to create the infinite effect.
+        */
+        function createInfiniteSections(v){
+            // Scrolling down
+            if (!v.isMovementUp) {
+                // Move all previous sections to after the active section
+                $(SECTION_ACTIVE_SEL).after(v.activeSection.prevAll(SECTION_SEL).get().reverse());
+            }
+            else { // Scrolling up
+                // Move all next sections to before the active section
+                $(SECTION_ACTIVE_SEL).before(v.activeSection.nextAll(SECTION_SEL));
+            }
+
+            // Maintain the displayed position (now that we changed the element order)
+            silentScroll($(SECTION_ACTIVE_SEL).position().top);
+
+            // Maintain the active slides visible in the viewport
+            keepSlidesPosition();
+
+            // save for later the elements that still need to be reordered
+            v.wrapAroundElements = v.activeSection;
+
+            // Recalculate animation variables
+            v.dtop = v.element.position().top;
+            v.yMovement = getYmovement(v.element);
+
+            //sections will temporally have another position in the DOM
+            //updating this values in case we need them
+            v.leavingSection = v.activeSection.index(SECTION_SEL) + 1;
+            v.sectionIndex = v.element.index(SECTION_SEL);
+
+            return v;
+        }
+
+        /**
+        * Fix section order after continuousVertical changes have been animated
+        */
+        function continuousVerticalFixSectionOrder (v) {
+            // If continuousVertical is in effect (and autoScrolling would also be in effect then),
+            // finish moving the elements around so the direct navigation will function more simply
+            if (!v.wrapAroundElements || !v.wrapAroundElements.length) {
+                return;
+            }
+
+            if (v.isMovementUp) {
+                $(SECTION_FIRST_SEL).before(v.wrapAroundElements);
+            }
+            else {
+                $(SECTION_LAST_SEL).after(v.wrapAroundElements);
+            }
+
+            silentScroll($(SECTION_ACTIVE_SEL).position().top);
+
+            // Maintain the active slides visible in the viewport
+            keepSlidesPosition();
+        }
+
+
+        /**
+        * Actions to do once the section is loaded.
+        */
+        function afterSectionLoads (v){
+            continuousVerticalFixSectionOrder(v);
+
+            //callback (afterLoad) if the site is not just resizing and readjusting the slides
+            $.isFunction(options.afterLoad) && !v.localIsResizing && options.afterLoad.call(v.element, v.anchorLink, (v.sectionIndex + 1));
+
+            if(options.scrollOverflow){
+                options.scrollOverflowHandler.afterLoad();
+            }
+
+            if(!v.localIsResizing){
+                playMedia(v.element);
+            }
+
+            v.element.addClass(COMPLETELY).siblings().removeClass(COMPLETELY);
+
+            canScroll = true;
+
+            $.isFunction(v.callback) && v.callback.call(this);
+        }
+
+        /**
+        * Sets the value for the given attribute from the `data-` attribute with the same suffix
+        * ie: data-srcset ==> srcset  |  data-src ==> src
+        */
+        function setSrc(element, attribute){
+            element
+                .attr(attribute, element.data(attribute))
+                .removeAttr('data-' + attribute);
+        }
+
+        /**
+        * Lazy loads image, video and audio elements.
+        */
+        function lazyLoad(destiny){
+            if (!options.lazyLoading){
+                return;
+            }
+
+            var panel = getSlideOrSection(destiny);
+            var element;
+
+            panel.find('img[data-src], img[data-srcset], source[data-src], source[data-srcset], video[data-src], audio[data-src], iframe[data-src]').each(function(){
+                element = $(this);
+
+                $.each(['src', 'srcset'], function(index, type){
+                    var attribute = element.attr('data-' + type);
+                    if(typeof attribute !== 'undefined' && attribute){
+                        setSrc(element, type);
+                    }
+                });
+
+                if(element.is('source')){
+                    var typeToPlay = element.closest('video').length ? 'video' : 'audio';
+                    element.closest(typeToPlay).get(0).load();
+                }
+            });
+        }
+
+        /**
+        * Plays video and audio elements.
+        */
+        function playMedia(destiny){
+            var panel = getSlideOrSection(destiny);
+
+            //playing HTML5 media elements
+            panel.find('video, audio').each(function(){
+                var element = $(this).get(0);
+
+                if( element.hasAttribute('data-autoplay') && typeof element.play === 'function' ) {
+                    element.play();
+                }
+            });
+
+            //youtube videos
+            panel.find('iframe[src*="youtube.com/embed/"]').each(function(){
+                var element = $(this).get(0);
+
+                if ( element.hasAttribute('data-autoplay') ){
+                    playYoutube(element);
+                }
+
+                //in case the URL was not loaded yet. On page load we need time for the new URL (with the API string) to load.
+                element.onload = function() {
+                    if ( element.hasAttribute('data-autoplay') ){
+                        playYoutube(element);
+                    }
+                };
+            });
+        }
+
+        /**
+        * Plays a youtube video
+        */
+        function playYoutube(element){
+            element.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        }
+
+        /**
+        * Stops video and audio elements.
+        */
+        function stopMedia(destiny){
+            var panel = getSlideOrSection(destiny);
+
+            //stopping HTML5 media elements
+            panel.find('video, audio').each(function(){
+                var element = $(this).get(0);
+
+                if( !element.hasAttribute('data-keepplaying') && typeof element.pause === 'function' ) {
+                    element.pause();
+                }
+            });
+
+            //youtube videos
+            panel.find('iframe[src*="youtube.com/embed/"]').each(function(){
+                var element = $(this).get(0);
+
+                if( /youtube\.com\/embed\//.test($(this).attr('src')) && !element.hasAttribute('data-keepplaying')){
+                    $(this).get(0).contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');
+                }
+            });
+        }
+
+        /**
+        * Gets the active slide (or section) for the given section
+        */
+        function getSlideOrSection(destiny){
+            var slide = destiny.find(SLIDE_ACTIVE_SEL);
+            if( slide.length ) {
+                destiny = $(slide);
+            }
+
+            return destiny;
+        }
+
+        /**
+        * Scrolls to the anchor in the URL when loading the site
+        */
+        function scrollToAnchor(){
+            var anchors =  getAnchorsURL();
+            var sectionAnchor = anchors.section;
+            var slideAnchor = anchors.slide;
+
+            if(sectionAnchor){  //if theres any #
+                if(options.animateAnchor){
+                    scrollPageAndSlide(sectionAnchor, slideAnchor);
+                }else{
+                    silentMoveTo(sectionAnchor, slideAnchor);
+                }
+            }
+        }
+
+        /**
+        * Detecting any change on the URL to scroll to the given anchor link
+        * (a way to detect back history button as we play with the hashes on the URL)
+        */
+        function hashChangeHandler(){
+            if(!isScrolling && !options.lockAnchors){
+                var anchors = getAnchorsURL();
+                var sectionAnchor = anchors.section;
+                var slideAnchor = anchors.slide;
+
+                //when moving to a slide in the first section for the first time (first time to add an anchor to the URL)
+                var isFirstSlideMove =  (typeof lastScrolledDestiny === 'undefined');
+                var isFirstScrollMove = (typeof lastScrolledDestiny === 'undefined' && typeof slideAnchor === 'undefined' && !slideMoving);
+
+                if(sectionAnchor.length){
+                    /*in order to call scrollpage() only once for each destination at a time
+                    It is called twice for each scroll otherwise, as in case of using anchorlinks `hashChange`
+                    event is fired on every scroll too.*/
+                    if ((sectionAnchor && sectionAnchor !== lastScrolledDestiny) && !isFirstSlideMove
+                        || isFirstScrollMove
+                        || (!slideMoving && lastScrolledSlide != slideAnchor )){
+
+                        scrollPageAndSlide(sectionAnchor, slideAnchor);
+                    }
+                }
+            }
+        }
+
+        //gets the URL anchors (section and slide)
+        function getAnchorsURL(){
+            var section;
+            var slide;
+            var hash = window.location.hash;
+
+            if(hash.length){
+                //getting the anchor link in the URL and deleting the `#`
+                var anchorsParts =  hash.replace('#', '').split('/');
+
+                //using / for visual reasons and not as a section/slide separator #2803
+                var isFunkyAnchor = hash.indexOf('#/') > -1;
+
+                section = isFunkyAnchor ? '/' + anchorsParts[1] : decodeURIComponent(anchorsParts[0]);
+
+                var slideAnchor = isFunkyAnchor ? anchorsParts[2] : anchorsParts[1];
+                if(slideAnchor && slideAnchor.length){
+                    slide = decodeURIComponent(slideAnchor);
+                }
+            }
+
+            return {
+                section: section,
+                slide: slide
+            }
+        }
+
+        //Sliding with arrow keys, both, vertical and horizontal
+        function keydownHandler(e) {
+            clearTimeout(keydownId);
+
+            var activeElement = $(':focus');
+            var keyCode = e.which;
+
+            //tab?
+            if(keyCode === 9){
+                onTab(e);
+            }
+
+            else if(!activeElement.is('textarea') && !activeElement.is('input') && !activeElement.is('select') &&
+                activeElement.attr('contentEditable') !== "true" && activeElement.attr('contentEditable') !== '' &&
+                options.keyboardScrolling && options.autoScrolling){
+
+                //preventing the scroll with arrow keys & spacebar & Page Up & Down keys
+                var keyControls = [40, 38, 32, 33, 34];
+                if($.inArray(keyCode, keyControls) > -1){
+                    e.preventDefault();
+                }
+
+                controlPressed = e.ctrlKey;
+
+                keydownId = setTimeout(function(){
+                    onkeydown(e);
+                },150);
+            }
+        }
+
+        function tooltipTextHandler(){
+            $(this).prev().trigger('click');
+        }
+
+        //to prevent scrolling while zooming
+        function keyUpHandler(e){
+            if(isWindowFocused){ //the keyup gets fired on new tab ctrl + t in Firefox
+                controlPressed = e.ctrlKey;
+            }
+        }
+
+        //binding the mousemove when the mouse's middle button is released
+        function mouseDownHandler(e){
+            //middle button
+            if (e.which == 2){
+                oldPageY = e.pageY;
+                container.on('mousemove', mouseMoveHandler);
+            }
+        }
+
+        //unbinding the mousemove when the mouse's middle button is released
+        function mouseUpHandler(e){
+            //middle button
+            if (e.which == 2){
+                container.off('mousemove');
+            }
+        }
+
+        //Scrolling horizontally when clicking on the slider controls.
+        function slideArrowHandler(){
+            var section = $(this).closest(SECTION_SEL);
+
+            if ($(this).hasClass(SLIDES_PREV)) {
+                if(isScrollAllowed.m.left){
+                    moveSlideLeft(section);
+                }
+            } else {
+                if(isScrollAllowed.m.right){
+                    moveSlideRight(section);
+                }
+            }
+        }
+
+        //when opening a new tab (ctrl + t), `control` won't be pressed when coming back.
+        function blurHandler(){
+            isWindowFocused = false;
+            controlPressed = false;
+        }
+
+        //Scrolls to the section when clicking the navigation bullet
+        function sectionBulletHandler(e){
+            e.preventDefault();
+            var index = $(this).parent().index();
+            scrollPage($(SECTION_SEL).eq(index));
+        }
+
+        //Scrolls the slider to the given slide destination for the given section
+        function slideBulletHandler(e){
+            e.preventDefault();
+            var slides = $(this).closest(SECTION_SEL).find(SLIDES_WRAPPER_SEL);
+            var destiny = slides.find(SLIDE_SEL).eq($(this).closest('li').index());
+
+            landscapeScroll(slides, destiny);
+        }
+
+        /**
+        * Keydown event
+        */
+        function onkeydown(e){
+            var shiftPressed = e.shiftKey;
+
+            //do nothing if we can not scroll or we are not using horizotnal key arrows.
+            if(!canScroll && [37,39].indexOf(e.which) < 0){
+                return;
+            }
+
+            switch (e.which) {
+                //up
+                case 38:
+                case 33:
+                    if(isScrollAllowed.k.up){
+                        moveSectionUp();
+                    }
+                    break;
+
+                //down
+                case 32: //spacebar
+                    if(shiftPressed && isScrollAllowed.k.up){
+                        moveSectionUp();
+                        break;
+                    }
+                /* falls through */
+                case 40:
+                case 34:
+                    if(isScrollAllowed.k.down){
+                        moveSectionDown();
+                    }
+                    break;
+
+                //Home
+                case 36:
+                    if(isScrollAllowed.k.up){
+                        moveTo(1);
+                    }
+                    break;
+
+                //End
+                case 35:
+                     if(isScrollAllowed.k.down){
+                        moveTo( $(SECTION_SEL).length );
+                    }
+                    break;
+
+                //left
+                case 37:
+                    if(isScrollAllowed.k.left){
+                        moveSlideLeft();
+                    }
+                    break;
+
+                //right
+                case 39:
+                    if(isScrollAllowed.k.right){
+                        moveSlideRight();
+                    }
+                    break;
+
+                default:
+                    return; // exit this handler for other keys
+            }
+        }
+
+        /**
+        * Makes sure the tab key will only focus elements within the current section/slide
+        * preventing this way from breaking the page.
+        * Based on "Modals and keyboard traps"
+        * from https://developers.google.com/web/fundamentals/accessibility/focus/using-tabindex
+        */
+        function onTab(e){
+            var isShiftPressed = e.shiftKey;
+            var activeElement = $(':focus');
+            var activeSection = $(SECTION_ACTIVE_SEL);
+            var activeSlide = activeSection.find(SLIDE_ACTIVE_SEL);
+            var focusableWrapper = activeSlide.length ? activeSlide : activeSection;
+            var focusableElements = focusableWrapper.find(focusableElementsString);
+
+            function preventAndFocusFirst(e){
+                e.preventDefault();
+                return focusableElements.first().focus();
+            }
+
+            //is there an element with focus?
+            if(activeElement.length){
+                if(!activeElement.closest(SECTION_ACTIVE_SEL, SLIDE_ACTIVE_SEL).length){
+                    activeElement = preventAndFocusFirst(e);
+                }
+            }
+
+            //no element if focused? Let's focus the first one of the section/slide
+            else{
+                preventAndFocusFirst(e);
+            }
+
+            //when reached the first or last focusable element of the section/slide
+            //we prevent the tab action to keep it in the last focusable element
+            if(!isShiftPressed && activeElement.is(focusableElements.last()) ||
+                isShiftPressed && activeElement.is(focusableElements.first())
+            ){
+                e.preventDefault();
+            }
+        }
+
+        /**
+        * Detecting the direction of the mouse movement.
+        * Used only for the middle button of the mouse.
+        */
+        var oldPageY = 0;
+        function mouseMoveHandler(e){
+            if(canScroll){
+                // moving up
+                if (e.pageY < oldPageY && isScrollAllowed.m.up){
+                    moveSectionUp();
+                }
+
+                // moving down
+                else if(e.pageY > oldPageY && isScrollAllowed.m.down){
+                    moveSectionDown();
+                }
+            }
+            oldPageY = e.pageY;
+        }
+
+        /**
+        * Scrolls horizontal sliders.
+        */
+        function landscapeScroll(slides, destiny, direction){
+            var section = slides.closest(SECTION_SEL);
+            var v = {
+                slides: slides,
+                destiny: destiny,
+                direction: direction,
+                destinyPos: destiny.position(),
+                slideIndex: destiny.index(),
+                section: section,
+                sectionIndex: section.index(SECTION_SEL),
+                anchorLink: section.data('anchor'),
+                slidesNav: section.find(SLIDES_NAV_SEL),
+                slideAnchor:  getAnchor(destiny),
+                prevSlide: section.find(SLIDE_ACTIVE_SEL),
+                prevSlideIndex: section.find(SLIDE_ACTIVE_SEL).index(),
+
+                //caching the value of isResizing at the momment the function is called
+                //because it will be checked later inside a setTimeout and the value might change
+                localIsResizing: isResizing
+            };
+            v.xMovement = getXmovement(v.prevSlideIndex, v.slideIndex);
+
+            //important!! Only do it when not resizing
+            if(!v.localIsResizing){
+                //preventing from scrolling to the next/prev section when using scrollHorizontally
+                canScroll = false;
+            }
+
+            if(options.onSlideLeave){
+
+                //if the site is not just resizing and readjusting the slides
+                if(!v.localIsResizing && v.xMovement!=='none'){
+                    if($.isFunction( options.onSlideLeave )){
+                        if(options.onSlideLeave.call( v.prevSlide, v.anchorLink, (v.sectionIndex + 1), v.prevSlideIndex, v.direction, v.slideIndex ) === false){
+                            slideMoving = false;
+                            return;
+                        }
+                    }
+                }
+            }
+
+            destiny.addClass(ACTIVE).siblings().removeClass(ACTIVE);
+
+            if(!v.localIsResizing){
+                stopMedia(v.prevSlide);
+                lazyLoad(destiny);
+            }
+
+            if(!options.loopHorizontal && options.controlArrows){
+                //hidding it for the fist slide, showing for the rest
+                section.find(SLIDES_ARROW_PREV_SEL).toggle(v.slideIndex!==0);
+
+                //hidding it for the last slide, showing for the rest
+                section.find(SLIDES_ARROW_NEXT_SEL).toggle(!destiny.is(':last-child'));
+            }
+
+            //only changing the URL if the slides are in the current section (not for resize re-adjusting)
+            if(section.hasClass(ACTIVE) && !v.localIsResizing){
+                setState(v.slideIndex, v.slideAnchor, v.anchorLink, v.sectionIndex);
+            }
+
+            performHorizontalMove(slides, v, true);
+        }
+
+
+        function afterSlideLoads(v){
+            activeSlidesNavigation(v.slidesNav, v.slideIndex);
+
+            //if the site is not just resizing and readjusting the slides
+            if(!v.localIsResizing){
+                $.isFunction( options.afterSlideLoad ) && options.afterSlideLoad.call( v.destiny, v.anchorLink, (v.sectionIndex + 1), v.slideAnchor, v.slideIndex);
+
+                //needs to be inside the condition to prevent problems with continuousVertical and scrollHorizontally
+                //and to prevent double scroll right after a windows resize
+                canScroll = true;
+
+                playMedia(v.destiny);
+            }
+
+            //letting them slide again
+            slideMoving = false;
+        }
+
+        /**
+        * Performs the horizontal movement. (CSS3 or jQuery)
+        *
+        * @param fireCallback {Bool} - determines whether or not to fire the callback
+        */
+        function performHorizontalMove(slides, v, fireCallback){
+            var destinyPos = v.destinyPos;
+
+            if(options.css3){
+                var translate3d = 'translate3d(-' + Math.round(destinyPos.left) + 'px, 0px, 0px)';
+
+                addAnimation(slides.find(SLIDES_CONTAINER_SEL)).css(getTransforms(translate3d));
+
+                afterSlideLoadsId = setTimeout(function(){
+                    fireCallback && afterSlideLoads(v);
+                }, options.scrollingSpeed, options.easing);
+            }else{
+                slides.animate({
+                    scrollLeft : Math.round(destinyPos.left)
+                }, options.scrollingSpeed, options.easing, function() {
+
+                    fireCallback && afterSlideLoads(v);
+                });
+            }
+        }
+
+        /**
+        * Sets the state for the horizontal bullet navigations.
+        */
+        function activeSlidesNavigation(slidesNav, slideIndex){
+            slidesNav.find(ACTIVE_SEL).removeClass(ACTIVE);
+            slidesNav.find('li').eq(slideIndex).find('a').addClass(ACTIVE);
+        }
+
+        var previousHeight = windowsHeight;
+
+        //when resizing the site, we adjust the heights of the sections, slimScroll...
+        function resizeHandler(){
+            //checking if it needs to get responsive
+            responsive();
+
+            // rebuild immediately on touch devices
+            if (isTouchDevice) {
+                var activeElement = $(document.activeElement);
+
+                //if the keyboard is NOT visible
+                if (!activeElement.is('textarea') && !activeElement.is('input') && !activeElement.is('select')) {
+                    var currentHeight = $window.height();
+
+                    //making sure the change in the viewport size is enough to force a rebuild. (20 % of the window to avoid problems when hidding scroll bars)
+                    if( Math.abs(currentHeight - previousHeight) > (20 * Math.max(previousHeight, currentHeight) / 100) ){
+                        reBuild(true);
+                        previousHeight = currentHeight;
+                    }
+                }
+            }else{
+                //in order to call the functions only when the resize is finished
+                //http://stackoverflow.com/questions/4298612/jquery-how-to-call-resize-event-only-once-its-finished-resizing
+                clearTimeout(resizeId);
+
+                resizeId = setTimeout(function(){
+                    reBuild(true);
+                }, 350);
+            }
+        }
+
+        /**
+        * Checks if the site needs to get responsive and disables autoScrolling if so.
+        * A class `fp-responsive` is added to the plugin's container in case the user wants to use it for his own responsive CSS.
+        */
+        function responsive(){
+            var widthLimit = options.responsive || options.responsiveWidth; //backwards compatiblity
+            var heightLimit = options.responsiveHeight;
+
+            //only calculating what we need. Remember its called on the resize event.
+            var isBreakingPointWidth = widthLimit && $window.outerWidth() < widthLimit;
+            var isBreakingPointHeight = heightLimit && $window.height() < heightLimit;
+
+            if(widthLimit && heightLimit){
+                setResponsive(isBreakingPointWidth || isBreakingPointHeight);
+            }
+            else if(widthLimit){
+                setResponsive(isBreakingPointWidth);
+            }
+            else if(heightLimit){
+                setResponsive(isBreakingPointHeight);
+            }
+        }
+
+        /**
+        * Adds transition animations for the given element
+        */
+        function addAnimation(element){
+            var transition = 'all ' + options.scrollingSpeed + 'ms ' + options.easingcss3;
+
+            element.removeClass(NO_TRANSITION);
+            return element.css({
+                '-webkit-transition': transition,
+                'transition': transition
+            });
+        }
+
+        /**
+        * Remove transition animations for the given element
+        */
+        function removeAnimation(element){
+            return element.addClass(NO_TRANSITION);
+        }
+
+        /**
+        * Activating the vertical navigation bullets according to the given slide name.
+        */
+        function activateNavDots(name, sectionIndex){
+            if(options.navigation){
+                $(SECTION_NAV_SEL).find(ACTIVE_SEL).removeClass(ACTIVE);
+                if(name){
+                    $(SECTION_NAV_SEL).find('a[href="#' + name + '"]').addClass(ACTIVE);
+                }else{
+                    $(SECTION_NAV_SEL).find('li').eq(sectionIndex).find('a').addClass(ACTIVE);
+                }
+            }
+        }
+
+        /**
+        * Activating the website main menu elements according to the given slide name.
+        */
+        function activateMenuElement(name){
+            if(options.menu){
+                $(options.menu).find(ACTIVE_SEL).removeClass(ACTIVE);
+                $(options.menu).find('[data-menuanchor="'+name+'"]').addClass(ACTIVE);
+            }
+        }
+
+        /**
+        * Sets to active the current menu and vertical nav items.
+        */
+        function activateMenuAndNav(anchor, index){
+            activateMenuElement(anchor);
+            activateNavDots(anchor, index);
+        }
+
+        /**
+        * Retuns `up` or `down` depending on the scrolling movement to reach its destination
+        * from the current section.
+        */
+        function getYmovement(destiny){
+            var fromIndex = $(SECTION_ACTIVE_SEL).index(SECTION_SEL);
+            var toIndex = destiny.index(SECTION_SEL);
+            if( fromIndex == toIndex){
+                return 'none';
+            }
+            if(fromIndex > toIndex){
+                return 'up';
+            }
+            return 'down';
+        }
+
+        /**
+        * Retuns `right` or `left` depending on the scrolling movement to reach its destination
+        * from the current slide.
+        */
+        function getXmovement(fromIndex, toIndex){
+            if( fromIndex == toIndex){
+                return 'none';
+            }
+            if(fromIndex > toIndex){
+                return 'left';
+            }
+            return 'right';
+        }
+
+        function addTableClass(element){
+            //In case we are styling for the 2nd time as in with reponsiveSlides
+            if(!element.hasClass(TABLE)){
+                element.addClass(TABLE).wrapInner('<div class="' + TABLE_CELL + '" style="height:' + getTableHeight(element) + 'px;" />');
+            }
+        }
+
+        function getTableHeight(element){
+            var sectionHeight = windowsHeight;
+
+            if(options.paddingTop || options.paddingBottom){
+                var section = element;
+                if(!section.hasClass(SECTION)){
+                    section = element.closest(SECTION_SEL);
+                }
+
+                var paddings = parseInt(section.css('padding-top')) + parseInt(section.css('padding-bottom'));
+                sectionHeight = (windowsHeight - paddings);
+            }
+
+            return sectionHeight;
+        }
+
+        /**
+        * Adds a css3 transform property to the container class with or without animation depending on the animated param.
+        */
+        function transformContainer(translate3d, animated){
+            if(animated){
+                addAnimation(container);
+            }else{
+                removeAnimation(container);
+            }
+
+            container.css(getTransforms(translate3d));
+
+            //syncronously removing the class after the animation has been applied.
+            setTimeout(function(){
+                container.removeClass(NO_TRANSITION);
+            },10);
+        }
+
+        /**
+        * Gets a section by its anchor / index
+        */
+        function getSectionByAnchor(sectionAnchor){
+            var section = container.find(SECTION_SEL + '[data-anchor="'+sectionAnchor+'"]');
+            if(!section.length){
+                var sectionIndex = typeof sectionAnchor !== 'undefined' ? sectionAnchor -1 : 0;
+                section = $(SECTION_SEL).eq(sectionIndex);
+            }
+
+            return section;
+        }
+
+        /**
+        * Gets a slide inside a given section by its anchor / index
+        */
+        function getSlideByAnchor(slideAnchor, section){
+            var slide = section.find(SLIDE_SEL + '[data-anchor="'+slideAnchor+'"]');
+            if(!slide.length){
+                slideAnchor = typeof slideAnchor !== 'undefined' ? slideAnchor : 0;
+                slide = section.find(SLIDE_SEL).eq(slideAnchor);
+            }
+
+            return slide;
+        }
+
+        /**
+        * Scrolls to the given section and slide anchors
+        */
+        function scrollPageAndSlide(sectionAnchor, slideAnchor){
+            var section = getSectionByAnchor(sectionAnchor);
+
+            //do nothing if there's no section with the given anchor name
+            if(!section.length) return;
+
+            var slide = getSlideByAnchor(slideAnchor, section);
+
+            //we need to scroll to the section and then to the slide
+            if (sectionAnchor !== lastScrolledDestiny && !section.hasClass(ACTIVE)){
+                scrollPage(section, function(){
+                    scrollSlider(slide);
+                });
+            }
+            //if we were already in the section
+            else{
+                scrollSlider(slide);
+            }
+        }
+
+        /**
+        * Scrolls the slider to the given slide destination for the given section
+        */
+        function scrollSlider(slide){
+            if(slide.length){
+                landscapeScroll(slide.closest(SLIDES_WRAPPER_SEL), slide);
+            }
+        }
+
+        /**
+        * Creates a landscape navigation bar with dots for horizontal sliders.
+        */
+        function addSlidesNavigation(section, numSlides){
+            section.append('<div class="' + SLIDES_NAV + '"><ul></ul></div>');
+            var nav = section.find(SLIDES_NAV_SEL);
+
+            //top or bottom
+            nav.addClass(options.slidesNavPosition);
+
+            for(var i=0; i< numSlides; i++){
+                nav.find('ul').append('<li><a href="#"><span></span></a></li>');
+            }
+
+            //centering it
+            nav.css('margin-left', '-' + (nav.width()/2) + 'px');
+
+            nav.find('li').first().find('a').addClass(ACTIVE);
+        }
+
+
+        /**
+        * Sets the state of the website depending on the active section/slide.
+        * It changes the URL hash when needed and updates the body class.
+        */
+        function setState(slideIndex, slideAnchor, anchorLink, sectionIndex){
+            var sectionHash = '';
+
+            if(options.anchors.length && !options.lockAnchors){
+
+                //isn't it the first slide?
+                if(slideIndex){
+                    if(typeof anchorLink !== 'undefined'){
+                        sectionHash = anchorLink;
+                    }
+
+                    //slide without anchor link? We take the index instead.
+                    if(typeof slideAnchor === 'undefined'){
+                        slideAnchor = slideIndex;
+                    }
+
+                    lastScrolledSlide = slideAnchor;
+                    setUrlHash(sectionHash + '/' + slideAnchor);
+
+                //first slide won't have slide anchor, just the section one
+                }else if(typeof slideIndex !== 'undefined'){
+                    lastScrolledSlide = slideAnchor;
+                    setUrlHash(anchorLink);
+                }
+
+                //section without slides
+                else{
+                    setUrlHash(anchorLink);
+                }
+            }
+
+            setBodyClass();
+        }
+
+        /**
+        * Sets the URL hash.
+        */
+        function setUrlHash(url){
+            if(options.recordHistory){
+                location.hash = url;
+            }else{
+                //Mobile Chrome doesn't work the normal way, so... lets use HTML5 for phones :)
+                if(isTouchDevice || isTouch){
+                    window.history.replaceState(undefined, undefined, '#' + url);
+                }else{
+                    var baseUrl = window.location.href.split('#')[0];
+                    window.location.replace( baseUrl + '#' + url );
+                }
+            }
+        }
+
+        /**
+        * Gets the anchor for the given slide / section. Its index will be used if there's none.
+        */
+        function getAnchor(element){
+            var anchor = element.data('anchor');
+            var index = element.index();
+
+            //Slide without anchor link? We take the index instead.
+            if(typeof anchor === 'undefined'){
+                anchor = index;
+            }
+
+            return anchor;
+        }
+
+        /**
+        * Sets a class for the body of the page depending on the active section / slide
+        */
+        function setBodyClass(){
+            var section = $(SECTION_ACTIVE_SEL);
+            var slide = section.find(SLIDE_ACTIVE_SEL);
+
+            var sectionAnchor = getAnchor(section);
+            var slideAnchor = getAnchor(slide);
+
+            var text = String(sectionAnchor);
+
+            if(slide.length){
+                text = text + '-' + slideAnchor;
+            }
+
+            //changing slash for dash to make it a valid CSS style
+            text = text.replace('/', '-').replace('#','');
+
+            //removing previous anchor classes
+            var classRe = new RegExp('\\b\\s?' + VIEWING_PREFIX + '-[^\\s]+\\b', "g");
+            $body[0].className = $body[0].className.replace(classRe, '');
+
+            //adding the current anchor
+            $body.addClass(VIEWING_PREFIX + '-' + text);
+        }
+
+        /**
+        * Checks for translate3d support
+        * @return boolean
+        * http://stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
+        */
+        function support3d() {
+            var el = document.createElement('p'),
+                has3d,
+                transforms = {
+                    'webkitTransform':'-webkit-transform',
+                    'OTransform':'-o-transform',
+                    'msTransform':'-ms-transform',
+                    'MozTransform':'-moz-transform',
+                    'transform':'transform'
+                };
+
+            // Add it to the body to get the computed style.
+            document.body.insertBefore(el, null);
+
+            for (var t in transforms) {
+                if (el.style[t] !== undefined) {
+                    el.style[t] = 'translate3d(1px,1px,1px)';
+                    has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
+                }
+            }
+
+            document.body.removeChild(el);
+
+            return (has3d !== undefined && has3d.length > 0 && has3d !== 'none');
+        }
+
+        /**
+        * Removes the auto scrolling action fired by the mouse wheel and trackpad.
+        * After this function is called, the mousewheel and trackpad movements won't scroll through sections.
+        */
+        function removeMouseWheelHandler(){
+            if (document.addEventListener) {
+                document.removeEventListener('mousewheel', MouseWheelHandler, false); //IE9, Chrome, Safari, Oper
+                document.removeEventListener('wheel', MouseWheelHandler, false); //Firefox
+                document.removeEventListener('MozMousePixelScroll', MouseWheelHandler, false); //old Firefox
+            } else {
+                document.detachEvent('onmousewheel', MouseWheelHandler); //IE 6/7/8
+            }
+        }
+
+        /**
+        * Adds the auto scrolling action for the mouse wheel and trackpad.
+        * After this function is called, the mousewheel and trackpad movements will scroll through sections
+        * https://developer.mozilla.org/en-US/docs/Web/Events/wheel
+        */
+        function addMouseWheelHandler(){
+            var prefix = '';
+            var _addEventListener;
+
+            if (window.addEventListener){
+                _addEventListener = "addEventListener";
+            }else{
+                _addEventListener = "attachEvent";
+                prefix = 'on';
+            }
+
+             // detect available wheel event
+            var support = 'onwheel' in document.createElement('div') ? 'wheel' : // Modern browsers support "wheel"
+                      document.onmousewheel !== undefined ? 'mousewheel' : // Webkit and IE support at least "mousewheel"
+                      'DOMMouseScroll'; // let's assume that remaining browsers are older Firefox
+
+
+            if(support == 'DOMMouseScroll'){
+                document[ _addEventListener ](prefix + 'MozMousePixelScroll', MouseWheelHandler, false);
+            }
+
+            //handle MozMousePixelScroll in older Firefox
+            else{
+                document[ _addEventListener ](prefix + support, MouseWheelHandler, false);
+            }
+        }
+
+        /**
+        * Binding the mousemove when the mouse's middle button is pressed
+        */
+        function addMiddleWheelHandler(){
+            container
+                .on('mousedown', mouseDownHandler)
+                .on('mouseup', mouseUpHandler);
+        }
+
+        /**
+        * Unbinding the mousemove when the mouse's middle button is released
+        */
+        function removeMiddleWheelHandler(){
+            container
+                .off('mousedown', mouseDownHandler)
+                .off('mouseup', mouseUpHandler);
+        }
+
+        /**
+        * Adds the possibility to auto scroll through sections on touch devices.
+        */
+        function addTouchHandler(){
+            if(isTouchDevice || isTouch){
+                if(options.autoScrolling){
+                    $body.off(events.touchmove).on(events.touchmove, preventBouncing);
+                }
+
+                $(WRAPPER_SEL)
+                    .off(events.touchstart).on(events.touchstart, touchStartHandler)
+                    .off(events.touchmove).on(events.touchmove, touchMoveHandler);
+            }
+        }
+
+        /**
+        * Removes the auto scrolling for touch devices.
+        */
+        function removeTouchHandler(){
+            if(isTouchDevice || isTouch){
+                if(options.autoScrolling){
+                    $body.off(events.touchmove);
+                }
+
+                $(WRAPPER_SEL)
+                    .off(events.touchstart)
+                    .off(events.touchmove);
+            }
+        }
+
+        /*
+        * Returns and object with Microsoft pointers (for IE<11 and for IE >= 11)
+        * http://msdn.microsoft.com/en-us/library/ie/dn304886(v=vs.85).aspx
+        */
+        function getMSPointer(){
+            var pointer;
+
+            //IE >= 11 & rest of browsers
+            if(window.PointerEvent){
+                pointer = { down: 'pointerdown', move: 'pointermove'};
+            }
+
+            //IE < 11
+            else{
+                pointer = { down: 'MSPointerDown', move: 'MSPointerMove'};
+            }
+
+            return pointer;
+        }
+
+        /**
+        * Gets the pageX and pageY properties depending on the browser.
+        * https://github.com/alvarotrigo/fullPage.js/issues/194#issuecomment-34069854
+        */
+        function getEventsPage(e){
+            var events = [];
+
+            events.y = (typeof e.pageY !== 'undefined' && (e.pageY || e.pageX) ? e.pageY : e.touches[0].pageY);
+            events.x = (typeof e.pageX !== 'undefined' && (e.pageY || e.pageX) ? e.pageX : e.touches[0].pageX);
+
+            //in touch devices with scroll bar, e.pageY is detected, but we have to deal with touch events. #1008
+            if(isTouch && isReallyTouch(e) && (options.scrollBar || !options.autoScrolling)){
+                events.y = e.touches[0].pageY;
+                events.x = e.touches[0].pageX;
+            }
+
+            return events;
+        }
+
+        /**
+        * Slides silently (with no animation) the active slider to the given slide.
+        * @param noCallback {bool} true or defined -> no callbacks
+        */
+        function silentLandscapeScroll(activeSlide, noCallbacks){
+            setScrollingSpeed (0, 'internal');
+
+            if(typeof noCallbacks !== 'undefined'){
+                //preventing firing callbacks afterSlideLoad etc.
+                isResizing = true;
+            }
+
+            landscapeScroll(activeSlide.closest(SLIDES_WRAPPER_SEL), activeSlide);
+
+            if(typeof noCallbacks !== 'undefined'){
+                isResizing = false;
+            }
+
+            setScrollingSpeed(originals.scrollingSpeed, 'internal');
+        }
+
+        /**
+        * Scrolls silently (with no animation) the page to the given Y position.
+        */
+        function silentScroll(top){
+            // The first section can have a negative value in iOS 10. Not quite sure why: -0.0142822265625
+            // that's why we round it to 0.
+            var roundedTop = Math.round(top);
+
+            if (options.css3 && options.autoScrolling && !options.scrollBar){
+                var translate3d = 'translate3d(0px, -' + roundedTop + 'px, 0px)';
+                transformContainer(translate3d, false);
+            }
+            else if(options.autoScrolling && !options.scrollBar){
+                container.css('top', -roundedTop);
+            }
+            else{
+                $htmlBody.scrollTop(roundedTop);
+            }
+        }
+
+        /**
+        * Returns the cross-browser transform string.
+        */
+        function getTransforms(translate3d){
+            return {
+                '-webkit-transform': translate3d,
+                '-moz-transform': translate3d,
+                '-ms-transform':translate3d,
+                'transform': translate3d
+            };
+        }
+
+        /**
+        * Allowing or disallowing the mouse/swipe scroll in a given direction. (not for keyboard)
+        * @type  m (mouse) or k (keyboard)
+        */
+        function setIsScrollAllowed(value, direction, type){
+            //up, down, left, right
+            if(direction !== 'all'){
+                isScrollAllowed[type][direction] = value;
+            }
+
+            //all directions?
+            else{
+                $.each(Object.keys(isScrollAllowed[type]), function(index, key){
+                    isScrollAllowed[type][key] = value;
+                });
+            }
+        }
+
+        /*
+        * Destroys fullpage.js plugin events and optinally its html markup and styles
+        */
+        function destroy(all){
+            setAutoScrolling(false, 'internal');
+            setAllowScrolling(false);
+            setKeyboardScrolling(false);
+            container.addClass(DESTROYED);
+
+            clearTimeout(afterSlideLoadsId);
+            clearTimeout(afterSectionLoadsId);
+            clearTimeout(resizeId);
+            clearTimeout(scrollId);
+            clearTimeout(scrollId2);
+
+            $window
+                .off('scroll', scrollHandler)
+                .off('hashchange', hashChangeHandler)
+                .off('resize', resizeHandler);
+
+            $document
+                .off('click touchstart', SECTION_NAV_SEL + ' a')
+                .off('mouseenter', SECTION_NAV_SEL + ' li')
+                .off('mouseleave', SECTION_NAV_SEL + ' li')
+                .off('click touchstart', SLIDES_NAV_LINK_SEL)
+                .off('mouseover', options.normalScrollElements)
+                .off('mouseout', options.normalScrollElements);
+
+            $(SECTION_SEL)
+                .off('click touchstart', SLIDES_ARROW_SEL);
+
+            clearTimeout(afterSlideLoadsId);
+            clearTimeout(afterSectionLoadsId);
+
+            //lets make a mess!
+            if(all){
+                destroyStructure();
+            }
+        }
+
+        /*
+        * Removes inline styles added by fullpage.js
+        */
+        function destroyStructure(){
+            //reseting the `top` or `translate` properties to 0
+            silentScroll(0);
+
+            //loading all the lazy load content
+            container.find('img[data-src], source[data-src], audio[data-src], iframe[data-src]').each(function(){
+                setSrc($(this), 'src');
+            });
+
+            container.find('img[data-srcset]').each(function(){
+                setSrc($(this), 'srcset');
+            });
+
+            $(SECTION_NAV_SEL + ', ' + SLIDES_NAV_SEL +  ', ' + SLIDES_ARROW_SEL).remove();
+
+            //removing inline styles
+            $(SECTION_SEL).css( {
+                'height': '',
+                'background-color' : '',
+                'padding': ''
+            });
+
+            $(SLIDE_SEL).css( {
+                'width': ''
+            });
+
+            container.css({
+                'height': '',
+                'position': '',
+                '-ms-touch-action': '',
+                'touch-action': ''
+            });
+
+            $htmlBody.css({
+                'overflow': '',
+                'height': ''
+            });
+
+            // remove .fp-enabled class
+            $('html').removeClass(ENABLED);
+
+            // remove .fp-responsive class
+            $body.removeClass(RESPONSIVE);
+
+            // remove all of the .fp-viewing- classes
+            $.each($body.get(0).className.split(/\s+/), function (index, className) {
+                if (className.indexOf(VIEWING_PREFIX) === 0) {
+                    $body.removeClass(className);
+                }
+            });
+
+            //removing added classes
+            $(SECTION_SEL + ', ' + SLIDE_SEL).each(function(){
+                if(options.scrollOverflowHandler){
+                    options.scrollOverflowHandler.remove($(this));
+                }
+                $(this).removeClass(TABLE + ' ' + ACTIVE);
+                $(this).attr('style', $(this).data('fp-styles'));
+            });
+
+            removeAnimation(container);
+
+            //Unwrapping content
+            container.find(TABLE_CELL_SEL + ', ' + SLIDES_CONTAINER_SEL + ', ' + SLIDES_WRAPPER_SEL).each(function(){
+                //unwrap not being use in case there's no child element inside and its just text
+                $(this).replaceWith(this.childNodes);
+            });
+
+            //removing the applied transition from the fullpage wrapper
+            container.css({
+                '-webkit-transition': 'none',
+                'transition': 'none'
+            });
+
+            //scrolling the page to the top with no animation
+            $htmlBody.scrollTop(0);
+
+            //removing selectors
+            var usedSelectors = [SECTION, SLIDE, SLIDES_CONTAINER];
+            $.each(usedSelectors, function(index, value){
+                $('.' + value).removeClass(value);
+            });
+        }
+
+        /*
+        * Sets the state for a variable with multiple states (original, and temporal)
+        * Some variables such as `autoScrolling` or `recordHistory` might change automatically its state when using `responsive` or `autoScrolling:false`.
+        * This function is used to keep track of both states, the original and the temporal one.
+        * If type is not 'internal', then we assume the user is globally changing the variable.
+        */
+        function setVariableState(variable, value, type){
+            options[variable] = value;
+            if(type !== 'internal'){
+                originals[variable] = value;
+            }
+        }
+
+        /**
+        * Displays warnings
+        */
+        function displayWarnings(){
+            var extensions = ['fadingEffect', 'continuousHorizontal', 'scrollHorizontally', 'interlockedSlides', 'resetSliders', 'responsiveSlides', 'offsetSections', 'dragAndMove', 'scrollOverflowReset', 'parallax'];
+            if($('html').hasClass(ENABLED)){
+                showError('error', 'Fullpage.js can only be initialized once and you are doing it multiple times!');
+                return;
+            }
+
+            // Disable mutually exclusive settings
+            if (options.continuousVertical &&
+                (options.loopTop || options.loopBottom)) {
+                options.continuousVertical = false;
+                showError('warn', 'Option `loopTop/loopBottom` is mutually exclusive with `continuousVertical`; `continuousVertical` disabled');
+            }
+
+            if(options.scrollBar && options.scrollOverflow){
+                showError('warn', 'Option `scrollBar` is mutually exclusive with `scrollOverflow`. Sections with scrollOverflow might not work well in Firefox');
+            }
+
+            if(options.continuousVertical && (options.scrollBar || !options.autoScrolling)){
+                options.continuousVertical = false;
+                showError('warn', 'Scroll bars (`scrollBar:true` or `autoScrolling:false`) are mutually exclusive with `continuousVertical`; `continuousVertical` disabled');
+            }
+
+            if(options.scrollOverflow && !options.scrollOverflowHandler){
+                options.scrollOverflow = false;
+                showError('error', 'The option `scrollOverflow:true` requires the file `scrolloverflow.min.js`. Please include it before fullPage.js.');
+            }
+
+            //using extensions? Wrong file!
+            $.each(extensions, function(index, extension){
+                //is the option set to true?
+                if(options[extension]){
+                    showError('warn', 'fullpage.js extensions require jquery.fullpage.extensions.min.js file instead of the usual jquery.fullpage.js. Requested: '+ extension);
+                }
+            });
+
+            //anchors can not have the same value as any element ID or NAME
+            $.each(options.anchors, function(index, name){
+
+                //case insensitive selectors (http://stackoverflow.com/a/19465187/1081396)
+                var nameAttr = $document.find('[name]').filter(function() {
+                    return $(this).attr('name') && $(this).attr('name').toLowerCase() == name.toLowerCase();
+                });
+
+                var idAttr = $document.find('[id]').filter(function() {
+                    return $(this).attr('id') && $(this).attr('id').toLowerCase() == name.toLowerCase();
+                });
+
+                if(idAttr.length || nameAttr.length ){
+                    showError('error', 'data-anchor tags can not have the same value as any `id` element on the site (or `name` element for IE).');
+                    idAttr.length && showError('error', '"' + name + '" is is being used by another element `id` property');
+                    nameAttr.length && showError('error', '"' + name + '" is is being used by another element `name` property');
+                }
+            });
+        }
+
+        /**
+        * Shows a message in the console of the given type.
+        */
+        function showError(type, text){
+            console && console[type] && console[type]('fullPage: ' + text);
+        }
+
+    }; //end of $.fn.fullpage
+});
+
+
+/***/ }),
+/* 237 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/*
@@ -56781,7 +61404,7 @@ if (jQuery) (function ($) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 227 */
+/* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -58145,7 +62768,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 228 */
+/* 239 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -59754,11 +64377,24 @@ return $;
 }));
 
 /***/ }),
-/* 229 */
+/* 240 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(14);
+__webpack_require__(160);
+__webpack_require__(241);
+__webpack_require__(161);
+__webpack_require__(242);
+__webpack_require__(162);
+__webpack_require__(243);
+__webpack_require__(246);
+
+/***/ }),
+/* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * jQuery UI Widget 1.12.1
+ * jQuery UI Disable Selection 1.12.1
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -59766,744 +64402,17 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  * http://jquery.org/license
  */
 
-//>>label: Widget
+//>>label: disableSelection
 //>>group: Core
-//>>description: Provides a factory for creating stateful widgets with a common API.
-//>>docs: http://api.jqueryui.com/jQuery.widget/
-//>>demos: http://jqueryui.com/widget/
+//>>description: Disable selection of text content within the set of matched elements.
+//>>docs: http://api.jqueryui.com/disableSelection/
 
+// This file is deprecated
 ( function( factory ) {
 	if ( true ) {
 
 		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1), __webpack_require__(230) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else {
-
-		// Browser globals
-		factory( jQuery );
-	}
-}( function( $ ) {
-
-var widgetUuid = 0;
-var widgetSlice = Array.prototype.slice;
-
-$.cleanData = ( function( orig ) {
-	return function( elems ) {
-		var events, elem, i;
-		for ( i = 0; ( elem = elems[ i ] ) != null; i++ ) {
-			try {
-
-				// Only trigger remove when necessary to save time
-				events = $._data( elem, "events" );
-				if ( events && events.remove ) {
-					$( elem ).triggerHandler( "remove" );
-				}
-
-			// Http://bugs.jquery.com/ticket/8235
-			} catch ( e ) {}
-		}
-		orig( elems );
-	};
-} )( $.cleanData );
-
-$.widget = function( name, base, prototype ) {
-	var existingConstructor, constructor, basePrototype;
-
-	// ProxiedPrototype allows the provided prototype to remain unmodified
-	// so that it can be used as a mixin for multiple widgets (#8876)
-	var proxiedPrototype = {};
-
-	var namespace = name.split( "." )[ 0 ];
-	name = name.split( "." )[ 1 ];
-	var fullName = namespace + "-" + name;
-
-	if ( !prototype ) {
-		prototype = base;
-		base = $.Widget;
-	}
-
-	if ( $.isArray( prototype ) ) {
-		prototype = $.extend.apply( null, [ {} ].concat( prototype ) );
-	}
-
-	// Create selector for plugin
-	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
-		return !!$.data( elem, fullName );
-	};
-
-	$[ namespace ] = $[ namespace ] || {};
-	existingConstructor = $[ namespace ][ name ];
-	constructor = $[ namespace ][ name ] = function( options, element ) {
-
-		// Allow instantiation without "new" keyword
-		if ( !this._createWidget ) {
-			return new constructor( options, element );
-		}
-
-		// Allow instantiation without initializing for simple inheritance
-		// must use "new" keyword (the code above always passes args)
-		if ( arguments.length ) {
-			this._createWidget( options, element );
-		}
-	};
-
-	// Extend with the existing constructor to carry over any static properties
-	$.extend( constructor, existingConstructor, {
-		version: prototype.version,
-
-		// Copy the object used to create the prototype in case we need to
-		// redefine the widget later
-		_proto: $.extend( {}, prototype ),
-
-		// Track widgets that inherit from this widget in case this widget is
-		// redefined after a widget inherits from it
-		_childConstructors: []
-	} );
-
-	basePrototype = new base();
-
-	// We need to make the options hash a property directly on the new instance
-	// otherwise we'll modify the options hash on the prototype that we're
-	// inheriting from
-	basePrototype.options = $.widget.extend( {}, basePrototype.options );
-	$.each( prototype, function( prop, value ) {
-		if ( !$.isFunction( value ) ) {
-			proxiedPrototype[ prop ] = value;
-			return;
-		}
-		proxiedPrototype[ prop ] = ( function() {
-			function _super() {
-				return base.prototype[ prop ].apply( this, arguments );
-			}
-
-			function _superApply( args ) {
-				return base.prototype[ prop ].apply( this, args );
-			}
-
-			return function() {
-				var __super = this._super;
-				var __superApply = this._superApply;
-				var returnValue;
-
-				this._super = _super;
-				this._superApply = _superApply;
-
-				returnValue = value.apply( this, arguments );
-
-				this._super = __super;
-				this._superApply = __superApply;
-
-				return returnValue;
-			};
-		} )();
-	} );
-	constructor.prototype = $.widget.extend( basePrototype, {
-
-		// TODO: remove support for widgetEventPrefix
-		// always use the name + a colon as the prefix, e.g., draggable:start
-		// don't prefix for widgets that aren't DOM-based
-		widgetEventPrefix: existingConstructor ? ( basePrototype.widgetEventPrefix || name ) : name
-	}, proxiedPrototype, {
-		constructor: constructor,
-		namespace: namespace,
-		widgetName: name,
-		widgetFullName: fullName
-	} );
-
-	// If this widget is being redefined then we need to find all widgets that
-	// are inheriting from it and redefine all of them so that they inherit from
-	// the new version of this widget. We're essentially trying to replace one
-	// level in the prototype chain.
-	if ( existingConstructor ) {
-		$.each( existingConstructor._childConstructors, function( i, child ) {
-			var childPrototype = child.prototype;
-
-			// Redefine the child widget using the same prototype that was
-			// originally used, but inherit from the new version of the base
-			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor,
-				child._proto );
-		} );
-
-		// Remove the list of existing child constructors from the old constructor
-		// so the old child constructors can be garbage collected
-		delete existingConstructor._childConstructors;
-	} else {
-		base._childConstructors.push( constructor );
-	}
-
-	$.widget.bridge( name, constructor );
-
-	return constructor;
-};
-
-$.widget.extend = function( target ) {
-	var input = widgetSlice.call( arguments, 1 );
-	var inputIndex = 0;
-	var inputLength = input.length;
-	var key;
-	var value;
-
-	for ( ; inputIndex < inputLength; inputIndex++ ) {
-		for ( key in input[ inputIndex ] ) {
-			value = input[ inputIndex ][ key ];
-			if ( input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
-
-				// Clone objects
-				if ( $.isPlainObject( value ) ) {
-					target[ key ] = $.isPlainObject( target[ key ] ) ?
-						$.widget.extend( {}, target[ key ], value ) :
-
-						// Don't extend strings, arrays, etc. with objects
-						$.widget.extend( {}, value );
-
-				// Copy everything else by reference
-				} else {
-					target[ key ] = value;
-				}
-			}
-		}
-	}
-	return target;
-};
-
-$.widget.bridge = function( name, object ) {
-	var fullName = object.prototype.widgetFullName || name;
-	$.fn[ name ] = function( options ) {
-		var isMethodCall = typeof options === "string";
-		var args = widgetSlice.call( arguments, 1 );
-		var returnValue = this;
-
-		if ( isMethodCall ) {
-
-			// If this is an empty collection, we need to have the instance method
-			// return undefined instead of the jQuery instance
-			if ( !this.length && options === "instance" ) {
-				returnValue = undefined;
-			} else {
-				this.each( function() {
-					var methodValue;
-					var instance = $.data( this, fullName );
-
-					if ( options === "instance" ) {
-						returnValue = instance;
-						return false;
-					}
-
-					if ( !instance ) {
-						return $.error( "cannot call methods on " + name +
-							" prior to initialization; " +
-							"attempted to call method '" + options + "'" );
-					}
-
-					if ( !$.isFunction( instance[ options ] ) || options.charAt( 0 ) === "_" ) {
-						return $.error( "no such method '" + options + "' for " + name +
-							" widget instance" );
-					}
-
-					methodValue = instance[ options ].apply( instance, args );
-
-					if ( methodValue !== instance && methodValue !== undefined ) {
-						returnValue = methodValue && methodValue.jquery ?
-							returnValue.pushStack( methodValue.get() ) :
-							methodValue;
-						return false;
-					}
-				} );
-			}
-		} else {
-
-			// Allow multiple hashes to be passed on init
-			if ( args.length ) {
-				options = $.widget.extend.apply( null, [ options ].concat( args ) );
-			}
-
-			this.each( function() {
-				var instance = $.data( this, fullName );
-				if ( instance ) {
-					instance.option( options || {} );
-					if ( instance._init ) {
-						instance._init();
-					}
-				} else {
-					$.data( this, fullName, new object( options, this ) );
-				}
-			} );
-		}
-
-		return returnValue;
-	};
-};
-
-$.Widget = function( /* options, element */ ) {};
-$.Widget._childConstructors = [];
-
-$.Widget.prototype = {
-	widgetName: "widget",
-	widgetEventPrefix: "",
-	defaultElement: "<div>",
-
-	options: {
-		classes: {},
-		disabled: false,
-
-		// Callbacks
-		create: null
-	},
-
-	_createWidget: function( options, element ) {
-		element = $( element || this.defaultElement || this )[ 0 ];
-		this.element = $( element );
-		this.uuid = widgetUuid++;
-		this.eventNamespace = "." + this.widgetName + this.uuid;
-
-		this.bindings = $();
-		this.hoverable = $();
-		this.focusable = $();
-		this.classesElementLookup = {};
-
-		if ( element !== this ) {
-			$.data( element, this.widgetFullName, this );
-			this._on( true, this.element, {
-				remove: function( event ) {
-					if ( event.target === element ) {
-						this.destroy();
-					}
-				}
-			} );
-			this.document = $( element.style ?
-
-				// Element within the document
-				element.ownerDocument :
-
-				// Element is window or document
-				element.document || element );
-			this.window = $( this.document[ 0 ].defaultView || this.document[ 0 ].parentWindow );
-		}
-
-		this.options = $.widget.extend( {},
-			this.options,
-			this._getCreateOptions(),
-			options );
-
-		this._create();
-
-		if ( this.options.disabled ) {
-			this._setOptionDisabled( this.options.disabled );
-		}
-
-		this._trigger( "create", null, this._getCreateEventData() );
-		this._init();
-	},
-
-	_getCreateOptions: function() {
-		return {};
-	},
-
-	_getCreateEventData: $.noop,
-
-	_create: $.noop,
-
-	_init: $.noop,
-
-	destroy: function() {
-		var that = this;
-
-		this._destroy();
-		$.each( this.classesElementLookup, function( key, value ) {
-			that._removeClass( value, key );
-		} );
-
-		// We can probably remove the unbind calls in 2.0
-		// all event bindings should go through this._on()
-		this.element
-			.off( this.eventNamespace )
-			.removeData( this.widgetFullName );
-		this.widget()
-			.off( this.eventNamespace )
-			.removeAttr( "aria-disabled" );
-
-		// Clean up events and states
-		this.bindings.off( this.eventNamespace );
-	},
-
-	_destroy: $.noop,
-
-	widget: function() {
-		return this.element;
-	},
-
-	option: function( key, value ) {
-		var options = key;
-		var parts;
-		var curOption;
-		var i;
-
-		if ( arguments.length === 0 ) {
-
-			// Don't return a reference to the internal hash
-			return $.widget.extend( {}, this.options );
-		}
-
-		if ( typeof key === "string" ) {
-
-			// Handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
-			options = {};
-			parts = key.split( "." );
-			key = parts.shift();
-			if ( parts.length ) {
-				curOption = options[ key ] = $.widget.extend( {}, this.options[ key ] );
-				for ( i = 0; i < parts.length - 1; i++ ) {
-					curOption[ parts[ i ] ] = curOption[ parts[ i ] ] || {};
-					curOption = curOption[ parts[ i ] ];
-				}
-				key = parts.pop();
-				if ( arguments.length === 1 ) {
-					return curOption[ key ] === undefined ? null : curOption[ key ];
-				}
-				curOption[ key ] = value;
-			} else {
-				if ( arguments.length === 1 ) {
-					return this.options[ key ] === undefined ? null : this.options[ key ];
-				}
-				options[ key ] = value;
-			}
-		}
-
-		this._setOptions( options );
-
-		return this;
-	},
-
-	_setOptions: function( options ) {
-		var key;
-
-		for ( key in options ) {
-			this._setOption( key, options[ key ] );
-		}
-
-		return this;
-	},
-
-	_setOption: function( key, value ) {
-		if ( key === "classes" ) {
-			this._setOptionClasses( value );
-		}
-
-		this.options[ key ] = value;
-
-		if ( key === "disabled" ) {
-			this._setOptionDisabled( value );
-		}
-
-		return this;
-	},
-
-	_setOptionClasses: function( value ) {
-		var classKey, elements, currentElements;
-
-		for ( classKey in value ) {
-			currentElements = this.classesElementLookup[ classKey ];
-			if ( value[ classKey ] === this.options.classes[ classKey ] ||
-					!currentElements ||
-					!currentElements.length ) {
-				continue;
-			}
-
-			// We are doing this to create a new jQuery object because the _removeClass() call
-			// on the next line is going to destroy the reference to the current elements being
-			// tracked. We need to save a copy of this collection so that we can add the new classes
-			// below.
-			elements = $( currentElements.get() );
-			this._removeClass( currentElements, classKey );
-
-			// We don't use _addClass() here, because that uses this.options.classes
-			// for generating the string of classes. We want to use the value passed in from
-			// _setOption(), this is the new value of the classes option which was passed to
-			// _setOption(). We pass this value directly to _classes().
-			elements.addClass( this._classes( {
-				element: elements,
-				keys: classKey,
-				classes: value,
-				add: true
-			} ) );
-		}
-	},
-
-	_setOptionDisabled: function( value ) {
-		this._toggleClass( this.widget(), this.widgetFullName + "-disabled", null, !!value );
-
-		// If the widget is becoming disabled, then nothing is interactive
-		if ( value ) {
-			this._removeClass( this.hoverable, null, "ui-state-hover" );
-			this._removeClass( this.focusable, null, "ui-state-focus" );
-		}
-	},
-
-	enable: function() {
-		return this._setOptions( { disabled: false } );
-	},
-
-	disable: function() {
-		return this._setOptions( { disabled: true } );
-	},
-
-	_classes: function( options ) {
-		var full = [];
-		var that = this;
-
-		options = $.extend( {
-			element: this.element,
-			classes: this.options.classes || {}
-		}, options );
-
-		function processClassString( classes, checkOption ) {
-			var current, i;
-			for ( i = 0; i < classes.length; i++ ) {
-				current = that.classesElementLookup[ classes[ i ] ] || $();
-				if ( options.add ) {
-					current = $( $.unique( current.get().concat( options.element.get() ) ) );
-				} else {
-					current = $( current.not( options.element ).get() );
-				}
-				that.classesElementLookup[ classes[ i ] ] = current;
-				full.push( classes[ i ] );
-				if ( checkOption && options.classes[ classes[ i ] ] ) {
-					full.push( options.classes[ classes[ i ] ] );
-				}
-			}
-		}
-
-		this._on( options.element, {
-			"remove": "_untrackClassesElement"
-		} );
-
-		if ( options.keys ) {
-			processClassString( options.keys.match( /\S+/g ) || [], true );
-		}
-		if ( options.extra ) {
-			processClassString( options.extra.match( /\S+/g ) || [] );
-		}
-
-		return full.join( " " );
-	},
-
-	_untrackClassesElement: function( event ) {
-		var that = this;
-		$.each( that.classesElementLookup, function( key, value ) {
-			if ( $.inArray( event.target, value ) !== -1 ) {
-				that.classesElementLookup[ key ] = $( value.not( event.target ).get() );
-			}
-		} );
-	},
-
-	_removeClass: function( element, keys, extra ) {
-		return this._toggleClass( element, keys, extra, false );
-	},
-
-	_addClass: function( element, keys, extra ) {
-		return this._toggleClass( element, keys, extra, true );
-	},
-
-	_toggleClass: function( element, keys, extra, add ) {
-		add = ( typeof add === "boolean" ) ? add : extra;
-		var shift = ( typeof element === "string" || element === null ),
-			options = {
-				extra: shift ? keys : extra,
-				keys: shift ? element : keys,
-				element: shift ? this.element : element,
-				add: add
-			};
-		options.element.toggleClass( this._classes( options ), add );
-		return this;
-	},
-
-	_on: function( suppressDisabledCheck, element, handlers ) {
-		var delegateElement;
-		var instance = this;
-
-		// No suppressDisabledCheck flag, shuffle arguments
-		if ( typeof suppressDisabledCheck !== "boolean" ) {
-			handlers = element;
-			element = suppressDisabledCheck;
-			suppressDisabledCheck = false;
-		}
-
-		// No element argument, shuffle and use this.element
-		if ( !handlers ) {
-			handlers = element;
-			element = this.element;
-			delegateElement = this.widget();
-		} else {
-			element = delegateElement = $( element );
-			this.bindings = this.bindings.add( element );
-		}
-
-		$.each( handlers, function( event, handler ) {
-			function handlerProxy() {
-
-				// Allow widgets to customize the disabled handling
-				// - disabled as an array instead of boolean
-				// - disabled class as method for disabling individual parts
-				if ( !suppressDisabledCheck &&
-						( instance.options.disabled === true ||
-						$( this ).hasClass( "ui-state-disabled" ) ) ) {
-					return;
-				}
-				return ( typeof handler === "string" ? instance[ handler ] : handler )
-					.apply( instance, arguments );
-			}
-
-			// Copy the guid so direct unbinding works
-			if ( typeof handler !== "string" ) {
-				handlerProxy.guid = handler.guid =
-					handler.guid || handlerProxy.guid || $.guid++;
-			}
-
-			var match = event.match( /^([\w:-]*)\s*(.*)$/ );
-			var eventName = match[ 1 ] + instance.eventNamespace;
-			var selector = match[ 2 ];
-
-			if ( selector ) {
-				delegateElement.on( eventName, selector, handlerProxy );
-			} else {
-				element.on( eventName, handlerProxy );
-			}
-		} );
-	},
-
-	_off: function( element, eventName ) {
-		eventName = ( eventName || "" ).split( " " ).join( this.eventNamespace + " " ) +
-			this.eventNamespace;
-		element.off( eventName ).off( eventName );
-
-		// Clear the stack to avoid memory leaks (#10056)
-		this.bindings = $( this.bindings.not( element ).get() );
-		this.focusable = $( this.focusable.not( element ).get() );
-		this.hoverable = $( this.hoverable.not( element ).get() );
-	},
-
-	_delay: function( handler, delay ) {
-		function handlerProxy() {
-			return ( typeof handler === "string" ? instance[ handler ] : handler )
-				.apply( instance, arguments );
-		}
-		var instance = this;
-		return setTimeout( handlerProxy, delay || 0 );
-	},
-
-	_hoverable: function( element ) {
-		this.hoverable = this.hoverable.add( element );
-		this._on( element, {
-			mouseenter: function( event ) {
-				this._addClass( $( event.currentTarget ), null, "ui-state-hover" );
-			},
-			mouseleave: function( event ) {
-				this._removeClass( $( event.currentTarget ), null, "ui-state-hover" );
-			}
-		} );
-	},
-
-	_focusable: function( element ) {
-		this.focusable = this.focusable.add( element );
-		this._on( element, {
-			focusin: function( event ) {
-				this._addClass( $( event.currentTarget ), null, "ui-state-focus" );
-			},
-			focusout: function( event ) {
-				this._removeClass( $( event.currentTarget ), null, "ui-state-focus" );
-			}
-		} );
-	},
-
-	_trigger: function( type, event, data ) {
-		var prop, orig;
-		var callback = this.options[ type ];
-
-		data = data || {};
-		event = $.Event( event );
-		event.type = ( type === this.widgetEventPrefix ?
-			type :
-			this.widgetEventPrefix + type ).toLowerCase();
-
-		// The original event may come from any element
-		// so we need to reset the target on the new event
-		event.target = this.element[ 0 ];
-
-		// Copy original event properties over to the new event
-		orig = event.originalEvent;
-		if ( orig ) {
-			for ( prop in orig ) {
-				if ( !( prop in event ) ) {
-					event[ prop ] = orig[ prop ];
-				}
-			}
-		}
-
-		this.element.trigger( event, data );
-		return !( $.isFunction( callback ) &&
-			callback.apply( this.element[ 0 ], [ event ].concat( data ) ) === false ||
-			event.isDefaultPrevented() );
-	}
-};
-
-$.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
-	$.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
-		if ( typeof options === "string" ) {
-			options = { effect: options };
-		}
-
-		var hasOptions;
-		var effectName = !options ?
-			method :
-			options === true || typeof options === "number" ?
-				defaultEffect :
-				options.effect || defaultEffect;
-
-		options = options || {};
-		if ( typeof options === "number" ) {
-			options = { duration: options };
-		}
-
-		hasOptions = !$.isEmptyObject( options );
-		options.complete = callback;
-
-		if ( options.delay ) {
-			element.delay( options.delay );
-		}
-
-		if ( hasOptions && $.effects && $.effects.effect[ effectName ] ) {
-			element[ method ]( options );
-		} else if ( effectName !== method && element[ effectName ] ) {
-			element[ effectName ]( options.duration, options.easing, callback );
-		} else {
-			element.queue( function( next ) {
-				$( this )[ method ]();
-				if ( callback ) {
-					callback.call( element[ 0 ] );
-				}
-				next();
-			} );
-		}
-	};
-} );
-
-return $.widget;
-
-} ) );
-
-
-/***/ }),
-/* 230 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;( function( factory ) {
-	if ( true ) {
-
-		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1), __webpack_require__(4) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -60514,2956 +64423,1788 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 	}
 } ( function( $ ) {
 
-$.ui = $.ui || {};
+return $.fn.extend( {
+	disableSelection: ( function() {
+		var eventType = "onselectstart" in document.createElement( "div" ) ?
+			"selectstart" :
+			"mousedown";
 
-return $.ui.version = "1.12.1";
+		return function() {
+			return this.on( eventType + ".ui-disableSelection", function( event ) {
+				event.preventDefault();
+			} );
+		};
+	} )(),
+
+	enableSelection: function() {
+		return this.off( ".ui-disableSelection" );
+	}
+} );
 
 } ) );
 
 
 /***/ }),
-/* 231 */
+/* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * fullPage 2.9.7
- * https://github.com/alvarotrigo/fullPage.js
- * @license MIT licensed
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * jQuery UI Sortable 1.12.1
+ * http://jqueryui.com
  *
- * Copyright (C) 2015 alvarotrigo.com - A project by Alvaro Trigo
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
  */
-(function(global, factory) {
-    'use strict';
-    if (true) {
-        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1)], __WEBPACK_AMD_DEFINE_RESULT__ = (function($) {
-          return factory($, global, global.document, global.Math);
-        }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+
+//>>label: Sortable
+//>>group: Interactions
+//>>description: Enables items in a list to be sorted using the mouse.
+//>>docs: http://api.jqueryui.com/sortable/
+//>>demos: http://jqueryui.com/sortable/
+//>>css.structure: ../../themes/base/sortable.css
+
+( function( factory ) {
+	if ( true ) {
+
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
+			__webpack_require__(1),
+			__webpack_require__(162),
+			__webpack_require__(160),
+			__webpack_require__(163),
+			__webpack_require__(161),
+			__webpack_require__(4),
+			__webpack_require__(14)
+		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-    } else if (typeof exports === "object" && exports) {
-        module.exports = factory(require('jquery'), global, global.document, global.Math);
-    } else {
-        factory(jQuery, global, global.document, global.Math);
-    }
-})(typeof window !== 'undefined' ? window : this, function($, window, document, Math, undefined) {
-    'use strict';
-
-    // keeping central set of classnames and selectors
-    var WRAPPER =               'fullpage-wrapper';
-    var WRAPPER_SEL =           '.' + WRAPPER;
-
-    // slimscroll
-    var SCROLLABLE =            'fp-scrollable';
-    var SCROLLABLE_SEL =        '.' + SCROLLABLE;
-
-    // util
-    var RESPONSIVE =            'fp-responsive';
-    var NO_TRANSITION =         'fp-notransition';
-    var DESTROYED =             'fp-destroyed';
-    var ENABLED =               'fp-enabled';
-    var VIEWING_PREFIX =        'fp-viewing';
-    var ACTIVE =                'active';
-    var ACTIVE_SEL =            '.' + ACTIVE;
-    var COMPLETELY =            'fp-completely';
-    var COMPLETELY_SEL =        '.' + COMPLETELY;
-
-    // section
-    var SECTION_DEFAULT_SEL =   '.section';
-    var SECTION =               'fp-section';
-    var SECTION_SEL =           '.' + SECTION;
-    var SECTION_ACTIVE_SEL =    SECTION_SEL + ACTIVE_SEL;
-    var SECTION_FIRST_SEL =     SECTION_SEL + ':first';
-    var SECTION_LAST_SEL =      SECTION_SEL + ':last';
-    var TABLE_CELL =            'fp-tableCell';
-    var TABLE_CELL_SEL =        '.' + TABLE_CELL;
-    var AUTO_HEIGHT =           'fp-auto-height';
-    var AUTO_HEIGHT_SEL =       '.fp-auto-height';
-    var NORMAL_SCROLL =         'fp-normal-scroll';
-    var NORMAL_SCROLL_SEL =     '.fp-normal-scroll';
-
-    // section nav
-    var SECTION_NAV =           'fp-nav';
-    var SECTION_NAV_SEL =       '#' + SECTION_NAV;
-    var SECTION_NAV_TOOLTIP =   'fp-tooltip';
-    var SECTION_NAV_TOOLTIP_SEL='.'+SECTION_NAV_TOOLTIP;
-    var SHOW_ACTIVE_TOOLTIP =   'fp-show-active';
-
-    // slide
-    var SLIDE_DEFAULT_SEL =     '.slide';
-    var SLIDE =                 'fp-slide';
-    var SLIDE_SEL =             '.' + SLIDE;
-    var SLIDE_ACTIVE_SEL =      SLIDE_SEL + ACTIVE_SEL;
-    var SLIDES_WRAPPER =        'fp-slides';
-    var SLIDES_WRAPPER_SEL =    '.' + SLIDES_WRAPPER;
-    var SLIDES_CONTAINER =      'fp-slidesContainer';
-    var SLIDES_CONTAINER_SEL =  '.' + SLIDES_CONTAINER;
-    var TABLE =                 'fp-table';
-
-    // slide nav
-    var SLIDES_NAV =            'fp-slidesNav';
-    var SLIDES_NAV_SEL =        '.' + SLIDES_NAV;
-    var SLIDES_NAV_LINK_SEL =   SLIDES_NAV_SEL + ' a';
-    var SLIDES_ARROW =          'fp-controlArrow';
-    var SLIDES_ARROW_SEL =      '.' + SLIDES_ARROW;
-    var SLIDES_PREV =           'fp-prev';
-    var SLIDES_PREV_SEL =       '.' + SLIDES_PREV;
-    var SLIDES_ARROW_PREV =     SLIDES_ARROW + ' ' + SLIDES_PREV;
-    var SLIDES_ARROW_PREV_SEL = SLIDES_ARROW_SEL + SLIDES_PREV_SEL;
-    var SLIDES_NEXT =           'fp-next';
-    var SLIDES_NEXT_SEL =       '.' + SLIDES_NEXT;
-    var SLIDES_ARROW_NEXT =     SLIDES_ARROW + ' ' + SLIDES_NEXT;
-    var SLIDES_ARROW_NEXT_SEL = SLIDES_ARROW_SEL + SLIDES_NEXT_SEL;
-
-    var $window = $(window);
-    var $document = $(document);
-
-    $.fn.fullpage = function(options) {
-        //only once my friend!
-        if($('html').hasClass(ENABLED)){ displayWarnings(); return; }
-
-        // common jQuery objects
-        var $htmlBody = $('html, body');
-        var $body = $('body');
-
-        var FP = $.fn.fullpage;
-
-        // Creating some defaults, extending them with any options that were provided
-        options = $.extend({
-            //navigation
-            menu: false,
-            anchors:[],
-            lockAnchors: false,
-            navigation: false,
-            navigationPosition: 'right',
-            navigationTooltips: [],
-            showActiveTooltip: false,
-            slidesNavigation: false,
-            slidesNavPosition: 'bottom',
-            scrollBar: false,
-            hybrid: false,
-
-            //scrolling
-            css3: true,
-            scrollingSpeed: 700,
-            autoScrolling: true,
-            fitToSection: true,
-            fitToSectionDelay: 1000,
-            easing: 'easeInOutCubic',
-            easingcss3: 'ease',
-            loopBottom: false,
-            loopTop: false,
-            loopHorizontal: true,
-            continuousVertical: false,
-            continuousHorizontal: false,
-            scrollHorizontally: false,
-            interlockedSlides: false,
-            dragAndMove: false,
-            offsetSections: false,
-            resetSliders: false,
-            fadingEffect: false,
-            normalScrollElements: null,
-            scrollOverflow: false,
-            scrollOverflowReset: false,
-            scrollOverflowHandler: $.fn.fp_scrolloverflow ? $.fn.fp_scrolloverflow.iscrollHandler : null,
-            scrollOverflowOptions: null,
-            touchSensitivity: 5,
-            normalScrollElementTouchThreshold: 5,
-            bigSectionsDestination: null,
-
-            //Accessibility
-            keyboardScrolling: true,
-            animateAnchor: true,
-            recordHistory: true,
-
-            //design
-            controlArrows: true,
-            controlArrowColor: '#fff',
-            verticalCentered: true,
-            sectionsColor : [],
-            paddingTop: 0,
-            paddingBottom: 0,
-            fixedElements: null,
-            responsive: 0, //backwards compabitility with responsiveWiddth
-            responsiveWidth: 0,
-            responsiveHeight: 0,
-            responsiveSlides: false,
-            parallax: false,
-            parallaxOptions: {
-                type: 'reveal',
-                percentage: 62,
-                property: 'translate'
-            },
-
-            //Custom selectors
-            sectionSelector: SECTION_DEFAULT_SEL,
-            slideSelector: SLIDE_DEFAULT_SEL,
-
-            //events
-            afterLoad: null,
-            onLeave: null,
-            afterRender: null,
-            afterResize: null,
-            afterReBuild: null,
-            afterSlideLoad: null,
-            onSlideLeave: null,
-            afterResponsive: null,
-
-            lazyLoading: true
-        }, options);
-
-        //flag to avoid very fast sliding for landscape sliders
-        var slideMoving = false;
-
-        var isTouchDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|playbook|silk|BlackBerry|BB10|Windows Phone|Tizen|Bada|webOS|IEMobile|Opera Mini)/);
-        var isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0) || (navigator.maxTouchPoints));
-        var container = $(this);
-        var windowsHeight = $window.height();
-        var isResizing = false;
-        var isWindowFocused = true;
-        var lastScrolledDestiny;
-        var lastScrolledSlide;
-        var canScroll = true;
-        var scrollings = [];
-        var controlPressed;
-        var startingSection;
-        var isScrollAllowed = {};
-        isScrollAllowed.m = {  'up':true, 'down':true, 'left':true, 'right':true };
-        isScrollAllowed.k = $.extend(true,{}, isScrollAllowed.m);
-        var MSPointer = getMSPointer();
-        var events = {
-            touchmove: 'ontouchmove' in window ? 'touchmove' :  MSPointer.move,
-            touchstart: 'ontouchstart' in window ? 'touchstart' :  MSPointer.down
-        };
-        var scrollBarHandler;
-
-        // taken from https://github.com/udacity/ud891/blob/gh-pages/lesson2-focus/07-modals-and-keyboard-traps/solution/modal.js
-        var focusableElementsString = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]';
-
-        //timeouts
-        var resizeId;
-        var afterSectionLoadsId;
-        var afterSlideLoadsId;
-        var scrollId;
-        var scrollId2;
-        var keydownId;
-        var originals = $.extend(true, {}, options); //deep copy
-
-        displayWarnings();
-
-        //easeInOutCubic animation included in the plugin
-        $.extend($.easing,{ easeInOutCubic: function (x, t, b, c, d) {if ((t/=d/2) < 1) return c/2*t*t*t + b;return c/2*((t-=2)*t*t + 2) + b;}});
-
-        /**
-        * Sets the autoScroll option.
-        * It changes the scroll bar visibility and the history of the site as a result.
-        */
-        function setAutoScrolling(value, type){
-            //removing the transformation
-            if(!value){
-                silentScroll(0);
-            }
-
-            setVariableState('autoScrolling', value, type);
-
-            var element = $(SECTION_ACTIVE_SEL);
-
-            if(options.autoScrolling && !options.scrollBar){
-                $htmlBody.css({
-                    'overflow' : 'hidden',
-                    'height' : '100%'
-                });
-
-                setRecordHistory(originals.recordHistory, 'internal');
-
-                //for IE touch devices
-                container.css({
-                    '-ms-touch-action': 'none',
-                    'touch-action': 'none'
-                });
-
-                if(element.length){
-                    //moving the container up
-                    silentScroll(element.position().top);
-                }
-
-            }else{
-                $htmlBody.css({
-                    'overflow' : 'visible',
-                    'height' : 'initial'
-                });
-
-                setRecordHistory(false, 'internal');
-
-                //for IE touch devices
-                container.css({
-                    '-ms-touch-action': '',
-                    'touch-action': ''
-                });
-
-                //scrolling the page to the section with no animation
-                if (element.length) {
-                    $htmlBody.scrollTop(element.position().top);
-                }
-            }
-        }
-
-        /**
-        * Defines wheter to record the history for each hash change in the URL.
-        */
-        function setRecordHistory(value, type){
-            setVariableState('recordHistory', value, type);
-        }
-
-        /**
-        * Defines the scrolling speed
-        */
-        function setScrollingSpeed(value, type){
-            setVariableState('scrollingSpeed', value, type);
-        }
-
-        /**
-        * Sets fitToSection
-        */
-        function setFitToSection(value, type){
-            setVariableState('fitToSection', value, type);
-        }
-
-        /**
-        * Sets lockAnchors
-        */
-        function setLockAnchors(value){
-            options.lockAnchors = value;
-        }
-
-        /**
-        * Adds or remove the possibility of scrolling through sections by using the mouse wheel or the trackpad.
-        */
-        function setMouseWheelScrolling(value){
-            if(value){
-                addMouseWheelHandler();
-                addMiddleWheelHandler();
-            }else{
-                removeMouseWheelHandler();
-                removeMiddleWheelHandler();
-            }
-        }
-
-        /**
-        * Adds or remove the possibility of scrolling through sections by using the mouse wheel/trackpad or touch gestures.
-        * Optionally a second parameter can be used to specify the direction for which the action will be applied.
-        *
-        * @param directions string containing the direction or directions separated by comma.
-        */
-        function setAllowScrolling(value, directions){
-            if(typeof directions !== 'undefined'){
-                directions = directions.replace(/ /g,'').split(',');
-
-                $.each(directions, function (index, direction){
-                    setIsScrollAllowed(value, direction, 'm');
-                });
-            }
-            else{
-                setIsScrollAllowed(value, 'all', 'm');
-
-                if(value){
-                    setMouseWheelScrolling(true);
-                    addTouchHandler();
-                }else{
-                    setMouseWheelScrolling(false);
-                    removeTouchHandler();
-                }
-            }
-        }
-
-        /**
-        * Adds or remove the possibility of scrolling through sections by using the keyboard arrow keys
-        */
-        function setKeyboardScrolling(value, directions){
-            if(typeof directions !== 'undefined'){
-                directions = directions.replace(/ /g,'').split(',');
-
-                $.each(directions, function (index, direction){
-                    setIsScrollAllowed(value, direction, 'k');
-                });
-            }else{
-                setIsScrollAllowed(value, 'all', 'k');
-                options.keyboardScrolling = value;
-            }
-        }
-
-        /**
-        * Moves the page up one section.
-        */
-        function moveSectionUp(){
-            var prev = $(SECTION_ACTIVE_SEL).prev(SECTION_SEL);
-
-            //looping to the bottom if there's no more sections above
-            if (!prev.length && (options.loopTop || options.continuousVertical)) {
-                prev = $(SECTION_SEL).last();
-            }
-
-            if (prev.length) {
-                scrollPage(prev, null, true);
-            }
-        }
-
-        /**
-        * Moves the page down one section.
-        */
-        function moveSectionDown(){
-            var next = $(SECTION_ACTIVE_SEL).next(SECTION_SEL);
-
-            //looping to the top if there's no more sections below
-            if(!next.length &&
-                (options.loopBottom || options.continuousVertical)){
-                next = $(SECTION_SEL).first();
-            }
-
-            if(next.length){
-                scrollPage(next, null, false);
-            }
-        }
-
-        /**
-        * Moves the page to the given section and slide with no animation.
-        * Anchors or index positions can be used as params.
-        */
-        function silentMoveTo(sectionAnchor, slideAnchor){
-            setScrollingSpeed (0, 'internal');
-            moveTo(sectionAnchor, slideAnchor);
-            setScrollingSpeed (originals.scrollingSpeed, 'internal');
-        }
-
-        /**
-        * Moves the page to the given section and slide.
-        * Anchors or index positions can be used as params.
-        */
-        function moveTo(sectionAnchor, slideAnchor){
-            var destiny = getSectionByAnchor(sectionAnchor);
-
-            if (typeof slideAnchor !== 'undefined'){
-                scrollPageAndSlide(sectionAnchor, slideAnchor);
-            }else if(destiny.length > 0){
-                scrollPage(destiny);
-            }
-        }
-
-        /**
-        * Slides right the slider of the active section.
-        * Optional `section` param.
-        */
-        function moveSlideRight(section){
-            moveSlide('right', section);
-        }
-
-        /**
-        * Slides left the slider of the active section.
-        * Optional `section` param.
-        */
-        function moveSlideLeft(section){
-            moveSlide('left', section);
-        }
-
-        /**
-         * When resizing is finished, we adjust the slides sizes and positions
-         */
-        function reBuild(resizing){
-            if(container.hasClass(DESTROYED)){ return; }  //nothing to do if the plugin was destroyed
-
-            isResizing = true;
-
-            windowsHeight = $window.height();  //updating global var
-
-            $(SECTION_SEL).each(function(){
-                var slidesWrap = $(this).find(SLIDES_WRAPPER_SEL);
-                var slides = $(this).find(SLIDE_SEL);
-
-                //adjusting the height of the table-cell for IE and Firefox
-                if(options.verticalCentered){
-                    $(this).find(TABLE_CELL_SEL).css('height', getTableHeight($(this)) + 'px');
-                }
-
-                $(this).css('height', windowsHeight + 'px');
-
-                //adjusting the position fo the FULL WIDTH slides...
-                if (slides.length > 1) {
-                    landscapeScroll(slidesWrap, slidesWrap.find(SLIDE_ACTIVE_SEL));
-                }
-            });
-
-            if(options.scrollOverflow){
-                scrollBarHandler.createScrollBarForAll();
-            }
-
-            var activeSection = $(SECTION_ACTIVE_SEL);
-            var sectionIndex = activeSection.index(SECTION_SEL);
-
-            //isn't it the first section?
-            if(sectionIndex){
-                //adjusting the position for the current section
-                silentMoveTo(sectionIndex + 1);
-            }
-
-            isResizing = false;
-            $.isFunction( options.afterResize ) && resizing && options.afterResize.call(container);
-            $.isFunction( options.afterReBuild ) && !resizing && options.afterReBuild.call(container);
-        }
-
-        /**
-        * Turns fullPage.js to normal scrolling mode when the viewport `width` or `height`
-        * are smaller than the set limit values.
-        */
-        function setResponsive(active){
-            var isResponsive = $body.hasClass(RESPONSIVE);
-
-            if(active){
-                if(!isResponsive){
-                    setAutoScrolling(false, 'internal');
-                    setFitToSection(false, 'internal');
-                    $(SECTION_NAV_SEL).hide();
-                    $body.addClass(RESPONSIVE);
-                    $.isFunction( options.afterResponsive ) && options.afterResponsive.call( container, active);
-                }
-            }
-            else if(isResponsive){
-                setAutoScrolling(originals.autoScrolling, 'internal');
-                setFitToSection(originals.autoScrolling, 'internal');
-                $(SECTION_NAV_SEL).show();
-                $body.removeClass(RESPONSIVE);
-                $.isFunction( options.afterResponsive ) && options.afterResponsive.call( container, active);
-            }
-        }
-
-        if($(this).length){
-            //public functions
-            FP.version = '2.9.6';
-            FP.setAutoScrolling = setAutoScrolling;
-            FP.setRecordHistory = setRecordHistory;
-            FP.setScrollingSpeed = setScrollingSpeed;
-            FP.setFitToSection = setFitToSection;
-            FP.setLockAnchors = setLockAnchors;
-            FP.setMouseWheelScrolling = setMouseWheelScrolling;
-            FP.setAllowScrolling = setAllowScrolling;
-            FP.setKeyboardScrolling = setKeyboardScrolling;
-            FP.moveSectionUp = moveSectionUp;
-            FP.moveSectionDown = moveSectionDown;
-            FP.silentMoveTo = silentMoveTo;
-            FP.moveTo = moveTo;
-            FP.moveSlideRight = moveSlideRight;
-            FP.moveSlideLeft = moveSlideLeft;
-            FP.fitToSection = fitToSection;
-            FP.reBuild = reBuild;
-            FP.setResponsive = setResponsive;
-            FP.destroy = destroy;
-
-            //functions we want to share across files but which are not
-            //mean to be used on their own by developers
-            FP.shared ={
-                afterRenderActions: afterRenderActions
-            };
-
-            init();
-
-            bindEvents();
-        }
-
-        function init(){
-            //if css3 is not supported, it will use jQuery animations
-            if(options.css3){
-                options.css3 = support3d();
-            }
-
-            options.scrollBar = options.scrollBar || options.hybrid;
-
-            setOptionsFromDOM();
-            prepareDom();
-            setAllowScrolling(true);
-            setAutoScrolling(options.autoScrolling, 'internal');
-            responsive();
-
-            //setting the class for the body element
-            setBodyClass();
-
-            if(document.readyState === 'complete'){
-                scrollToAnchor();
-            }
-            $window.on('load', scrollToAnchor);
-        }
-
-        function bindEvents(){
-            $window
-                //when scrolling...
-                .on('scroll', scrollHandler)
-
-                //detecting any change on the URL to scroll to the given anchor link
-                //(a way to detect back history button as we play with the hashes on the URL)
-                .on('hashchange', hashChangeHandler)
-
-                //when opening a new tab (ctrl + t), `control` won't be pressed when coming back.
-                .blur(blurHandler)
-
-                //when resizing the site, we adjust the heights of the sections, slimScroll...
-                .resize(resizeHandler);
-
-            $document
-                //Sliding with arrow keys, both, vertical and horizontal
-                .keydown(keydownHandler)
-
-                //to prevent scrolling while zooming
-                .keyup(keyUpHandler)
-
-                //Scrolls to the section when clicking the navigation bullet
-                .on('click touchstart', SECTION_NAV_SEL + ' a', sectionBulletHandler)
-
-                //Scrolls the slider to the given slide destination for the given section
-                .on('click touchstart', SLIDES_NAV_LINK_SEL, slideBulletHandler)
-
-                .on('click', SECTION_NAV_TOOLTIP_SEL, tooltipTextHandler);
-
-            //Scrolling horizontally when clicking on the slider controls.
-            $(SECTION_SEL).on('click touchstart', SLIDES_ARROW_SEL, slideArrowHandler);
-
-            /**
-            * Applying normalScroll elements.
-            * Ignoring the scrolls over the specified selectors.
-            */
-            if(options.normalScrollElements){
-                $document.on('mouseenter touchstart', options.normalScrollElements, function () {
-                    setAllowScrolling(false);
-                });
-
-                $document.on('mouseleave touchend', options.normalScrollElements, function(){
-                    setAllowScrolling(true);
-                });
-            }
-        }
-
-        /**
-        * Setting options from DOM elements if they are not provided.
-        */
-        function setOptionsFromDOM(){
-            var sections = container.find(options.sectionSelector);
-
-            //no anchors option? Checking for them in the DOM attributes
-            if(!options.anchors.length){
-                options.anchors = sections.filter('[data-anchor]').map(function(){
-                    return $(this).data('anchor').toString();
-                }).get();
-            }
-
-            //no tooltips option? Checking for them in the DOM attributes
-            if(!options.navigationTooltips.length){
-                options.navigationTooltips = sections.filter('[data-tooltip]').map(function(){
-                    return $(this).data('tooltip').toString();
-                }).get();
-            }
-        }
-
-        /**
-        * Works over the DOM structure to set it up for the current fullpage options.
-        */
-        function prepareDom(){
-            container.css({
-                'height': '100%',
-                'position': 'relative'
-            });
-
-            //adding a class to recognize the container internally in the code
-            container.addClass(WRAPPER);
-            $('html').addClass(ENABLED);
-
-            //due to https://github.com/alvarotrigo/fullPage.js/issues/1502
-            windowsHeight = $window.height();
-
-            container.removeClass(DESTROYED); //in case it was destroyed before initializing it again
-
-            addInternalSelectors();
-
-            //styling the sections / slides / menu
-            $(SECTION_SEL).each(function(index){
-                var section = $(this);
-                var slides = section.find(SLIDE_SEL);
-                var numSlides = slides.length;
-
-                //caching the original styles to add them back on destroy('all')
-                section.data('fp-styles', section.attr('style'));
-
-                styleSection(section, index);
-                styleMenu(section, index);
-
-                // if there's any slide
-                if (numSlides > 0) {
-                    styleSlides(section, slides, numSlides);
-                }else{
-                    if(options.verticalCentered){
-                        addTableClass(section);
-                    }
-                }
-            });
-
-            //fixed elements need to be moved out of the plugin container due to problems with CSS3.
-            if(options.fixedElements && options.css3){
-                $(options.fixedElements).appendTo($body);
-            }
-
-            //vertical centered of the navigation + active bullet
-            if(options.navigation){
-                addVerticalNavigation();
-            }
-
-            enableYoutubeAPI();
-
-            if(options.scrollOverflow){
-                scrollBarHandler = options.scrollOverflowHandler.init(options);
-            }else{
-                afterRenderActions();
-            }
-        }
-
-        /**
-        * Styles the horizontal slides for a section.
-        */
-        function styleSlides(section, slides, numSlides){
-            var sliderWidth = numSlides * 100;
-            var slideWidth = 100 / numSlides;
-
-            slides.wrapAll('<div class="' + SLIDES_CONTAINER + '" />');
-            slides.parent().wrap('<div class="' + SLIDES_WRAPPER + '" />');
-
-            section.find(SLIDES_CONTAINER_SEL).css('width', sliderWidth + '%');
-
-            if(numSlides > 1){
-                if(options.controlArrows){
-                    createSlideArrows(section);
-                }
-
-                if(options.slidesNavigation){
-                    addSlidesNavigation(section, numSlides);
-                }
-            }
-
-            slides.each(function(index) {
-                $(this).css('width', slideWidth + '%');
-
-                if(options.verticalCentered){
-                    addTableClass($(this));
-                }
-            });
-
-            var startingSlide = section.find(SLIDE_ACTIVE_SEL);
-
-            //if the slide won't be an starting point, the default will be the first one
-            //the active section isn't the first one? Is not the first slide of the first section? Then we load that section/slide by default.
-            if( startingSlide.length &&  ($(SECTION_ACTIVE_SEL).index(SECTION_SEL) !== 0 || ($(SECTION_ACTIVE_SEL).index(SECTION_SEL) === 0 && startingSlide.index() !== 0))){
-                silentLandscapeScroll(startingSlide, 'internal');
-            }else{
-                slides.eq(0).addClass(ACTIVE);
-            }
-        }
-
-        /**
-        * Styling vertical sections
-        */
-        function styleSection(section, index){
-            //if no active section is defined, the 1st one will be the default one
-            if(!index && $(SECTION_ACTIVE_SEL).length === 0) {
-                section.addClass(ACTIVE);
-            }
-            startingSection = $(SECTION_ACTIVE_SEL);
-
-            section.css('height', windowsHeight + 'px');
-
-            if(options.paddingTop){
-                section.css('padding-top', options.paddingTop);
-            }
-
-            if(options.paddingBottom){
-                section.css('padding-bottom', options.paddingBottom);
-            }
-
-            if (typeof options.sectionsColor[index] !==  'undefined') {
-                section.css('background-color', options.sectionsColor[index]);
-            }
-
-            if (typeof options.anchors[index] !== 'undefined') {
-                section.attr('data-anchor', options.anchors[index]);
-            }
-        }
-
-        /**
-        * Sets the data-anchor attributes to the menu elements and activates the current one.
-        */
-        function styleMenu(section, index){
-            if (typeof options.anchors[index] !== 'undefined') {
-                //activating the menu / nav element on load
-                if(section.hasClass(ACTIVE)){
-                    activateMenuAndNav(options.anchors[index], index);
-                }
-            }
-
-            //moving the menu outside the main container if it is inside (avoid problems with fixed positions when using CSS3 tranforms)
-            if(options.menu && options.css3 && $(options.menu).closest(WRAPPER_SEL).length){
-                $(options.menu).appendTo($body);
-            }
-        }
-
-        /**
-        * Adds internal classes to be able to provide customizable selectors
-        * keeping the link with the style sheet.
-        */
-        function addInternalSelectors(){
-            container.find(options.sectionSelector).addClass(SECTION);
-            container.find(options.slideSelector).addClass(SLIDE);
-        }
-
-        /**
-        * Creates the control arrows for the given section
-        */
-        function createSlideArrows(section){
-            section.find(SLIDES_WRAPPER_SEL).after('<div class="' + SLIDES_ARROW_PREV + '"></div><div class="' + SLIDES_ARROW_NEXT + '"></div>');
-
-            if(options.controlArrowColor!='#fff'){
-                section.find(SLIDES_ARROW_NEXT_SEL).css('border-color', 'transparent transparent transparent '+options.controlArrowColor);
-                section.find(SLIDES_ARROW_PREV_SEL).css('border-color', 'transparent '+ options.controlArrowColor + ' transparent transparent');
-            }
-
-            if(!options.loopHorizontal){
-                section.find(SLIDES_ARROW_PREV_SEL).hide();
-            }
-        }
-
-        /**
-        * Creates a vertical navigation bar.
-        */
-        function addVerticalNavigation(){
-            $body.append('<div id="' + SECTION_NAV + '"><ul></ul></div>');
-            var nav = $(SECTION_NAV_SEL);
-
-            nav.addClass(function() {
-                return options.showActiveTooltip ? SHOW_ACTIVE_TOOLTIP + ' ' + options.navigationPosition : options.navigationPosition;
-            });
-
-            for (var i = 0; i < $(SECTION_SEL).length; i++) {
-                var link = '';
-                if (options.anchors.length) {
-                    link = options.anchors[i];
-                }
-
-                var li = '<li><a href="#' + link + '"><span></span></a>';
-
-                // Only add tooltip if needed (defined by user)
-                var tooltip = options.navigationTooltips[i];
-
-                if (typeof tooltip !== 'undefined' && tooltip !== '') {
-                    li += '<div class="' + SECTION_NAV_TOOLTIP + ' ' + options.navigationPosition + '">' + tooltip + '</div>';
-                }
-
-                li += '</li>';
-
-                nav.find('ul').append(li);
-            }
-
-            //centering it vertically
-            $(SECTION_NAV_SEL).css('margin-top', '-' + ($(SECTION_NAV_SEL).height()/2) + 'px');
-
-            //activating the current active section
-            $(SECTION_NAV_SEL).find('li').eq($(SECTION_ACTIVE_SEL).index(SECTION_SEL)).find('a').addClass(ACTIVE);
-        }
-
-        /*
-        * Enables the Youtube videos API so we can control their flow if necessary.
-        */
-        function enableYoutubeAPI(){
-            container.find('iframe[src*="youtube.com/embed/"]').each(function(){
-                addURLParam($(this), 'enablejsapi=1');
-            });
-        }
-
-        /**
-        * Adds a new parameter and its value to the `src` of a given element
-        */
-        function addURLParam(element, newParam){
-            var originalSrc = element.attr('src');
-            element.attr('src', originalSrc + getUrlParamSign(originalSrc) + newParam);
-        }
-
-        /*
-        * Returns the prefix sign to use for a new parameter in an existen URL.
-        *
-        * @return {String}  ? | &
-        */
-        function getUrlParamSign(url){
-            return ( !/\?/.test( url ) ) ? '?' : '&';
-        }
-
-        /**
-        * Actions and callbacks to fire afterRender
-        */
-        function afterRenderActions(){
-            var section = $(SECTION_ACTIVE_SEL);
-
-            section.addClass(COMPLETELY);
-
-            lazyLoad(section);
-            playMedia(section);
-
-            if(options.scrollOverflow){
-                options.scrollOverflowHandler.afterLoad();
-            }
-
-            if(isDestinyTheStartingSection()){
-                $.isFunction( options.afterLoad ) && options.afterLoad.call(section, section.data('anchor'), (section.index(SECTION_SEL) + 1));
-            }
-
-            $.isFunction( options.afterRender ) && options.afterRender.call(container);
-        }
-
-        /**
-        * Determines if the URL anchor destiny is the starting section (the one using 'active' class before initialization)
-        */
-        function isDestinyTheStartingSection(){
-            var destinationSection = getSectionByAnchor(getAnchorsURL().section);
-            return !destinationSection || destinationSection.length && destinationSection.index() === startingSection.index();
-        }
-
-
-        var isScrolling = false;
-        var lastScroll = 0;
-
-        //when scrolling...
-        function scrollHandler(){
-            var currentSection;
-
-            if(!options.autoScrolling || options.scrollBar){
-                var currentScroll = $window.scrollTop();
-                var scrollDirection = getScrollDirection(currentScroll);
-                var visibleSectionIndex = 0;
-                var screen_mid = currentScroll + ($window.height() / 2.0);
-                var isAtBottom = $body.height() - $window.height() === currentScroll;
-                var sections =  document.querySelectorAll(SECTION_SEL);
-
-                //when using `auto-height` for a small last section it won't be centered in the viewport
-                if(isAtBottom){
-                    visibleSectionIndex = sections.length - 1;
-                }
-                //is at top? when using `auto-height` for a small first section it won't be centered in the viewport
-                else if(!currentScroll){
-                    visibleSectionIndex = 0;
-                }
-
-                //taking the section which is showing more content in the viewport
-                else{
-                    for (var i = 0; i < sections.length; ++i) {
-                        var section = sections[i];
-
-                        // Pick the the last section which passes the middle line of the screen.
-                        if (section.offsetTop <= screen_mid)
-                        {
-                            visibleSectionIndex = i;
-                        }
-                    }
-                }
-
-                if(isCompletelyInViewPort(scrollDirection)){
-                    if(!$(SECTION_ACTIVE_SEL).hasClass(COMPLETELY)){
-                        $(SECTION_ACTIVE_SEL).addClass(COMPLETELY).siblings().removeClass(COMPLETELY);
-                    }
-                }
-
-                //geting the last one, the current one on the screen
-                currentSection = $(sections).eq(visibleSectionIndex);
-
-                //setting the visible section as active when manually scrolling
-                //executing only once the first time we reach the section
-                if(!currentSection.hasClass(ACTIVE)){
-                    isScrolling = true;
-                    var leavingSection = $(SECTION_ACTIVE_SEL);
-                    var leavingSectionIndex = leavingSection.index(SECTION_SEL) + 1;
-                    var yMovement = getYmovement(currentSection);
-                    var anchorLink  = currentSection.data('anchor');
-                    var sectionIndex = currentSection.index(SECTION_SEL) + 1;
-                    var activeSlide = currentSection.find(SLIDE_ACTIVE_SEL);
-                    var slideIndex;
-                    var slideAnchorLink;
-
-                    if(activeSlide.length){
-                        slideAnchorLink = activeSlide.data('anchor');
-                        slideIndex = activeSlide.index();
-                    }
-
-                    if(canScroll){
-                        currentSection.addClass(ACTIVE).siblings().removeClass(ACTIVE);
-
-                        $.isFunction( options.onLeave ) && options.onLeave.call( leavingSection, leavingSectionIndex, sectionIndex, yMovement);
-                        $.isFunction( options.afterLoad ) && options.afterLoad.call( currentSection, anchorLink, sectionIndex);
-
-                        stopMedia(leavingSection);
-                        lazyLoad(currentSection);
-                        playMedia(currentSection);
-
-                        activateMenuAndNav(anchorLink, sectionIndex - 1);
-
-                        if(options.anchors.length){
-                            //needed to enter in hashChange event when using the menu with anchor links
-                            lastScrolledDestiny = anchorLink;
-                        }
-                        setState(slideIndex, slideAnchorLink, anchorLink, sectionIndex);
-                    }
-
-                    //small timeout in order to avoid entering in hashChange event when scrolling is not finished yet
-                    clearTimeout(scrollId);
-                    scrollId = setTimeout(function(){
-                        isScrolling = false;
-                    }, 100);
-                }
-
-                if(options.fitToSection){
-                    //for the auto adjust of the viewport to fit a whole section
-                    clearTimeout(scrollId2);
-
-                    scrollId2 = setTimeout(function(){
-                        //checking it again in case it changed during the delay
-                        if(options.fitToSection &&
-
-                            //is the destination element bigger than the viewport?
-                            $(SECTION_ACTIVE_SEL).outerHeight() <= windowsHeight
-                        ){
-                            fitToSection();
-                        }
-                    }, options.fitToSectionDelay);
-                }
-            }
-        }
-
-        /**
-        * Fits the site to the nearest active section
-        */
-        function fitToSection(){
-            //checking fitToSection again in case it was set to false before the timeout delay
-            if(canScroll){
-                //allows to scroll to an active section and
-                //if the section is already active, we prevent firing callbacks
-                isResizing = true;
-
-                scrollPage($(SECTION_ACTIVE_SEL));
-                isResizing = false;
-            }
-        }
-
-        /**
-        * Determines whether the active section has seen in its whole or not.
-        */
-        function isCompletelyInViewPort(movement){
-            var top = $(SECTION_ACTIVE_SEL).position().top;
-            var bottom = top + $window.height();
-
-            if(movement == 'up'){
-                return bottom >= ($window.scrollTop() + $window.height());
-            }
-            return top <= $window.scrollTop();
-        }
-
-        /**
-        * Gets the directon of the the scrolling fired by the scroll event.
-        */
-        function getScrollDirection(currentScroll){
-            var direction = currentScroll > lastScroll ? 'down' : 'up';
-
-            lastScroll = currentScroll;
-
-            //needed for auto-height sections to determine if we want to scroll to the top or bottom of the destination
-            previousDestTop = currentScroll;
-
-            return direction;
-        }
-
-        /**
-        * Determines the way of scrolling up or down:
-        * by 'automatically' scrolling a section or by using the default and normal scrolling.
-        */
-        function scrolling(type){
-            if (!isScrollAllowed.m[type]){
-                return;
-            }
-
-            var scrollSection = (type === 'down') ? moveSectionDown : moveSectionUp;
-
-            if(options.scrollOverflow){
-                var scrollable = options.scrollOverflowHandler.scrollable($(SECTION_ACTIVE_SEL));
-                var check = (type === 'down') ? 'bottom' : 'top';
-
-                if(scrollable.length > 0 ){
-                    //is the scrollbar at the start/end of the scroll?
-                    if(options.scrollOverflowHandler.isScrolled(check, scrollable)){
-                        scrollSection();
-                    }else{
-                        return true;
-                    }
-                }else{
-                    // moved up/down
-                    scrollSection();
-                }
-            }else{
-                // moved up/down
-                scrollSection();
-            }
-        }
-
-        /*
-        * Preventing bouncing in iOS #2285
-        */
-        function preventBouncing(event){
-            var e = event.originalEvent;
-            if(options.autoScrolling && isReallyTouch(e)){
-                //preventing the easing on iOS devices
-                event.preventDefault();
-            }
-        }
-
-        var touchStartY = 0;
-        var touchStartX = 0;
-        var touchEndY = 0;
-        var touchEndX = 0;
-
-        /* Detecting touch events
-
-        * As we are changing the top property of the page on scrolling, we can not use the traditional way to detect it.
-        * This way, the touchstart and the touch moves shows an small difference between them which is the
-        * used one to determine the direction.
-        */
-        function touchMoveHandler(event){
-            var e = event.originalEvent;
-            var activeSection = $(e.target).closest(SECTION_SEL);
-
-            // additional: if one of the normalScrollElements isn't within options.normalScrollElementTouchThreshold hops up the DOM chain
-            if (isReallyTouch(e) ) {
-
-                if(options.autoScrolling){
-                    //preventing the easing on iOS devices
-                    event.preventDefault();
-                }
-
-                var touchEvents = getEventsPage(e);
-
-                touchEndY = touchEvents.y;
-                touchEndX = touchEvents.x;
-
-                //if movement in the X axys is greater than in the Y and the currect section has slides...
-                if (activeSection.find(SLIDES_WRAPPER_SEL).length && Math.abs(touchStartX - touchEndX) > (Math.abs(touchStartY - touchEndY))) {
-
-                    //is the movement greater than the minimum resistance to scroll?
-                    if (!slideMoving && Math.abs(touchStartX - touchEndX) > ($window.outerWidth() / 100 * options.touchSensitivity)) {
-                        if (touchStartX > touchEndX) {
-                            if(isScrollAllowed.m.right){
-                                moveSlideRight(activeSection); //next
-                            }
-                        } else {
-                            if(isScrollAllowed.m.left){
-                                moveSlideLeft(activeSection); //prev
-                            }
-                        }
-                    }
-                }
-
-                //vertical scrolling (only when autoScrolling is enabled)
-                else if(options.autoScrolling && canScroll){
-
-                    //is the movement greater than the minimum resistance to scroll?
-                    if (Math.abs(touchStartY - touchEndY) > ($window.height() / 100 * options.touchSensitivity)) {
-                        if (touchStartY > touchEndY) {
-                            scrolling('down');
-                        } else if (touchEndY > touchStartY) {
-                            scrolling('up');
-                        }
-                    }
-                }
-            }
-        }
-
-        /**
-        * As IE >= 10 fires both touch and mouse events when using a mouse in a touchscreen
-        * this way we make sure that is really a touch event what IE is detecting.
-        */
-        function isReallyTouch(e){
-            //if is not IE   ||  IE is detecting `touch` or `pen`
-            return typeof e.pointerType === 'undefined' || e.pointerType != 'mouse';
-        }
-
-        /**
-        * Handler for the touch start event.
-        */
-        function touchStartHandler(event){
-            var e = event.originalEvent;
-
-            //stopping the auto scroll to adjust to a section
-            if(options.fitToSection){
-                $htmlBody.stop();
-            }
-
-            if(isReallyTouch(e)){
-                var touchEvents = getEventsPage(e);
-                touchStartY = touchEvents.y;
-                touchStartX = touchEvents.x;
-            }
-        }
-
-        /**
-        * Gets the average of the last `number` elements of the given array.
-        */
-        function getAverage(elements, number){
-            var sum = 0;
-
-            //taking `number` elements from the end to make the average, if there are not enought, 1
-            var lastElements = elements.slice(Math.max(elements.length - number, 1));
-
-            for(var i = 0; i < lastElements.length; i++){
-                sum = sum + lastElements[i];
-            }
-
-            return Math.ceil(sum/number);
-        }
-
-        /**
-         * Detecting mousewheel scrolling
-         *
-         * http://blogs.sitepointstatic.com/examples/tech/mouse-wheel/index.html
-         * http://www.sitepoint.com/html5-javascript-mouse-wheel/
-         */
-        var prevTime = new Date().getTime();
-
-        function MouseWheelHandler(e) {
-            var curTime = new Date().getTime();
-            var isNormalScroll = $(COMPLETELY_SEL).hasClass(NORMAL_SCROLL);
-
-            //autoscrolling and not zooming?
-            if(options.autoScrolling && !controlPressed && !isNormalScroll){
-                // cross-browser wheel delta
-                e = e || window.event;
-                var value = e.wheelDelta || -e.deltaY || -e.detail;
-                var delta = Math.max(-1, Math.min(1, value));
-
-                var horizontalDetection = typeof e.wheelDeltaX !== 'undefined' || typeof e.deltaX !== 'undefined';
-                var isScrollingVertically = (Math.abs(e.wheelDeltaX) < Math.abs(e.wheelDelta)) || (Math.abs(e.deltaX ) < Math.abs(e.deltaY) || !horizontalDetection);
-
-                //Limiting the array to 150 (lets not waste memory!)
-                if(scrollings.length > 149){
-                    scrollings.shift();
-                }
-
-                //keeping record of the previous scrollings
-                scrollings.push(Math.abs(value));
-
-                //preventing to scroll the site on mouse wheel when scrollbar is present
-                if(options.scrollBar){
-                    e.preventDefault ? e.preventDefault() : e.returnValue = false;
-                }
-
-                //time difference between the last scroll and the current one
-                var timeDiff = curTime-prevTime;
-                prevTime = curTime;
-
-                //haven't they scrolled in a while?
-                //(enough to be consider a different scrolling action to scroll another section)
-                if(timeDiff > 200){
-                    //emptying the array, we dont care about old scrollings for our averages
-                    scrollings = [];
-                }
-
-                if(canScroll){
-                    var averageEnd = getAverage(scrollings, 10);
-                    var averageMiddle = getAverage(scrollings, 70);
-                    var isAccelerating = averageEnd >= averageMiddle;
-
-                    //to avoid double swipes...
-                    if(isAccelerating && isScrollingVertically){
-                        //scrolling down?
-                        if (delta < 0) {
-                            scrolling('down');
-
-                        //scrolling up?
-                        }else {
-                            scrolling('up');
-                        }
-                    }
-                }
-
-                return false;
-            }
-
-            if(options.fitToSection){
-                //stopping the auto scroll to adjust to a section
-                $htmlBody.stop();
-            }
-        }
-
-        /**
-        * Slides a slider to the given direction.
-        * Optional `section` param.
-        */
-        function moveSlide(direction, section){
-            var activeSection = typeof section === 'undefined' ? $(SECTION_ACTIVE_SEL) : section;
-            var slides = activeSection.find(SLIDES_WRAPPER_SEL);
-            var numSlides = slides.find(SLIDE_SEL).length;
-
-            // more than one slide needed and nothing should be sliding
-            if (!slides.length || slideMoving || numSlides < 2) {
-                return;
-            }
-
-            var currentSlide = slides.find(SLIDE_ACTIVE_SEL);
-            var destiny = null;
-
-            if(direction === 'left'){
-                destiny = currentSlide.prev(SLIDE_SEL);
-            }else{
-                destiny = currentSlide.next(SLIDE_SEL);
-            }
-
-            //isn't there a next slide in the secuence?
-            if(!destiny.length){
-                //respect loopHorizontal settin
-                if (!options.loopHorizontal) return;
-
-                if(direction === 'left'){
-                    destiny = currentSlide.siblings(':last');
-                }else{
-                    destiny = currentSlide.siblings(':first');
-                }
-            }
-
-            slideMoving = true;
-
-            landscapeScroll(slides, destiny, direction);
-        }
-
-        /**
-        * Maintains the active slides in the viewport
-        * (Because the `scroll` animation might get lost with some actions, such as when using continuousVertical)
-        */
-        function keepSlidesPosition(){
-            $(SLIDE_ACTIVE_SEL).each(function(){
-                silentLandscapeScroll($(this), 'internal');
-            });
-        }
-
-        var previousDestTop = 0;
-        /**
-        * Returns the destination Y position based on the scrolling direction and
-        * the height of the section.
-        */
-        function getDestinationPosition(element){
-            var elemPosition = element.position();
-
-            //top of the desination will be at the top of the viewport
-            var position = elemPosition.top;
-            var isScrollingDown =  elemPosition.top > previousDestTop;
-            var sectionBottom = position - windowsHeight + element.outerHeight();
-            var bigSectionsDestination = options.bigSectionsDestination;
-
-            //is the destination element bigger than the viewport?
-            if(element.outerHeight() > windowsHeight){
-                //scrolling up?
-                if(!isScrollingDown && !bigSectionsDestination || bigSectionsDestination === 'bottom' ){
-                    position = sectionBottom;
-                }
-            }
-
-            //sections equal or smaller than the viewport height && scrolling down? ||  is resizing and its in the last section
-            else if(isScrollingDown || (isResizing && element.is(':last-child')) ){
-                //The bottom of the destination will be at the bottom of the viewport
-                position = sectionBottom;
-            }
-
-            /*
-            Keeping record of the last scrolled position to determine the scrolling direction.
-            No conventional methods can be used as the scroll bar might not be present
-            AND the section might not be active if it is auto-height and didnt reach the middle
-            of the viewport.
-            */
-            previousDestTop = position;
-            return position;
-        }
-
-        /**
-        * Scrolls the site to the given element and scrolls to the slide if a callback is given.
-        */
-        function scrollPage(element, callback, isMovementUp){
-            if(typeof element === 'undefined'){ return; } //there's no element to scroll, leaving the function
-
-            var dtop = getDestinationPosition(element);
-            var slideAnchorLink;
-            var slideIndex;
-
-            //local variables
-            var v = {
-                element: element,
-                callback: callback,
-                isMovementUp: isMovementUp,
-                dtop: dtop,
-                yMovement: getYmovement(element),
-                anchorLink: element.data('anchor'),
-                sectionIndex: element.index(SECTION_SEL),
-                activeSlide: element.find(SLIDE_ACTIVE_SEL),
-                activeSection: $(SECTION_ACTIVE_SEL),
-                leavingSection: $(SECTION_ACTIVE_SEL).index(SECTION_SEL) + 1,
-
-                //caching the value of isResizing at the momment the function is called
-                //because it will be checked later inside a setTimeout and the value might change
-                localIsResizing: isResizing
-            };
-
-            //quiting when destination scroll is the same as the current one
-            if((v.activeSection.is(element) && !isResizing) || (options.scrollBar && $window.scrollTop() === v.dtop && !element.hasClass(AUTO_HEIGHT) )){ return; }
-
-            if(v.activeSlide.length){
-                slideAnchorLink = v.activeSlide.data('anchor');
-                slideIndex = v.activeSlide.index();
-            }
-
-            //callback (onLeave) if the site is not just resizing and readjusting the slides
-            if($.isFunction(options.onLeave) && !v.localIsResizing){
-                var direction = v.yMovement;
-
-                //required for continousVertical
-                if(typeof isMovementUp !== 'undefined'){
-                    direction = isMovementUp ? 'up' : 'down';
-                }
-
-                if(options.onLeave.call(v.activeSection, v.leavingSection, (v.sectionIndex + 1), direction) === false){
-                    return;
-                }
-            }
-
-            // If continuousVertical && we need to wrap around
-            if (options.autoScrolling && options.continuousVertical && typeof (v.isMovementUp) !== "undefined" &&
-                ((!v.isMovementUp && v.yMovement == 'up') || // Intending to scroll down but about to go up or
-                (v.isMovementUp && v.yMovement == 'down'))) { // intending to scroll up but about to go down
-
-                v = createInfiniteSections(v);
-            }
-
-            //pausing media of the leaving section (if we are not just resizing, as destinatino will be the same one)
-            if(!v.localIsResizing){
-                stopMedia(v.activeSection);
-            }
-
-            if(options.scrollOverflow){
-                options.scrollOverflowHandler.beforeLeave();
-            }
-
-            element.addClass(ACTIVE).siblings().removeClass(ACTIVE);
-            lazyLoad(element);
-
-            if(options.scrollOverflow){
-                options.scrollOverflowHandler.onLeave();
-            }
-
-            //preventing from activating the MouseWheelHandler event
-            //more than once if the page is scrolling
-            canScroll = false;
-
-            setState(slideIndex, slideAnchorLink, v.anchorLink, v.sectionIndex);
-
-            performMovement(v);
-
-            //flag to avoid callingn `scrollPage()` twice in case of using anchor links
-            lastScrolledDestiny = v.anchorLink;
-
-            //avoid firing it twice (as it does also on scroll)
-            activateMenuAndNav(v.anchorLink, v.sectionIndex);
-        }
-
-        /**
-        * Performs the vertical movement (by CSS3 or by jQuery)
-        */
-        function performMovement(v){
-            // using CSS3 translate functionality
-            if (options.css3 && options.autoScrolling && !options.scrollBar) {
-
-                // The first section can have a negative value in iOS 10. Not quite sure why: -0.0142822265625
-                // that's why we round it to 0.
-                var translate3d = 'translate3d(0px, -' + Math.round(v.dtop) + 'px, 0px)';
-                transformContainer(translate3d, true);
-
-                //even when the scrollingSpeed is 0 there's a little delay, which might cause the
-                //scrollingSpeed to change in case of using silentMoveTo();
-                if(options.scrollingSpeed){
-                    clearTimeout(afterSectionLoadsId);
-                    afterSectionLoadsId = setTimeout(function () {
-                        afterSectionLoads(v);
-                    }, options.scrollingSpeed);
-                }else{
-                    afterSectionLoads(v);
-                }
-            }
-
-            // using jQuery animate
-            else{
-                var scrollSettings = getScrollSettings(v);
-
-                $(scrollSettings.element).animate(
-                    scrollSettings.options,
-                options.scrollingSpeed, options.easing).promise().done(function () { //only one single callback in case of animating  `html, body`
-                    if(options.scrollBar){
-
-                        /* Hack!
-                        The timeout prevents setting the most dominant section in the viewport as "active" when the user
-                        scrolled to a smaller section by using the mousewheel (auto scrolling) rather than draging the scroll bar.
-
-                        When using scrollBar:true It seems like the scroll events still getting propagated even after the scrolling animation has finished.
-                        */
-                        setTimeout(function(){
-                            afterSectionLoads(v);
-                        },30);
-                    }else{
-                        afterSectionLoads(v);
-                    }
-                });
-            }
-        }
-
-        /**
-        * Gets the scrolling settings depending on the plugin autoScrolling option
-        */
-        function getScrollSettings(v){
-            var scroll = {};
-
-            if(options.autoScrolling && !options.scrollBar){
-                scroll.options = { 'top': -v.dtop};
-                scroll.element = WRAPPER_SEL;
-            }else{
-                scroll.options = { 'scrollTop': v.dtop};
-                scroll.element = 'html, body';
-            }
-
-            return scroll;
-        }
-
-        /**
-        * Adds sections before or after the current one to create the infinite effect.
-        */
-        function createInfiniteSections(v){
-            // Scrolling down
-            if (!v.isMovementUp) {
-                // Move all previous sections to after the active section
-                $(SECTION_ACTIVE_SEL).after(v.activeSection.prevAll(SECTION_SEL).get().reverse());
-            }
-            else { // Scrolling up
-                // Move all next sections to before the active section
-                $(SECTION_ACTIVE_SEL).before(v.activeSection.nextAll(SECTION_SEL));
-            }
-
-            // Maintain the displayed position (now that we changed the element order)
-            silentScroll($(SECTION_ACTIVE_SEL).position().top);
-
-            // Maintain the active slides visible in the viewport
-            keepSlidesPosition();
-
-            // save for later the elements that still need to be reordered
-            v.wrapAroundElements = v.activeSection;
-
-            // Recalculate animation variables
-            v.dtop = v.element.position().top;
-            v.yMovement = getYmovement(v.element);
-
-            //sections will temporally have another position in the DOM
-            //updating this values in case we need them
-            v.leavingSection = v.activeSection.index(SECTION_SEL) + 1;
-            v.sectionIndex = v.element.index(SECTION_SEL);
-
-            return v;
-        }
-
-        /**
-        * Fix section order after continuousVertical changes have been animated
-        */
-        function continuousVerticalFixSectionOrder (v) {
-            // If continuousVertical is in effect (and autoScrolling would also be in effect then),
-            // finish moving the elements around so the direct navigation will function more simply
-            if (!v.wrapAroundElements || !v.wrapAroundElements.length) {
-                return;
-            }
-
-            if (v.isMovementUp) {
-                $(SECTION_FIRST_SEL).before(v.wrapAroundElements);
-            }
-            else {
-                $(SECTION_LAST_SEL).after(v.wrapAroundElements);
-            }
-
-            silentScroll($(SECTION_ACTIVE_SEL).position().top);
-
-            // Maintain the active slides visible in the viewport
-            keepSlidesPosition();
-        }
-
-
-        /**
-        * Actions to do once the section is loaded.
-        */
-        function afterSectionLoads (v){
-            continuousVerticalFixSectionOrder(v);
-
-            //callback (afterLoad) if the site is not just resizing and readjusting the slides
-            $.isFunction(options.afterLoad) && !v.localIsResizing && options.afterLoad.call(v.element, v.anchorLink, (v.sectionIndex + 1));
-
-            if(options.scrollOverflow){
-                options.scrollOverflowHandler.afterLoad();
-            }
-
-            if(!v.localIsResizing){
-                playMedia(v.element);
-            }
-
-            v.element.addClass(COMPLETELY).siblings().removeClass(COMPLETELY);
-
-            canScroll = true;
-
-            $.isFunction(v.callback) && v.callback.call(this);
-        }
-
-        /**
-        * Sets the value for the given attribute from the `data-` attribute with the same suffix
-        * ie: data-srcset ==> srcset  |  data-src ==> src
-        */
-        function setSrc(element, attribute){
-            element
-                .attr(attribute, element.data(attribute))
-                .removeAttr('data-' + attribute);
-        }
-
-        /**
-        * Lazy loads image, video and audio elements.
-        */
-        function lazyLoad(destiny){
-            if (!options.lazyLoading){
-                return;
-            }
-
-            var panel = getSlideOrSection(destiny);
-            var element;
-
-            panel.find('img[data-src], img[data-srcset], source[data-src], source[data-srcset], video[data-src], audio[data-src], iframe[data-src]').each(function(){
-                element = $(this);
-
-                $.each(['src', 'srcset'], function(index, type){
-                    var attribute = element.attr('data-' + type);
-                    if(typeof attribute !== 'undefined' && attribute){
-                        setSrc(element, type);
-                    }
-                });
-
-                if(element.is('source')){
-                    var typeToPlay = element.closest('video').length ? 'video' : 'audio';
-                    element.closest(typeToPlay).get(0).load();
-                }
-            });
-        }
-
-        /**
-        * Plays video and audio elements.
-        */
-        function playMedia(destiny){
-            var panel = getSlideOrSection(destiny);
-
-            //playing HTML5 media elements
-            panel.find('video, audio').each(function(){
-                var element = $(this).get(0);
-
-                if( element.hasAttribute('data-autoplay') && typeof element.play === 'function' ) {
-                    element.play();
-                }
-            });
-
-            //youtube videos
-            panel.find('iframe[src*="youtube.com/embed/"]').each(function(){
-                var element = $(this).get(0);
-
-                if ( element.hasAttribute('data-autoplay') ){
-                    playYoutube(element);
-                }
-
-                //in case the URL was not loaded yet. On page load we need time for the new URL (with the API string) to load.
-                element.onload = function() {
-                    if ( element.hasAttribute('data-autoplay') ){
-                        playYoutube(element);
-                    }
-                };
-            });
-        }
-
-        /**
-        * Plays a youtube video
-        */
-        function playYoutube(element){
-            element.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        }
-
-        /**
-        * Stops video and audio elements.
-        */
-        function stopMedia(destiny){
-            var panel = getSlideOrSection(destiny);
-
-            //stopping HTML5 media elements
-            panel.find('video, audio').each(function(){
-                var element = $(this).get(0);
-
-                if( !element.hasAttribute('data-keepplaying') && typeof element.pause === 'function' ) {
-                    element.pause();
-                }
-            });
-
-            //youtube videos
-            panel.find('iframe[src*="youtube.com/embed/"]').each(function(){
-                var element = $(this).get(0);
-
-                if( /youtube\.com\/embed\//.test($(this).attr('src')) && !element.hasAttribute('data-keepplaying')){
-                    $(this).get(0).contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');
-                }
-            });
-        }
-
-        /**
-        * Gets the active slide (or section) for the given section
-        */
-        function getSlideOrSection(destiny){
-            var slide = destiny.find(SLIDE_ACTIVE_SEL);
-            if( slide.length ) {
-                destiny = $(slide);
-            }
-
-            return destiny;
-        }
-
-        /**
-        * Scrolls to the anchor in the URL when loading the site
-        */
-        function scrollToAnchor(){
-            var anchors =  getAnchorsURL();
-            var sectionAnchor = anchors.section;
-            var slideAnchor = anchors.slide;
-
-            if(sectionAnchor){  //if theres any #
-                if(options.animateAnchor){
-                    scrollPageAndSlide(sectionAnchor, slideAnchor);
-                }else{
-                    silentMoveTo(sectionAnchor, slideAnchor);
-                }
-            }
-        }
-
-        /**
-        * Detecting any change on the URL to scroll to the given anchor link
-        * (a way to detect back history button as we play with the hashes on the URL)
-        */
-        function hashChangeHandler(){
-            if(!isScrolling && !options.lockAnchors){
-                var anchors = getAnchorsURL();
-                var sectionAnchor = anchors.section;
-                var slideAnchor = anchors.slide;
-
-                //when moving to a slide in the first section for the first time (first time to add an anchor to the URL)
-                var isFirstSlideMove =  (typeof lastScrolledDestiny === 'undefined');
-                var isFirstScrollMove = (typeof lastScrolledDestiny === 'undefined' && typeof slideAnchor === 'undefined' && !slideMoving);
-
-                if(sectionAnchor && sectionAnchor.length){
-                    /*in order to call scrollpage() only once for each destination at a time
-                    It is called twice for each scroll otherwise, as in case of using anchorlinks `hashChange`
-                    event is fired on every scroll too.*/
-                    if ((sectionAnchor && sectionAnchor !== lastScrolledDestiny) && !isFirstSlideMove
-                        || isFirstScrollMove
-                        || (!slideMoving && lastScrolledSlide != slideAnchor )){
-
-                        scrollPageAndSlide(sectionAnchor, slideAnchor);
-                    }
-                }
-            }
-        }
-
-        //gets the URL anchors (section and slide)
-        function getAnchorsURL(){
-            var section;
-            var slide;
-            var hash = window.location.hash;
-
-            if(hash.length){
-                //getting the anchor link in the URL and deleting the `#`
-                var anchorsParts =  hash.replace('#', '').split('/');
-
-                //using / for visual reasons and not as a section/slide separator #2803
-                var isFunkyAnchor = hash.indexOf('#/') > -1;
-
-                section = isFunkyAnchor ? '/' + anchorsParts[1] : decodeURIComponent(anchorsParts[0]);
-
-                var slideAnchor = isFunkyAnchor ? anchorsParts[2] : anchorsParts[1];
-                if(slideAnchor && slideAnchor.length){
-                    slide = decodeURIComponent(slideAnchor);
-                }
-            }
-
-            return {
-                section: section,
-                slide: slide
-            }
-        }
-
-        //Sliding with arrow keys, both, vertical and horizontal
-        function keydownHandler(e) {
-            clearTimeout(keydownId);
-
-            var activeElement = $(':focus');
-            var keyCode = e.which;
-
-            //tab?
-            if(keyCode === 9){
-                onTab(e);
-            }
-
-            else if(!activeElement.is('textarea') && !activeElement.is('input') && !activeElement.is('select') &&
-                activeElement.attr('contentEditable') !== "true" && activeElement.attr('contentEditable') !== '' &&
-                options.keyboardScrolling && options.autoScrolling){
-
-                //preventing the scroll with arrow keys & spacebar & Page Up & Down keys
-                var keyControls = [40, 38, 32, 33, 34];
-                if($.inArray(keyCode, keyControls) > -1){
-                    e.preventDefault();
-                }
-
-                controlPressed = e.ctrlKey;
-
-                keydownId = setTimeout(function(){
-                    onkeydown(e);
-                },150);
-            }
-        }
-
-        function tooltipTextHandler(){
-            $(this).prev().trigger('click');
-        }
-
-        //to prevent scrolling while zooming
-        function keyUpHandler(e){
-            if(isWindowFocused){ //the keyup gets fired on new tab ctrl + t in Firefox
-                controlPressed = e.ctrlKey;
-            }
-        }
-
-        //binding the mousemove when the mouse's middle button is released
-        function mouseDownHandler(e){
-            //middle button
-            if (e.which == 2){
-                oldPageY = e.pageY;
-                container.on('mousemove', mouseMoveHandler);
-            }
-        }
-
-        //unbinding the mousemove when the mouse's middle button is released
-        function mouseUpHandler(e){
-            //middle button
-            if (e.which == 2){
-                container.off('mousemove');
-            }
-        }
-
-        //Scrolling horizontally when clicking on the slider controls.
-        function slideArrowHandler(){
-            var section = $(this).closest(SECTION_SEL);
-
-            if ($(this).hasClass(SLIDES_PREV)) {
-                if(isScrollAllowed.m.left){
-                    moveSlideLeft(section);
-                }
-            } else {
-                if(isScrollAllowed.m.right){
-                    moveSlideRight(section);
-                }
-            }
-        }
-
-        //when opening a new tab (ctrl + t), `control` won't be pressed when coming back.
-        function blurHandler(){
-            isWindowFocused = false;
-            controlPressed = false;
-        }
-
-        //Scrolls to the section when clicking the navigation bullet
-        function sectionBulletHandler(e){
-            e.preventDefault();
-            var index = $(this).parent().index();
-            scrollPage($(SECTION_SEL).eq(index));
-        }
-
-        //Scrolls the slider to the given slide destination for the given section
-        function slideBulletHandler(e){
-            e.preventDefault();
-            var slides = $(this).closest(SECTION_SEL).find(SLIDES_WRAPPER_SEL);
-            var destiny = slides.find(SLIDE_SEL).eq($(this).closest('li').index());
-
-            landscapeScroll(slides, destiny);
-        }
-
-        /**
-        * Keydown event
-        */
-        function onkeydown(e){
-            var shiftPressed = e.shiftKey;
-
-            //do nothing if we can not scroll or we are not using horizotnal key arrows.
-            if(!canScroll && [37,39].indexOf(e.which) < 0){
-                return;
-            }
-
-            switch (e.which) {
-                //up
-                case 38:
-                case 33:
-                    if(isScrollAllowed.k.up){
-                        moveSectionUp();
-                    }
-                    break;
-
-                //down
-                case 32: //spacebar
-                    if(shiftPressed && isScrollAllowed.k.up){
-                        moveSectionUp();
-                        break;
-                    }
-                /* falls through */
-                case 40:
-                case 34:
-                    if(isScrollAllowed.k.down){
-                        moveSectionDown();
-                    }
-                    break;
-
-                //Home
-                case 36:
-                    if(isScrollAllowed.k.up){
-                        moveTo(1);
-                    }
-                    break;
-
-                //End
-                case 35:
-                     if(isScrollAllowed.k.down){
-                        moveTo( $(SECTION_SEL).length );
-                    }
-                    break;
-
-                //left
-                case 37:
-                    if(isScrollAllowed.k.left){
-                        moveSlideLeft();
-                    }
-                    break;
-
-                //right
-                case 39:
-                    if(isScrollAllowed.k.right){
-                        moveSlideRight();
-                    }
-                    break;
-
-                default:
-                    return; // exit this handler for other keys
-            }
-        }
-
-        /**
-        * Makes sure the tab key will only focus elements within the current section/slide
-        * preventing this way from breaking the page.
-        * Based on "Modals and keyboard traps"
-        * from https://developers.google.com/web/fundamentals/accessibility/focus/using-tabindex
-        */
-        function onTab(e){
-            var isShiftPressed = e.shiftKey;
-            var activeElement = $(':focus');
-            var activeSection = $(SECTION_ACTIVE_SEL);
-            var activeSlide = activeSection.find(SLIDE_ACTIVE_SEL);
-            var focusableWrapper = activeSlide.length ? activeSlide : activeSection;
-            var focusableElements = focusableWrapper.find(focusableElementsString).not('[tabindex="-1"]');
-
-            function preventAndFocusFirst(e){
-                e.preventDefault();
-                return focusableElements.first().focus();
-            }
-
-            //is there an element with focus?
-            if(activeElement.length){
-                if(!activeElement.closest(SECTION_ACTIVE_SEL, SLIDE_ACTIVE_SEL).length){
-                    activeElement = preventAndFocusFirst(e);
-                }
-            }
-
-            //no element if focused? Let's focus the first one of the section/slide
-            else{
-                preventAndFocusFirst(e);
-            }
-
-            //when reached the first or last focusable element of the section/slide
-            //we prevent the tab action to keep it in the last focusable element
-            if(!isShiftPressed && activeElement.is(focusableElements.last()) ||
-                isShiftPressed && activeElement.is(focusableElements.first())
-            ){
-                e.preventDefault();
-            }
-        }
-
-        /**
-        * Detecting the direction of the mouse movement.
-        * Used only for the middle button of the mouse.
-        */
-        var oldPageY = 0;
-        function mouseMoveHandler(e){
-            if(canScroll){
-                // moving up
-                if (e.pageY < oldPageY && isScrollAllowed.m.up){
-                    moveSectionUp();
-                }
-
-                // moving down
-                else if(e.pageY > oldPageY && isScrollAllowed.m.down){
-                    moveSectionDown();
-                }
-            }
-            oldPageY = e.pageY;
-        }
-
-        /**
-        * Scrolls horizontal sliders.
-        */
-        function landscapeScroll(slides, destiny, direction){
-            var section = slides.closest(SECTION_SEL);
-            var v = {
-                slides: slides,
-                destiny: destiny,
-                direction: direction,
-                destinyPos: destiny.position(),
-                slideIndex: destiny.index(),
-                section: section,
-                sectionIndex: section.index(SECTION_SEL),
-                anchorLink: section.data('anchor'),
-                slidesNav: section.find(SLIDES_NAV_SEL),
-                slideAnchor:  getAnchor(destiny),
-                prevSlide: section.find(SLIDE_ACTIVE_SEL),
-                prevSlideIndex: section.find(SLIDE_ACTIVE_SEL).index(),
-
-                //caching the value of isResizing at the momment the function is called
-                //because it will be checked later inside a setTimeout and the value might change
-                localIsResizing: isResizing
-            };
-            v.xMovement = getXmovement(v.prevSlideIndex, v.slideIndex);
-
-            //important!! Only do it when not resizing
-            if(!v.localIsResizing){
-                //preventing from scrolling to the next/prev section when using scrollHorizontally
-                canScroll = false;
-            }
-
-            if(options.onSlideLeave){
-
-                //if the site is not just resizing and readjusting the slides
-                if(!v.localIsResizing && v.xMovement!=='none'){
-                    if($.isFunction( options.onSlideLeave )){
-                        if(options.onSlideLeave.call( v.prevSlide, v.anchorLink, (v.sectionIndex + 1), v.prevSlideIndex, v.direction, v.slideIndex ) === false){
-                            slideMoving = false;
-                            return;
-                        }
-                    }
-                }
-            }
-
-            destiny.addClass(ACTIVE).siblings().removeClass(ACTIVE);
-
-            if(!v.localIsResizing){
-                stopMedia(v.prevSlide);
-                lazyLoad(destiny);
-            }
-
-            if(!options.loopHorizontal && options.controlArrows){
-                //hidding it for the fist slide, showing for the rest
-                section.find(SLIDES_ARROW_PREV_SEL).toggle(v.slideIndex!==0);
-
-                //hidding it for the last slide, showing for the rest
-                section.find(SLIDES_ARROW_NEXT_SEL).toggle(!destiny.is(':last-child'));
-            }
-
-            //only changing the URL if the slides are in the current section (not for resize re-adjusting)
-            if(section.hasClass(ACTIVE) && !v.localIsResizing){
-                setState(v.slideIndex, v.slideAnchor, v.anchorLink, v.sectionIndex);
-            }
-
-            performHorizontalMove(slides, v, true);
-        }
-
-
-        function afterSlideLoads(v){
-            activeSlidesNavigation(v.slidesNav, v.slideIndex);
-
-            //if the site is not just resizing and readjusting the slides
-            if(!v.localIsResizing){
-                $.isFunction( options.afterSlideLoad ) && options.afterSlideLoad.call( v.destiny, v.anchorLink, (v.sectionIndex + 1), v.slideAnchor, v.slideIndex);
-
-                //needs to be inside the condition to prevent problems with continuousVertical and scrollHorizontally
-                //and to prevent double scroll right after a windows resize
-                canScroll = true;
-
-                playMedia(v.destiny);
-            }
-
-            //letting them slide again
-            slideMoving = false;
-        }
-
-        /**
-        * Performs the horizontal movement. (CSS3 or jQuery)
-        *
-        * @param fireCallback {Bool} - determines whether or not to fire the callback
-        */
-        function performHorizontalMove(slides, v, fireCallback){
-            var destinyPos = v.destinyPos;
-
-            if(options.css3){
-                var translate3d = 'translate3d(-' + Math.round(destinyPos.left) + 'px, 0px, 0px)';
-
-                addAnimation(slides.find(SLIDES_CONTAINER_SEL)).css(getTransforms(translate3d));
-
-                afterSlideLoadsId = setTimeout(function(){
-                    fireCallback && afterSlideLoads(v);
-                }, options.scrollingSpeed, options.easing);
-            }else{
-                slides.animate({
-                    scrollLeft : Math.round(destinyPos.left)
-                }, options.scrollingSpeed, options.easing, function() {
-
-                    fireCallback && afterSlideLoads(v);
-                });
-            }
-        }
-
-        /**
-        * Sets the state for the horizontal bullet navigations.
-        */
-        function activeSlidesNavigation(slidesNav, slideIndex){
-            slidesNav.find(ACTIVE_SEL).removeClass(ACTIVE);
-            slidesNav.find('li').eq(slideIndex).find('a').addClass(ACTIVE);
-        }
-
-        var previousHeight = windowsHeight;
-
-        //when resizing the site, we adjust the heights of the sections, slimScroll...
-        function resizeHandler(){
-            //checking if it needs to get responsive
-            responsive();
-
-            // rebuild immediately on touch devices
-            if (isTouchDevice) {
-                var activeElement = $(document.activeElement);
-
-                //if the keyboard is NOT visible
-                if (!activeElement.is('textarea') && !activeElement.is('input') && !activeElement.is('select')) {
-                    var currentHeight = $window.height();
-
-                    //making sure the change in the viewport size is enough to force a rebuild. (20 % of the window to avoid problems when hidding scroll bars)
-                    if( Math.abs(currentHeight - previousHeight) > (20 * Math.max(previousHeight, currentHeight) / 100) ){
-                        reBuild(true);
-                        previousHeight = currentHeight;
-                    }
-                }
-            }else{
-                //in order to call the functions only when the resize is finished
-                //http://stackoverflow.com/questions/4298612/jquery-how-to-call-resize-event-only-once-its-finished-resizing
-                clearTimeout(resizeId);
-
-                resizeId = setTimeout(function(){
-                    reBuild(true);
-                }, 350);
-            }
-        }
-
-        /**
-        * Checks if the site needs to get responsive and disables autoScrolling if so.
-        * A class `fp-responsive` is added to the plugin's container in case the user wants to use it for his own responsive CSS.
-        */
-        function responsive(){
-            var widthLimit = options.responsive || options.responsiveWidth; //backwards compatiblity
-            var heightLimit = options.responsiveHeight;
-
-            //only calculating what we need. Remember its called on the resize event.
-            var isBreakingPointWidth = widthLimit && $window.outerWidth() < widthLimit;
-            var isBreakingPointHeight = heightLimit && $window.height() < heightLimit;
-
-            if(widthLimit && heightLimit){
-                setResponsive(isBreakingPointWidth || isBreakingPointHeight);
-            }
-            else if(widthLimit){
-                setResponsive(isBreakingPointWidth);
-            }
-            else if(heightLimit){
-                setResponsive(isBreakingPointHeight);
-            }
-        }
-
-        /**
-        * Adds transition animations for the given element
-        */
-        function addAnimation(element){
-            var transition = 'all ' + options.scrollingSpeed + 'ms ' + options.easingcss3;
-
-            element.removeClass(NO_TRANSITION);
-            return element.css({
-                '-webkit-transition': transition,
-                'transition': transition
-            });
-        }
-
-        /**
-        * Remove transition animations for the given element
-        */
-        function removeAnimation(element){
-            return element.addClass(NO_TRANSITION);
-        }
-
-        /**
-        * Activating the vertical navigation bullets according to the given slide name.
-        */
-        function activateNavDots(name, sectionIndex){
-            if(options.navigation){
-                $(SECTION_NAV_SEL).find(ACTIVE_SEL).removeClass(ACTIVE);
-                if(name){
-                    $(SECTION_NAV_SEL).find('a[href="#' + name + '"]').addClass(ACTIVE);
-                }else{
-                    $(SECTION_NAV_SEL).find('li').eq(sectionIndex).find('a').addClass(ACTIVE);
-                }
-            }
-        }
-
-        /**
-        * Activating the website main menu elements according to the given slide name.
-        */
-        function activateMenuElement(name){
-            if(options.menu){
-                $(options.menu).find(ACTIVE_SEL).removeClass(ACTIVE);
-                $(options.menu).find('[data-menuanchor="'+name+'"]').addClass(ACTIVE);
-            }
-        }
-
-        /**
-        * Sets to active the current menu and vertical nav items.
-        */
-        function activateMenuAndNav(anchor, index){
-            activateMenuElement(anchor);
-            activateNavDots(anchor, index);
-        }
-
-        /**
-        * Retuns `up` or `down` depending on the scrolling movement to reach its destination
-        * from the current section.
-        */
-        function getYmovement(destiny){
-            var fromIndex = $(SECTION_ACTIVE_SEL).index(SECTION_SEL);
-            var toIndex = destiny.index(SECTION_SEL);
-            if( fromIndex == toIndex){
-                return 'none';
-            }
-            if(fromIndex > toIndex){
-                return 'up';
-            }
-            return 'down';
-        }
-
-        /**
-        * Retuns `right` or `left` depending on the scrolling movement to reach its destination
-        * from the current slide.
-        */
-        function getXmovement(fromIndex, toIndex){
-            if( fromIndex == toIndex){
-                return 'none';
-            }
-            if(fromIndex > toIndex){
-                return 'left';
-            }
-            return 'right';
-        }
-
-        function addTableClass(element){
-            //In case we are styling for the 2nd time as in with reponsiveSlides
-            if(!element.hasClass(TABLE)){
-                var wrapper = $('<div class="' + TABLE_CELL + '" />').height(getTableHeight(element));
-                element.addClass(TABLE).wrapInner(wrapper);
-            }
-        }
-
-        function getTableHeight(element){
-            var sectionHeight = windowsHeight;
-
-            if(options.paddingTop || options.paddingBottom){
-                var section = element;
-                if(!section.hasClass(SECTION)){
-                    section = element.closest(SECTION_SEL);
-                }
-
-                var paddings = parseInt(section.css('padding-top')) + parseInt(section.css('padding-bottom'));
-                sectionHeight = (windowsHeight - paddings);
-            }
-
-            return sectionHeight;
-        }
-
-        /**
-        * Adds a css3 transform property to the container class with or without animation depending on the animated param.
-        */
-        function transformContainer(translate3d, animated){
-            if(animated){
-                addAnimation(container);
-            }else{
-                removeAnimation(container);
-            }
-
-            container.css(getTransforms(translate3d));
-
-            //syncronously removing the class after the animation has been applied.
-            setTimeout(function(){
-                container.removeClass(NO_TRANSITION);
-            },10);
-        }
-
-        /**
-        * Gets a section by its anchor / index
-        */
-        function getSectionByAnchor(sectionAnchor){
-            var section = container.find(SECTION_SEL + '[data-anchor="'+sectionAnchor+'"]');
-            if(!section.length){
-                var sectionIndex = typeof sectionAnchor !== 'undefined' ? sectionAnchor -1 : 0;
-                section = $(SECTION_SEL).eq(sectionIndex);
-            }
-
-            return section;
-        }
-
-        /**
-        * Gets a slide inside a given section by its anchor / index
-        */
-        function getSlideByAnchor(slideAnchor, section){
-            var slide = section.find(SLIDE_SEL + '[data-anchor="'+slideAnchor+'"]');
-            if(!slide.length){
-                slideAnchor = typeof slideAnchor !== 'undefined' ? slideAnchor : 0;
-                slide = section.find(SLIDE_SEL).eq(slideAnchor);
-            }
-
-            return slide;
-        }
-
-        /**
-        * Scrolls to the given section and slide anchors
-        */
-        function scrollPageAndSlide(sectionAnchor, slideAnchor){
-            var section = getSectionByAnchor(sectionAnchor);
-
-            //do nothing if there's no section with the given anchor name
-            if(!section.length) return;
-
-            var slide = getSlideByAnchor(slideAnchor, section);
-
-            //we need to scroll to the section and then to the slide
-            if (sectionAnchor !== lastScrolledDestiny && !section.hasClass(ACTIVE)){
-                scrollPage(section, function(){
-                    scrollSlider(slide);
-                });
-            }
-            //if we were already in the section
-            else{
-                scrollSlider(slide);
-            }
-        }
-
-        /**
-        * Scrolls the slider to the given slide destination for the given section
-        */
-        function scrollSlider(slide){
-            if(slide.length){
-                landscapeScroll(slide.closest(SLIDES_WRAPPER_SEL), slide);
-            }
-        }
-
-        /**
-        * Creates a landscape navigation bar with dots for horizontal sliders.
-        */
-        function addSlidesNavigation(section, numSlides){
-            section.append('<div class="' + SLIDES_NAV + '"><ul></ul></div>');
-            var nav = section.find(SLIDES_NAV_SEL);
-
-            //top or bottom
-            nav.addClass(options.slidesNavPosition);
-
-            for(var i=0; i< numSlides; i++){
-                nav.find('ul').append('<li><a href="#"><span></span></a></li>');
-            }
-
-            //centering it
-            nav.css('margin-left', '-' + (nav.width()/2) + 'px');
-
-            nav.find('li').first().find('a').addClass(ACTIVE);
-        }
-
-
-        /**
-        * Sets the state of the website depending on the active section/slide.
-        * It changes the URL hash when needed and updates the body class.
-        */
-        function setState(slideIndex, slideAnchor, anchorLink, sectionIndex){
-            var sectionHash = '';
-
-            if(options.anchors.length && !options.lockAnchors){
-
-                //isn't it the first slide?
-                if(slideIndex){
-                    if(typeof anchorLink !== 'undefined'){
-                        sectionHash = anchorLink;
-                    }
-
-                    //slide without anchor link? We take the index instead.
-                    if(typeof slideAnchor === 'undefined'){
-                        slideAnchor = slideIndex;
-                    }
-
-                    lastScrolledSlide = slideAnchor;
-                    setUrlHash(sectionHash + '/' + slideAnchor);
-
-                //first slide won't have slide anchor, just the section one
-                }else if(typeof slideIndex !== 'undefined'){
-                    lastScrolledSlide = slideAnchor;
-                    setUrlHash(anchorLink);
-                }
-
-                //section without slides
-                else{
-                    setUrlHash(anchorLink);
-                }
-            }
-
-            setBodyClass();
-        }
-
-        /**
-        * Sets the URL hash.
-        */
-        function setUrlHash(url){
-            if(options.recordHistory){
-                location.hash = url;
-            }else{
-                //Mobile Chrome doesn't work the normal way, so... lets use HTML5 for phones :)
-                if(isTouchDevice || isTouch){
-                    window.history.replaceState(undefined, undefined, '#' + url);
-                }else{
-                    var baseUrl = window.location.href.split('#')[0];
-                    window.location.replace( baseUrl + '#' + url );
-                }
-            }
-        }
-
-        /**
-        * Gets the anchor for the given slide / section. Its index will be used if there's none.
-        */
-        function getAnchor(element){
-            var anchor = element.data('anchor');
-            var index = element.index();
-
-            //Slide without anchor link? We take the index instead.
-            if(typeof anchor === 'undefined'){
-                anchor = index;
-            }
-
-            return anchor;
-        }
-
-        /**
-        * Sets a class for the body of the page depending on the active section / slide
-        */
-        function setBodyClass(){
-            var section = $(SECTION_ACTIVE_SEL);
-            var slide = section.find(SLIDE_ACTIVE_SEL);
-
-            var sectionAnchor = getAnchor(section);
-            var slideAnchor = getAnchor(slide);
-
-            var text = String(sectionAnchor);
-
-            if(slide.length){
-                text = text + '-' + slideAnchor;
-            }
-
-            //changing slash for dash to make it a valid CSS style
-            text = text.replace('/', '-').replace('#','');
-
-            //removing previous anchor classes
-            var classRe = new RegExp('\\b\\s?' + VIEWING_PREFIX + '-[^\\s]+\\b', "g");
-            $body[0].className = $body[0].className.replace(classRe, '');
-
-            //adding the current anchor
-            $body.addClass(VIEWING_PREFIX + '-' + text);
-        }
-
-        /**
-        * Checks for translate3d support
-        * @return boolean
-        * http://stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
-        */
-        function support3d() {
-            var el = document.createElement('p'),
-                has3d,
-                transforms = {
-                    'webkitTransform':'-webkit-transform',
-                    'OTransform':'-o-transform',
-                    'msTransform':'-ms-transform',
-                    'MozTransform':'-moz-transform',
-                    'transform':'transform'
-                };
-
-            // Add it to the body to get the computed style.
-            document.body.insertBefore(el, null);
-
-            for (var t in transforms) {
-                if (el.style[t] !== undefined) {
-                    el.style[t] = 'translate3d(1px,1px,1px)';
-                    has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
-                }
-            }
-
-            document.body.removeChild(el);
-
-            return (has3d !== undefined && has3d.length > 0 && has3d !== 'none');
-        }
-
-        /**
-        * Removes the auto scrolling action fired by the mouse wheel and trackpad.
-        * After this function is called, the mousewheel and trackpad movements won't scroll through sections.
-        */
-        function removeMouseWheelHandler(){
-            if (document.addEventListener) {
-                document.removeEventListener('mousewheel', MouseWheelHandler, false); //IE9, Chrome, Safari, Oper
-                document.removeEventListener('wheel', MouseWheelHandler, false); //Firefox
-                document.removeEventListener('MozMousePixelScroll', MouseWheelHandler, false); //old Firefox
-            } else {
-                document.detachEvent('onmousewheel', MouseWheelHandler); //IE 6/7/8
-            }
-        }
-
-        /**
-        * Adds the auto scrolling action for the mouse wheel and trackpad.
-        * After this function is called, the mousewheel and trackpad movements will scroll through sections
-        * https://developer.mozilla.org/en-US/docs/Web/Events/wheel
-        */
-        function addMouseWheelHandler(){
-            var prefix = '';
-            var _addEventListener;
-
-            if (window.addEventListener){
-                _addEventListener = "addEventListener";
-            }else{
-                _addEventListener = "attachEvent";
-                prefix = 'on';
-            }
-
-             // detect available wheel event
-            var support = 'onwheel' in document.createElement('div') ? 'wheel' : // Modern browsers support "wheel"
-                      document.onmousewheel !== undefined ? 'mousewheel' : // Webkit and IE support at least "mousewheel"
-                      'DOMMouseScroll'; // let's assume that remaining browsers are older Firefox
-
-
-            if(support == 'DOMMouseScroll'){
-                document[ _addEventListener ](prefix + 'MozMousePixelScroll', MouseWheelHandler, false);
-            }
-
-            //handle MozMousePixelScroll in older Firefox
-            else{
-                document[ _addEventListener ](prefix + support, MouseWheelHandler, false);
-            }
-        }
-
-        /**
-        * Binding the mousemove when the mouse's middle button is pressed
-        */
-        function addMiddleWheelHandler(){
-            container
-                .on('mousedown', mouseDownHandler)
-                .on('mouseup', mouseUpHandler);
-        }
-
-        /**
-        * Unbinding the mousemove when the mouse's middle button is released
-        */
-        function removeMiddleWheelHandler(){
-            container
-                .off('mousedown', mouseDownHandler)
-                .off('mouseup', mouseUpHandler);
-        }
-
-        /**
-        * Adds the possibility to auto scroll through sections on touch devices.
-        */
-        function addTouchHandler(){
-            if(isTouchDevice || isTouch){
-                if(options.autoScrolling){
-                    $body.off(events.touchmove).on(events.touchmove, preventBouncing);
-                }
-
-                $(WRAPPER_SEL)
-                    .off(events.touchstart).on(events.touchstart, touchStartHandler)
-                    .off(events.touchmove).on(events.touchmove, touchMoveHandler);
-            }
-        }
-
-        /**
-        * Removes the auto scrolling for touch devices.
-        */
-        function removeTouchHandler(){
-            if(isTouchDevice || isTouch){
-                if(options.autoScrolling){
-                    $body.off(events.touchmove);
-                }
-
-                $(WRAPPER_SEL)
-                    .off(events.touchstart)
-                    .off(events.touchmove);
-            }
-        }
-
-        /*
-        * Returns and object with Microsoft pointers (for IE<11 and for IE >= 11)
-        * http://msdn.microsoft.com/en-us/library/ie/dn304886(v=vs.85).aspx
-        */
-        function getMSPointer(){
-            var pointer;
-
-            //IE >= 11 & rest of browsers
-            if(window.PointerEvent){
-                pointer = { down: 'pointerdown', move: 'pointermove'};
-            }
-
-            //IE < 11
-            else{
-                pointer = { down: 'MSPointerDown', move: 'MSPointerMove'};
-            }
-
-            return pointer;
-        }
-
-        /**
-        * Gets the pageX and pageY properties depending on the browser.
-        * https://github.com/alvarotrigo/fullPage.js/issues/194#issuecomment-34069854
-        */
-        function getEventsPage(e){
-            var events = [];
-
-            events.y = (typeof e.pageY !== 'undefined' && (e.pageY || e.pageX) ? e.pageY : e.touches[0].pageY);
-            events.x = (typeof e.pageX !== 'undefined' && (e.pageY || e.pageX) ? e.pageX : e.touches[0].pageX);
-
-            //in touch devices with scroll bar, e.pageY is detected, but we have to deal with touch events. #1008
-            if(isTouch && isReallyTouch(e) && (options.scrollBar || !options.autoScrolling)){
-                events.y = e.touches[0].pageY;
-                events.x = e.touches[0].pageX;
-            }
-
-            return events;
-        }
-
-        /**
-        * Slides silently (with no animation) the active slider to the given slide.
-        * @param noCallback {bool} true or defined -> no callbacks
-        */
-        function silentLandscapeScroll(activeSlide, noCallbacks){
-            setScrollingSpeed (0, 'internal');
-
-            if(typeof noCallbacks !== 'undefined'){
-                //preventing firing callbacks afterSlideLoad etc.
-                isResizing = true;
-            }
-
-            landscapeScroll(activeSlide.closest(SLIDES_WRAPPER_SEL), activeSlide);
-
-            if(typeof noCallbacks !== 'undefined'){
-                isResizing = false;
-            }
-
-            setScrollingSpeed(originals.scrollingSpeed, 'internal');
-        }
-
-        /**
-        * Scrolls silently (with no animation) the page to the given Y position.
-        */
-        function silentScroll(top){
-            // The first section can have a negative value in iOS 10. Not quite sure why: -0.0142822265625
-            // that's why we round it to 0.
-            var roundedTop = Math.round(top);
-
-            if (options.css3 && options.autoScrolling && !options.scrollBar){
-                var translate3d = 'translate3d(0px, -' + roundedTop + 'px, 0px)';
-                transformContainer(translate3d, false);
-            }
-            else if(options.autoScrolling && !options.scrollBar){
-                container.css('top', -roundedTop);
-            }
-            else{
-                $htmlBody.scrollTop(roundedTop);
-            }
-        }
-
-        /**
-        * Returns the cross-browser transform string.
-        */
-        function getTransforms(translate3d){
-            return {
-                '-webkit-transform': translate3d,
-                '-moz-transform': translate3d,
-                '-ms-transform':translate3d,
-                'transform': translate3d
-            };
-        }
-
-        /**
-        * Allowing or disallowing the mouse/swipe scroll in a given direction. (not for keyboard)
-        * @type  m (mouse) or k (keyboard)
-        */
-        function setIsScrollAllowed(value, direction, type){
-            //up, down, left, right
-            if(direction !== 'all'){
-                isScrollAllowed[type][direction] = value;
-            }
-
-            //all directions?
-            else{
-                $.each(Object.keys(isScrollAllowed[type]), function(index, key){
-                    isScrollAllowed[type][key] = value;
-                });
-            }
-        }
-
-        /*
-        * Destroys fullpage.js plugin events and optinally its html markup and styles
-        */
-        function destroy(all){
-            setAutoScrolling(false, 'internal');
-            setAllowScrolling(false);
-            setKeyboardScrolling(false);
-            container.addClass(DESTROYED);
-
-            clearTimeout(afterSlideLoadsId);
-            clearTimeout(afterSectionLoadsId);
-            clearTimeout(resizeId);
-            clearTimeout(scrollId);
-            clearTimeout(scrollId2);
-
-            $window
-                .off('scroll', scrollHandler)
-                .off('hashchange', hashChangeHandler)
-                .off('resize', resizeHandler);
-
-            $document
-                .off('keydown', keydownHandler)
-                .off('keyup', keyUpHandler)
-                .off('click touchstart', SECTION_NAV_SEL + ' a')
-                .off('mouseenter', SECTION_NAV_SEL + ' li')
-                .off('mouseleave', SECTION_NAV_SEL + ' li')
-                .off('click touchstart', SLIDES_NAV_LINK_SEL)
-                .off('mouseover', options.normalScrollElements)
-                .off('mouseout', options.normalScrollElements);
-
-            $(SECTION_SEL)
-                .off('click touchstart', SLIDES_ARROW_SEL);
-
-            clearTimeout(afterSlideLoadsId);
-            clearTimeout(afterSectionLoadsId);
-
-            //lets make a mess!
-            if(all){
-                destroyStructure();
-            }
-        }
-
-        /*
-        * Removes inline styles added by fullpage.js
-        */
-        function destroyStructure(){
-            //reseting the `top` or `translate` properties to 0
-            silentScroll(0);
-
-            //loading all the lazy load content
-            container.find('img[data-src], source[data-src], audio[data-src], iframe[data-src]').each(function(){
-                setSrc($(this), 'src');
-            });
-
-            container.find('img[data-srcset]').each(function(){
-                setSrc($(this), 'srcset');
-            });
-
-            $(SECTION_NAV_SEL + ', ' + SLIDES_NAV_SEL +  ', ' + SLIDES_ARROW_SEL).remove();
-
-            //removing inline styles
-            $(SECTION_SEL).css( {
-                'height': '',
-                'background-color' : '',
-                'padding': ''
-            });
-
-            $(SLIDE_SEL).css( {
-                'width': ''
-            });
-
-            container.css({
-                'height': '',
-                'position': '',
-                '-ms-touch-action': '',
-                'touch-action': ''
-            });
-
-            $htmlBody.css({
-                'overflow': '',
-                'height': ''
-            });
-
-            // remove .fp-enabled class
-            $('html').removeClass(ENABLED);
-
-            // remove .fp-responsive class
-            $body.removeClass(RESPONSIVE);
-
-            // remove all of the .fp-viewing- classes
-            $.each($body.get(0).className.split(/\s+/), function (index, className) {
-                if (className.indexOf(VIEWING_PREFIX) === 0) {
-                    $body.removeClass(className);
-                }
-            });
-
-            //removing added classes
-            $(SECTION_SEL + ', ' + SLIDE_SEL).each(function(){
-                if(options.scrollOverflowHandler){
-                    options.scrollOverflowHandler.remove($(this));
-                }
-                $(this).removeClass(TABLE + ' ' + ACTIVE);
-                $(this).attr('style', $(this).data('fp-styles'));
-            });
-
-            removeAnimation(container);
-
-            //Unwrapping content
-            container.find(TABLE_CELL_SEL + ', ' + SLIDES_CONTAINER_SEL + ', ' + SLIDES_WRAPPER_SEL).each(function(){
-                //unwrap not being use in case there's no child element inside and its just text
-                $(this).replaceWith(this.childNodes);
-            });
-
-            //removing the applied transition from the fullpage wrapper
-            container.css({
-                '-webkit-transition': 'none',
-                'transition': 'none'
-            });
-
-            //scrolling the page to the top with no animation
-            $htmlBody.scrollTop(0);
-
-            //removing selectors
-            var usedSelectors = [SECTION, SLIDE, SLIDES_CONTAINER];
-            $.each(usedSelectors, function(index, value){
-                $('.' + value).removeClass(value);
-            });
-        }
-
-        /*
-        * Sets the state for a variable with multiple states (original, and temporal)
-        * Some variables such as `autoScrolling` or `recordHistory` might change automatically its state when using `responsive` or `autoScrolling:false`.
-        * This function is used to keep track of both states, the original and the temporal one.
-        * If type is not 'internal', then we assume the user is globally changing the variable.
-        */
-        function setVariableState(variable, value, type){
-            options[variable] = value;
-            if(type !== 'internal'){
-                originals[variable] = value;
-            }
-        }
-
-        /**
-        * Displays warnings
-        */
-        function displayWarnings(){
-            var extensions = ['fadingEffect', 'continuousHorizontal', 'scrollHorizontally', 'interlockedSlides', 'resetSliders', 'responsiveSlides', 'offsetSections', 'dragAndMove', 'scrollOverflowReset', 'parallax'];
-            if($('html').hasClass(ENABLED)){
-                showError('error', 'Fullpage.js can only be initialized once and you are doing it multiple times!');
-                return;
-            }
-
-            // Disable mutually exclusive settings
-            if (options.continuousVertical &&
-                (options.loopTop || options.loopBottom)) {
-                options.continuousVertical = false;
-                showError('warn', 'Option `loopTop/loopBottom` is mutually exclusive with `continuousVertical`; `continuousVertical` disabled');
-            }
-
-            if(options.scrollBar && options.scrollOverflow){
-                showError('warn', 'Option `scrollBar` is mutually exclusive with `scrollOverflow`. Sections with scrollOverflow might not work well in Firefox');
-            }
-
-            if(options.continuousVertical && (options.scrollBar || !options.autoScrolling)){
-                options.continuousVertical = false;
-                showError('warn', 'Scroll bars (`scrollBar:true` or `autoScrolling:false`) are mutually exclusive with `continuousVertical`; `continuousVertical` disabled');
-            }
-
-            if(options.scrollOverflow && !options.scrollOverflowHandler){
-                options.scrollOverflow = false;
-                showError('error', 'The option `scrollOverflow:true` requires the file `scrolloverflow.min.js`. Please include it before fullPage.js.');
-            }
-
-            //using extensions? Wrong file!
-            $.each(extensions, function(index, extension){
-                //is the option set to true?
-                if(options[extension]){
-                    showError('warn', 'fullpage.js extensions require jquery.fullpage.extensions.min.js file instead of the usual jquery.fullpage.js. Requested: '+ extension);
-                }
-            });
-
-            //anchors can not have the same value as any element ID or NAME
-            $.each(options.anchors, function(index, name){
-
-                //case insensitive selectors (http://stackoverflow.com/a/19465187/1081396)
-                var nameAttr = $document.find('[name]').filter(function() {
-                    return $(this).attr('name') && $(this).attr('name').toLowerCase() == name.toLowerCase();
-                });
-
-                var idAttr = $document.find('[id]').filter(function() {
-                    return $(this).attr('id') && $(this).attr('id').toLowerCase() == name.toLowerCase();
-                });
-
-                if(idAttr.length || nameAttr.length ){
-                    showError('error', 'data-anchor tags can not have the same value as any `id` element on the site (or `name` element for IE).');
-                    idAttr.length && showError('error', '"' + name + '" is is being used by another element `id` property');
-                    nameAttr.length && showError('error', '"' + name + '" is is being used by another element `name` property');
-                }
-            });
-        }
-
-        /**
-        * Shows a message in the console of the given type.
-        */
-        function showError(type, text){
-            console && console[type] && console[type]('fullPage: ' + text);
-        }
-
-    }; //end of $.fn.fullpage
-});
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}( function( $ ) {
+
+return $.widget( "ui.sortable", $.ui.mouse, {
+	version: "1.12.1",
+	widgetEventPrefix: "sort",
+	ready: false,
+	options: {
+		appendTo: "parent",
+		axis: false,
+		connectWith: false,
+		containment: false,
+		cursor: "auto",
+		cursorAt: false,
+		dropOnEmpty: true,
+		forcePlaceholderSize: false,
+		forceHelperSize: false,
+		grid: false,
+		handle: false,
+		helper: "original",
+		items: "> *",
+		opacity: false,
+		placeholder: false,
+		revert: false,
+		scroll: true,
+		scrollSensitivity: 20,
+		scrollSpeed: 20,
+		scope: "default",
+		tolerance: "intersect",
+		zIndex: 1000,
+
+		// Callbacks
+		activate: null,
+		beforeStop: null,
+		change: null,
+		deactivate: null,
+		out: null,
+		over: null,
+		receive: null,
+		remove: null,
+		sort: null,
+		start: null,
+		stop: null,
+		update: null
+	},
+
+	_isOverAxis: function( x, reference, size ) {
+		return ( x >= reference ) && ( x < ( reference + size ) );
+	},
+
+	_isFloating: function( item ) {
+		return ( /left|right/ ).test( item.css( "float" ) ) ||
+			( /inline|table-cell/ ).test( item.css( "display" ) );
+	},
+
+	_create: function() {
+		this.containerCache = {};
+		this._addClass( "ui-sortable" );
+
+		//Get the items
+		this.refresh();
+
+		//Let's determine the parent's offset
+		this.offset = this.element.offset();
+
+		//Initialize mouse events for interaction
+		this._mouseInit();
+
+		this._setHandleClassName();
+
+		//We're ready to go
+		this.ready = true;
+
+	},
+
+	_setOption: function( key, value ) {
+		this._super( key, value );
+
+		if ( key === "handle" ) {
+			this._setHandleClassName();
+		}
+	},
+
+	_setHandleClassName: function() {
+		var that = this;
+		this._removeClass( this.element.find( ".ui-sortable-handle" ), "ui-sortable-handle" );
+		$.each( this.items, function() {
+			that._addClass(
+				this.instance.options.handle ?
+					this.item.find( this.instance.options.handle ) :
+					this.item,
+				"ui-sortable-handle"
+			);
+		} );
+	},
+
+	_destroy: function() {
+		this._mouseDestroy();
+
+		for ( var i = this.items.length - 1; i >= 0; i-- ) {
+			this.items[ i ].item.removeData( this.widgetName + "-item" );
+		}
+
+		return this;
+	},
+
+	_mouseCapture: function( event, overrideHandle ) {
+		var currentItem = null,
+			validHandle = false,
+			that = this;
+
+		if ( this.reverting ) {
+			return false;
+		}
+
+		if ( this.options.disabled || this.options.type === "static" ) {
+			return false;
+		}
+
+		//We have to refresh the items data once first
+		this._refreshItems( event );
+
+		//Find out if the clicked node (or one of its parents) is a actual item in this.items
+		$( event.target ).parents().each( function() {
+			if ( $.data( this, that.widgetName + "-item" ) === that ) {
+				currentItem = $( this );
+				return false;
+			}
+		} );
+		if ( $.data( event.target, that.widgetName + "-item" ) === that ) {
+			currentItem = $( event.target );
+		}
+
+		if ( !currentItem ) {
+			return false;
+		}
+		if ( this.options.handle && !overrideHandle ) {
+			$( this.options.handle, currentItem ).find( "*" ).addBack().each( function() {
+				if ( this === event.target ) {
+					validHandle = true;
+				}
+			} );
+			if ( !validHandle ) {
+				return false;
+			}
+		}
+
+		this.currentItem = currentItem;
+		this._removeCurrentsFromItems();
+		return true;
+
+	},
+
+	_mouseStart: function( event, overrideHandle, noActivation ) {
+
+		var i, body,
+			o = this.options;
+
+		this.currentContainer = this;
+
+		//We only need to call refreshPositions, because the refreshItems call has been moved to
+		// mouseCapture
+		this.refreshPositions();
+
+		//Create and append the visible helper
+		this.helper = this._createHelper( event );
+
+		//Cache the helper size
+		this._cacheHelperProportions();
+
+		/*
+		 * - Position generation -
+		 * This block generates everything position related - it's the core of draggables.
+		 */
+
+		//Cache the margins of the original element
+		this._cacheMargins();
+
+		//Get the next scrolling parent
+		this.scrollParent = this.helper.scrollParent();
+
+		//The element's absolute position on the page minus margins
+		this.offset = this.currentItem.offset();
+		this.offset = {
+			top: this.offset.top - this.margins.top,
+			left: this.offset.left - this.margins.left
+		};
+
+		$.extend( this.offset, {
+			click: { //Where the click happened, relative to the element
+				left: event.pageX - this.offset.left,
+				top: event.pageY - this.offset.top
+			},
+			parent: this._getParentOffset(),
+
+			// This is a relative to absolute position minus the actual position calculation -
+			// only used for relative positioned helper
+			relative: this._getRelativeOffset()
+		} );
+
+		// Only after we got the offset, we can change the helper's position to absolute
+		// TODO: Still need to figure out a way to make relative sorting possible
+		this.helper.css( "position", "absolute" );
+		this.cssPosition = this.helper.css( "position" );
+
+		//Generate the original position
+		this.originalPosition = this._generatePosition( event );
+		this.originalPageX = event.pageX;
+		this.originalPageY = event.pageY;
+
+		//Adjust the mouse offset relative to the helper if "cursorAt" is supplied
+		( o.cursorAt && this._adjustOffsetFromHelper( o.cursorAt ) );
+
+		//Cache the former DOM position
+		this.domPosition = {
+			prev: this.currentItem.prev()[ 0 ],
+			parent: this.currentItem.parent()[ 0 ]
+		};
+
+		// If the helper is not the original, hide the original so it's not playing any role during
+		// the drag, won't cause anything bad this way
+		if ( this.helper[ 0 ] !== this.currentItem[ 0 ] ) {
+			this.currentItem.hide();
+		}
+
+		//Create the placeholder
+		this._createPlaceholder();
+
+		//Set a containment if given in the options
+		if ( o.containment ) {
+			this._setContainment();
+		}
+
+		if ( o.cursor && o.cursor !== "auto" ) { // cursor option
+			body = this.document.find( "body" );
+
+			// Support: IE
+			this.storedCursor = body.css( "cursor" );
+			body.css( "cursor", o.cursor );
+
+			this.storedStylesheet =
+				$( "<style>*{ cursor: " + o.cursor + " !important; }</style>" ).appendTo( body );
+		}
+
+		if ( o.opacity ) { // opacity option
+			if ( this.helper.css( "opacity" ) ) {
+				this._storedOpacity = this.helper.css( "opacity" );
+			}
+			this.helper.css( "opacity", o.opacity );
+		}
+
+		if ( o.zIndex ) { // zIndex option
+			if ( this.helper.css( "zIndex" ) ) {
+				this._storedZIndex = this.helper.css( "zIndex" );
+			}
+			this.helper.css( "zIndex", o.zIndex );
+		}
+
+		//Prepare scrolling
+		if ( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+				this.scrollParent[ 0 ].tagName !== "HTML" ) {
+			this.overflowOffset = this.scrollParent.offset();
+		}
+
+		//Call callbacks
+		this._trigger( "start", event, this._uiHash() );
+
+		//Recache the helper size
+		if ( !this._preserveHelperProportions ) {
+			this._cacheHelperProportions();
+		}
+
+		//Post "activate" events to possible containers
+		if ( !noActivation ) {
+			for ( i = this.containers.length - 1; i >= 0; i-- ) {
+				this.containers[ i ]._trigger( "activate", event, this._uiHash( this ) );
+			}
+		}
+
+		//Prepare possible droppables
+		if ( $.ui.ddmanager ) {
+			$.ui.ddmanager.current = this;
+		}
+
+		if ( $.ui.ddmanager && !o.dropBehaviour ) {
+			$.ui.ddmanager.prepareOffsets( this, event );
+		}
+
+		this.dragging = true;
+
+		this._addClass( this.helper, "ui-sortable-helper" );
+
+		// Execute the drag once - this causes the helper not to be visiblebefore getting its
+		// correct position
+		this._mouseDrag( event );
+		return true;
+
+	},
+
+	_mouseDrag: function( event ) {
+		var i, item, itemElement, intersection,
+			o = this.options,
+			scrolled = false;
+
+		//Compute the helpers position
+		this.position = this._generatePosition( event );
+		this.positionAbs = this._convertPositionTo( "absolute" );
+
+		if ( !this.lastPositionAbs ) {
+			this.lastPositionAbs = this.positionAbs;
+		}
+
+		//Do scrolling
+		if ( this.options.scroll ) {
+			if ( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+					this.scrollParent[ 0 ].tagName !== "HTML" ) {
+
+				if ( ( this.overflowOffset.top + this.scrollParent[ 0 ].offsetHeight ) -
+						event.pageY < o.scrollSensitivity ) {
+					this.scrollParent[ 0 ].scrollTop =
+						scrolled = this.scrollParent[ 0 ].scrollTop + o.scrollSpeed;
+				} else if ( event.pageY - this.overflowOffset.top < o.scrollSensitivity ) {
+					this.scrollParent[ 0 ].scrollTop =
+						scrolled = this.scrollParent[ 0 ].scrollTop - o.scrollSpeed;
+				}
+
+				if ( ( this.overflowOffset.left + this.scrollParent[ 0 ].offsetWidth ) -
+						event.pageX < o.scrollSensitivity ) {
+					this.scrollParent[ 0 ].scrollLeft = scrolled =
+						this.scrollParent[ 0 ].scrollLeft + o.scrollSpeed;
+				} else if ( event.pageX - this.overflowOffset.left < o.scrollSensitivity ) {
+					this.scrollParent[ 0 ].scrollLeft = scrolled =
+						this.scrollParent[ 0 ].scrollLeft - o.scrollSpeed;
+				}
+
+			} else {
+
+				if ( event.pageY - this.document.scrollTop() < o.scrollSensitivity ) {
+					scrolled = this.document.scrollTop( this.document.scrollTop() - o.scrollSpeed );
+				} else if ( this.window.height() - ( event.pageY - this.document.scrollTop() ) <
+						o.scrollSensitivity ) {
+					scrolled = this.document.scrollTop( this.document.scrollTop() + o.scrollSpeed );
+				}
+
+				if ( event.pageX - this.document.scrollLeft() < o.scrollSensitivity ) {
+					scrolled = this.document.scrollLeft(
+						this.document.scrollLeft() - o.scrollSpeed
+					);
+				} else if ( this.window.width() - ( event.pageX - this.document.scrollLeft() ) <
+						o.scrollSensitivity ) {
+					scrolled = this.document.scrollLeft(
+						this.document.scrollLeft() + o.scrollSpeed
+					);
+				}
+
+			}
+
+			if ( scrolled !== false && $.ui.ddmanager && !o.dropBehaviour ) {
+				$.ui.ddmanager.prepareOffsets( this, event );
+			}
+		}
+
+		//Regenerate the absolute position used for position checks
+		this.positionAbs = this._convertPositionTo( "absolute" );
+
+		//Set the helper position
+		if ( !this.options.axis || this.options.axis !== "y" ) {
+			this.helper[ 0 ].style.left = this.position.left + "px";
+		}
+		if ( !this.options.axis || this.options.axis !== "x" ) {
+			this.helper[ 0 ].style.top = this.position.top + "px";
+		}
+
+		//Rearrange
+		for ( i = this.items.length - 1; i >= 0; i-- ) {
+
+			//Cache variables and intersection, continue if no intersection
+			item = this.items[ i ];
+			itemElement = item.item[ 0 ];
+			intersection = this._intersectsWithPointer( item );
+			if ( !intersection ) {
+				continue;
+			}
+
+			// Only put the placeholder inside the current Container, skip all
+			// items from other containers. This works because when moving
+			// an item from one container to another the
+			// currentContainer is switched before the placeholder is moved.
+			//
+			// Without this, moving items in "sub-sortables" can cause
+			// the placeholder to jitter between the outer and inner container.
+			if ( item.instance !== this.currentContainer ) {
+				continue;
+			}
+
+			// Cannot intersect with itself
+			// no useless actions that have been done before
+			// no action if the item moved is the parent of the item checked
+			if ( itemElement !== this.currentItem[ 0 ] &&
+				this.placeholder[ intersection === 1 ? "next" : "prev" ]()[ 0 ] !== itemElement &&
+				!$.contains( this.placeholder[ 0 ], itemElement ) &&
+				( this.options.type === "semi-dynamic" ?
+					!$.contains( this.element[ 0 ], itemElement ) :
+					true
+				)
+			) {
+
+				this.direction = intersection === 1 ? "down" : "up";
+
+				if ( this.options.tolerance === "pointer" || this._intersectsWithSides( item ) ) {
+					this._rearrange( event, item );
+				} else {
+					break;
+				}
+
+				this._trigger( "change", event, this._uiHash() );
+				break;
+			}
+		}
+
+		//Post events to containers
+		this._contactContainers( event );
+
+		//Interconnect with droppables
+		if ( $.ui.ddmanager ) {
+			$.ui.ddmanager.drag( this, event );
+		}
+
+		//Call callbacks
+		this._trigger( "sort", event, this._uiHash() );
+
+		this.lastPositionAbs = this.positionAbs;
+		return false;
+
+	},
+
+	_mouseStop: function( event, noPropagation ) {
+
+		if ( !event ) {
+			return;
+		}
+
+		//If we are using droppables, inform the manager about the drop
+		if ( $.ui.ddmanager && !this.options.dropBehaviour ) {
+			$.ui.ddmanager.drop( this, event );
+		}
+
+		if ( this.options.revert ) {
+			var that = this,
+				cur = this.placeholder.offset(),
+				axis = this.options.axis,
+				animation = {};
+
+			if ( !axis || axis === "x" ) {
+				animation.left = cur.left - this.offset.parent.left - this.margins.left +
+					( this.offsetParent[ 0 ] === this.document[ 0 ].body ?
+						0 :
+						this.offsetParent[ 0 ].scrollLeft
+					);
+			}
+			if ( !axis || axis === "y" ) {
+				animation.top = cur.top - this.offset.parent.top - this.margins.top +
+					( this.offsetParent[ 0 ] === this.document[ 0 ].body ?
+						0 :
+						this.offsetParent[ 0 ].scrollTop
+					);
+			}
+			this.reverting = true;
+			$( this.helper ).animate(
+				animation,
+				parseInt( this.options.revert, 10 ) || 500,
+				function() {
+					that._clear( event );
+				}
+			);
+		} else {
+			this._clear( event, noPropagation );
+		}
+
+		return false;
+
+	},
+
+	cancel: function() {
+
+		if ( this.dragging ) {
+
+			this._mouseUp( new $.Event( "mouseup", { target: null } ) );
+
+			if ( this.options.helper === "original" ) {
+				this.currentItem.css( this._storedCSS );
+				this._removeClass( this.currentItem, "ui-sortable-helper" );
+			} else {
+				this.currentItem.show();
+			}
+
+			//Post deactivating events to containers
+			for ( var i = this.containers.length - 1; i >= 0; i-- ) {
+				this.containers[ i ]._trigger( "deactivate", null, this._uiHash( this ) );
+				if ( this.containers[ i ].containerCache.over ) {
+					this.containers[ i ]._trigger( "out", null, this._uiHash( this ) );
+					this.containers[ i ].containerCache.over = 0;
+				}
+			}
+
+		}
+
+		if ( this.placeholder ) {
+
+			//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately,
+			// it unbinds ALL events from the original node!
+			if ( this.placeholder[ 0 ].parentNode ) {
+				this.placeholder[ 0 ].parentNode.removeChild( this.placeholder[ 0 ] );
+			}
+			if ( this.options.helper !== "original" && this.helper &&
+					this.helper[ 0 ].parentNode ) {
+				this.helper.remove();
+			}
+
+			$.extend( this, {
+				helper: null,
+				dragging: false,
+				reverting: false,
+				_noFinalSort: null
+			} );
+
+			if ( this.domPosition.prev ) {
+				$( this.domPosition.prev ).after( this.currentItem );
+			} else {
+				$( this.domPosition.parent ).prepend( this.currentItem );
+			}
+		}
+
+		return this;
+
+	},
+
+	serialize: function( o ) {
+
+		var items = this._getItemsAsjQuery( o && o.connected ),
+			str = [];
+		o = o || {};
+
+		$( items ).each( function() {
+			var res = ( $( o.item || this ).attr( o.attribute || "id" ) || "" )
+				.match( o.expression || ( /(.+)[\-=_](.+)/ ) );
+			if ( res ) {
+				str.push(
+					( o.key || res[ 1 ] + "[]" ) +
+					"=" + ( o.key && o.expression ? res[ 1 ] : res[ 2 ] ) );
+			}
+		} );
+
+		if ( !str.length && o.key ) {
+			str.push( o.key + "=" );
+		}
+
+		return str.join( "&" );
+
+	},
+
+	toArray: function( o ) {
+
+		var items = this._getItemsAsjQuery( o && o.connected ),
+			ret = [];
+
+		o = o || {};
+
+		items.each( function() {
+			ret.push( $( o.item || this ).attr( o.attribute || "id" ) || "" );
+		} );
+		return ret;
+
+	},
+
+	/* Be careful with the following core functions */
+	_intersectsWith: function( item ) {
+
+		var x1 = this.positionAbs.left,
+			x2 = x1 + this.helperProportions.width,
+			y1 = this.positionAbs.top,
+			y2 = y1 + this.helperProportions.height,
+			l = item.left,
+			r = l + item.width,
+			t = item.top,
+			b = t + item.height,
+			dyClick = this.offset.click.top,
+			dxClick = this.offset.click.left,
+			isOverElementHeight = ( this.options.axis === "x" ) || ( ( y1 + dyClick ) > t &&
+				( y1 + dyClick ) < b ),
+			isOverElementWidth = ( this.options.axis === "y" ) || ( ( x1 + dxClick ) > l &&
+				( x1 + dxClick ) < r ),
+			isOverElement = isOverElementHeight && isOverElementWidth;
+
+		if ( this.options.tolerance === "pointer" ||
+			this.options.forcePointerForContainers ||
+			( this.options.tolerance !== "pointer" &&
+				this.helperProportions[ this.floating ? "width" : "height" ] >
+				item[ this.floating ? "width" : "height" ] )
+		) {
+			return isOverElement;
+		} else {
+
+			return ( l < x1 + ( this.helperProportions.width / 2 ) && // Right Half
+				x2 - ( this.helperProportions.width / 2 ) < r && // Left Half
+				t < y1 + ( this.helperProportions.height / 2 ) && // Bottom Half
+				y2 - ( this.helperProportions.height / 2 ) < b ); // Top Half
+
+		}
+	},
+
+	_intersectsWithPointer: function( item ) {
+		var verticalDirection, horizontalDirection,
+			isOverElementHeight = ( this.options.axis === "x" ) ||
+				this._isOverAxis(
+					this.positionAbs.top + this.offset.click.top, item.top, item.height ),
+			isOverElementWidth = ( this.options.axis === "y" ) ||
+				this._isOverAxis(
+					this.positionAbs.left + this.offset.click.left, item.left, item.width ),
+			isOverElement = isOverElementHeight && isOverElementWidth;
+
+		if ( !isOverElement ) {
+			return false;
+		}
+
+		verticalDirection = this._getDragVerticalDirection();
+		horizontalDirection = this._getDragHorizontalDirection();
+
+		return this.floating ?
+			( ( horizontalDirection === "right" || verticalDirection === "down" ) ? 2 : 1 )
+			: ( verticalDirection && ( verticalDirection === "down" ? 2 : 1 ) );
+
+	},
+
+	_intersectsWithSides: function( item ) {
+
+		var isOverBottomHalf = this._isOverAxis( this.positionAbs.top +
+				this.offset.click.top, item.top + ( item.height / 2 ), item.height ),
+			isOverRightHalf = this._isOverAxis( this.positionAbs.left +
+				this.offset.click.left, item.left + ( item.width / 2 ), item.width ),
+			verticalDirection = this._getDragVerticalDirection(),
+			horizontalDirection = this._getDragHorizontalDirection();
+
+		if ( this.floating && horizontalDirection ) {
+			return ( ( horizontalDirection === "right" && isOverRightHalf ) ||
+				( horizontalDirection === "left" && !isOverRightHalf ) );
+		} else {
+			return verticalDirection && ( ( verticalDirection === "down" && isOverBottomHalf ) ||
+				( verticalDirection === "up" && !isOverBottomHalf ) );
+		}
+
+	},
+
+	_getDragVerticalDirection: function() {
+		var delta = this.positionAbs.top - this.lastPositionAbs.top;
+		return delta !== 0 && ( delta > 0 ? "down" : "up" );
+	},
+
+	_getDragHorizontalDirection: function() {
+		var delta = this.positionAbs.left - this.lastPositionAbs.left;
+		return delta !== 0 && ( delta > 0 ? "right" : "left" );
+	},
+
+	refresh: function( event ) {
+		this._refreshItems( event );
+		this._setHandleClassName();
+		this.refreshPositions();
+		return this;
+	},
+
+	_connectWith: function() {
+		var options = this.options;
+		return options.connectWith.constructor === String ?
+			[ options.connectWith ] :
+			options.connectWith;
+	},
+
+	_getItemsAsjQuery: function( connected ) {
+
+		var i, j, cur, inst,
+			items = [],
+			queries = [],
+			connectWith = this._connectWith();
+
+		if ( connectWith && connected ) {
+			for ( i = connectWith.length - 1; i >= 0; i-- ) {
+				cur = $( connectWith[ i ], this.document[ 0 ] );
+				for ( j = cur.length - 1; j >= 0; j-- ) {
+					inst = $.data( cur[ j ], this.widgetFullName );
+					if ( inst && inst !== this && !inst.options.disabled ) {
+						queries.push( [ $.isFunction( inst.options.items ) ?
+							inst.options.items.call( inst.element ) :
+							$( inst.options.items, inst.element )
+								.not( ".ui-sortable-helper" )
+								.not( ".ui-sortable-placeholder" ), inst ] );
+					}
+				}
+			}
+		}
+
+		queries.push( [ $.isFunction( this.options.items ) ?
+			this.options.items
+				.call( this.element, null, { options: this.options, item: this.currentItem } ) :
+			$( this.options.items, this.element )
+				.not( ".ui-sortable-helper" )
+				.not( ".ui-sortable-placeholder" ), this ] );
+
+		function addItems() {
+			items.push( this );
+		}
+		for ( i = queries.length - 1; i >= 0; i-- ) {
+			queries[ i ][ 0 ].each( addItems );
+		}
+
+		return $( items );
+
+	},
+
+	_removeCurrentsFromItems: function() {
+
+		var list = this.currentItem.find( ":data(" + this.widgetName + "-item)" );
+
+		this.items = $.grep( this.items, function( item ) {
+			for ( var j = 0; j < list.length; j++ ) {
+				if ( list[ j ] === item.item[ 0 ] ) {
+					return false;
+				}
+			}
+			return true;
+		} );
+
+	},
+
+	_refreshItems: function( event ) {
+
+		this.items = [];
+		this.containers = [ this ];
+
+		var i, j, cur, inst, targetData, _queries, item, queriesLength,
+			items = this.items,
+			queries = [ [ $.isFunction( this.options.items ) ?
+				this.options.items.call( this.element[ 0 ], event, { item: this.currentItem } ) :
+				$( this.options.items, this.element ), this ] ],
+			connectWith = this._connectWith();
+
+		//Shouldn't be run the first time through due to massive slow-down
+		if ( connectWith && this.ready ) {
+			for ( i = connectWith.length - 1; i >= 0; i-- ) {
+				cur = $( connectWith[ i ], this.document[ 0 ] );
+				for ( j = cur.length - 1; j >= 0; j-- ) {
+					inst = $.data( cur[ j ], this.widgetFullName );
+					if ( inst && inst !== this && !inst.options.disabled ) {
+						queries.push( [ $.isFunction( inst.options.items ) ?
+							inst.options.items
+								.call( inst.element[ 0 ], event, { item: this.currentItem } ) :
+							$( inst.options.items, inst.element ), inst ] );
+						this.containers.push( inst );
+					}
+				}
+			}
+		}
+
+		for ( i = queries.length - 1; i >= 0; i-- ) {
+			targetData = queries[ i ][ 1 ];
+			_queries = queries[ i ][ 0 ];
+
+			for ( j = 0, queriesLength = _queries.length; j < queriesLength; j++ ) {
+				item = $( _queries[ j ] );
+
+				// Data for target checking (mouse manager)
+				item.data( this.widgetName + "-item", targetData );
+
+				items.push( {
+					item: item,
+					instance: targetData,
+					width: 0, height: 0,
+					left: 0, top: 0
+				} );
+			}
+		}
+
+	},
+
+	refreshPositions: function( fast ) {
+
+		// Determine whether items are being displayed horizontally
+		this.floating = this.items.length ?
+			this.options.axis === "x" || this._isFloating( this.items[ 0 ].item ) :
+			false;
+
+		//This has to be redone because due to the item being moved out/into the offsetParent,
+		// the offsetParent's position will change
+		if ( this.offsetParent && this.helper ) {
+			this.offset.parent = this._getParentOffset();
+		}
+
+		var i, item, t, p;
+
+		for ( i = this.items.length - 1; i >= 0; i-- ) {
+			item = this.items[ i ];
+
+			//We ignore calculating positions of all connected containers when we're not over them
+			if ( item.instance !== this.currentContainer && this.currentContainer &&
+					item.item[ 0 ] !== this.currentItem[ 0 ] ) {
+				continue;
+			}
+
+			t = this.options.toleranceElement ?
+				$( this.options.toleranceElement, item.item ) :
+				item.item;
+
+			if ( !fast ) {
+				item.width = t.outerWidth();
+				item.height = t.outerHeight();
+			}
+
+			p = t.offset();
+			item.left = p.left;
+			item.top = p.top;
+		}
+
+		if ( this.options.custom && this.options.custom.refreshContainers ) {
+			this.options.custom.refreshContainers.call( this );
+		} else {
+			for ( i = this.containers.length - 1; i >= 0; i-- ) {
+				p = this.containers[ i ].element.offset();
+				this.containers[ i ].containerCache.left = p.left;
+				this.containers[ i ].containerCache.top = p.top;
+				this.containers[ i ].containerCache.width =
+					this.containers[ i ].element.outerWidth();
+				this.containers[ i ].containerCache.height =
+					this.containers[ i ].element.outerHeight();
+			}
+		}
+
+		return this;
+	},
+
+	_createPlaceholder: function( that ) {
+		that = that || this;
+		var className,
+			o = that.options;
+
+		if ( !o.placeholder || o.placeholder.constructor === String ) {
+			className = o.placeholder;
+			o.placeholder = {
+				element: function() {
+
+					var nodeName = that.currentItem[ 0 ].nodeName.toLowerCase(),
+						element = $( "<" + nodeName + ">", that.document[ 0 ] );
+
+						that._addClass( element, "ui-sortable-placeholder",
+								className || that.currentItem[ 0 ].className )
+							._removeClass( element, "ui-sortable-helper" );
+
+					if ( nodeName === "tbody" ) {
+						that._createTrPlaceholder(
+							that.currentItem.find( "tr" ).eq( 0 ),
+							$( "<tr>", that.document[ 0 ] ).appendTo( element )
+						);
+					} else if ( nodeName === "tr" ) {
+						that._createTrPlaceholder( that.currentItem, element );
+					} else if ( nodeName === "img" ) {
+						element.attr( "src", that.currentItem.attr( "src" ) );
+					}
+
+					if ( !className ) {
+						element.css( "visibility", "hidden" );
+					}
+
+					return element;
+				},
+				update: function( container, p ) {
+
+					// 1. If a className is set as 'placeholder option, we don't force sizes -
+					// the class is responsible for that
+					// 2. The option 'forcePlaceholderSize can be enabled to force it even if a
+					// class name is specified
+					if ( className && !o.forcePlaceholderSize ) {
+						return;
+					}
+
+					//If the element doesn't have a actual height by itself (without styles coming
+					// from a stylesheet), it receives the inline height from the dragged item
+					if ( !p.height() ) {
+						p.height(
+							that.currentItem.innerHeight() -
+							parseInt( that.currentItem.css( "paddingTop" ) || 0, 10 ) -
+							parseInt( that.currentItem.css( "paddingBottom" ) || 0, 10 ) );
+					}
+					if ( !p.width() ) {
+						p.width(
+							that.currentItem.innerWidth() -
+							parseInt( that.currentItem.css( "paddingLeft" ) || 0, 10 ) -
+							parseInt( that.currentItem.css( "paddingRight" ) || 0, 10 ) );
+					}
+				}
+			};
+		}
+
+		//Create the placeholder
+		that.placeholder = $( o.placeholder.element.call( that.element, that.currentItem ) );
+
+		//Append it after the actual current item
+		that.currentItem.after( that.placeholder );
+
+		//Update the size of the placeholder (TODO: Logic to fuzzy, see line 316/317)
+		o.placeholder.update( that, that.placeholder );
+
+	},
+
+	_createTrPlaceholder: function( sourceTr, targetTr ) {
+		var that = this;
+
+		sourceTr.children().each( function() {
+			$( "<td>&#160;</td>", that.document[ 0 ] )
+				.attr( "colspan", $( this ).attr( "colspan" ) || 1 )
+				.appendTo( targetTr );
+		} );
+	},
+
+	_contactContainers: function( event ) {
+		var i, j, dist, itemWithLeastDistance, posProperty, sizeProperty, cur, nearBottom,
+			floating, axis,
+			innermostContainer = null,
+			innermostIndex = null;
+
+		// Get innermost container that intersects with item
+		for ( i = this.containers.length - 1; i >= 0; i-- ) {
+
+			// Never consider a container that's located within the item itself
+			if ( $.contains( this.currentItem[ 0 ], this.containers[ i ].element[ 0 ] ) ) {
+				continue;
+			}
+
+			if ( this._intersectsWith( this.containers[ i ].containerCache ) ) {
+
+				// If we've already found a container and it's more "inner" than this, then continue
+				if ( innermostContainer &&
+						$.contains(
+							this.containers[ i ].element[ 0 ],
+							innermostContainer.element[ 0 ] ) ) {
+					continue;
+				}
+
+				innermostContainer = this.containers[ i ];
+				innermostIndex = i;
+
+			} else {
+
+				// container doesn't intersect. trigger "out" event if necessary
+				if ( this.containers[ i ].containerCache.over ) {
+					this.containers[ i ]._trigger( "out", event, this._uiHash( this ) );
+					this.containers[ i ].containerCache.over = 0;
+				}
+			}
+
+		}
+
+		// If no intersecting containers found, return
+		if ( !innermostContainer ) {
+			return;
+		}
+
+		// Move the item into the container if it's not there already
+		if ( this.containers.length === 1 ) {
+			if ( !this.containers[ innermostIndex ].containerCache.over ) {
+				this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash( this ) );
+				this.containers[ innermostIndex ].containerCache.over = 1;
+			}
+		} else {
+
+			// When entering a new container, we will find the item with the least distance and
+			// append our item near it
+			dist = 10000;
+			itemWithLeastDistance = null;
+			floating = innermostContainer.floating || this._isFloating( this.currentItem );
+			posProperty = floating ? "left" : "top";
+			sizeProperty = floating ? "width" : "height";
+			axis = floating ? "pageX" : "pageY";
+
+			for ( j = this.items.length - 1; j >= 0; j-- ) {
+				if ( !$.contains(
+						this.containers[ innermostIndex ].element[ 0 ], this.items[ j ].item[ 0 ] )
+				) {
+					continue;
+				}
+				if ( this.items[ j ].item[ 0 ] === this.currentItem[ 0 ] ) {
+					continue;
+				}
+
+				cur = this.items[ j ].item.offset()[ posProperty ];
+				nearBottom = false;
+				if ( event[ axis ] - cur > this.items[ j ][ sizeProperty ] / 2 ) {
+					nearBottom = true;
+				}
+
+				if ( Math.abs( event[ axis ] - cur ) < dist ) {
+					dist = Math.abs( event[ axis ] - cur );
+					itemWithLeastDistance = this.items[ j ];
+					this.direction = nearBottom ? "up" : "down";
+				}
+			}
+
+			//Check if dropOnEmpty is enabled
+			if ( !itemWithLeastDistance && !this.options.dropOnEmpty ) {
+				return;
+			}
+
+			if ( this.currentContainer === this.containers[ innermostIndex ] ) {
+				if ( !this.currentContainer.containerCache.over ) {
+					this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash() );
+					this.currentContainer.containerCache.over = 1;
+				}
+				return;
+			}
+
+			itemWithLeastDistance ?
+				this._rearrange( event, itemWithLeastDistance, null, true ) :
+				this._rearrange( event, null, this.containers[ innermostIndex ].element, true );
+			this._trigger( "change", event, this._uiHash() );
+			this.containers[ innermostIndex ]._trigger( "change", event, this._uiHash( this ) );
+			this.currentContainer = this.containers[ innermostIndex ];
+
+			//Update the placeholder
+			this.options.placeholder.update( this.currentContainer, this.placeholder );
+
+			this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash( this ) );
+			this.containers[ innermostIndex ].containerCache.over = 1;
+		}
+
+	},
+
+	_createHelper: function( event ) {
+
+		var o = this.options,
+			helper = $.isFunction( o.helper ) ?
+				$( o.helper.apply( this.element[ 0 ], [ event, this.currentItem ] ) ) :
+				( o.helper === "clone" ? this.currentItem.clone() : this.currentItem );
+
+		//Add the helper to the DOM if that didn't happen already
+		if ( !helper.parents( "body" ).length ) {
+			$( o.appendTo !== "parent" ?
+				o.appendTo :
+				this.currentItem[ 0 ].parentNode )[ 0 ].appendChild( helper[ 0 ] );
+		}
+
+		if ( helper[ 0 ] === this.currentItem[ 0 ] ) {
+			this._storedCSS = {
+				width: this.currentItem[ 0 ].style.width,
+				height: this.currentItem[ 0 ].style.height,
+				position: this.currentItem.css( "position" ),
+				top: this.currentItem.css( "top" ),
+				left: this.currentItem.css( "left" )
+			};
+		}
+
+		if ( !helper[ 0 ].style.width || o.forceHelperSize ) {
+			helper.width( this.currentItem.width() );
+		}
+		if ( !helper[ 0 ].style.height || o.forceHelperSize ) {
+			helper.height( this.currentItem.height() );
+		}
+
+		return helper;
+
+	},
+
+	_adjustOffsetFromHelper: function( obj ) {
+		if ( typeof obj === "string" ) {
+			obj = obj.split( " " );
+		}
+		if ( $.isArray( obj ) ) {
+			obj = { left: +obj[ 0 ], top: +obj[ 1 ] || 0 };
+		}
+		if ( "left" in obj ) {
+			this.offset.click.left = obj.left + this.margins.left;
+		}
+		if ( "right" in obj ) {
+			this.offset.click.left = this.helperProportions.width - obj.right + this.margins.left;
+		}
+		if ( "top" in obj ) {
+			this.offset.click.top = obj.top + this.margins.top;
+		}
+		if ( "bottom" in obj ) {
+			this.offset.click.top = this.helperProportions.height - obj.bottom + this.margins.top;
+		}
+	},
+
+	_getParentOffset: function() {
+
+		//Get the offsetParent and cache its position
+		this.offsetParent = this.helper.offsetParent();
+		var po = this.offsetParent.offset();
+
+		// This is a special case where we need to modify a offset calculated on start, since the
+		// following happened:
+		// 1. The position of the helper is absolute, so it's position is calculated based on the
+		// next positioned parent
+		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't
+		// the document, which means that the scroll is included in the initial calculation of the
+		// offset of the parent, and never recalculated upon drag
+		if ( this.cssPosition === "absolute" && this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+				$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) {
+			po.left += this.scrollParent.scrollLeft();
+			po.top += this.scrollParent.scrollTop();
+		}
+
+		// This needs to be actually done for all browsers, since pageX/pageY includes this
+		// information with an ugly IE fix
+		if ( this.offsetParent[ 0 ] === this.document[ 0 ].body ||
+				( this.offsetParent[ 0 ].tagName &&
+				this.offsetParent[ 0 ].tagName.toLowerCase() === "html" && $.ui.ie ) ) {
+			po = { top: 0, left: 0 };
+		}
+
+		return {
+			top: po.top + ( parseInt( this.offsetParent.css( "borderTopWidth" ), 10 ) || 0 ),
+			left: po.left + ( parseInt( this.offsetParent.css( "borderLeftWidth" ), 10 ) || 0 )
+		};
+
+	},
+
+	_getRelativeOffset: function() {
+
+		if ( this.cssPosition === "relative" ) {
+			var p = this.currentItem.position();
+			return {
+				top: p.top - ( parseInt( this.helper.css( "top" ), 10 ) || 0 ) +
+					this.scrollParent.scrollTop(),
+				left: p.left - ( parseInt( this.helper.css( "left" ), 10 ) || 0 ) +
+					this.scrollParent.scrollLeft()
+			};
+		} else {
+			return { top: 0, left: 0 };
+		}
+
+	},
+
+	_cacheMargins: function() {
+		this.margins = {
+			left: ( parseInt( this.currentItem.css( "marginLeft" ), 10 ) || 0 ),
+			top: ( parseInt( this.currentItem.css( "marginTop" ), 10 ) || 0 )
+		};
+	},
+
+	_cacheHelperProportions: function() {
+		this.helperProportions = {
+			width: this.helper.outerWidth(),
+			height: this.helper.outerHeight()
+		};
+	},
+
+	_setContainment: function() {
+
+		var ce, co, over,
+			o = this.options;
+		if ( o.containment === "parent" ) {
+			o.containment = this.helper[ 0 ].parentNode;
+		}
+		if ( o.containment === "document" || o.containment === "window" ) {
+			this.containment = [
+				0 - this.offset.relative.left - this.offset.parent.left,
+				0 - this.offset.relative.top - this.offset.parent.top,
+				o.containment === "document" ?
+					this.document.width() :
+					this.window.width() - this.helperProportions.width - this.margins.left,
+				( o.containment === "document" ?
+					( this.document.height() || document.body.parentNode.scrollHeight ) :
+					this.window.height() || this.document[ 0 ].body.parentNode.scrollHeight
+				) - this.helperProportions.height - this.margins.top
+			];
+		}
+
+		if ( !( /^(document|window|parent)$/ ).test( o.containment ) ) {
+			ce = $( o.containment )[ 0 ];
+			co = $( o.containment ).offset();
+			over = ( $( ce ).css( "overflow" ) !== "hidden" );
+
+			this.containment = [
+				co.left + ( parseInt( $( ce ).css( "borderLeftWidth" ), 10 ) || 0 ) +
+					( parseInt( $( ce ).css( "paddingLeft" ), 10 ) || 0 ) - this.margins.left,
+				co.top + ( parseInt( $( ce ).css( "borderTopWidth" ), 10 ) || 0 ) +
+					( parseInt( $( ce ).css( "paddingTop" ), 10 ) || 0 ) - this.margins.top,
+				co.left + ( over ? Math.max( ce.scrollWidth, ce.offsetWidth ) : ce.offsetWidth ) -
+					( parseInt( $( ce ).css( "borderLeftWidth" ), 10 ) || 0 ) -
+					( parseInt( $( ce ).css( "paddingRight" ), 10 ) || 0 ) -
+					this.helperProportions.width - this.margins.left,
+				co.top + ( over ? Math.max( ce.scrollHeight, ce.offsetHeight ) : ce.offsetHeight ) -
+					( parseInt( $( ce ).css( "borderTopWidth" ), 10 ) || 0 ) -
+					( parseInt( $( ce ).css( "paddingBottom" ), 10 ) || 0 ) -
+					this.helperProportions.height - this.margins.top
+			];
+		}
+
+	},
+
+	_convertPositionTo: function( d, pos ) {
+
+		if ( !pos ) {
+			pos = this.position;
+		}
+		var mod = d === "absolute" ? 1 : -1,
+			scroll = this.cssPosition === "absolute" &&
+				!( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+				$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ?
+					this.offsetParent :
+					this.scrollParent,
+			scrollIsRootNode = ( /(html|body)/i ).test( scroll[ 0 ].tagName );
+
+		return {
+			top: (
+
+				// The absolute mouse position
+				pos.top	+
+
+				// Only for relative positioned nodes: Relative offset from element to offset parent
+				this.offset.relative.top * mod +
+
+				// The offsetParent's offset without borders (offset + border)
+				this.offset.parent.top * mod -
+				( ( this.cssPosition === "fixed" ?
+					-this.scrollParent.scrollTop() :
+					( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod )
+			),
+			left: (
+
+				// The absolute mouse position
+				pos.left +
+
+				// Only for relative positioned nodes: Relative offset from element to offset parent
+				this.offset.relative.left * mod +
+
+				// The offsetParent's offset without borders (offset + border)
+				this.offset.parent.left * mod	-
+				( ( this.cssPosition === "fixed" ?
+					-this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 :
+					scroll.scrollLeft() ) * mod )
+			)
+		};
+
+	},
+
+	_generatePosition: function( event ) {
+
+		var top, left,
+			o = this.options,
+			pageX = event.pageX,
+			pageY = event.pageY,
+			scroll = this.cssPosition === "absolute" &&
+				!( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+				$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ?
+					this.offsetParent :
+					this.scrollParent,
+				scrollIsRootNode = ( /(html|body)/i ).test( scroll[ 0 ].tagName );
+
+		// This is another very weird special case that only happens for relative elements:
+		// 1. If the css position is relative
+		// 2. and the scroll parent is the document or similar to the offset parent
+		// we have to refresh the relative offset during the scroll so there are no jumps
+		if ( this.cssPosition === "relative" && !( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+				this.scrollParent[ 0 ] !== this.offsetParent[ 0 ] ) ) {
+			this.offset.relative = this._getRelativeOffset();
+		}
+
+		/*
+		 * - Position constraining -
+		 * Constrain the position to a mix of grid, containment.
+		 */
+
+		if ( this.originalPosition ) { //If we are not dragging yet, we won't check for options
+
+			if ( this.containment ) {
+				if ( event.pageX - this.offset.click.left < this.containment[ 0 ] ) {
+					pageX = this.containment[ 0 ] + this.offset.click.left;
+				}
+				if ( event.pageY - this.offset.click.top < this.containment[ 1 ] ) {
+					pageY = this.containment[ 1 ] + this.offset.click.top;
+				}
+				if ( event.pageX - this.offset.click.left > this.containment[ 2 ] ) {
+					pageX = this.containment[ 2 ] + this.offset.click.left;
+				}
+				if ( event.pageY - this.offset.click.top > this.containment[ 3 ] ) {
+					pageY = this.containment[ 3 ] + this.offset.click.top;
+				}
+			}
+
+			if ( o.grid ) {
+				top = this.originalPageY + Math.round( ( pageY - this.originalPageY ) /
+					o.grid[ 1 ] ) * o.grid[ 1 ];
+				pageY = this.containment ?
+					( ( top - this.offset.click.top >= this.containment[ 1 ] &&
+						top - this.offset.click.top <= this.containment[ 3 ] ) ?
+							top :
+							( ( top - this.offset.click.top >= this.containment[ 1 ] ) ?
+								top - o.grid[ 1 ] : top + o.grid[ 1 ] ) ) :
+								top;
+
+				left = this.originalPageX + Math.round( ( pageX - this.originalPageX ) /
+					o.grid[ 0 ] ) * o.grid[ 0 ];
+				pageX = this.containment ?
+					( ( left - this.offset.click.left >= this.containment[ 0 ] &&
+						left - this.offset.click.left <= this.containment[ 2 ] ) ?
+							left :
+							( ( left - this.offset.click.left >= this.containment[ 0 ] ) ?
+								left - o.grid[ 0 ] : left + o.grid[ 0 ] ) ) :
+								left;
+			}
+
+		}
+
+		return {
+			top: (
+
+				// The absolute mouse position
+				pageY -
+
+				// Click offset (relative to the element)
+				this.offset.click.top -
+
+				// Only for relative positioned nodes: Relative offset from element to offset parent
+				this.offset.relative.top -
+
+				// The offsetParent's offset without borders (offset + border)
+				this.offset.parent.top +
+				( ( this.cssPosition === "fixed" ?
+					-this.scrollParent.scrollTop() :
+					( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) )
+			),
+			left: (
+
+				// The absolute mouse position
+				pageX -
+
+				// Click offset (relative to the element)
+				this.offset.click.left -
+
+				// Only for relative positioned nodes: Relative offset from element to offset parent
+				this.offset.relative.left -
+
+				// The offsetParent's offset without borders (offset + border)
+				this.offset.parent.left +
+				( ( this.cssPosition === "fixed" ?
+					-this.scrollParent.scrollLeft() :
+					scrollIsRootNode ? 0 : scroll.scrollLeft() ) )
+			)
+		};
+
+	},
+
+	_rearrange: function( event, i, a, hardRefresh ) {
+
+		a ? a[ 0 ].appendChild( this.placeholder[ 0 ] ) :
+			i.item[ 0 ].parentNode.insertBefore( this.placeholder[ 0 ],
+				( this.direction === "down" ? i.item[ 0 ] : i.item[ 0 ].nextSibling ) );
+
+		//Various things done here to improve the performance:
+		// 1. we create a setTimeout, that calls refreshPositions
+		// 2. on the instance, we have a counter variable, that get's higher after every append
+		// 3. on the local scope, we copy the counter variable, and check in the timeout,
+		// if it's still the same
+		// 4. this lets only the last addition to the timeout stack through
+		this.counter = this.counter ? ++this.counter : 1;
+		var counter = this.counter;
+
+		this._delay( function() {
+			if ( counter === this.counter ) {
+
+				//Precompute after each DOM insertion, NOT on mousemove
+				this.refreshPositions( !hardRefresh );
+			}
+		} );
+
+	},
+
+	_clear: function( event, noPropagation ) {
+
+		this.reverting = false;
+
+		// We delay all events that have to be triggered to after the point where the placeholder
+		// has been removed and everything else normalized again
+		var i,
+			delayedTriggers = [];
+
+		// We first have to update the dom position of the actual currentItem
+		// Note: don't do it if the current item is already removed (by a user), or it gets
+		// reappended (see #4088)
+		if ( !this._noFinalSort && this.currentItem.parent().length ) {
+			this.placeholder.before( this.currentItem );
+		}
+		this._noFinalSort = null;
+
+		if ( this.helper[ 0 ] === this.currentItem[ 0 ] ) {
+			for ( i in this._storedCSS ) {
+				if ( this._storedCSS[ i ] === "auto" || this._storedCSS[ i ] === "static" ) {
+					this._storedCSS[ i ] = "";
+				}
+			}
+			this.currentItem.css( this._storedCSS );
+			this._removeClass( this.currentItem, "ui-sortable-helper" );
+		} else {
+			this.currentItem.show();
+		}
+
+		if ( this.fromOutside && !noPropagation ) {
+			delayedTriggers.push( function( event ) {
+				this._trigger( "receive", event, this._uiHash( this.fromOutside ) );
+			} );
+		}
+		if ( ( this.fromOutside ||
+				this.domPosition.prev !==
+				this.currentItem.prev().not( ".ui-sortable-helper" )[ 0 ] ||
+				this.domPosition.parent !== this.currentItem.parent()[ 0 ] ) && !noPropagation ) {
+
+			// Trigger update callback if the DOM position has changed
+			delayedTriggers.push( function( event ) {
+				this._trigger( "update", event, this._uiHash() );
+			} );
+		}
+
+		// Check if the items Container has Changed and trigger appropriate
+		// events.
+		if ( this !== this.currentContainer ) {
+			if ( !noPropagation ) {
+				delayedTriggers.push( function( event ) {
+					this._trigger( "remove", event, this._uiHash() );
+				} );
+				delayedTriggers.push( ( function( c ) {
+					return function( event ) {
+						c._trigger( "receive", event, this._uiHash( this ) );
+					};
+				} ).call( this, this.currentContainer ) );
+				delayedTriggers.push( ( function( c ) {
+					return function( event ) {
+						c._trigger( "update", event, this._uiHash( this ) );
+					};
+				} ).call( this, this.currentContainer ) );
+			}
+		}
+
+		//Post events to containers
+		function delayEvent( type, instance, container ) {
+			return function( event ) {
+				container._trigger( type, event, instance._uiHash( instance ) );
+			};
+		}
+		for ( i = this.containers.length - 1; i >= 0; i-- ) {
+			if ( !noPropagation ) {
+				delayedTriggers.push( delayEvent( "deactivate", this, this.containers[ i ] ) );
+			}
+			if ( this.containers[ i ].containerCache.over ) {
+				delayedTriggers.push( delayEvent( "out", this, this.containers[ i ] ) );
+				this.containers[ i ].containerCache.over = 0;
+			}
+		}
+
+		//Do what was originally in plugins
+		if ( this.storedCursor ) {
+			this.document.find( "body" ).css( "cursor", this.storedCursor );
+			this.storedStylesheet.remove();
+		}
+		if ( this._storedOpacity ) {
+			this.helper.css( "opacity", this._storedOpacity );
+		}
+		if ( this._storedZIndex ) {
+			this.helper.css( "zIndex", this._storedZIndex === "auto" ? "" : this._storedZIndex );
+		}
+
+		this.dragging = false;
+
+		if ( !noPropagation ) {
+			this._trigger( "beforeStop", event, this._uiHash() );
+		}
+
+		//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately,
+		// it unbinds ALL events from the original node!
+		this.placeholder[ 0 ].parentNode.removeChild( this.placeholder[ 0 ] );
+
+		if ( !this.cancelHelperRemoval ) {
+			if ( this.helper[ 0 ] !== this.currentItem[ 0 ] ) {
+				this.helper.remove();
+			}
+			this.helper = null;
+		}
+
+		if ( !noPropagation ) {
+			for ( i = 0; i < delayedTriggers.length; i++ ) {
+
+				// Trigger all delayed events
+				delayedTriggers[ i ].call( this, event );
+			}
+			this._trigger( "stop", event, this._uiHash() );
+		}
+
+		this.fromOutside = false;
+		return !this.cancelHelperRemoval;
+
+	},
+
+	_trigger: function() {
+		if ( $.Widget.prototype._trigger.apply( this, arguments ) === false ) {
+			this.cancel();
+		}
+	},
+
+	_uiHash: function( _inst ) {
+		var inst = _inst || this;
+		return {
+			helper: inst.helper,
+			placeholder: inst.placeholder || $( [] ),
+			position: inst.position,
+			originalPosition: inst.originalPosition,
+			offset: inst.positionAbs,
+			item: inst.currentItem,
+			sender: _inst ? _inst.element : null
+		};
+	}
+
+} );
+
+} ) );
 
 
 /***/ }),
-/* 232 */
+/* 243 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(244);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(165)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../css-loader/index.js!./core.css", function() {
+			var newContent = require("!!../../../css-loader/index.js!./core.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 244 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(164)(false);
+// imports
+
+
+// module
+exports.push([module.i, "/*!\n * jQuery UI CSS Framework 1.12.1\n * http://jqueryui.com\n *\n * Copyright jQuery Foundation and other contributors\n * Released under the MIT license.\n * http://jquery.org/license\n *\n * http://api.jqueryui.com/category/theming/\n */\n\n/* Layout helpers\n----------------------------------*/\n.ui-helper-hidden {\n\tdisplay: none;\n}\n.ui-helper-hidden-accessible {\n\tborder: 0;\n\tclip: rect(0 0 0 0);\n\theight: 1px;\n\tmargin: -1px;\n\toverflow: hidden;\n\tpadding: 0;\n\tposition: absolute;\n\twidth: 1px;\n}\n.ui-helper-reset {\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\toutline: 0;\n\tline-height: 1.3;\n\ttext-decoration: none;\n\tfont-size: 100%;\n\tlist-style: none;\n}\n.ui-helper-clearfix:before,\n.ui-helper-clearfix:after {\n\tcontent: \"\";\n\tdisplay: table;\n\tborder-collapse: collapse;\n}\n.ui-helper-clearfix:after {\n\tclear: both;\n}\n.ui-helper-zfix {\n\twidth: 100%;\n\theight: 100%;\n\ttop: 0;\n\tleft: 0;\n\tposition: absolute;\n\topacity: 0;\n\tfilter:Alpha(Opacity=0); /* support: IE8 */\n}\n\n.ui-front {\n\tz-index: 100;\n}\n\n\n/* Interaction Cues\n----------------------------------*/\n.ui-state-disabled {\n\tcursor: default !important;\n\tpointer-events: none;\n}\n\n\n/* Icons\n----------------------------------*/\n.ui-icon {\n\tdisplay: inline-block;\n\tvertical-align: middle;\n\tmargin-top: -.25em;\n\tposition: relative;\n\ttext-indent: -99999px;\n\toverflow: hidden;\n\tbackground-repeat: no-repeat;\n}\n\n.ui-widget-icon-block {\n\tleft: 50%;\n\tmargin-left: -8px;\n\tdisplay: block;\n}\n\n/* Misc visuals\n----------------------------------*/\n\n/* Overlays */\n.ui-widget-overlay {\n\tposition: fixed;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 245 */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
+
+/***/ }),
+/* 246 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(247);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(165)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../css-loader/index.js!./sortable.css", function() {
+			var newContent = require("!!../../../css-loader/index.js!./sortable.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 247 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(164)(false);
+// imports
+
+
+// module
+exports.push([module.i, "/*!\n * jQuery UI Sortable 1.12.1\n * http://jqueryui.com\n *\n * Copyright jQuery Foundation and other contributors\n * Released under the MIT license.\n * http://jquery.org/license\n */\n.ui-sortable-handle {\n\t-ms-touch-action: none;\n\ttouch-action: none;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(233);
-__webpack_require__(234);
-__webpack_require__(235);
+__webpack_require__(249);
+__webpack_require__(250);
+__webpack_require__(251);
 
 /***/ }),
-/* 233 */
+/* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -63518,7 +66259,7 @@ $.fn.exists = function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 234 */
+/* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -63552,7 +66293,7 @@ $.isCSSFeatureSupported = function (cssFeature) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 235 */
+/* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -63575,10 +66316,10 @@ UI.click('[data-behavior~=clickable]', function (e, el) {
   var href = $(el).data('href');
   if (href) window.location.href = href;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ }),
-/* 236 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -63593,10 +66334,10 @@ UI.click('.js-arrow-toggle', function (e, el) {
     target.slideToggle();
   }
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ }),
-/* 237 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -63662,16 +66403,16 @@ UI.click('.jq-dropdown li a', function (e, el) {
 function __guard__(value, transform) {
   return typeof value !== 'undefined' && value !== null ? transform(value) : undefined;
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ }),
-/* 238 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(UI, $) {
 
-var Dropzone = __webpack_require__(239);
+var Dropzone = __webpack_require__(255);
 
 Dropzone.autoDiscover = false;
 
@@ -63823,10 +66564,10 @@ UI.load(function () {
     });
   }
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ }),
-/* 239 */
+/* 255 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Uses AMD or browser globals to create a jQuery plugin.
@@ -67375,13 +70116,13 @@ function __guardMethod__(obj, methodName, transform) {
 }));
 
 /***/ }),
-/* 240 */
+/* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($, UI) {
 
-__webpack_require__(157);
+__webpack_require__(166);
 
 var updateFilters = function updateFilters() {
   if ($('#filter-bar').exists()) {
@@ -67402,10 +70143,10 @@ UI.click('#show-filters-btn', function (e, el) {
 UI.ujsSuccess(function () {
   return updateFilters();
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(3)))
 
 /***/ }),
-/* 241 */
+/* 257 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67439,10 +70180,10 @@ if (typeof Turbolinks !== 'undefined' && Turbolinks !== null && Turbolinks.suppo
     return $('.flash').remove();
   });
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ }),
-/* 242 */
+/* 258 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67604,10 +70345,10 @@ $.customRomeValidators = function (field) {
     return $(relatedField).valid();
   }
 };
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ }),
-/* 243 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67666,10 +70407,10 @@ var createFallbackInlineSpinner = function createFallbackInlineSpinner(el) {
     $(el + ' inline-progress').append(fallbackSpinner);
   }
 };
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(3)))
 
 /***/ }),
-/* 244 */
+/* 260 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67780,16 +70521,16 @@ var createFallbackLoadingSpinner = function createFallbackLoadingSpinner() {
     return $('#loading-overlay').append(fallbackSpinner);
   }
 };
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ }),
-/* 245 */
+/* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(UI, $) {
 
-__webpack_require__(156);
+__webpack_require__(158);
 
 UI.load(function () {
   return (
@@ -67800,16 +70541,16 @@ UI.load(function () {
     $('.color-picker-text-field').minicolors()
   );
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ }),
-/* 246 */
+/* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($, UI) {
 
-__webpack_require__(157);
+__webpack_require__(166);
 
 // ===================================================
 // show/hide the mobile dropdown menu
@@ -67890,10 +70631,10 @@ UI.click('#cur-user-dropdown-trigger', function (e, el) {
 UI.load(function () {
   return $("#subnav.sticky-subnav").stick_in_parent({ bottoming: false, offset_top: $('#nav').height() });
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(3)))
 
 /***/ }),
-/* 247 */
+/* 263 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67912,10 +70653,10 @@ UI.click('.scroll-to-target', function (e, el) {
 UI.click('.scroll-to-top', function (e, el) {
   return $('html, body').animate({ scrollTop: 0 }, 300);
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ }),
-/* 248 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67933,20 +70674,20 @@ UI.load(function () {
     new Switchery(this, settings);
   });
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ }),
-/* 249 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _jstz = __webpack_require__(250);
+var _jstz = __webpack_require__(266);
 
 var jstz = _interopRequireWildcard(_jstz);
 
-var _jsCookie = __webpack_require__(254);
+var _jsCookie = __webpack_require__(159);
 
 var _jsCookie2 = _interopRequireDefault(_jsCookie);
 
@@ -67960,14 +70701,14 @@ var tz = jstz.determine();
 _jsCookie2.default.set('timezone', tz.name(), { expires: 7, path: '/' });
 
 /***/ }),
-/* 250 */
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(251);
+module.exports = __webpack_require__(267);
 
 
 /***/ }),
-/* 251 */
+/* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root) {/*global exports, Intl*/
@@ -69386,7 +72127,7 @@ jstz.olson.dst_rules = {
 };
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     module.exports = jstz;
-} else if (("function" !== 'undefined' && __webpack_require__(252) !== null) && (__webpack_require__(253) != null)) {
+} else if (("function" !== 'undefined' && __webpack_require__(268) !== null) && (__webpack_require__(269) != null)) {
     !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function() {
         return jstz;
     }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
@@ -69402,7 +72143,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 
 /***/ }),
-/* 252 */
+/* 268 */
 /***/ (function(module, exports) {
 
 module.exports = function() {
@@ -69411,7 +72152,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 253 */
+/* 269 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -69420,182 +72161,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 254 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * JavaScript Cookie v2.2.0
- * https://github.com/js-cookie/js-cookie
- *
- * Copyright 2006, 2015 Klaus Hartl & Fagner Brack
- * Released under the MIT license
- */
-;(function (factory) {
-	var registeredInModuleLoader = false;
-	if (true) {
-		!(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		registeredInModuleLoader = true;
-	}
-	if (true) {
-		module.exports = factory();
-		registeredInModuleLoader = true;
-	}
-	if (!registeredInModuleLoader) {
-		var OldCookies = window.Cookies;
-		var api = window.Cookies = factory();
-		api.noConflict = function () {
-			window.Cookies = OldCookies;
-			return api;
-		};
-	}
-}(function () {
-	function extend () {
-		var i = 0;
-		var result = {};
-		for (; i < arguments.length; i++) {
-			var attributes = arguments[ i ];
-			for (var key in attributes) {
-				result[key] = attributes[key];
-			}
-		}
-		return result;
-	}
-
-	function init (converter) {
-		function api (key, value, attributes) {
-			var result;
-			if (typeof document === 'undefined') {
-				return;
-			}
-
-			// Write
-
-			if (arguments.length > 1) {
-				attributes = extend({
-					path: '/'
-				}, api.defaults, attributes);
-
-				if (typeof attributes.expires === 'number') {
-					var expires = new Date();
-					expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
-					attributes.expires = expires;
-				}
-
-				// We're using "expires" because "max-age" is not supported by IE
-				attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
-
-				try {
-					result = JSON.stringify(value);
-					if (/^[\{\[]/.test(result)) {
-						value = result;
-					}
-				} catch (e) {}
-
-				if (!converter.write) {
-					value = encodeURIComponent(String(value))
-						.replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
-				} else {
-					value = converter.write(value, key);
-				}
-
-				key = encodeURIComponent(String(key));
-				key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
-				key = key.replace(/[\(\)]/g, escape);
-
-				var stringifiedAttributes = '';
-
-				for (var attributeName in attributes) {
-					if (!attributes[attributeName]) {
-						continue;
-					}
-					stringifiedAttributes += '; ' + attributeName;
-					if (attributes[attributeName] === true) {
-						continue;
-					}
-					stringifiedAttributes += '=' + attributes[attributeName];
-				}
-				return (document.cookie = key + '=' + value + stringifiedAttributes);
-			}
-
-			// Read
-
-			if (!key) {
-				result = {};
-			}
-
-			// To prevent the for loop in the first place assign an empty array
-			// in case there are no cookies at all. Also prevents odd result when
-			// calling "get()"
-			var cookies = document.cookie ? document.cookie.split('; ') : [];
-			var rdecode = /(%[0-9A-Z]{2})+/g;
-			var i = 0;
-
-			for (; i < cookies.length; i++) {
-				var parts = cookies[i].split('=');
-				var cookie = parts.slice(1).join('=');
-
-				if (!this.json && cookie.charAt(0) === '"') {
-					cookie = cookie.slice(1, -1);
-				}
-
-				try {
-					var name = parts[0].replace(rdecode, decodeURIComponent);
-					cookie = converter.read ?
-						converter.read(cookie, name) : converter(cookie, name) ||
-						cookie.replace(rdecode, decodeURIComponent);
-
-					if (this.json) {
-						try {
-							cookie = JSON.parse(cookie);
-						} catch (e) {}
-					}
-
-					if (key === name) {
-						result = cookie;
-						break;
-					}
-
-					if (!key) {
-						result[name] = cookie;
-					}
-				} catch (e) {}
-			}
-
-			return result;
-		}
-
-		api.set = api;
-		api.get = function (key) {
-			return api.call(api, key);
-		};
-		api.getJSON = function () {
-			return api.apply({
-				json: true
-			}, [].slice.call(arguments));
-		};
-		api.defaults = {};
-
-		api.remove = function (key, attributes) {
-			api(key, '', extend(attributes, {
-				expires: -1
-			}));
-		};
-
-		api.withConverter = init;
-
-		return api;
-	}
-
-	return init(function () {});
-}));
-
-
-/***/ }),
-/* 255 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69613,10 +72179,10 @@ UI.load(function () {
   // currently we use our own fork of PowerTips: https://github.com/techvalidate/jquery-powertip
   $('.js-tooltip').powerTip(tooltipOptions);
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
 
 /***/ }),
-/* 256 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69628,7 +72194,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _webpackHelpers = __webpack_require__(257);
+var _webpackHelpers = __webpack_require__(272);
 
 /**
  * registerControllers - A helper function to register imported classes with your stimulus application.
@@ -69652,7 +72218,7 @@ function registerControllers(application, controllers) {
 exports.default = registerControllers;
 
 /***/ }),
-/* 257 */
+/* 272 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

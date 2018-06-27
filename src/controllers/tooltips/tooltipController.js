@@ -85,14 +85,23 @@ export default class extends Controller {
     this.tooltip.html(this.bodyTemplate)
   }
 
-  connect() {
-    if (!this.tooltip.exists()) {
-      $('body').append(this.container)
-      this.setTemplate()
-    }
+  createTip() {
+    $('body').append(this.container)
+    this.setTemplate()
+  }
 
+  bindInteractions() {
     this.element.addEventListener('mouseover', _.bind(this.show, this))
     this.element.addEventListener('mouseout', _.bind(this.hide, this))
+  }
+
+  connect() {
+    const controller = this
+    if (!this.tooltip.exists()) {
+      this.createTip()
+    }
+
+    this.bindInteractions()
 
     // default hover target to the element
     if (!this.targets.has('hover')) {

@@ -341,115 +341,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
-
-var customEvent = __webpack_require__(208);
-var eventmap = __webpack_require__(209);
-var doc = global.document;
-var addEvent = addEventEasy;
-var removeEvent = removeEventEasy;
-var hardCache = [];
-
-if (!global.addEventListener) {
-  addEvent = addEventHard;
-  removeEvent = removeEventHard;
-}
-
-module.exports = {
-  add: addEvent,
-  remove: removeEvent,
-  fabricate: fabricateEvent
-};
-
-function addEventEasy (el, type, fn, capturing) {
-  return el.addEventListener(type, fn, capturing);
-}
-
-function addEventHard (el, type, fn) {
-  return el.attachEvent('on' + type, wrap(el, type, fn));
-}
-
-function removeEventEasy (el, type, fn, capturing) {
-  return el.removeEventListener(type, fn, capturing);
-}
-
-function removeEventHard (el, type, fn) {
-  var listener = unwrap(el, type, fn);
-  if (listener) {
-    return el.detachEvent('on' + type, listener);
-  }
-}
-
-function fabricateEvent (el, type, model) {
-  var e = eventmap.indexOf(type) === -1 ? makeCustomEvent() : makeClassicEvent();
-  if (el.dispatchEvent) {
-    el.dispatchEvent(e);
-  } else {
-    el.fireEvent('on' + type, e);
-  }
-  function makeClassicEvent () {
-    var e;
-    if (doc.createEvent) {
-      e = doc.createEvent('Event');
-      e.initEvent(type, true, true);
-    } else if (doc.createEventObject) {
-      e = doc.createEventObject();
-    }
-    return e;
-  }
-  function makeCustomEvent () {
-    return new customEvent(type, { detail: model });
-  }
-}
-
-function wrapperFactory (el, type, fn) {
-  return function wrapper (originalEvent) {
-    var e = originalEvent || global.event;
-    e.target = e.target || e.srcElement;
-    e.preventDefault = e.preventDefault || function preventDefault () { e.returnValue = false; };
-    e.stopPropagation = e.stopPropagation || function stopPropagation () { e.cancelBubble = true; };
-    e.which = e.which || e.keyCode;
-    fn.call(el, e);
-  };
-}
-
-function wrap (el, type, fn) {
-  var wrapper = unwrap(el, type, fn) || wrapperFactory(el, type, fn);
-  hardCache.push({
-    wrapper: wrapper,
-    element: el,
-    type: type,
-    fn: fn
-  });
-  return wrapper;
-}
-
-function unwrap (el, type, fn) {
-  var i = find(el, type, fn);
-  if (i) {
-    var wrapper = hardCache[i].wrapper;
-    hardCache.splice(i, 1); // free up a tad of memory
-    return wrapper;
-  }
-}
-
-function find (el, type, fn) {
-  var i, item;
-  for (i = 0; i < hardCache.length; i++) {
-    item = hardCache[i];
-    if (item.element === el && item.type === type && item.fn === fn) {
-      return i;
-    }
-  }
-}
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
  * @license
  * Lodash <https://lodash.com/>
@@ -17552,6 +17443,115 @@ function find (el, type, fn) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(16)(module)))
 
 /***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
+
+var customEvent = __webpack_require__(208);
+var eventmap = __webpack_require__(209);
+var doc = global.document;
+var addEvent = addEventEasy;
+var removeEvent = removeEventEasy;
+var hardCache = [];
+
+if (!global.addEventListener) {
+  addEvent = addEventHard;
+  removeEvent = removeEventHard;
+}
+
+module.exports = {
+  add: addEvent,
+  remove: removeEvent,
+  fabricate: fabricateEvent
+};
+
+function addEventEasy (el, type, fn, capturing) {
+  return el.addEventListener(type, fn, capturing);
+}
+
+function addEventHard (el, type, fn) {
+  return el.attachEvent('on' + type, wrap(el, type, fn));
+}
+
+function removeEventEasy (el, type, fn, capturing) {
+  return el.removeEventListener(type, fn, capturing);
+}
+
+function removeEventHard (el, type, fn) {
+  var listener = unwrap(el, type, fn);
+  if (listener) {
+    return el.detachEvent('on' + type, listener);
+  }
+}
+
+function fabricateEvent (el, type, model) {
+  var e = eventmap.indexOf(type) === -1 ? makeCustomEvent() : makeClassicEvent();
+  if (el.dispatchEvent) {
+    el.dispatchEvent(e);
+  } else {
+    el.fireEvent('on' + type, e);
+  }
+  function makeClassicEvent () {
+    var e;
+    if (doc.createEvent) {
+      e = doc.createEvent('Event');
+      e.initEvent(type, true, true);
+    } else if (doc.createEventObject) {
+      e = doc.createEventObject();
+    }
+    return e;
+  }
+  function makeCustomEvent () {
+    return new customEvent(type, { detail: model });
+  }
+}
+
+function wrapperFactory (el, type, fn) {
+  return function wrapper (originalEvent) {
+    var e = originalEvent || global.event;
+    e.target = e.target || e.srcElement;
+    e.preventDefault = e.preventDefault || function preventDefault () { e.returnValue = false; };
+    e.stopPropagation = e.stopPropagation || function stopPropagation () { e.cancelBubble = true; };
+    e.which = e.which || e.keyCode;
+    fn.call(el, e);
+  };
+}
+
+function wrap (el, type, fn) {
+  var wrapper = unwrap(el, type, fn) || wrapperFactory(el, type, fn);
+  hardCache.push({
+    wrapper: wrapper,
+    element: el,
+    type: type,
+    fn: fn
+  });
+  return wrapper;
+}
+
+function unwrap (el, type, fn) {
+  var i = find(el, type, fn);
+  if (i) {
+    var wrapper = hardCache[i].wrapper;
+    hardCache.splice(i, 1); // free up a tad of memory
+    return wrapper;
+  }
+}
+
+function find (el, type, fn) {
+  var i, item;
+  for (i = 0; i < hardCache.length; i++) {
+    item = hardCache[i];
+    if (item.element === el && item.type === type && item.fn === fn) {
+      return i;
+    }
+  }
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+
+/***/ }),
 /* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -23346,7 +23346,7 @@ var _class = function (_Controller) {
 }(_stimulus.Controller);
 
 exports.default = _class;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(8)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
 
 /***/ }),
 /* 16 */
@@ -23914,15 +23914,26 @@ var _class = function (_Controller) {
       this.tooltip.html(this.bodyTemplate);
     }
   }, {
-    key: 'connect',
-    value: function connect() {
-      if (!this.tooltip.exists()) {
-        $('body').append(this.container);
-        this.setTemplate();
-      }
-
+    key: 'createTip',
+    value: function createTip() {
+      $('body').append(this.container);
+      this.setTemplate();
+    }
+  }, {
+    key: 'bindInteractions',
+    value: function bindInteractions() {
       this.element.addEventListener('mouseover', _.bind(this.show, this));
       this.element.addEventListener('mouseout', _.bind(this.hide, this));
+    }
+  }, {
+    key: 'connect',
+    value: function connect() {
+      var controller = this;
+      if (!this.tooltip.exists()) {
+        this.createTip();
+      }
+
+      this.bindInteractions();
 
       // default hover target to the element
       if (!this.targets.has('hover')) {
@@ -23956,7 +23967,7 @@ var _class = function (_Controller) {
 
 _class.targets = ['hover', 'template'];
 exports.default = _class;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(8)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
 
 /***/ }),
 /* 27 */
@@ -36099,7 +36110,7 @@ module.exports = defaults;
 "use strict";
 
 
-var crossvent = __webpack_require__(7);
+var crossvent = __webpack_require__(8);
 var emitter = __webpack_require__(220);
 var dom = __webpack_require__(227);
 var text = __webpack_require__(228);
@@ -50503,7 +50514,7 @@ var _class = function (_ModalController) {
 }(_modalController2.default);
 
 exports.default = _class;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(8)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
 
 /***/ }),
 /* 189 */
@@ -50592,13 +50603,15 @@ exports.default = _class;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {
+/* WEBPACK VAR INJECTION */(function($, _) {
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _tooltipController = __webpack_require__(26);
 
@@ -50638,12 +50651,11 @@ var _class = function (_TooltipController) {
       var $element = $(this.hoverTarget);
       var x = $element.offset().left;
       var y = $element.offset().top;
-      var maxWidth = 250;
+      var maxWidth = this.data.get('width') || 250;
       var style = {
         position: 'absolute',
         'max-width': maxWidth + 'px',
-        'z-index': 1002,
-        'pointer-events': 'none'
+        'z-index': 1002
         // Replace body content with title text or template content
       };if (this.targets.has('template')) {
         this.tooltip.html(this.content).css(style);
@@ -50657,6 +50669,37 @@ var _class = function (_TooltipController) {
       }).addClass('visible');
 
       $element.css({ cursor: 'pointer' });
+    }
+  }, {
+    key: 'hide',
+    value: function hide() {
+      if (this.keepOpen) return;
+      this.tooltip.removeClass('visible');
+    }
+  }, {
+    key: 'createTip',
+    value: function createTip() {
+      _get(_class.prototype.__proto__ || Object.getPrototypeOf(_class.prototype), 'createTip', this).call(this);
+
+      var controller = this;
+
+      this.tooltip.on('mouseenter', function () {
+        controller.keepOpen = true;
+      });
+
+      this.tooltip.on('mouseleave', function () {
+        controller.keepOpen = false;
+        controller.hide();
+      });
+    }
+  }, {
+    key: 'bindInteractions',
+    value: function bindInteractions() {
+      var controller = this;
+      this.element.addEventListener('mouseover', _.bind(this.show, this));
+      this.element.addEventListener('mouseout', function () {
+        _.delay(_.bind(controller.hide, controller), 100);
+      });
     }
   }, {
     key: 'container',
@@ -50674,7 +50717,7 @@ var _class = function (_TooltipController) {
 }(_tooltipController2.default);
 
 exports.default = _class;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
 
 /***/ }),
 /* 191 */
@@ -56493,7 +56536,7 @@ module.exports = core;
 "use strict";
 
 
-var crossvent = __webpack_require__(7);
+var crossvent = __webpack_require__(8);
 var bullseye = __webpack_require__(210);
 var throttle = __webpack_require__(219);
 var clone = __webpack_require__(154);
@@ -56704,7 +56747,7 @@ module.exports = eventmap;
 "use strict";
 
 
-var crossvent = __webpack_require__(7);
+var crossvent = __webpack_require__(8);
 var throttle = __webpack_require__(151);
 var tailormade = __webpack_require__(211);
 
@@ -56799,7 +56842,7 @@ module.exports = bullseye;
 /* WEBPACK VAR INJECTION */(function(global) {
 
 var sell = __webpack_require__(212);
-var crossvent = __webpack_require__(7);
+var crossvent = __webpack_require__(8);
 var seleccion = __webpack_require__(213);
 var throttle = __webpack_require__(151);
 var getSelection = seleccion.get;

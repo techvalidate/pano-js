@@ -23,12 +23,11 @@ export default class extends TooltipController {
     const $element = $(this.hoverTarget)
     const x = $element.offset().left
     const y = $element.offset().top
-    const maxWidth = 250
+    const maxWidth = this.data.get('width') || 250
     const style = {
       position: 'absolute',
       'max-width': `${maxWidth}px`,
-      'z-index': 1002,
-      'pointer-events': 'none'
+      'z-index': 1002
     }
     // Replace body content with title text or template content
     if (this.targets.has('template')) {
@@ -49,5 +48,33 @@ export default class extends TooltipController {
       .addClass('visible')
 
     $element.css({ cursor: 'pointer' })
+  }
+
+  hide() {
+    if (this.keepOpen) return
+    this.tooltip.removeClass('visible')
+  }
+
+  createTip() {
+    super.createTip()
+
+    const controller = this
+
+    this.tooltip.on('mouseenter', function() {
+      controller.keepOpen = true
+    })
+
+    this.tooltip.on('mouseleave', function() {
+      controller.keepOpen = false
+      controller.hide()
+    })
+  }
+
+  bindInteractions() {
+    const controller = this
+    this.element.addEventListener('mouseover', _.bind(this.show, this))
+    this.element.addEventListener('mouseout', () => {
+      _.delay(_.bind(controller.hide, controller), 100)
+    })
   }
 }

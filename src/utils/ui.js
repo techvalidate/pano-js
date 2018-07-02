@@ -23,7 +23,7 @@
 
 export function load(callback) {
   if ((typeof Turbolinks !== 'undefined' && Turbolinks !== null) && Turbolinks.supported) {
-    $(document).on('turbolinks:load', () => {
+    document.addEventListener('turbolinks:load', () => {
       callback()
     });
   }

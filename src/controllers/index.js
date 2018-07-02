@@ -4,6 +4,7 @@ import TooltipController from './tooltips/tooltipController'
 import PopoverController from './tooltips/popoverController'
 import ModalsController from './modals/modalsController'
 import DatePickerController from './datepickerController'
+import FileUploadController from './fileuploadController'
 
 const Controllers = {
   AccordianController,
@@ -11,7 +12,8 @@ const Controllers = {
   Modals,
   ModalsController,
   PopoverController,
-  TooltipController
+  TooltipController,
+  FileUploadController
 }
 
 export default Controllers

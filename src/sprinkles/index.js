@@ -10,7 +10,6 @@ require('../utils')
  */
 require('./arrowToggle.js')
 require('./dropdown.js')
-require('./fileUploads.js')
 require('./filters.js')
 require('./flashMessages.js');
 require('./forms.js');

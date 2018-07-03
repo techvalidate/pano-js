@@ -304,6 +304,22 @@ return $.ui.version = "1.12.1";
 
 /***/ }),
 /* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stimulus_core__ = __webpack_require__(173);
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Action", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["a"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ActionDescriptor", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["b"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Application", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["c"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Context", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["d"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Controller", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["e"]; });
+/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "defaultSchema", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["f"]; });
+
+
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -319,22 +335,6 @@ var api = {
 };
 
 module.exports = api;
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__stimulus_core__ = __webpack_require__(173);
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Action", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["a"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "ActionDescriptor", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["b"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Application", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["c"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Context", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["d"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "Controller", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["e"]; });
-/* harmony namespace reexport (by provided) */ __webpack_require__.d(__webpack_exports__, "defaultSchema", function() { return __WEBPACK_IMPORTED_MODULE_0__stimulus_core__["f"]; });
-
 
 
 /***/ }),
@@ -22503,7 +22503,7 @@ module.exports = {
 "use strict";
 
 
-var momentum = __webpack_require__(5);
+var momentum = __webpack_require__(6);
 
 function raw (date, format) {
   if (typeof date === 'string') {
@@ -23294,7 +23294,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _stimulus = __webpack_require__(6);
+var _stimulus = __webpack_require__(5);
 
 var _velocityAnimate = __webpack_require__(10);
 
@@ -23831,7 +23831,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _stimulus = __webpack_require__(6);
+var _stimulus = __webpack_require__(5);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -23865,12 +23865,11 @@ var _class = function (_Controller) {
     key: 'setContent',
     value: function setContent() {
       if (this.element.hasAttribute('title')) {
-        this.data.set('content', this.element.getAttribute('title'));
-        this.element.removeAttribute('title'); // remove title so it won't be shown by browser.
+        this.content = this.element.getAttribute('title');
       }
 
       if (this.targets.has('template')) {
-        this.data.set('content', $(this.templateTarget).html());
+        this.content = $(this.templateTarget).html();
       }
     }
   }, {
@@ -23884,14 +23883,23 @@ var _class = function (_Controller) {
       var y = $element.offset().top;
       var centerX = x + $element.width() / 2;
       var maxWidth = 250;
+
       var style = {
         position: 'absolute',
         'max-width': maxWidth + 'px',
         'z-index': 1002,
         'pointer-events': 'none'
-        // Replace body content with title text or template content
-      };if (this.targets.has('template')) {
-        this.tooltip.html(this.content).css(style);
+      };
+
+      if (this.hoverTarget.classList.contains('tooltip-white')) {
+        this.tooltip.addClass('tooltip-white');
+      } else {
+        this.tooltip.removeClass('tooltip-white');
+      }
+
+      // Replace body content with title text or template content
+      if (this.targets.has('template')) {
+        this.tooltip.css(style).find('.tooltip-body').html(this.content);
       } else {
         this.tooltip.css(style).find('.tooltip-body').html(this.content);
       }
@@ -23953,7 +23961,10 @@ var _class = function (_Controller) {
   }, {
     key: 'content',
     get: function get() {
-      return this.data.get('content');
+      return this._content;
+    },
+    set: function set(content) {
+      this._content = content;
     }
   }, {
     key: 'tooltip',
@@ -35963,7 +35974,7 @@ module.exports = rangeToTextRange;
 "use strict";
 
 
-var momentum = __webpack_require__(5);
+var momentum = __webpack_require__(6);
 
 // naïve implementation, specifically meant to clone `options` objects
 function clone (thing) {
@@ -35999,7 +36010,7 @@ module.exports = clone;
 
 var parse = __webpack_require__(12);
 var isInput = __webpack_require__(13);
-var momentum = __webpack_require__(5);
+var momentum = __webpack_require__(6);
 
 function defaults (options, cal) {
   var temp;
@@ -36117,7 +36128,7 @@ var text = __webpack_require__(228);
 var parse = __webpack_require__(12);
 var clone = __webpack_require__(154);
 var defaults = __webpack_require__(155);
-var momentum = __webpack_require__(5);
+var momentum = __webpack_require__(6);
 var classes = __webpack_require__(157);
 var noop = __webpack_require__(229);
 var no;
@@ -38342,7 +38353,7 @@ var stylesInDom = {},
 	singletonElement = null,
 	singletonCounter = 0,
 	styleElementsInsertedAtTop = [],
-	fixUrls = __webpack_require__(245);
+	fixUrls = __webpack_require__(247);
 
 module.exports = function(list, options) {
 	if(typeof DEBUG !== "undefined" && DEBUG) {
@@ -38913,7 +38924,7 @@ var _controllers = __webpack_require__(171);
 
 var _controllers2 = _interopRequireDefault(_controllers);
 
-var _sprinkles = __webpack_require__(234);
+var _sprinkles = __webpack_require__(236);
 
 var Sprinkles = _interopRequireWildcard(_sprinkles);
 
@@ -49350,7 +49361,7 @@ var _datepickerController = __webpack_require__(193);
 
 var _datepickerController2 = _interopRequireDefault(_datepickerController);
 
-var _fileuploadController = __webpack_require__(273);
+var _fileuploadController = __webpack_require__(234);
 
 var _fileuploadController2 = _interopRequireDefault(_fileuploadController);
 
@@ -50534,7 +50545,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _stimulus = __webpack_require__(6);
+var _stimulus = __webpack_require__(5);
 
 var _velocityAnimate = __webpack_require__(10);
 
@@ -50739,7 +50750,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 __webpack_require__(192);
 
-var _stimulus = __webpack_require__(6);
+var _stimulus = __webpack_require__(5);
 
 var _velocityAnimate = __webpack_require__(10);
 
@@ -51311,7 +51322,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _stimulus = __webpack_require__(6);
+var _stimulus = __webpack_require__(5);
 
 var _rome = __webpack_require__(27);
 
@@ -56547,7 +56558,7 @@ var throttle = __webpack_require__(219);
 var clone = __webpack_require__(154);
 var defaults = __webpack_require__(155);
 var calendar = __webpack_require__(156);
-var momentum = __webpack_require__(5);
+var momentum = __webpack_require__(6);
 var classes = __webpack_require__(157);
 
 function inputCalendar (input, calendarOptions) {
@@ -58178,7 +58189,7 @@ module.exports = inline;
 "use strict";
 
 
-var momentum = __webpack_require__(5);
+var momentum = __webpack_require__(6);
 
 function use (moment) {
   this.moment = momentum.moment = moment;
@@ -58335,8126 +58346,194 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function($) {
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-/**
- * Load sprinkle dependencies
- */
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-__webpack_require__(235);
-__webpack_require__(248);
+var _stimulus = __webpack_require__(5);
 
-/**
- * Load sprinkles
- */
-__webpack_require__(252);
-__webpack_require__(253);
-__webpack_require__(256);
-__webpack_require__(257);
-__webpack_require__(258);
-__webpack_require__(259);
-__webpack_require__(260);
-__webpack_require__(261);
-__webpack_require__(262);
-__webpack_require__(263);
-__webpack_require__(264);
-__webpack_require__(265);
-__webpack_require__(270);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Dropzone = __webpack_require__(235);
+Dropzone.autoDiscover = false;
+
+var _class = function (_Controller) {
+  _inherits(_class, _Controller);
+
+  function _class() {
+    _classCallCheck(this, _class);
+
+    return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+  }
+
+  _createClass(_class, [{
+    key: 'connect',
+    value: function connect() {
+      if (Dropzone.isBrowserSupported()) {
+        // dropzone callbacks
+        var dropSuccess = function dropSuccess(responseText) {
+          $(document).trigger('inline-spinner:hide', '.dropzone');
+          return eval(responseText); // Just redirects to the current page via Turbolinks
+        };
+
+        var dropError = function dropError(file, message, dropzone) {
+          dropzone.removeFile(file);
+          alert(message);
+        };
+
+        var onProgress = function onProgress(file, progress, bytesSent) {
+          if (progress >= 100) {
+            // reset the progressbar and show the spinner while the image is processing
+            $('[data-dz-uploadprogress]').css('width', 0);
+            $('.dz-progress').css('transition', 'none');
+            $('.dz-progress').css('opacity', 0);
+            $('.dz-filename').addClass('processing');
+            $(document).trigger('inline-spinner:show', '.dropzone');
+          }
+        };
+
+        // override Dropzone's default image sizer for thumbnail previews
+        var onResize = function onResize(file) {
+          var thmbHeight = 0;
+          var thmbWidth = 0;
+          var previewHeight = parseInt($('.dropzone.dropzone-image-form').css('height'), 10);
+          var previewWidth = parseInt($('.dropzone.dropzone-image-form').css('width'), 10);
+
+          if (file.height >= file.width) {
+            if (file.height > previewHeight) {
+              thmbHeight = previewHeight;
+              thmbWidth = previewHeight * file.width / file.height;
+            } else {
+              thmbHeight = this.options.thumbnailHeight;
+              thmbWidth = parseInt(this.options.thumbnailHeight * file.width / file.height);
+            }
+          } else {
+            if (file.width > previewWidth) {
+              thmbHeight = previewWidth * file.height / file.width;
+              thmbWidth = previewWidth;
+            } else {
+              thmbHeight = parseInt(this.options.thumbnailWidth * file.height / file.width);
+              thmbWidth = this.options.thumbnailWidth;
+            }
+          }
+
+          return {
+            srcX: 0,
+            srcY: 0,
+            srcWidth: file.width,
+            srcHeight: file.height,
+            trgX: 0,
+            trgY: 0,
+            trgWidth: thmbWidth,
+            trgHeight: thmbHeight
+          };
+        };
+
+        // find image form elements that need dropzones
+        $('.dropzone-image-form').each(function () {
+          var dzForm = $(this);
+          var param = dzForm.data('dropzone-param');
+          // instantiate image uploaders
+          var dropzone = new Dropzone('.dropzone-image-form', {
+            headers: { "Accept": "text/javascript" },
+            paramName: param,
+            acceptedFiles: "image/*",
+            uploadMultiple: false,
+            clickable: true,
+            maxFiles: 1,
+            maxFilesize: 5,
+            resize: onResize
+          });
+
+          // event handlers
+          dropzone.on('success', function (file, responseText) {
+            return dropSuccess(responseText);
+          });
+
+          dropzone.on('error', function (file, message, test) {
+            dropError(file, message, this);
+          });
+
+          return dropzone.on('uploadprogress', function (file, progress, byesSent) {
+            return onProgress(file, progress, byesSent);
+          });
+        });
+
+        // find csv form elements that need dropzones
+        $('.dropzone-csv-form').each(function () {
+          var dzForm = $(this);
+          var param = dzForm.data('dropzone-param');
+          // instantiate csv uploaders
+          var dropzone = new Dropzone('.dropzone-csv-form', {
+            headers: { "Accept": "text/javascript" },
+            paramName: param,
+            acceptedFiles: "text/csv,.csv",
+            uploadMultiple: false,
+            clickable: true,
+            maxFiles: 1
+          });
+
+          // event handlers
+          dropzone.on('success', function (file, responseText) {
+            return dropSuccess(responseText);
+          });
+
+          dropzone.on('uploadprogress', function (file, progress, byesSent) {
+            return onProgress(file, progress, byesSent);
+          });
+
+          dropzone.on('error', function (file, message) {
+            dropError(file, message, this);
+          });
+        });
+
+        // find PO file form elements that need dropzones
+        $('.dropzone-po-form').each(function () {
+          var dzForm = $(this);
+          var param = dzForm.data('dropzone-param');
+          // instantiate csv uploaders
+          var dropzone = new Dropzone('.dropzone-po-form', {
+            headers: { "Accept": "text/javascript" },
+            paramName: param,
+            acceptedFiles: "text/x-gettext-translation, application/x-po, text/x-po, application/octet-stream, .po",
+            uploadMultiple: false,
+            clickable: true,
+            maxFiles: 1
+          });
+
+          // event handlers
+          dropzone.on('success', function (file, responseText) {
+            return dropSuccess(responseText);
+          });
+
+          dropzone.on('uploadprogress', function (file, progress, byesSent) {
+            return onProgress(file, progress, byesSent);
+          });
+
+          dropzone.on('error', function (file, message) {
+            dropError(file, message, this);
+          });
+        });
+      }
+    }
+  }]);
+
+  return _class;
+}(_stimulus.Controller);
+
+exports.default = _class;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
 /* 235 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(236);
-__webpack_require__(237);
-__webpack_require__(238);
-__webpack_require__(158);
-__webpack_require__(239);
-__webpack_require__(159);
-__webpack_require__(27);
-__webpack_require__(240);
-
-/***/ }),
-/* 236 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * fullPage 2.9.6
- * https://github.com/alvarotrigo/fullPage.js
- * @license MIT licensed
- *
- * Copyright (C) 2015 alvarotrigo.com - A project by Alvaro Trigo
- */
-(function(global, factory) {
-    'use strict';
-    if (true) {
-        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1)], __WEBPACK_AMD_DEFINE_RESULT__ = (function($) {
-          return factory($, global, global.document, global.Math);
-        }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-    } else if (typeof exports === "object" && exports) {
-        module.exports = factory(require('jquery'), global, global.document, global.Math);
-    } else {
-        factory(jQuery, global, global.document, global.Math);
-    }
-})(typeof window !== 'undefined' ? window : this, function($, window, document, Math, undefined) {
-    'use strict';
-
-    // keeping central set of classnames and selectors
-    var WRAPPER =               'fullpage-wrapper';
-    var WRAPPER_SEL =           '.' + WRAPPER;
-
-    // slimscroll
-    var SCROLLABLE =            'fp-scrollable';
-    var SCROLLABLE_SEL =        '.' + SCROLLABLE;
-
-    // util
-    var RESPONSIVE =            'fp-responsive';
-    var NO_TRANSITION =         'fp-notransition';
-    var DESTROYED =             'fp-destroyed';
-    var ENABLED =               'fp-enabled';
-    var VIEWING_PREFIX =        'fp-viewing';
-    var ACTIVE =                'active';
-    var ACTIVE_SEL =            '.' + ACTIVE;
-    var COMPLETELY =            'fp-completely';
-    var COMPLETELY_SEL =        '.' + COMPLETELY;
-
-    // section
-    var SECTION_DEFAULT_SEL =   '.section';
-    var SECTION =               'fp-section';
-    var SECTION_SEL =           '.' + SECTION;
-    var SECTION_ACTIVE_SEL =    SECTION_SEL + ACTIVE_SEL;
-    var SECTION_FIRST_SEL =     SECTION_SEL + ':first';
-    var SECTION_LAST_SEL =      SECTION_SEL + ':last';
-    var TABLE_CELL =            'fp-tableCell';
-    var TABLE_CELL_SEL =        '.' + TABLE_CELL;
-    var AUTO_HEIGHT =           'fp-auto-height';
-    var AUTO_HEIGHT_SEL =       '.fp-auto-height';
-    var NORMAL_SCROLL =         'fp-normal-scroll';
-    var NORMAL_SCROLL_SEL =     '.fp-normal-scroll';
-
-    // section nav
-    var SECTION_NAV =           'fp-nav';
-    var SECTION_NAV_SEL =       '#' + SECTION_NAV;
-    var SECTION_NAV_TOOLTIP =   'fp-tooltip';
-    var SECTION_NAV_TOOLTIP_SEL='.'+SECTION_NAV_TOOLTIP;
-    var SHOW_ACTIVE_TOOLTIP =   'fp-show-active';
-
-    // slide
-    var SLIDE_DEFAULT_SEL =     '.slide';
-    var SLIDE =                 'fp-slide';
-    var SLIDE_SEL =             '.' + SLIDE;
-    var SLIDE_ACTIVE_SEL =      SLIDE_SEL + ACTIVE_SEL;
-    var SLIDES_WRAPPER =        'fp-slides';
-    var SLIDES_WRAPPER_SEL =    '.' + SLIDES_WRAPPER;
-    var SLIDES_CONTAINER =      'fp-slidesContainer';
-    var SLIDES_CONTAINER_SEL =  '.' + SLIDES_CONTAINER;
-    var TABLE =                 'fp-table';
-
-    // slide nav
-    var SLIDES_NAV =            'fp-slidesNav';
-    var SLIDES_NAV_SEL =        '.' + SLIDES_NAV;
-    var SLIDES_NAV_LINK_SEL =   SLIDES_NAV_SEL + ' a';
-    var SLIDES_ARROW =          'fp-controlArrow';
-    var SLIDES_ARROW_SEL =      '.' + SLIDES_ARROW;
-    var SLIDES_PREV =           'fp-prev';
-    var SLIDES_PREV_SEL =       '.' + SLIDES_PREV;
-    var SLIDES_ARROW_PREV =     SLIDES_ARROW + ' ' + SLIDES_PREV;
-    var SLIDES_ARROW_PREV_SEL = SLIDES_ARROW_SEL + SLIDES_PREV_SEL;
-    var SLIDES_NEXT =           'fp-next';
-    var SLIDES_NEXT_SEL =       '.' + SLIDES_NEXT;
-    var SLIDES_ARROW_NEXT =     SLIDES_ARROW + ' ' + SLIDES_NEXT;
-    var SLIDES_ARROW_NEXT_SEL = SLIDES_ARROW_SEL + SLIDES_NEXT_SEL;
-
-    var $window = $(window);
-    var $document = $(document);
-
-    $.fn.fullpage = function(options) {
-        //only once my friend!
-        if($('html').hasClass(ENABLED)){ displayWarnings(); return; }
-
-        // common jQuery objects
-        var $htmlBody = $('html, body');
-        var $body = $('body');
-
-        var FP = $.fn.fullpage;
-
-        // Creating some defaults, extending them with any options that were provided
-        options = $.extend({
-            //navigation
-            menu: false,
-            anchors:[],
-            lockAnchors: false,
-            navigation: false,
-            navigationPosition: 'right',
-            navigationTooltips: [],
-            showActiveTooltip: false,
-            slidesNavigation: false,
-            slidesNavPosition: 'bottom',
-            scrollBar: false,
-            hybrid: false,
-
-            //scrolling
-            css3: true,
-            scrollingSpeed: 700,
-            autoScrolling: true,
-            fitToSection: true,
-            fitToSectionDelay: 1000,
-            easing: 'easeInOutCubic',
-            easingcss3: 'ease',
-            loopBottom: false,
-            loopTop: false,
-            loopHorizontal: true,
-            continuousVertical: false,
-            continuousHorizontal: false,
-            scrollHorizontally: false,
-            interlockedSlides: false,
-            dragAndMove: false,
-            offsetSections: false,
-            resetSliders: false,
-            fadingEffect: false,
-            normalScrollElements: null,
-            scrollOverflow: false,
-            scrollOverflowReset: false,
-            scrollOverflowHandler: $.fn.fp_scrolloverflow ? $.fn.fp_scrolloverflow.iscrollHandler : null,
-            scrollOverflowOptions: null,
-            touchSensitivity: 5,
-            normalScrollElementTouchThreshold: 5,
-            bigSectionsDestination: null,
-
-            //Accessibility
-            keyboardScrolling: true,
-            animateAnchor: true,
-            recordHistory: true,
-
-            //design
-            controlArrows: true,
-            controlArrowColor: '#fff',
-            verticalCentered: true,
-            sectionsColor : [],
-            paddingTop: 0,
-            paddingBottom: 0,
-            fixedElements: null,
-            responsive: 0, //backwards compabitility with responsiveWiddth
-            responsiveWidth: 0,
-            responsiveHeight: 0,
-            responsiveSlides: false,
-            parallax: false,
-            parallaxOptions: {
-                type: 'reveal',
-                percentage: 62,
-                property: 'translate'
-            },
-
-            //Custom selectors
-            sectionSelector: SECTION_DEFAULT_SEL,
-            slideSelector: SLIDE_DEFAULT_SEL,
-
-            //events
-            afterLoad: null,
-            onLeave: null,
-            afterRender: null,
-            afterResize: null,
-            afterReBuild: null,
-            afterSlideLoad: null,
-            onSlideLeave: null,
-            afterResponsive: null,
-
-            lazyLoading: true
-        }, options);
-
-        //flag to avoid very fast sliding for landscape sliders
-        var slideMoving = false;
-
-        var isTouchDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|playbook|silk|BlackBerry|BB10|Windows Phone|Tizen|Bada|webOS|IEMobile|Opera Mini)/);
-        var isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0) || (navigator.maxTouchPoints));
-        var container = $(this);
-        var windowsHeight = $window.height();
-        var isResizing = false;
-        var isWindowFocused = true;
-        var lastScrolledDestiny;
-        var lastScrolledSlide;
-        var canScroll = true;
-        var scrollings = [];
-        var controlPressed;
-        var startingSection;
-        var isScrollAllowed = {};
-        isScrollAllowed.m = {  'up':true, 'down':true, 'left':true, 'right':true };
-        isScrollAllowed.k = $.extend(true,{}, isScrollAllowed.m);
-        var MSPointer = getMSPointer();
-        var events = {
-            touchmove: 'ontouchmove' in window ? 'touchmove' :  MSPointer.move,
-            touchstart: 'ontouchstart' in window ? 'touchstart' :  MSPointer.down
-        };
-        var scrollBarHandler;
-
-        // taken from https://github.com/udacity/ud891/blob/gh-pages/lesson2-focus/07-modals-and-keyboard-traps/solution/modal.js
-        var focusableElementsString = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]';
-
-        //timeouts
-        var resizeId;
-        var afterSectionLoadsId;
-        var afterSlideLoadsId;
-        var scrollId;
-        var scrollId2;
-        var keydownId;
-        var originals = $.extend(true, {}, options); //deep copy
-
-        displayWarnings();
-
-        //easeInOutCubic animation included in the plugin
-        $.extend($.easing,{ easeInOutCubic: function (x, t, b, c, d) {if ((t/=d/2) < 1) return c/2*t*t*t + b;return c/2*((t-=2)*t*t + 2) + b;}});
-
-        /**
-        * Sets the autoScroll option.
-        * It changes the scroll bar visibility and the history of the site as a result.
-        */
-        function setAutoScrolling(value, type){
-            //removing the transformation
-            if(!value){
-                silentScroll(0);
-            }
-
-            setVariableState('autoScrolling', value, type);
-
-            var element = $(SECTION_ACTIVE_SEL);
-
-            if(options.autoScrolling && !options.scrollBar){
-                $htmlBody.css({
-                    'overflow' : 'hidden',
-                    'height' : '100%'
-                });
-
-                setRecordHistory(originals.recordHistory, 'internal');
-
-                //for IE touch devices
-                container.css({
-                    '-ms-touch-action': 'none',
-                    'touch-action': 'none'
-                });
-
-                if(element.length){
-                    //moving the container up
-                    silentScroll(element.position().top);
-                }
-
-            }else{
-                $htmlBody.css({
-                    'overflow' : 'visible',
-                    'height' : 'initial'
-                });
-
-                setRecordHistory(false, 'internal');
-
-                //for IE touch devices
-                container.css({
-                    '-ms-touch-action': '',
-                    'touch-action': ''
-                });
-
-                //scrolling the page to the section with no animation
-                if (element.length) {
-                    $htmlBody.scrollTop(element.position().top);
-                }
-            }
-        }
-
-        /**
-        * Defines wheter to record the history for each hash change in the URL.
-        */
-        function setRecordHistory(value, type){
-            setVariableState('recordHistory', value, type);
-        }
-
-        /**
-        * Defines the scrolling speed
-        */
-        function setScrollingSpeed(value, type){
-            setVariableState('scrollingSpeed', value, type);
-        }
-
-        /**
-        * Sets fitToSection
-        */
-        function setFitToSection(value, type){
-            setVariableState('fitToSection', value, type);
-        }
-
-        /**
-        * Sets lockAnchors
-        */
-        function setLockAnchors(value){
-            options.lockAnchors = value;
-        }
-
-        /**
-        * Adds or remove the possibility of scrolling through sections by using the mouse wheel or the trackpad.
-        */
-        function setMouseWheelScrolling(value){
-            if(value){
-                addMouseWheelHandler();
-                addMiddleWheelHandler();
-            }else{
-                removeMouseWheelHandler();
-                removeMiddleWheelHandler();
-            }
-        }
-
-        /**
-        * Adds or remove the possibility of scrolling through sections by using the mouse wheel/trackpad or touch gestures.
-        * Optionally a second parameter can be used to specify the direction for which the action will be applied.
-        *
-        * @param directions string containing the direction or directions separated by comma.
-        */
-        function setAllowScrolling(value, directions){
-            if(typeof directions !== 'undefined'){
-                directions = directions.replace(/ /g,'').split(',');
-
-                $.each(directions, function (index, direction){
-                    setIsScrollAllowed(value, direction, 'm');
-                });
-            }
-            else{
-                setIsScrollAllowed(value, 'all', 'm');
-
-                if(value){
-                    setMouseWheelScrolling(true);
-                    addTouchHandler();
-                }else{
-                    setMouseWheelScrolling(false);
-                    removeTouchHandler();
-                }
-            }
-        }
-
-        /**
-        * Adds or remove the possibility of scrolling through sections by using the keyboard arrow keys
-        */
-        function setKeyboardScrolling(value, directions){
-            if(typeof directions !== 'undefined'){
-                directions = directions.replace(/ /g,'').split(',');
-
-                $.each(directions, function (index, direction){
-                    setIsScrollAllowed(value, direction, 'k');
-                });
-            }else{
-                setIsScrollAllowed(value, 'all', 'k');
-                options.keyboardScrolling = value;
-            }
-        }
-
-        /**
-        * Moves the page up one section.
-        */
-        function moveSectionUp(){
-            var prev = $(SECTION_ACTIVE_SEL).prev(SECTION_SEL);
-
-            //looping to the bottom if there's no more sections above
-            if (!prev.length && (options.loopTop || options.continuousVertical)) {
-                prev = $(SECTION_SEL).last();
-            }
-
-            if (prev.length) {
-                scrollPage(prev, null, true);
-            }
-        }
-
-        /**
-        * Moves the page down one section.
-        */
-        function moveSectionDown(){
-            var next = $(SECTION_ACTIVE_SEL).next(SECTION_SEL);
-
-            //looping to the top if there's no more sections below
-            if(!next.length &&
-                (options.loopBottom || options.continuousVertical)){
-                next = $(SECTION_SEL).first();
-            }
-
-            if(next.length){
-                scrollPage(next, null, false);
-            }
-        }
-
-        /**
-        * Moves the page to the given section and slide with no animation.
-        * Anchors or index positions can be used as params.
-        */
-        function silentMoveTo(sectionAnchor, slideAnchor){
-            setScrollingSpeed (0, 'internal');
-            moveTo(sectionAnchor, slideAnchor);
-            setScrollingSpeed (originals.scrollingSpeed, 'internal');
-        }
-
-        /**
-        * Moves the page to the given section and slide.
-        * Anchors or index positions can be used as params.
-        */
-        function moveTo(sectionAnchor, slideAnchor){
-            var destiny = getSectionByAnchor(sectionAnchor);
-
-            if (typeof slideAnchor !== 'undefined'){
-                scrollPageAndSlide(sectionAnchor, slideAnchor);
-            }else if(destiny.length > 0){
-                scrollPage(destiny);
-            }
-        }
-
-        /**
-        * Slides right the slider of the active section.
-        * Optional `section` param.
-        */
-        function moveSlideRight(section){
-            moveSlide('right', section);
-        }
-
-        /**
-        * Slides left the slider of the active section.
-        * Optional `section` param.
-        */
-        function moveSlideLeft(section){
-            moveSlide('left', section);
-        }
-
-        /**
-         * When resizing is finished, we adjust the slides sizes and positions
-         */
-        function reBuild(resizing){
-            if(container.hasClass(DESTROYED)){ return; }  //nothing to do if the plugin was destroyed
-
-            isResizing = true;
-
-            windowsHeight = $window.height();  //updating global var
-
-            $(SECTION_SEL).each(function(){
-                var slidesWrap = $(this).find(SLIDES_WRAPPER_SEL);
-                var slides = $(this).find(SLIDE_SEL);
-
-                //adjusting the height of the table-cell for IE and Firefox
-                if(options.verticalCentered){
-                    $(this).find(TABLE_CELL_SEL).css('height', getTableHeight($(this)) + 'px');
-                }
-
-                $(this).css('height', windowsHeight + 'px');
-
-                //adjusting the position fo the FULL WIDTH slides...
-                if (slides.length > 1) {
-                    landscapeScroll(slidesWrap, slidesWrap.find(SLIDE_ACTIVE_SEL));
-                }
-            });
-
-            if(options.scrollOverflow){
-                scrollBarHandler.createScrollBarForAll();
-            }
-
-            var activeSection = $(SECTION_ACTIVE_SEL);
-            var sectionIndex = activeSection.index(SECTION_SEL);
-
-            //isn't it the first section?
-            if(sectionIndex){
-                //adjusting the position for the current section
-                silentMoveTo(sectionIndex + 1);
-            }
-
-            isResizing = false;
-            $.isFunction( options.afterResize ) && resizing && options.afterResize.call(container);
-            $.isFunction( options.afterReBuild ) && !resizing && options.afterReBuild.call(container);
-        }
-
-        /**
-        * Turns fullPage.js to normal scrolling mode when the viewport `width` or `height`
-        * are smaller than the set limit values.
-        */
-        function setResponsive(active){
-            var isResponsive = $body.hasClass(RESPONSIVE);
-
-            if(active){
-                if(!isResponsive){
-                    setAutoScrolling(false, 'internal');
-                    setFitToSection(false, 'internal');
-                    $(SECTION_NAV_SEL).hide();
-                    $body.addClass(RESPONSIVE);
-                    $.isFunction( options.afterResponsive ) && options.afterResponsive.call( container, active);
-                }
-            }
-            else if(isResponsive){
-                setAutoScrolling(originals.autoScrolling, 'internal');
-                setFitToSection(originals.autoScrolling, 'internal');
-                $(SECTION_NAV_SEL).show();
-                $body.removeClass(RESPONSIVE);
-                $.isFunction( options.afterResponsive ) && options.afterResponsive.call( container, active);
-            }
-        }
-
-        if($(this).length){
-            //public functions
-            FP.version = '2.9.5';
-            FP.setAutoScrolling = setAutoScrolling;
-            FP.setRecordHistory = setRecordHistory;
-            FP.setScrollingSpeed = setScrollingSpeed;
-            FP.setFitToSection = setFitToSection;
-            FP.setLockAnchors = setLockAnchors;
-            FP.setMouseWheelScrolling = setMouseWheelScrolling;
-            FP.setAllowScrolling = setAllowScrolling;
-            FP.setKeyboardScrolling = setKeyboardScrolling;
-            FP.moveSectionUp = moveSectionUp;
-            FP.moveSectionDown = moveSectionDown;
-            FP.silentMoveTo = silentMoveTo;
-            FP.moveTo = moveTo;
-            FP.moveSlideRight = moveSlideRight;
-            FP.moveSlideLeft = moveSlideLeft;
-            FP.fitToSection = fitToSection;
-            FP.reBuild = reBuild;
-            FP.setResponsive = setResponsive;
-            FP.destroy = destroy;
-
-            //functions we want to share across files but which are not
-            //mean to be used on their own by developers
-            FP.shared ={
-                afterRenderActions: afterRenderActions
-            };
-
-            init();
-
-            bindEvents();
-        }
-
-        function init(){
-            //if css3 is not supported, it will use jQuery animations
-            if(options.css3){
-                options.css3 = support3d();
-            }
-
-            options.scrollBar = options.scrollBar || options.hybrid;
-
-            setOptionsFromDOM();
-            prepareDom();
-            setAllowScrolling(true);
-            setAutoScrolling(options.autoScrolling, 'internal');
-            responsive();
-
-            //setting the class for the body element
-            setBodyClass();
-
-            if(document.readyState === 'complete'){
-                scrollToAnchor();
-            }
-            $window.on('load', scrollToAnchor);
-        }
-
-        function bindEvents(){
-            $window
-                //when scrolling...
-                .on('scroll', scrollHandler)
-
-                //detecting any change on the URL to scroll to the given anchor link
-                //(a way to detect back history button as we play with the hashes on the URL)
-                .on('hashchange', hashChangeHandler)
-
-                //when opening a new tab (ctrl + t), `control` won't be pressed when coming back.
-                .blur(blurHandler)
-
-                //when resizing the site, we adjust the heights of the sections, slimScroll...
-                .resize(resizeHandler);
-
-            $document
-                //Sliding with arrow keys, both, vertical and horizontal
-                .keydown(keydownHandler)
-
-                //to prevent scrolling while zooming
-                .keyup(keyUpHandler)
-
-                //Scrolls to the section when clicking the navigation bullet
-                .on('click touchstart', SECTION_NAV_SEL + ' a', sectionBulletHandler)
-
-                //Scrolls the slider to the given slide destination for the given section
-                .on('click touchstart', SLIDES_NAV_LINK_SEL, slideBulletHandler)
-
-                .on('click', SECTION_NAV_TOOLTIP_SEL, tooltipTextHandler);
-
-            //Scrolling horizontally when clicking on the slider controls.
-            $(SECTION_SEL).on('click touchstart', SLIDES_ARROW_SEL, slideArrowHandler);
-
-            /**
-            * Applying normalScroll elements.
-            * Ignoring the scrolls over the specified selectors.
-            */
-            if(options.normalScrollElements){
-                $document.on('mouseenter touchstart', options.normalScrollElements, function () {
-                    setAllowScrolling(false);
-                });
-
-                $document.on('mouseleave touchend', options.normalScrollElements, function(){
-                    setAllowScrolling(true);
-                });
-            }
-        }
-
-        /**
-        * Setting options from DOM elements if they are not provided.
-        */
-        function setOptionsFromDOM(){
-            var sections = container.find(options.sectionSelector);
-
-            //no anchors option? Checking for them in the DOM attributes
-            if(!options.anchors.length){
-                options.anchors = sections.filter('[data-anchor]').map(function(){
-                    return $(this).data('anchor').toString();
-                }).get();
-            }
-
-            //no tooltips option? Checking for them in the DOM attributes
-            if(!options.navigationTooltips.length){
-                options.navigationTooltips = sections.filter('[data-tooltip]').map(function(){
-                    return $(this).data('tooltip').toString();
-                }).get();
-            }
-        }
-
-        /**
-        * Works over the DOM structure to set it up for the current fullpage options.
-        */
-        function prepareDom(){
-            container.css({
-                'height': '100%',
-                'position': 'relative'
-            });
-
-            //adding a class to recognize the container internally in the code
-            container.addClass(WRAPPER);
-            $('html').addClass(ENABLED);
-
-            //due to https://github.com/alvarotrigo/fullPage.js/issues/1502
-            windowsHeight = $window.height();
-
-            container.removeClass(DESTROYED); //in case it was destroyed before initializing it again
-
-            addInternalSelectors();
-
-            //styling the sections / slides / menu
-            $(SECTION_SEL).each(function(index){
-                var section = $(this);
-                var slides = section.find(SLIDE_SEL);
-                var numSlides = slides.length;
-
-                //caching the original styles to add them back on destroy('all')
-                section.data('fp-styles', section.attr('style'));
-
-                styleSection(section, index);
-                styleMenu(section, index);
-
-                // if there's any slide
-                if (numSlides > 0) {
-                    styleSlides(section, slides, numSlides);
-                }else{
-                    if(options.verticalCentered){
-                        addTableClass(section);
-                    }
-                }
-            });
-
-            //fixed elements need to be moved out of the plugin container due to problems with CSS3.
-            if(options.fixedElements && options.css3){
-                $(options.fixedElements).appendTo($body);
-            }
-
-            //vertical centered of the navigation + active bullet
-            if(options.navigation){
-                addVerticalNavigation();
-            }
-
-            enableYoutubeAPI();
-
-            if(options.scrollOverflow){
-                scrollBarHandler = options.scrollOverflowHandler.init(options);
-            }else{
-                afterRenderActions();
-            }
-        }
-
-        /**
-        * Styles the horizontal slides for a section.
-        */
-        function styleSlides(section, slides, numSlides){
-            var sliderWidth = numSlides * 100;
-            var slideWidth = 100 / numSlides;
-
-            slides.wrapAll('<div class="' + SLIDES_CONTAINER + '" />');
-            slides.parent().wrap('<div class="' + SLIDES_WRAPPER + '" />');
-
-            section.find(SLIDES_CONTAINER_SEL).css('width', sliderWidth + '%');
-
-            if(numSlides > 1){
-                if(options.controlArrows){
-                    createSlideArrows(section);
-                }
-
-                if(options.slidesNavigation){
-                    addSlidesNavigation(section, numSlides);
-                }
-            }
-
-            slides.each(function(index) {
-                $(this).css('width', slideWidth + '%');
-
-                if(options.verticalCentered){
-                    addTableClass($(this));
-                }
-            });
-
-            var startingSlide = section.find(SLIDE_ACTIVE_SEL);
-
-            //if the slide won't be an starting point, the default will be the first one
-            //the active section isn't the first one? Is not the first slide of the first section? Then we load that section/slide by default.
-            if( startingSlide.length &&  ($(SECTION_ACTIVE_SEL).index(SECTION_SEL) !== 0 || ($(SECTION_ACTIVE_SEL).index(SECTION_SEL) === 0 && startingSlide.index() !== 0))){
-                silentLandscapeScroll(startingSlide, 'internal');
-            }else{
-                slides.eq(0).addClass(ACTIVE);
-            }
-        }
-
-        /**
-        * Styling vertical sections
-        */
-        function styleSection(section, index){
-            //if no active section is defined, the 1st one will be the default one
-            if(!index && $(SECTION_ACTIVE_SEL).length === 0) {
-                section.addClass(ACTIVE);
-            }
-            startingSection = $(SECTION_ACTIVE_SEL);
-
-            section.css('height', windowsHeight + 'px');
-
-            if(options.paddingTop){
-                section.css('padding-top', options.paddingTop);
-            }
-
-            if(options.paddingBottom){
-                section.css('padding-bottom', options.paddingBottom);
-            }
-
-            if (typeof options.sectionsColor[index] !==  'undefined') {
-                section.css('background-color', options.sectionsColor[index]);
-            }
-
-            if (typeof options.anchors[index] !== 'undefined') {
-                section.attr('data-anchor', options.anchors[index]);
-            }
-        }
-
-        /**
-        * Sets the data-anchor attributes to the menu elements and activates the current one.
-        */
-        function styleMenu(section, index){
-            if (typeof options.anchors[index] !== 'undefined') {
-                //activating the menu / nav element on load
-                if(section.hasClass(ACTIVE)){
-                    activateMenuAndNav(options.anchors[index], index);
-                }
-            }
-
-            //moving the menu outside the main container if it is inside (avoid problems with fixed positions when using CSS3 tranforms)
-            if(options.menu && options.css3 && $(options.menu).closest(WRAPPER_SEL).length){
-                $(options.menu).appendTo($body);
-            }
-        }
-
-        /**
-        * Adds internal classes to be able to provide customizable selectors
-        * keeping the link with the style sheet.
-        */
-        function addInternalSelectors(){
-            container.find(options.sectionSelector).addClass(SECTION);
-            container.find(options.slideSelector).addClass(SLIDE);
-        }
-
-        /**
-        * Creates the control arrows for the given section
-        */
-        function createSlideArrows(section){
-            section.find(SLIDES_WRAPPER_SEL).after('<div class="' + SLIDES_ARROW_PREV + '"></div><div class="' + SLIDES_ARROW_NEXT + '"></div>');
-
-            if(options.controlArrowColor!='#fff'){
-                section.find(SLIDES_ARROW_NEXT_SEL).css('border-color', 'transparent transparent transparent '+options.controlArrowColor);
-                section.find(SLIDES_ARROW_PREV_SEL).css('border-color', 'transparent '+ options.controlArrowColor + ' transparent transparent');
-            }
-
-            if(!options.loopHorizontal){
-                section.find(SLIDES_ARROW_PREV_SEL).hide();
-            }
-        }
-
-        /**
-        * Creates a vertical navigation bar.
-        */
-        function addVerticalNavigation(){
-            $body.append('<div id="' + SECTION_NAV + '"><ul></ul></div>');
-            var nav = $(SECTION_NAV_SEL);
-
-            nav.addClass(function() {
-                return options.showActiveTooltip ? SHOW_ACTIVE_TOOLTIP + ' ' + options.navigationPosition : options.navigationPosition;
-            });
-
-            for (var i = 0; i < $(SECTION_SEL).length; i++) {
-                var link = '';
-                if (options.anchors.length) {
-                    link = options.anchors[i];
-                }
-
-                var li = '<li><a href="#' + link + '"><span></span></a>';
-
-                // Only add tooltip if needed (defined by user)
-                var tooltip = options.navigationTooltips[i];
-
-                if (typeof tooltip !== 'undefined' && tooltip !== '') {
-                    li += '<div class="' + SECTION_NAV_TOOLTIP + ' ' + options.navigationPosition + '">' + tooltip + '</div>';
-                }
-
-                li += '</li>';
-
-                nav.find('ul').append(li);
-            }
-
-            //centering it vertically
-            $(SECTION_NAV_SEL).css('margin-top', '-' + ($(SECTION_NAV_SEL).height()/2) + 'px');
-
-            //activating the current active section
-            $(SECTION_NAV_SEL).find('li').eq($(SECTION_ACTIVE_SEL).index(SECTION_SEL)).find('a').addClass(ACTIVE);
-        }
-
-        /*
-        * Enables the Youtube videos API so we can control their flow if necessary.
-        */
-        function enableYoutubeAPI(){
-            container.find('iframe[src*="youtube.com/embed/"]').each(function(){
-                addURLParam($(this), 'enablejsapi=1');
-            });
-        }
-
-        /**
-        * Adds a new parameter and its value to the `src` of a given element
-        */
-        function addURLParam(element, newParam){
-            var originalSrc = element.attr('src');
-            element.attr('src', originalSrc + getUrlParamSign(originalSrc) + newParam);
-        }
-
-        /*
-        * Returns the prefix sign to use for a new parameter in an existen URL.
-        *
-        * @return {String}  ? | &
-        */
-        function getUrlParamSign(url){
-            return ( !/\?/.test( url ) ) ? '?' : '&';
-        }
-
-        /**
-        * Actions and callbacks to fire afterRender
-        */
-        function afterRenderActions(){
-            var section = $(SECTION_ACTIVE_SEL);
-
-            section.addClass(COMPLETELY);
-
-            lazyLoad(section);
-            playMedia(section);
-
-            if(options.scrollOverflow){
-                options.scrollOverflowHandler.afterLoad();
-            }
-
-            if(isDestinyTheStartingSection()){
-                $.isFunction( options.afterLoad ) && options.afterLoad.call(section, section.data('anchor'), (section.index(SECTION_SEL) + 1));
-            }
-
-            $.isFunction( options.afterRender ) && options.afterRender.call(container);
-        }
-
-        /**
-        * Determines if the URL anchor destiny is the starting section (the one using 'active' class before initialization)
-        */
-        function isDestinyTheStartingSection(){
-            var destinationSection = getSectionByAnchor(getAnchorsURL().section);
-            return !destinationSection || destinationSection.length && destinationSection.index() === startingSection.index();
-        }
-
-
-        var isScrolling = false;
-        var lastScroll = 0;
-
-        //when scrolling...
-        function scrollHandler(){
-            var currentSection;
-
-            if(!options.autoScrolling || options.scrollBar){
-                var currentScroll = $window.scrollTop();
-                var scrollDirection = getScrollDirection(currentScroll);
-                var visibleSectionIndex = 0;
-                var screen_mid = currentScroll + ($window.height() / 2.0);
-                var isAtBottom = $body.height() - $window.height() === currentScroll;
-                var sections =  document.querySelectorAll(SECTION_SEL);
-
-                //when using `auto-height` for a small last section it won't be centered in the viewport
-                if(isAtBottom){
-                    visibleSectionIndex = sections.length - 1;
-                }
-                //is at top? when using `auto-height` for a small first section it won't be centered in the viewport
-                else if(!currentScroll){
-                    visibleSectionIndex = 0;
-                }
-
-                //taking the section which is showing more content in the viewport
-                else{
-                    for (var i = 0; i < sections.length; ++i) {
-                        var section = sections[i];
-
-                        // Pick the the last section which passes the middle line of the screen.
-                        if (section.offsetTop <= screen_mid)
-                        {
-                            visibleSectionIndex = i;
-                        }
-                    }
-                }
-
-                if(isCompletelyInViewPort(scrollDirection)){
-                    if(!$(SECTION_ACTIVE_SEL).hasClass(COMPLETELY)){
-                        $(SECTION_ACTIVE_SEL).addClass(COMPLETELY).siblings().removeClass(COMPLETELY);
-                    }
-                }
-
-                //geting the last one, the current one on the screen
-                currentSection = $(sections).eq(visibleSectionIndex);
-
-                //setting the visible section as active when manually scrolling
-                //executing only once the first time we reach the section
-                if(!currentSection.hasClass(ACTIVE)){
-                    isScrolling = true;
-                    var leavingSection = $(SECTION_ACTIVE_SEL);
-                    var leavingSectionIndex = leavingSection.index(SECTION_SEL) + 1;
-                    var yMovement = getYmovement(currentSection);
-                    var anchorLink  = currentSection.data('anchor');
-                    var sectionIndex = currentSection.index(SECTION_SEL) + 1;
-                    var activeSlide = currentSection.find(SLIDE_ACTIVE_SEL);
-                    var slideIndex;
-                    var slideAnchorLink;
-
-                    if(activeSlide.length){
-                        slideAnchorLink = activeSlide.data('anchor');
-                        slideIndex = activeSlide.index();
-                    }
-
-                    if(canScroll){
-                        currentSection.addClass(ACTIVE).siblings().removeClass(ACTIVE);
-
-                        $.isFunction( options.onLeave ) && options.onLeave.call( leavingSection, leavingSectionIndex, sectionIndex, yMovement);
-                        $.isFunction( options.afterLoad ) && options.afterLoad.call( currentSection, anchorLink, sectionIndex);
-
-                        stopMedia(leavingSection);
-                        lazyLoad(currentSection);
-                        playMedia(currentSection);
-
-                        activateMenuAndNav(anchorLink, sectionIndex - 1);
-
-                        if(options.anchors.length){
-                            //needed to enter in hashChange event when using the menu with anchor links
-                            lastScrolledDestiny = anchorLink;
-                        }
-                        setState(slideIndex, slideAnchorLink, anchorLink, sectionIndex);
-                    }
-
-                    //small timeout in order to avoid entering in hashChange event when scrolling is not finished yet
-                    clearTimeout(scrollId);
-                    scrollId = setTimeout(function(){
-                        isScrolling = false;
-                    }, 100);
-                }
-
-                if(options.fitToSection){
-                    //for the auto adjust of the viewport to fit a whole section
-                    clearTimeout(scrollId2);
-
-                    scrollId2 = setTimeout(function(){
-                        //checking it again in case it changed during the delay
-                        if(options.fitToSection &&
-
-                            //is the destination element bigger than the viewport?
-                            $(SECTION_ACTIVE_SEL).outerHeight() <= windowsHeight
-                        ){
-                            fitToSection();
-                        }
-                    }, options.fitToSectionDelay);
-                }
-            }
-        }
-
-        /**
-        * Fits the site to the nearest active section
-        */
-        function fitToSection(){
-            //checking fitToSection again in case it was set to false before the timeout delay
-            if(canScroll){
-                //allows to scroll to an active section and
-                //if the section is already active, we prevent firing callbacks
-                isResizing = true;
-
-                scrollPage($(SECTION_ACTIVE_SEL));
-                isResizing = false;
-            }
-        }
-
-        /**
-        * Determines whether the active section has seen in its whole or not.
-        */
-        function isCompletelyInViewPort(movement){
-            var top = $(SECTION_ACTIVE_SEL).position().top;
-            var bottom = top + $window.height();
-
-            if(movement == 'up'){
-                return bottom >= ($window.scrollTop() + $window.height());
-            }
-            return top <= $window.scrollTop();
-        }
-
-        /**
-        * Gets the directon of the the scrolling fired by the scroll event.
-        */
-        function getScrollDirection(currentScroll){
-            var direction = currentScroll > lastScroll ? 'down' : 'up';
-
-            lastScroll = currentScroll;
-
-            //needed for auto-height sections to determine if we want to scroll to the top or bottom of the destination
-            previousDestTop = currentScroll;
-
-            return direction;
-        }
-
-        /**
-        * Determines the way of scrolling up or down:
-        * by 'automatically' scrolling a section or by using the default and normal scrolling.
-        */
-        function scrolling(type){
-            if (!isScrollAllowed.m[type]){
-                return;
-            }
-
-            var scrollSection = (type === 'down') ? moveSectionDown : moveSectionUp;
-
-            if(options.scrollOverflow){
-                var scrollable = options.scrollOverflowHandler.scrollable($(SECTION_ACTIVE_SEL));
-                var check = (type === 'down') ? 'bottom' : 'top';
-
-                if(scrollable.length > 0 ){
-                    //is the scrollbar at the start/end of the scroll?
-                    if(options.scrollOverflowHandler.isScrolled(check, scrollable)){
-                        scrollSection();
-                    }else{
-                        return true;
-                    }
-                }else{
-                    // moved up/down
-                    scrollSection();
-                }
-            }else{
-                // moved up/down
-                scrollSection();
-            }
-        }
-
-        /*
-        * Preventing bouncing in iOS #2285
-        */
-        function preventBouncing(event){
-            var e = event.originalEvent;
-            if(options.autoScrolling && isReallyTouch(e)){
-                //preventing the easing on iOS devices
-                event.preventDefault();
-            }
-        }
-
-        var touchStartY = 0;
-        var touchStartX = 0;
-        var touchEndY = 0;
-        var touchEndX = 0;
-
-        /* Detecting touch events
-
-        * As we are changing the top property of the page on scrolling, we can not use the traditional way to detect it.
-        * This way, the touchstart and the touch moves shows an small difference between them which is the
-        * used one to determine the direction.
-        */
-        function touchMoveHandler(event){
-            var e = event.originalEvent;
-            var activeSection = $(e.target).closest(SECTION_SEL);
-
-            // additional: if one of the normalScrollElements isn't within options.normalScrollElementTouchThreshold hops up the DOM chain
-            if (isReallyTouch(e) ) {
-
-                if(options.autoScrolling){
-                    //preventing the easing on iOS devices
-                    event.preventDefault();
-                }
-
-                var touchEvents = getEventsPage(e);
-
-                touchEndY = touchEvents.y;
-                touchEndX = touchEvents.x;
-
-                //if movement in the X axys is greater than in the Y and the currect section has slides...
-                if (activeSection.find(SLIDES_WRAPPER_SEL).length && Math.abs(touchStartX - touchEndX) > (Math.abs(touchStartY - touchEndY))) {
-
-                    //is the movement greater than the minimum resistance to scroll?
-                    if (!slideMoving && Math.abs(touchStartX - touchEndX) > ($window.outerWidth() / 100 * options.touchSensitivity)) {
-                        if (touchStartX > touchEndX) {
-                            if(isScrollAllowed.m.right){
-                                moveSlideRight(activeSection); //next
-                            }
-                        } else {
-                            if(isScrollAllowed.m.left){
-                                moveSlideLeft(activeSection); //prev
-                            }
-                        }
-                    }
-                }
-
-                //vertical scrolling (only when autoScrolling is enabled)
-                else if(options.autoScrolling && canScroll){
-
-                    //is the movement greater than the minimum resistance to scroll?
-                    if (Math.abs(touchStartY - touchEndY) > ($window.height() / 100 * options.touchSensitivity)) {
-                        if (touchStartY > touchEndY) {
-                            scrolling('down');
-                        } else if (touchEndY > touchStartY) {
-                            scrolling('up');
-                        }
-                    }
-                }
-            }
-        }
-
-        /**
-        * As IE >= 10 fires both touch and mouse events when using a mouse in a touchscreen
-        * this way we make sure that is really a touch event what IE is detecting.
-        */
-        function isReallyTouch(e){
-            //if is not IE   ||  IE is detecting `touch` or `pen`
-            return typeof e.pointerType === 'undefined' || e.pointerType != 'mouse';
-        }
-
-        /**
-        * Handler for the touch start event.
-        */
-        function touchStartHandler(event){
-            var e = event.originalEvent;
-
-            //stopping the auto scroll to adjust to a section
-            if(options.fitToSection){
-                $htmlBody.stop();
-            }
-
-            if(isReallyTouch(e)){
-                var touchEvents = getEventsPage(e);
-                touchStartY = touchEvents.y;
-                touchStartX = touchEvents.x;
-            }
-        }
-
-        /**
-        * Gets the average of the last `number` elements of the given array.
-        */
-        function getAverage(elements, number){
-            var sum = 0;
-
-            //taking `number` elements from the end to make the average, if there are not enought, 1
-            var lastElements = elements.slice(Math.max(elements.length - number, 1));
-
-            for(var i = 0; i < lastElements.length; i++){
-                sum = sum + lastElements[i];
-            }
-
-            return Math.ceil(sum/number);
-        }
-
-        /**
-         * Detecting mousewheel scrolling
-         *
-         * http://blogs.sitepointstatic.com/examples/tech/mouse-wheel/index.html
-         * http://www.sitepoint.com/html5-javascript-mouse-wheel/
-         */
-        var prevTime = new Date().getTime();
-
-        function MouseWheelHandler(e) {
-            var curTime = new Date().getTime();
-            var isNormalScroll = $(COMPLETELY_SEL).hasClass(NORMAL_SCROLL);
-
-            //autoscrolling and not zooming?
-            if(options.autoScrolling && !controlPressed && !isNormalScroll){
-                // cross-browser wheel delta
-                e = e || window.event;
-                var value = e.wheelDelta || -e.deltaY || -e.detail;
-                var delta = Math.max(-1, Math.min(1, value));
-
-                var horizontalDetection = typeof e.wheelDeltaX !== 'undefined' || typeof e.deltaX !== 'undefined';
-                var isScrollingVertically = (Math.abs(e.wheelDeltaX) < Math.abs(e.wheelDelta)) || (Math.abs(e.deltaX ) < Math.abs(e.deltaY) || !horizontalDetection);
-
-                //Limiting the array to 150 (lets not waste memory!)
-                if(scrollings.length > 149){
-                    scrollings.shift();
-                }
-
-                //keeping record of the previous scrollings
-                scrollings.push(Math.abs(value));
-
-                //preventing to scroll the site on mouse wheel when scrollbar is present
-                if(options.scrollBar){
-                    e.preventDefault ? e.preventDefault() : e.returnValue = false;
-                }
-
-                //time difference between the last scroll and the current one
-                var timeDiff = curTime-prevTime;
-                prevTime = curTime;
-
-                //haven't they scrolled in a while?
-                //(enough to be consider a different scrolling action to scroll another section)
-                if(timeDiff > 200){
-                    //emptying the array, we dont care about old scrollings for our averages
-                    scrollings = [];
-                }
-
-                if(canScroll){
-                    var averageEnd = getAverage(scrollings, 10);
-                    var averageMiddle = getAverage(scrollings, 70);
-                    var isAccelerating = averageEnd >= averageMiddle;
-
-                    //to avoid double swipes...
-                    if(isAccelerating && isScrollingVertically){
-                        //scrolling down?
-                        if (delta < 0) {
-                            scrolling('down');
-
-                        //scrolling up?
-                        }else {
-                            scrolling('up');
-                        }
-                    }
-                }
-
-                return false;
-            }
-
-            if(options.fitToSection){
-                //stopping the auto scroll to adjust to a section
-                $htmlBody.stop();
-            }
-        }
-
-        /**
-        * Slides a slider to the given direction.
-        * Optional `section` param.
-        */
-        function moveSlide(direction, section){
-            var activeSection = typeof section === 'undefined' ? $(SECTION_ACTIVE_SEL) : section;
-            var slides = activeSection.find(SLIDES_WRAPPER_SEL);
-            var numSlides = slides.find(SLIDE_SEL).length;
-
-            // more than one slide needed and nothing should be sliding
-            if (!slides.length || slideMoving || numSlides < 2) {
-                return;
-            }
-
-            var currentSlide = slides.find(SLIDE_ACTIVE_SEL);
-            var destiny = null;
-
-            if(direction === 'left'){
-                destiny = currentSlide.prev(SLIDE_SEL);
-            }else{
-                destiny = currentSlide.next(SLIDE_SEL);
-            }
-
-            //isn't there a next slide in the secuence?
-            if(!destiny.length){
-                //respect loopHorizontal settin
-                if (!options.loopHorizontal) return;
-
-                if(direction === 'left'){
-                    destiny = currentSlide.siblings(':last');
-                }else{
-                    destiny = currentSlide.siblings(':first');
-                }
-            }
-
-            slideMoving = true;
-
-            landscapeScroll(slides, destiny, direction);
-        }
-
-        /**
-        * Maintains the active slides in the viewport
-        * (Because the `scroll` animation might get lost with some actions, such as when using continuousVertical)
-        */
-        function keepSlidesPosition(){
-            $(SLIDE_ACTIVE_SEL).each(function(){
-                silentLandscapeScroll($(this), 'internal');
-            });
-        }
-
-        var previousDestTop = 0;
-        /**
-        * Returns the destination Y position based on the scrolling direction and
-        * the height of the section.
-        */
-        function getDestinationPosition(element){
-            var elemPosition = element.position();
-
-            //top of the desination will be at the top of the viewport
-            var position = elemPosition.top;
-            var isScrollingDown =  elemPosition.top > previousDestTop;
-            var sectionBottom = position - windowsHeight + element.outerHeight();
-            var bigSectionsDestination = options.bigSectionsDestination;
-
-            //is the destination element bigger than the viewport?
-            if(element.outerHeight() > windowsHeight){
-                //scrolling up?
-                if(!isScrollingDown && !bigSectionsDestination || bigSectionsDestination === 'bottom' ){
-                    position = sectionBottom;
-                }
-            }
-
-            //sections equal or smaller than the viewport height && scrolling down? ||  is resizing and its in the last section
-            else if(isScrollingDown || (isResizing && element.is(':last-child')) ){
-                //The bottom of the destination will be at the bottom of the viewport
-                position = sectionBottom;
-            }
-
-            /*
-            Keeping record of the last scrolled position to determine the scrolling direction.
-            No conventional methods can be used as the scroll bar might not be present
-            AND the section might not be active if it is auto-height and didnt reach the middle
-            of the viewport.
-            */
-            previousDestTop = position;
-            return position;
-        }
-
-        /**
-        * Scrolls the site to the given element and scrolls to the slide if a callback is given.
-        */
-        function scrollPage(element, callback, isMovementUp){
-            if(typeof element === 'undefined'){ return; } //there's no element to scroll, leaving the function
-
-            var dtop = getDestinationPosition(element);
-            var slideAnchorLink;
-            var slideIndex;
-
-            //local variables
-            var v = {
-                element: element,
-                callback: callback,
-                isMovementUp: isMovementUp,
-                dtop: dtop,
-                yMovement: getYmovement(element),
-                anchorLink: element.data('anchor'),
-                sectionIndex: element.index(SECTION_SEL),
-                activeSlide: element.find(SLIDE_ACTIVE_SEL),
-                activeSection: $(SECTION_ACTIVE_SEL),
-                leavingSection: $(SECTION_ACTIVE_SEL).index(SECTION_SEL) + 1,
-
-                //caching the value of isResizing at the momment the function is called
-                //because it will be checked later inside a setTimeout and the value might change
-                localIsResizing: isResizing
-            };
-
-            //quiting when destination scroll is the same as the current one
-            if((v.activeSection.is(element) && !isResizing) || (options.scrollBar && $window.scrollTop() === v.dtop && !element.hasClass(AUTO_HEIGHT) )){ return; }
-
-            if(v.activeSlide.length){
-                slideAnchorLink = v.activeSlide.data('anchor');
-                slideIndex = v.activeSlide.index();
-            }
-
-            //callback (onLeave) if the site is not just resizing and readjusting the slides
-            if($.isFunction(options.onLeave) && !v.localIsResizing){
-                if(options.onLeave.call(v.activeSection, v.leavingSection, (v.sectionIndex + 1), v.yMovement) === false){
-                    return;
-                }
-            }
-
-            // If continuousVertical && we need to wrap around
-            if (options.autoScrolling && options.continuousVertical && typeof (v.isMovementUp) !== "undefined" &&
-                ((!v.isMovementUp && v.yMovement == 'up') || // Intending to scroll down but about to go up or
-                (v.isMovementUp && v.yMovement == 'down'))) { // intending to scroll up but about to go down
-
-                v = createInfiniteSections(v);
-            }
-
-            //pausing media of the leaving section (if we are not just resizing, as destinatino will be the same one)
-            if(!v.localIsResizing){
-                stopMedia(v.activeSection);
-            }
-
-            if(options.scrollOverflow){
-                options.scrollOverflowHandler.beforeLeave();
-            }
-
-            element.addClass(ACTIVE).siblings().removeClass(ACTIVE);
-            lazyLoad(element);
-
-            if(options.scrollOverflow){
-                options.scrollOverflowHandler.onLeave();
-            }
-
-            //preventing from activating the MouseWheelHandler event
-            //more than once if the page is scrolling
-            canScroll = false;
-
-            setState(slideIndex, slideAnchorLink, v.anchorLink, v.sectionIndex);
-
-            performMovement(v);
-
-            //flag to avoid callingn `scrollPage()` twice in case of using anchor links
-            lastScrolledDestiny = v.anchorLink;
-
-            //avoid firing it twice (as it does also on scroll)
-            activateMenuAndNav(v.anchorLink, v.sectionIndex);
-        }
-
-        /**
-        * Performs the vertical movement (by CSS3 or by jQuery)
-        */
-        function performMovement(v){
-            // using CSS3 translate functionality
-            if (options.css3 && options.autoScrolling && !options.scrollBar) {
-
-                // The first section can have a negative value in iOS 10. Not quite sure why: -0.0142822265625
-                // that's why we round it to 0.
-                var translate3d = 'translate3d(0px, -' + Math.round(v.dtop) + 'px, 0px)';
-                transformContainer(translate3d, true);
-
-                //even when the scrollingSpeed is 0 there's a little delay, which might cause the
-                //scrollingSpeed to change in case of using silentMoveTo();
-                if(options.scrollingSpeed){
-                    clearTimeout(afterSectionLoadsId);
-                    afterSectionLoadsId = setTimeout(function () {
-                        afterSectionLoads(v);
-                    }, options.scrollingSpeed);
-                }else{
-                    afterSectionLoads(v);
-                }
-            }
-
-            // using jQuery animate
-            else{
-                var scrollSettings = getScrollSettings(v);
-
-                $(scrollSettings.element).animate(
-                    scrollSettings.options,
-                options.scrollingSpeed, options.easing).promise().done(function () { //only one single callback in case of animating  `html, body`
-                    if(options.scrollBar){
-
-                        /* Hack!
-                        The timeout prevents setting the most dominant section in the viewport as "active" when the user
-                        scrolled to a smaller section by using the mousewheel (auto scrolling) rather than draging the scroll bar.
-
-                        When using scrollBar:true It seems like the scroll events still getting propagated even after the scrolling animation has finished.
-                        */
-                        setTimeout(function(){
-                            afterSectionLoads(v);
-                        },30);
-                    }else{
-                        afterSectionLoads(v);
-                    }
-                });
-            }
-        }
-
-        /**
-        * Gets the scrolling settings depending on the plugin autoScrolling option
-        */
-        function getScrollSettings(v){
-            var scroll = {};
-
-            if(options.autoScrolling && !options.scrollBar){
-                scroll.options = { 'top': -v.dtop};
-                scroll.element = WRAPPER_SEL;
-            }else{
-                scroll.options = { 'scrollTop': v.dtop};
-                scroll.element = 'html, body';
-            }
-
-            return scroll;
-        }
-
-        /**
-        * Adds sections before or after the current one to create the infinite effect.
-        */
-        function createInfiniteSections(v){
-            // Scrolling down
-            if (!v.isMovementUp) {
-                // Move all previous sections to after the active section
-                $(SECTION_ACTIVE_SEL).after(v.activeSection.prevAll(SECTION_SEL).get().reverse());
-            }
-            else { // Scrolling up
-                // Move all next sections to before the active section
-                $(SECTION_ACTIVE_SEL).before(v.activeSection.nextAll(SECTION_SEL));
-            }
-
-            // Maintain the displayed position (now that we changed the element order)
-            silentScroll($(SECTION_ACTIVE_SEL).position().top);
-
-            // Maintain the active slides visible in the viewport
-            keepSlidesPosition();
-
-            // save for later the elements that still need to be reordered
-            v.wrapAroundElements = v.activeSection;
-
-            // Recalculate animation variables
-            v.dtop = v.element.position().top;
-            v.yMovement = getYmovement(v.element);
-
-            //sections will temporally have another position in the DOM
-            //updating this values in case we need them
-            v.leavingSection = v.activeSection.index(SECTION_SEL) + 1;
-            v.sectionIndex = v.element.index(SECTION_SEL);
-
-            return v;
-        }
-
-        /**
-        * Fix section order after continuousVertical changes have been animated
-        */
-        function continuousVerticalFixSectionOrder (v) {
-            // If continuousVertical is in effect (and autoScrolling would also be in effect then),
-            // finish moving the elements around so the direct navigation will function more simply
-            if (!v.wrapAroundElements || !v.wrapAroundElements.length) {
-                return;
-            }
-
-            if (v.isMovementUp) {
-                $(SECTION_FIRST_SEL).before(v.wrapAroundElements);
-            }
-            else {
-                $(SECTION_LAST_SEL).after(v.wrapAroundElements);
-            }
-
-            silentScroll($(SECTION_ACTIVE_SEL).position().top);
-
-            // Maintain the active slides visible in the viewport
-            keepSlidesPosition();
-        }
-
-
-        /**
-        * Actions to do once the section is loaded.
-        */
-        function afterSectionLoads (v){
-            continuousVerticalFixSectionOrder(v);
-
-            //callback (afterLoad) if the site is not just resizing and readjusting the slides
-            $.isFunction(options.afterLoad) && !v.localIsResizing && options.afterLoad.call(v.element, v.anchorLink, (v.sectionIndex + 1));
-
-            if(options.scrollOverflow){
-                options.scrollOverflowHandler.afterLoad();
-            }
-
-            if(!v.localIsResizing){
-                playMedia(v.element);
-            }
-
-            v.element.addClass(COMPLETELY).siblings().removeClass(COMPLETELY);
-
-            canScroll = true;
-
-            $.isFunction(v.callback) && v.callback.call(this);
-        }
-
-        /**
-        * Sets the value for the given attribute from the `data-` attribute with the same suffix
-        * ie: data-srcset ==> srcset  |  data-src ==> src
-        */
-        function setSrc(element, attribute){
-            element
-                .attr(attribute, element.data(attribute))
-                .removeAttr('data-' + attribute);
-        }
-
-        /**
-        * Lazy loads image, video and audio elements.
-        */
-        function lazyLoad(destiny){
-            if (!options.lazyLoading){
-                return;
-            }
-
-            var panel = getSlideOrSection(destiny);
-            var element;
-
-            panel.find('img[data-src], img[data-srcset], source[data-src], source[data-srcset], video[data-src], audio[data-src], iframe[data-src]').each(function(){
-                element = $(this);
-
-                $.each(['src', 'srcset'], function(index, type){
-                    var attribute = element.attr('data-' + type);
-                    if(typeof attribute !== 'undefined' && attribute){
-                        setSrc(element, type);
-                    }
-                });
-
-                if(element.is('source')){
-                    var typeToPlay = element.closest('video').length ? 'video' : 'audio';
-                    element.closest(typeToPlay).get(0).load();
-                }
-            });
-        }
-
-        /**
-        * Plays video and audio elements.
-        */
-        function playMedia(destiny){
-            var panel = getSlideOrSection(destiny);
-
-            //playing HTML5 media elements
-            panel.find('video, audio').each(function(){
-                var element = $(this).get(0);
-
-                if( element.hasAttribute('data-autoplay') && typeof element.play === 'function' ) {
-                    element.play();
-                }
-            });
-
-            //youtube videos
-            panel.find('iframe[src*="youtube.com/embed/"]').each(function(){
-                var element = $(this).get(0);
-
-                if ( element.hasAttribute('data-autoplay') ){
-                    playYoutube(element);
-                }
-
-                //in case the URL was not loaded yet. On page load we need time for the new URL (with the API string) to load.
-                element.onload = function() {
-                    if ( element.hasAttribute('data-autoplay') ){
-                        playYoutube(element);
-                    }
-                };
-            });
-        }
-
-        /**
-        * Plays a youtube video
-        */
-        function playYoutube(element){
-            element.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        }
-
-        /**
-        * Stops video and audio elements.
-        */
-        function stopMedia(destiny){
-            var panel = getSlideOrSection(destiny);
-
-            //stopping HTML5 media elements
-            panel.find('video, audio').each(function(){
-                var element = $(this).get(0);
-
-                if( !element.hasAttribute('data-keepplaying') && typeof element.pause === 'function' ) {
-                    element.pause();
-                }
-            });
-
-            //youtube videos
-            panel.find('iframe[src*="youtube.com/embed/"]').each(function(){
-                var element = $(this).get(0);
-
-                if( /youtube\.com\/embed\//.test($(this).attr('src')) && !element.hasAttribute('data-keepplaying')){
-                    $(this).get(0).contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');
-                }
-            });
-        }
-
-        /**
-        * Gets the active slide (or section) for the given section
-        */
-        function getSlideOrSection(destiny){
-            var slide = destiny.find(SLIDE_ACTIVE_SEL);
-            if( slide.length ) {
-                destiny = $(slide);
-            }
-
-            return destiny;
-        }
-
-        /**
-        * Scrolls to the anchor in the URL when loading the site
-        */
-        function scrollToAnchor(){
-            var anchors =  getAnchorsURL();
-            var sectionAnchor = anchors.section;
-            var slideAnchor = anchors.slide;
-
-            if(sectionAnchor){  //if theres any #
-                if(options.animateAnchor){
-                    scrollPageAndSlide(sectionAnchor, slideAnchor);
-                }else{
-                    silentMoveTo(sectionAnchor, slideAnchor);
-                }
-            }
-        }
-
-        /**
-        * Detecting any change on the URL to scroll to the given anchor link
-        * (a way to detect back history button as we play with the hashes on the URL)
-        */
-        function hashChangeHandler(){
-            if(!isScrolling && !options.lockAnchors){
-                var anchors = getAnchorsURL();
-                var sectionAnchor = anchors.section;
-                var slideAnchor = anchors.slide;
-
-                //when moving to a slide in the first section for the first time (first time to add an anchor to the URL)
-                var isFirstSlideMove =  (typeof lastScrolledDestiny === 'undefined');
-                var isFirstScrollMove = (typeof lastScrolledDestiny === 'undefined' && typeof slideAnchor === 'undefined' && !slideMoving);
-
-                if(sectionAnchor.length){
-                    /*in order to call scrollpage() only once for each destination at a time
-                    It is called twice for each scroll otherwise, as in case of using anchorlinks `hashChange`
-                    event is fired on every scroll too.*/
-                    if ((sectionAnchor && sectionAnchor !== lastScrolledDestiny) && !isFirstSlideMove
-                        || isFirstScrollMove
-                        || (!slideMoving && lastScrolledSlide != slideAnchor )){
-
-                        scrollPageAndSlide(sectionAnchor, slideAnchor);
-                    }
-                }
-            }
-        }
-
-        //gets the URL anchors (section and slide)
-        function getAnchorsURL(){
-            var section;
-            var slide;
-            var hash = window.location.hash;
-
-            if(hash.length){
-                //getting the anchor link in the URL and deleting the `#`
-                var anchorsParts =  hash.replace('#', '').split('/');
-
-                //using / for visual reasons and not as a section/slide separator #2803
-                var isFunkyAnchor = hash.indexOf('#/') > -1;
-
-                section = isFunkyAnchor ? '/' + anchorsParts[1] : decodeURIComponent(anchorsParts[0]);
-
-                var slideAnchor = isFunkyAnchor ? anchorsParts[2] : anchorsParts[1];
-                if(slideAnchor && slideAnchor.length){
-                    slide = decodeURIComponent(slideAnchor);
-                }
-            }
-
-            return {
-                section: section,
-                slide: slide
-            }
-        }
-
-        //Sliding with arrow keys, both, vertical and horizontal
-        function keydownHandler(e) {
-            clearTimeout(keydownId);
-
-            var activeElement = $(':focus');
-            var keyCode = e.which;
-
-            //tab?
-            if(keyCode === 9){
-                onTab(e);
-            }
-
-            else if(!activeElement.is('textarea') && !activeElement.is('input') && !activeElement.is('select') &&
-                activeElement.attr('contentEditable') !== "true" && activeElement.attr('contentEditable') !== '' &&
-                options.keyboardScrolling && options.autoScrolling){
-
-                //preventing the scroll with arrow keys & spacebar & Page Up & Down keys
-                var keyControls = [40, 38, 32, 33, 34];
-                if($.inArray(keyCode, keyControls) > -1){
-                    e.preventDefault();
-                }
-
-                controlPressed = e.ctrlKey;
-
-                keydownId = setTimeout(function(){
-                    onkeydown(e);
-                },150);
-            }
-        }
-
-        function tooltipTextHandler(){
-            $(this).prev().trigger('click');
-        }
-
-        //to prevent scrolling while zooming
-        function keyUpHandler(e){
-            if(isWindowFocused){ //the keyup gets fired on new tab ctrl + t in Firefox
-                controlPressed = e.ctrlKey;
-            }
-        }
-
-        //binding the mousemove when the mouse's middle button is released
-        function mouseDownHandler(e){
-            //middle button
-            if (e.which == 2){
-                oldPageY = e.pageY;
-                container.on('mousemove', mouseMoveHandler);
-            }
-        }
-
-        //unbinding the mousemove when the mouse's middle button is released
-        function mouseUpHandler(e){
-            //middle button
-            if (e.which == 2){
-                container.off('mousemove');
-            }
-        }
-
-        //Scrolling horizontally when clicking on the slider controls.
-        function slideArrowHandler(){
-            var section = $(this).closest(SECTION_SEL);
-
-            if ($(this).hasClass(SLIDES_PREV)) {
-                if(isScrollAllowed.m.left){
-                    moveSlideLeft(section);
-                }
-            } else {
-                if(isScrollAllowed.m.right){
-                    moveSlideRight(section);
-                }
-            }
-        }
-
-        //when opening a new tab (ctrl + t), `control` won't be pressed when coming back.
-        function blurHandler(){
-            isWindowFocused = false;
-            controlPressed = false;
-        }
-
-        //Scrolls to the section when clicking the navigation bullet
-        function sectionBulletHandler(e){
-            e.preventDefault();
-            var index = $(this).parent().index();
-            scrollPage($(SECTION_SEL).eq(index));
-        }
-
-        //Scrolls the slider to the given slide destination for the given section
-        function slideBulletHandler(e){
-            e.preventDefault();
-            var slides = $(this).closest(SECTION_SEL).find(SLIDES_WRAPPER_SEL);
-            var destiny = slides.find(SLIDE_SEL).eq($(this).closest('li').index());
-
-            landscapeScroll(slides, destiny);
-        }
-
-        /**
-        * Keydown event
-        */
-        function onkeydown(e){
-            var shiftPressed = e.shiftKey;
-
-            //do nothing if we can not scroll or we are not using horizotnal key arrows.
-            if(!canScroll && [37,39].indexOf(e.which) < 0){
-                return;
-            }
-
-            switch (e.which) {
-                //up
-                case 38:
-                case 33:
-                    if(isScrollAllowed.k.up){
-                        moveSectionUp();
-                    }
-                    break;
-
-                //down
-                case 32: //spacebar
-                    if(shiftPressed && isScrollAllowed.k.up){
-                        moveSectionUp();
-                        break;
-                    }
-                /* falls through */
-                case 40:
-                case 34:
-                    if(isScrollAllowed.k.down){
-                        moveSectionDown();
-                    }
-                    break;
-
-                //Home
-                case 36:
-                    if(isScrollAllowed.k.up){
-                        moveTo(1);
-                    }
-                    break;
-
-                //End
-                case 35:
-                     if(isScrollAllowed.k.down){
-                        moveTo( $(SECTION_SEL).length );
-                    }
-                    break;
-
-                //left
-                case 37:
-                    if(isScrollAllowed.k.left){
-                        moveSlideLeft();
-                    }
-                    break;
-
-                //right
-                case 39:
-                    if(isScrollAllowed.k.right){
-                        moveSlideRight();
-                    }
-                    break;
-
-                default:
-                    return; // exit this handler for other keys
-            }
-        }
-
-        /**
-        * Makes sure the tab key will only focus elements within the current section/slide
-        * preventing this way from breaking the page.
-        * Based on "Modals and keyboard traps"
-        * from https://developers.google.com/web/fundamentals/accessibility/focus/using-tabindex
-        */
-        function onTab(e){
-            var isShiftPressed = e.shiftKey;
-            var activeElement = $(':focus');
-            var activeSection = $(SECTION_ACTIVE_SEL);
-            var activeSlide = activeSection.find(SLIDE_ACTIVE_SEL);
-            var focusableWrapper = activeSlide.length ? activeSlide : activeSection;
-            var focusableElements = focusableWrapper.find(focusableElementsString);
-
-            function preventAndFocusFirst(e){
-                e.preventDefault();
-                return focusableElements.first().focus();
-            }
-
-            //is there an element with focus?
-            if(activeElement.length){
-                if(!activeElement.closest(SECTION_ACTIVE_SEL, SLIDE_ACTIVE_SEL).length){
-                    activeElement = preventAndFocusFirst(e);
-                }
-            }
-
-            //no element if focused? Let's focus the first one of the section/slide
-            else{
-                preventAndFocusFirst(e);
-            }
-
-            //when reached the first or last focusable element of the section/slide
-            //we prevent the tab action to keep it in the last focusable element
-            if(!isShiftPressed && activeElement.is(focusableElements.last()) ||
-                isShiftPressed && activeElement.is(focusableElements.first())
-            ){
-                e.preventDefault();
-            }
-        }
-
-        /**
-        * Detecting the direction of the mouse movement.
-        * Used only for the middle button of the mouse.
-        */
-        var oldPageY = 0;
-        function mouseMoveHandler(e){
-            if(canScroll){
-                // moving up
-                if (e.pageY < oldPageY && isScrollAllowed.m.up){
-                    moveSectionUp();
-                }
-
-                // moving down
-                else if(e.pageY > oldPageY && isScrollAllowed.m.down){
-                    moveSectionDown();
-                }
-            }
-            oldPageY = e.pageY;
-        }
-
-        /**
-        * Scrolls horizontal sliders.
-        */
-        function landscapeScroll(slides, destiny, direction){
-            var section = slides.closest(SECTION_SEL);
-            var v = {
-                slides: slides,
-                destiny: destiny,
-                direction: direction,
-                destinyPos: destiny.position(),
-                slideIndex: destiny.index(),
-                section: section,
-                sectionIndex: section.index(SECTION_SEL),
-                anchorLink: section.data('anchor'),
-                slidesNav: section.find(SLIDES_NAV_SEL),
-                slideAnchor:  getAnchor(destiny),
-                prevSlide: section.find(SLIDE_ACTIVE_SEL),
-                prevSlideIndex: section.find(SLIDE_ACTIVE_SEL).index(),
-
-                //caching the value of isResizing at the momment the function is called
-                //because it will be checked later inside a setTimeout and the value might change
-                localIsResizing: isResizing
-            };
-            v.xMovement = getXmovement(v.prevSlideIndex, v.slideIndex);
-
-            //important!! Only do it when not resizing
-            if(!v.localIsResizing){
-                //preventing from scrolling to the next/prev section when using scrollHorizontally
-                canScroll = false;
-            }
-
-            if(options.onSlideLeave){
-
-                //if the site is not just resizing and readjusting the slides
-                if(!v.localIsResizing && v.xMovement!=='none'){
-                    if($.isFunction( options.onSlideLeave )){
-                        if(options.onSlideLeave.call( v.prevSlide, v.anchorLink, (v.sectionIndex + 1), v.prevSlideIndex, v.direction, v.slideIndex ) === false){
-                            slideMoving = false;
-                            return;
-                        }
-                    }
-                }
-            }
-
-            destiny.addClass(ACTIVE).siblings().removeClass(ACTIVE);
-
-            if(!v.localIsResizing){
-                stopMedia(v.prevSlide);
-                lazyLoad(destiny);
-            }
-
-            if(!options.loopHorizontal && options.controlArrows){
-                //hidding it for the fist slide, showing for the rest
-                section.find(SLIDES_ARROW_PREV_SEL).toggle(v.slideIndex!==0);
-
-                //hidding it for the last slide, showing for the rest
-                section.find(SLIDES_ARROW_NEXT_SEL).toggle(!destiny.is(':last-child'));
-            }
-
-            //only changing the URL if the slides are in the current section (not for resize re-adjusting)
-            if(section.hasClass(ACTIVE) && !v.localIsResizing){
-                setState(v.slideIndex, v.slideAnchor, v.anchorLink, v.sectionIndex);
-            }
-
-            performHorizontalMove(slides, v, true);
-        }
-
-
-        function afterSlideLoads(v){
-            activeSlidesNavigation(v.slidesNav, v.slideIndex);
-
-            //if the site is not just resizing and readjusting the slides
-            if(!v.localIsResizing){
-                $.isFunction( options.afterSlideLoad ) && options.afterSlideLoad.call( v.destiny, v.anchorLink, (v.sectionIndex + 1), v.slideAnchor, v.slideIndex);
-
-                //needs to be inside the condition to prevent problems with continuousVertical and scrollHorizontally
-                //and to prevent double scroll right after a windows resize
-                canScroll = true;
-
-                playMedia(v.destiny);
-            }
-
-            //letting them slide again
-            slideMoving = false;
-        }
-
-        /**
-        * Performs the horizontal movement. (CSS3 or jQuery)
-        *
-        * @param fireCallback {Bool} - determines whether or not to fire the callback
-        */
-        function performHorizontalMove(slides, v, fireCallback){
-            var destinyPos = v.destinyPos;
-
-            if(options.css3){
-                var translate3d = 'translate3d(-' + Math.round(destinyPos.left) + 'px, 0px, 0px)';
-
-                addAnimation(slides.find(SLIDES_CONTAINER_SEL)).css(getTransforms(translate3d));
-
-                afterSlideLoadsId = setTimeout(function(){
-                    fireCallback && afterSlideLoads(v);
-                }, options.scrollingSpeed, options.easing);
-            }else{
-                slides.animate({
-                    scrollLeft : Math.round(destinyPos.left)
-                }, options.scrollingSpeed, options.easing, function() {
-
-                    fireCallback && afterSlideLoads(v);
-                });
-            }
-        }
-
-        /**
-        * Sets the state for the horizontal bullet navigations.
-        */
-        function activeSlidesNavigation(slidesNav, slideIndex){
-            slidesNav.find(ACTIVE_SEL).removeClass(ACTIVE);
-            slidesNav.find('li').eq(slideIndex).find('a').addClass(ACTIVE);
-        }
-
-        var previousHeight = windowsHeight;
-
-        //when resizing the site, we adjust the heights of the sections, slimScroll...
-        function resizeHandler(){
-            //checking if it needs to get responsive
-            responsive();
-
-            // rebuild immediately on touch devices
-            if (isTouchDevice) {
-                var activeElement = $(document.activeElement);
-
-                //if the keyboard is NOT visible
-                if (!activeElement.is('textarea') && !activeElement.is('input') && !activeElement.is('select')) {
-                    var currentHeight = $window.height();
-
-                    //making sure the change in the viewport size is enough to force a rebuild. (20 % of the window to avoid problems when hidding scroll bars)
-                    if( Math.abs(currentHeight - previousHeight) > (20 * Math.max(previousHeight, currentHeight) / 100) ){
-                        reBuild(true);
-                        previousHeight = currentHeight;
-                    }
-                }
-            }else{
-                //in order to call the functions only when the resize is finished
-                //http://stackoverflow.com/questions/4298612/jquery-how-to-call-resize-event-only-once-its-finished-resizing
-                clearTimeout(resizeId);
-
-                resizeId = setTimeout(function(){
-                    reBuild(true);
-                }, 350);
-            }
-        }
-
-        /**
-        * Checks if the site needs to get responsive and disables autoScrolling if so.
-        * A class `fp-responsive` is added to the plugin's container in case the user wants to use it for his own responsive CSS.
-        */
-        function responsive(){
-            var widthLimit = options.responsive || options.responsiveWidth; //backwards compatiblity
-            var heightLimit = options.responsiveHeight;
-
-            //only calculating what we need. Remember its called on the resize event.
-            var isBreakingPointWidth = widthLimit && $window.outerWidth() < widthLimit;
-            var isBreakingPointHeight = heightLimit && $window.height() < heightLimit;
-
-            if(widthLimit && heightLimit){
-                setResponsive(isBreakingPointWidth || isBreakingPointHeight);
-            }
-            else if(widthLimit){
-                setResponsive(isBreakingPointWidth);
-            }
-            else if(heightLimit){
-                setResponsive(isBreakingPointHeight);
-            }
-        }
-
-        /**
-        * Adds transition animations for the given element
-        */
-        function addAnimation(element){
-            var transition = 'all ' + options.scrollingSpeed + 'ms ' + options.easingcss3;
-
-            element.removeClass(NO_TRANSITION);
-            return element.css({
-                '-webkit-transition': transition,
-                'transition': transition
-            });
-        }
-
-        /**
-        * Remove transition animations for the given element
-        */
-        function removeAnimation(element){
-            return element.addClass(NO_TRANSITION);
-        }
-
-        /**
-        * Activating the vertical navigation bullets according to the given slide name.
-        */
-        function activateNavDots(name, sectionIndex){
-            if(options.navigation){
-                $(SECTION_NAV_SEL).find(ACTIVE_SEL).removeClass(ACTIVE);
-                if(name){
-                    $(SECTION_NAV_SEL).find('a[href="#' + name + '"]').addClass(ACTIVE);
-                }else{
-                    $(SECTION_NAV_SEL).find('li').eq(sectionIndex).find('a').addClass(ACTIVE);
-                }
-            }
-        }
-
-        /**
-        * Activating the website main menu elements according to the given slide name.
-        */
-        function activateMenuElement(name){
-            if(options.menu){
-                $(options.menu).find(ACTIVE_SEL).removeClass(ACTIVE);
-                $(options.menu).find('[data-menuanchor="'+name+'"]').addClass(ACTIVE);
-            }
-        }
-
-        /**
-        * Sets to active the current menu and vertical nav items.
-        */
-        function activateMenuAndNav(anchor, index){
-            activateMenuElement(anchor);
-            activateNavDots(anchor, index);
-        }
-
-        /**
-        * Retuns `up` or `down` depending on the scrolling movement to reach its destination
-        * from the current section.
-        */
-        function getYmovement(destiny){
-            var fromIndex = $(SECTION_ACTIVE_SEL).index(SECTION_SEL);
-            var toIndex = destiny.index(SECTION_SEL);
-            if( fromIndex == toIndex){
-                return 'none';
-            }
-            if(fromIndex > toIndex){
-                return 'up';
-            }
-            return 'down';
-        }
-
-        /**
-        * Retuns `right` or `left` depending on the scrolling movement to reach its destination
-        * from the current slide.
-        */
-        function getXmovement(fromIndex, toIndex){
-            if( fromIndex == toIndex){
-                return 'none';
-            }
-            if(fromIndex > toIndex){
-                return 'left';
-            }
-            return 'right';
-        }
-
-        function addTableClass(element){
-            //In case we are styling for the 2nd time as in with reponsiveSlides
-            if(!element.hasClass(TABLE)){
-                element.addClass(TABLE).wrapInner('<div class="' + TABLE_CELL + '" style="height:' + getTableHeight(element) + 'px;" />');
-            }
-        }
-
-        function getTableHeight(element){
-            var sectionHeight = windowsHeight;
-
-            if(options.paddingTop || options.paddingBottom){
-                var section = element;
-                if(!section.hasClass(SECTION)){
-                    section = element.closest(SECTION_SEL);
-                }
-
-                var paddings = parseInt(section.css('padding-top')) + parseInt(section.css('padding-bottom'));
-                sectionHeight = (windowsHeight - paddings);
-            }
-
-            return sectionHeight;
-        }
-
-        /**
-        * Adds a css3 transform property to the container class with or without animation depending on the animated param.
-        */
-        function transformContainer(translate3d, animated){
-            if(animated){
-                addAnimation(container);
-            }else{
-                removeAnimation(container);
-            }
-
-            container.css(getTransforms(translate3d));
-
-            //syncronously removing the class after the animation has been applied.
-            setTimeout(function(){
-                container.removeClass(NO_TRANSITION);
-            },10);
-        }
-
-        /**
-        * Gets a section by its anchor / index
-        */
-        function getSectionByAnchor(sectionAnchor){
-            var section = container.find(SECTION_SEL + '[data-anchor="'+sectionAnchor+'"]');
-            if(!section.length){
-                var sectionIndex = typeof sectionAnchor !== 'undefined' ? sectionAnchor -1 : 0;
-                section = $(SECTION_SEL).eq(sectionIndex);
-            }
-
-            return section;
-        }
-
-        /**
-        * Gets a slide inside a given section by its anchor / index
-        */
-        function getSlideByAnchor(slideAnchor, section){
-            var slide = section.find(SLIDE_SEL + '[data-anchor="'+slideAnchor+'"]');
-            if(!slide.length){
-                slideAnchor = typeof slideAnchor !== 'undefined' ? slideAnchor : 0;
-                slide = section.find(SLIDE_SEL).eq(slideAnchor);
-            }
-
-            return slide;
-        }
-
-        /**
-        * Scrolls to the given section and slide anchors
-        */
-        function scrollPageAndSlide(sectionAnchor, slideAnchor){
-            var section = getSectionByAnchor(sectionAnchor);
-
-            //do nothing if there's no section with the given anchor name
-            if(!section.length) return;
-
-            var slide = getSlideByAnchor(slideAnchor, section);
-
-            //we need to scroll to the section and then to the slide
-            if (sectionAnchor !== lastScrolledDestiny && !section.hasClass(ACTIVE)){
-                scrollPage(section, function(){
-                    scrollSlider(slide);
-                });
-            }
-            //if we were already in the section
-            else{
-                scrollSlider(slide);
-            }
-        }
-
-        /**
-        * Scrolls the slider to the given slide destination for the given section
-        */
-        function scrollSlider(slide){
-            if(slide.length){
-                landscapeScroll(slide.closest(SLIDES_WRAPPER_SEL), slide);
-            }
-        }
-
-        /**
-        * Creates a landscape navigation bar with dots for horizontal sliders.
-        */
-        function addSlidesNavigation(section, numSlides){
-            section.append('<div class="' + SLIDES_NAV + '"><ul></ul></div>');
-            var nav = section.find(SLIDES_NAV_SEL);
-
-            //top or bottom
-            nav.addClass(options.slidesNavPosition);
-
-            for(var i=0; i< numSlides; i++){
-                nav.find('ul').append('<li><a href="#"><span></span></a></li>');
-            }
-
-            //centering it
-            nav.css('margin-left', '-' + (nav.width()/2) + 'px');
-
-            nav.find('li').first().find('a').addClass(ACTIVE);
-        }
-
-
-        /**
-        * Sets the state of the website depending on the active section/slide.
-        * It changes the URL hash when needed and updates the body class.
-        */
-        function setState(slideIndex, slideAnchor, anchorLink, sectionIndex){
-            var sectionHash = '';
-
-            if(options.anchors.length && !options.lockAnchors){
-
-                //isn't it the first slide?
-                if(slideIndex){
-                    if(typeof anchorLink !== 'undefined'){
-                        sectionHash = anchorLink;
-                    }
-
-                    //slide without anchor link? We take the index instead.
-                    if(typeof slideAnchor === 'undefined'){
-                        slideAnchor = slideIndex;
-                    }
-
-                    lastScrolledSlide = slideAnchor;
-                    setUrlHash(sectionHash + '/' + slideAnchor);
-
-                //first slide won't have slide anchor, just the section one
-                }else if(typeof slideIndex !== 'undefined'){
-                    lastScrolledSlide = slideAnchor;
-                    setUrlHash(anchorLink);
-                }
-
-                //section without slides
-                else{
-                    setUrlHash(anchorLink);
-                }
-            }
-
-            setBodyClass();
-        }
-
-        /**
-        * Sets the URL hash.
-        */
-        function setUrlHash(url){
-            if(options.recordHistory){
-                location.hash = url;
-            }else{
-                //Mobile Chrome doesn't work the normal way, so... lets use HTML5 for phones :)
-                if(isTouchDevice || isTouch){
-                    window.history.replaceState(undefined, undefined, '#' + url);
-                }else{
-                    var baseUrl = window.location.href.split('#')[0];
-                    window.location.replace( baseUrl + '#' + url );
-                }
-            }
-        }
-
-        /**
-        * Gets the anchor for the given slide / section. Its index will be used if there's none.
-        */
-        function getAnchor(element){
-            var anchor = element.data('anchor');
-            var index = element.index();
-
-            //Slide without anchor link? We take the index instead.
-            if(typeof anchor === 'undefined'){
-                anchor = index;
-            }
-
-            return anchor;
-        }
-
-        /**
-        * Sets a class for the body of the page depending on the active section / slide
-        */
-        function setBodyClass(){
-            var section = $(SECTION_ACTIVE_SEL);
-            var slide = section.find(SLIDE_ACTIVE_SEL);
-
-            var sectionAnchor = getAnchor(section);
-            var slideAnchor = getAnchor(slide);
-
-            var text = String(sectionAnchor);
-
-            if(slide.length){
-                text = text + '-' + slideAnchor;
-            }
-
-            //changing slash for dash to make it a valid CSS style
-            text = text.replace('/', '-').replace('#','');
-
-            //removing previous anchor classes
-            var classRe = new RegExp('\\b\\s?' + VIEWING_PREFIX + '-[^\\s]+\\b', "g");
-            $body[0].className = $body[0].className.replace(classRe, '');
-
-            //adding the current anchor
-            $body.addClass(VIEWING_PREFIX + '-' + text);
-        }
-
-        /**
-        * Checks for translate3d support
-        * @return boolean
-        * http://stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
-        */
-        function support3d() {
-            var el = document.createElement('p'),
-                has3d,
-                transforms = {
-                    'webkitTransform':'-webkit-transform',
-                    'OTransform':'-o-transform',
-                    'msTransform':'-ms-transform',
-                    'MozTransform':'-moz-transform',
-                    'transform':'transform'
-                };
-
-            // Add it to the body to get the computed style.
-            document.body.insertBefore(el, null);
-
-            for (var t in transforms) {
-                if (el.style[t] !== undefined) {
-                    el.style[t] = 'translate3d(1px,1px,1px)';
-                    has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
-                }
-            }
-
-            document.body.removeChild(el);
-
-            return (has3d !== undefined && has3d.length > 0 && has3d !== 'none');
-        }
-
-        /**
-        * Removes the auto scrolling action fired by the mouse wheel and trackpad.
-        * After this function is called, the mousewheel and trackpad movements won't scroll through sections.
-        */
-        function removeMouseWheelHandler(){
-            if (document.addEventListener) {
-                document.removeEventListener('mousewheel', MouseWheelHandler, false); //IE9, Chrome, Safari, Oper
-                document.removeEventListener('wheel', MouseWheelHandler, false); //Firefox
-                document.removeEventListener('MozMousePixelScroll', MouseWheelHandler, false); //old Firefox
-            } else {
-                document.detachEvent('onmousewheel', MouseWheelHandler); //IE 6/7/8
-            }
-        }
-
-        /**
-        * Adds the auto scrolling action for the mouse wheel and trackpad.
-        * After this function is called, the mousewheel and trackpad movements will scroll through sections
-        * https://developer.mozilla.org/en-US/docs/Web/Events/wheel
-        */
-        function addMouseWheelHandler(){
-            var prefix = '';
-            var _addEventListener;
-
-            if (window.addEventListener){
-                _addEventListener = "addEventListener";
-            }else{
-                _addEventListener = "attachEvent";
-                prefix = 'on';
-            }
-
-             // detect available wheel event
-            var support = 'onwheel' in document.createElement('div') ? 'wheel' : // Modern browsers support "wheel"
-                      document.onmousewheel !== undefined ? 'mousewheel' : // Webkit and IE support at least "mousewheel"
-                      'DOMMouseScroll'; // let's assume that remaining browsers are older Firefox
-
-
-            if(support == 'DOMMouseScroll'){
-                document[ _addEventListener ](prefix + 'MozMousePixelScroll', MouseWheelHandler, false);
-            }
-
-            //handle MozMousePixelScroll in older Firefox
-            else{
-                document[ _addEventListener ](prefix + support, MouseWheelHandler, false);
-            }
-        }
-
-        /**
-        * Binding the mousemove when the mouse's middle button is pressed
-        */
-        function addMiddleWheelHandler(){
-            container
-                .on('mousedown', mouseDownHandler)
-                .on('mouseup', mouseUpHandler);
-        }
-
-        /**
-        * Unbinding the mousemove when the mouse's middle button is released
-        */
-        function removeMiddleWheelHandler(){
-            container
-                .off('mousedown', mouseDownHandler)
-                .off('mouseup', mouseUpHandler);
-        }
-
-        /**
-        * Adds the possibility to auto scroll through sections on touch devices.
-        */
-        function addTouchHandler(){
-            if(isTouchDevice || isTouch){
-                if(options.autoScrolling){
-                    $body.off(events.touchmove).on(events.touchmove, preventBouncing);
-                }
-
-                $(WRAPPER_SEL)
-                    .off(events.touchstart).on(events.touchstart, touchStartHandler)
-                    .off(events.touchmove).on(events.touchmove, touchMoveHandler);
-            }
-        }
-
-        /**
-        * Removes the auto scrolling for touch devices.
-        */
-        function removeTouchHandler(){
-            if(isTouchDevice || isTouch){
-                if(options.autoScrolling){
-                    $body.off(events.touchmove);
-                }
-
-                $(WRAPPER_SEL)
-                    .off(events.touchstart)
-                    .off(events.touchmove);
-            }
-        }
-
-        /*
-        * Returns and object with Microsoft pointers (for IE<11 and for IE >= 11)
-        * http://msdn.microsoft.com/en-us/library/ie/dn304886(v=vs.85).aspx
-        */
-        function getMSPointer(){
-            var pointer;
-
-            //IE >= 11 & rest of browsers
-            if(window.PointerEvent){
-                pointer = { down: 'pointerdown', move: 'pointermove'};
-            }
-
-            //IE < 11
-            else{
-                pointer = { down: 'MSPointerDown', move: 'MSPointerMove'};
-            }
-
-            return pointer;
-        }
-
-        /**
-        * Gets the pageX and pageY properties depending on the browser.
-        * https://github.com/alvarotrigo/fullPage.js/issues/194#issuecomment-34069854
-        */
-        function getEventsPage(e){
-            var events = [];
-
-            events.y = (typeof e.pageY !== 'undefined' && (e.pageY || e.pageX) ? e.pageY : e.touches[0].pageY);
-            events.x = (typeof e.pageX !== 'undefined' && (e.pageY || e.pageX) ? e.pageX : e.touches[0].pageX);
-
-            //in touch devices with scroll bar, e.pageY is detected, but we have to deal with touch events. #1008
-            if(isTouch && isReallyTouch(e) && (options.scrollBar || !options.autoScrolling)){
-                events.y = e.touches[0].pageY;
-                events.x = e.touches[0].pageX;
-            }
-
-            return events;
-        }
-
-        /**
-        * Slides silently (with no animation) the active slider to the given slide.
-        * @param noCallback {bool} true or defined -> no callbacks
-        */
-        function silentLandscapeScroll(activeSlide, noCallbacks){
-            setScrollingSpeed (0, 'internal');
-
-            if(typeof noCallbacks !== 'undefined'){
-                //preventing firing callbacks afterSlideLoad etc.
-                isResizing = true;
-            }
-
-            landscapeScroll(activeSlide.closest(SLIDES_WRAPPER_SEL), activeSlide);
-
-            if(typeof noCallbacks !== 'undefined'){
-                isResizing = false;
-            }
-
-            setScrollingSpeed(originals.scrollingSpeed, 'internal');
-        }
-
-        /**
-        * Scrolls silently (with no animation) the page to the given Y position.
-        */
-        function silentScroll(top){
-            // The first section can have a negative value in iOS 10. Not quite sure why: -0.0142822265625
-            // that's why we round it to 0.
-            var roundedTop = Math.round(top);
-
-            if (options.css3 && options.autoScrolling && !options.scrollBar){
-                var translate3d = 'translate3d(0px, -' + roundedTop + 'px, 0px)';
-                transformContainer(translate3d, false);
-            }
-            else if(options.autoScrolling && !options.scrollBar){
-                container.css('top', -roundedTop);
-            }
-            else{
-                $htmlBody.scrollTop(roundedTop);
-            }
-        }
-
-        /**
-        * Returns the cross-browser transform string.
-        */
-        function getTransforms(translate3d){
-            return {
-                '-webkit-transform': translate3d,
-                '-moz-transform': translate3d,
-                '-ms-transform':translate3d,
-                'transform': translate3d
-            };
-        }
-
-        /**
-        * Allowing or disallowing the mouse/swipe scroll in a given direction. (not for keyboard)
-        * @type  m (mouse) or k (keyboard)
-        */
-        function setIsScrollAllowed(value, direction, type){
-            //up, down, left, right
-            if(direction !== 'all'){
-                isScrollAllowed[type][direction] = value;
-            }
-
-            //all directions?
-            else{
-                $.each(Object.keys(isScrollAllowed[type]), function(index, key){
-                    isScrollAllowed[type][key] = value;
-                });
-            }
-        }
-
-        /*
-        * Destroys fullpage.js plugin events and optinally its html markup and styles
-        */
-        function destroy(all){
-            setAutoScrolling(false, 'internal');
-            setAllowScrolling(false);
-            setKeyboardScrolling(false);
-            container.addClass(DESTROYED);
-
-            clearTimeout(afterSlideLoadsId);
-            clearTimeout(afterSectionLoadsId);
-            clearTimeout(resizeId);
-            clearTimeout(scrollId);
-            clearTimeout(scrollId2);
-
-            $window
-                .off('scroll', scrollHandler)
-                .off('hashchange', hashChangeHandler)
-                .off('resize', resizeHandler);
-
-            $document
-                .off('click touchstart', SECTION_NAV_SEL + ' a')
-                .off('mouseenter', SECTION_NAV_SEL + ' li')
-                .off('mouseleave', SECTION_NAV_SEL + ' li')
-                .off('click touchstart', SLIDES_NAV_LINK_SEL)
-                .off('mouseover', options.normalScrollElements)
-                .off('mouseout', options.normalScrollElements);
-
-            $(SECTION_SEL)
-                .off('click touchstart', SLIDES_ARROW_SEL);
-
-            clearTimeout(afterSlideLoadsId);
-            clearTimeout(afterSectionLoadsId);
-
-            //lets make a mess!
-            if(all){
-                destroyStructure();
-            }
-        }
-
-        /*
-        * Removes inline styles added by fullpage.js
-        */
-        function destroyStructure(){
-            //reseting the `top` or `translate` properties to 0
-            silentScroll(0);
-
-            //loading all the lazy load content
-            container.find('img[data-src], source[data-src], audio[data-src], iframe[data-src]').each(function(){
-                setSrc($(this), 'src');
-            });
-
-            container.find('img[data-srcset]').each(function(){
-                setSrc($(this), 'srcset');
-            });
-
-            $(SECTION_NAV_SEL + ', ' + SLIDES_NAV_SEL +  ', ' + SLIDES_ARROW_SEL).remove();
-
-            //removing inline styles
-            $(SECTION_SEL).css( {
-                'height': '',
-                'background-color' : '',
-                'padding': ''
-            });
-
-            $(SLIDE_SEL).css( {
-                'width': ''
-            });
-
-            container.css({
-                'height': '',
-                'position': '',
-                '-ms-touch-action': '',
-                'touch-action': ''
-            });
-
-            $htmlBody.css({
-                'overflow': '',
-                'height': ''
-            });
-
-            // remove .fp-enabled class
-            $('html').removeClass(ENABLED);
-
-            // remove .fp-responsive class
-            $body.removeClass(RESPONSIVE);
-
-            // remove all of the .fp-viewing- classes
-            $.each($body.get(0).className.split(/\s+/), function (index, className) {
-                if (className.indexOf(VIEWING_PREFIX) === 0) {
-                    $body.removeClass(className);
-                }
-            });
-
-            //removing added classes
-            $(SECTION_SEL + ', ' + SLIDE_SEL).each(function(){
-                if(options.scrollOverflowHandler){
-                    options.scrollOverflowHandler.remove($(this));
-                }
-                $(this).removeClass(TABLE + ' ' + ACTIVE);
-                $(this).attr('style', $(this).data('fp-styles'));
-            });
-
-            removeAnimation(container);
-
-            //Unwrapping content
-            container.find(TABLE_CELL_SEL + ', ' + SLIDES_CONTAINER_SEL + ', ' + SLIDES_WRAPPER_SEL).each(function(){
-                //unwrap not being use in case there's no child element inside and its just text
-                $(this).replaceWith(this.childNodes);
-            });
-
-            //removing the applied transition from the fullpage wrapper
-            container.css({
-                '-webkit-transition': 'none',
-                'transition': 'none'
-            });
-
-            //scrolling the page to the top with no animation
-            $htmlBody.scrollTop(0);
-
-            //removing selectors
-            var usedSelectors = [SECTION, SLIDE, SLIDES_CONTAINER];
-            $.each(usedSelectors, function(index, value){
-                $('.' + value).removeClass(value);
-            });
-        }
-
-        /*
-        * Sets the state for a variable with multiple states (original, and temporal)
-        * Some variables such as `autoScrolling` or `recordHistory` might change automatically its state when using `responsive` or `autoScrolling:false`.
-        * This function is used to keep track of both states, the original and the temporal one.
-        * If type is not 'internal', then we assume the user is globally changing the variable.
-        */
-        function setVariableState(variable, value, type){
-            options[variable] = value;
-            if(type !== 'internal'){
-                originals[variable] = value;
-            }
-        }
-
-        /**
-        * Displays warnings
-        */
-        function displayWarnings(){
-            var extensions = ['fadingEffect', 'continuousHorizontal', 'scrollHorizontally', 'interlockedSlides', 'resetSliders', 'responsiveSlides', 'offsetSections', 'dragAndMove', 'scrollOverflowReset', 'parallax'];
-            if($('html').hasClass(ENABLED)){
-                showError('error', 'Fullpage.js can only be initialized once and you are doing it multiple times!');
-                return;
-            }
-
-            // Disable mutually exclusive settings
-            if (options.continuousVertical &&
-                (options.loopTop || options.loopBottom)) {
-                options.continuousVertical = false;
-                showError('warn', 'Option `loopTop/loopBottom` is mutually exclusive with `continuousVertical`; `continuousVertical` disabled');
-            }
-
-            if(options.scrollBar && options.scrollOverflow){
-                showError('warn', 'Option `scrollBar` is mutually exclusive with `scrollOverflow`. Sections with scrollOverflow might not work well in Firefox');
-            }
-
-            if(options.continuousVertical && (options.scrollBar || !options.autoScrolling)){
-                options.continuousVertical = false;
-                showError('warn', 'Scroll bars (`scrollBar:true` or `autoScrolling:false`) are mutually exclusive with `continuousVertical`; `continuousVertical` disabled');
-            }
-
-            if(options.scrollOverflow && !options.scrollOverflowHandler){
-                options.scrollOverflow = false;
-                showError('error', 'The option `scrollOverflow:true` requires the file `scrolloverflow.min.js`. Please include it before fullPage.js.');
-            }
-
-            //using extensions? Wrong file!
-            $.each(extensions, function(index, extension){
-                //is the option set to true?
-                if(options[extension]){
-                    showError('warn', 'fullpage.js extensions require jquery.fullpage.extensions.min.js file instead of the usual jquery.fullpage.js. Requested: '+ extension);
-                }
-            });
-
-            //anchors can not have the same value as any element ID or NAME
-            $.each(options.anchors, function(index, name){
-
-                //case insensitive selectors (http://stackoverflow.com/a/19465187/1081396)
-                var nameAttr = $document.find('[name]').filter(function() {
-                    return $(this).attr('name') && $(this).attr('name').toLowerCase() == name.toLowerCase();
-                });
-
-                var idAttr = $document.find('[id]').filter(function() {
-                    return $(this).attr('id') && $(this).attr('id').toLowerCase() == name.toLowerCase();
-                });
-
-                if(idAttr.length || nameAttr.length ){
-                    showError('error', 'data-anchor tags can not have the same value as any `id` element on the site (or `name` element for IE).');
-                    idAttr.length && showError('error', '"' + name + '" is is being used by another element `id` property');
-                    nameAttr.length && showError('error', '"' + name + '" is is being used by another element `name` property');
-                }
-            });
-        }
-
-        /**
-        * Shows a message in the console of the given type.
-        */
-        function showError(type, text){
-            console && console[type] && console[type]('fullPage: ' + text);
-        }
-
-    }; //end of $.fn.fullpage
-});
-
-
-/***/ }),
-/* 237 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(jQuery) {/*
- * jQuery Dropdown: A simple dropdown plugin
- *
- * Contribute: https://github.com/claviska/jquery-dropdown
- *
- * @license: MIT license: http://opensource.org/licenses/MIT
- *
- */
-if (jQuery) (function ($) {
-
-    $.extend($.fn, {
-        jqDropdown: function (method, data) {
-
-            switch (method) {
-                case 'show':
-                    show(null, $(this));
-                    return $(this);
-                case 'hide':
-                    hide();
-                    return $(this);
-                case 'attach':
-                    return $(this).attr('data-jq-dropdown', data);
-                case 'detach':
-                    hide();
-                    return $(this).removeAttr('data-jq-dropdown');
-                case 'disable':
-                    return $(this).addClass('jq-dropdown-disabled');
-                case 'enable':
-                    hide();
-                    return $(this).removeClass('jq-dropdown-disabled');
-            }
-
-        }
-    });
-
-    function show(event, object) {
-
-        var trigger = event ? $(this) : object,
-            jqDropdown = $(trigger.attr('data-jq-dropdown')),
-            isOpen = trigger.hasClass('jq-dropdown-open');
-
-        // In some cases we don't want to show it
-        if (event) {
-            if ($(event.target).hasClass('jq-dropdown-ignore')) return;
-
-            event.preventDefault();
-            event.stopPropagation();
-        } else {
-            if (trigger !== object.target && $(object.target).hasClass('jq-dropdown-ignore')) return;
-        }
-        hide();
-
-        if (isOpen || trigger.hasClass('jq-dropdown-disabled')) return;
-
-        // Show it
-        trigger.addClass('jq-dropdown-open');
-        jqDropdown
-            .data('jq-dropdown-trigger', trigger)
-            .show();
-
-        // Position it
-        position();
-
-        // Trigger the show callback
-        jqDropdown
-            .trigger('show', {
-                jqDropdown: jqDropdown,
-                trigger: trigger
-            });
-
-    }
-
-    function hide(event) {
-
-        // In some cases we don't hide them
-        var targetGroup = event ? $(event.target).parents().addBack() : null;
-
-        // Are we clicking anywhere in a jq-dropdown?
-        if (targetGroup && targetGroup.is('.jq-dropdown')) {
-            // Is it a jq-dropdown menu?
-            if (targetGroup.is('.jq-dropdown-menu')) {
-                // Did we click on an option? If so close it.
-                if (!targetGroup.is('A')) return;
-            } else {
-                // Nope, it's a panel. Leave it open.
-                return;
-            }
-        }
-
-        // Trigger the event early, so that it might be prevented on the visible popups
-        var hideEvent = jQuery.Event("hide");
-
-        $(document).find('.jq-dropdown:visible').each(function () {
-            var jqDropdown = $(this);
-            jqDropdown
-                .hide()
-                .removeData('jq-dropdown-trigger')
-                .trigger('hide', { jqDropdown: jqDropdown });
-        });
-
-        if(!hideEvent.isDefaultPrevented()) {
-            // Hide any jq-dropdown that may be showing
-            $(document).find('.jq-dropdown:visible').each(function () {
-                var jqDropdown = $(this);
-                jqDropdown
-                    .hide()
-                    .removeData('jq-dropdown-trigger')
-                    .trigger('hide', { jqDropdown: jqDropdown });
-            });
-
-            // Remove all jq-dropdown-open classes
-            $(document).find('.jq-dropdown-open').removeClass('jq-dropdown-open');
-        }
-    }
-
-    function position() {
-
-        var jqDropdown = $('.jq-dropdown:visible').eq(0),
-            trigger = jqDropdown.data('jq-dropdown-trigger'),
-            hOffset = trigger ? parseInt(trigger.attr('data-horizontal-offset') || 0, 10) : null,
-            vOffset = trigger ? parseInt(trigger.attr('data-vertical-offset') || 0, 10) : null;
-
-        if (jqDropdown.length === 0 || !trigger) return;
-
-        // Position the jq-dropdown relative-to-parent...
-        if (jqDropdown.hasClass('jq-dropdown-relative')) {
-            jqDropdown.css({
-                left: jqDropdown.hasClass('jq-dropdown-anchor-right') ?
-                    trigger.position().left - (jqDropdown.outerWidth(true) - trigger.outerWidth(true)) - parseInt(trigger.css('margin-right'), 10) + hOffset :
-                    trigger.position().left + parseInt(trigger.css('margin-left'), 10) + hOffset,
-                top: trigger.position().top + trigger.outerHeight(true) - parseInt(trigger.css('margin-top'), 10) + vOffset
-            });
-        } else {
-            // ...or relative to document
-            jqDropdown.css({
-                left: jqDropdown.hasClass('jq-dropdown-anchor-right') ?
-                    trigger.offset().left - (jqDropdown.outerWidth() - trigger.outerWidth()) + hOffset : trigger.offset().left + hOffset,
-                top: trigger.offset().top + trigger.outerHeight() + vOffset
-            });
-        }
-    }
-
-    $(document).on('click.jq-dropdown', '[data-jq-dropdown]', show);
-    $(document).on('click.jq-dropdown', hide);
-    $(window).on('resize', position);
-
-})(jQuery);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
-/* 238 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- PowerTip v1.3.0 (2017-01-15)
- https://stevenbenner.github.io/jquery-powertip/
- Copyright (c) 2017 Steven Benner (http://stevenbenner.com/).
- Released under MIT license.
- https://raw.github.com/stevenbenner/jquery-powertip/master/LICENSE.txt
-*/
-(function(root, factory) {
-	// support loading the plugin via common patterns
-	if (true) {
-		// load the plugin as an amd module
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else if (typeof module === 'object' && module.exports) {
-		// load the plugin as a commonjs module
-		module.exports = factory(require('jquery'));
-	} else {
-		// load the plugin as a global
-		factory(root.jQuery);
-	}
-}(this, function($) {
-
-	// useful private variables
-	var $document = $(document),
-		$window = $(window),
-		$body = $('body');
-
-	// constants
-	var DATA_DISPLAYCONTROLLER = 'displayController',
-		DATA_HASACTIVEHOVER = 'hasActiveHover',
-		DATA_FORCEDOPEN = 'forcedOpen',
-		DATA_HASMOUSEMOVE = 'hasMouseMove',
-		DATA_MOUSEONTOTIP = 'mouseOnToPopup',
-		DATA_ORIGINALTITLE = 'originalTitle',
-		DATA_POWERTIP = 'powertip',
-		DATA_POWERTIPJQ = 'powertipjq',
-		DATA_POWERTIPTARGET = 'powertiptarget',
-		EVENT_NAMESPACE = '.powertip',
-		RAD2DEG = 180 / Math.PI;
-
-	/**
-	 * Session data
-	 * Private properties global to all powerTip instances
-	 */
-	var session = {
-		elements: null,
-		tooltips: null,
-		isTipOpen: false,
-		isFixedTipOpen: false,
-		isClosing: false,
-		tipOpenImminent: false,
-		activeHover: null,
-		currentX: 0,
-		currentY: 0,
-		previousX: 0,
-		previousY: 0,
-		desyncTimeout: null,
-		closeDelayTimeout: null,
-		mouseTrackingActive: false,
-		delayInProgress: false,
-		windowWidth: 0,
-		windowHeight: 0,
-		scrollTop: 0,
-		scrollLeft: 0
-	};
-
-	/**
-	 * Collision enumeration
-	 * @enum {number}
-	 */
-	var Collision = {
-		none: 0,
-		top: 1,
-		bottom: 2,
-		left: 4,
-		right: 8
-	};
-
-	/**
-	 * Display hover tooltips on the matched elements.
-	 * @param {(Object|string)=} opts The options object to use for the plugin, or
-	 *     the name of a method to invoke on the first matched element.
-	 * @param {*=} [arg] Argument for an invoked method (optional).
-	 * @return {jQuery} jQuery object for the matched selectors.
-	 */
-	$.fn.powerTip = function(opts, arg) {
-		var targetElements = this,
-			options,
-			tipController;
-
-		// don't do any work if there were no matched elements
-		if (!targetElements.length) {
-			return targetElements;
-		}
-
-		// handle api method calls on the plugin, e.g. powerTip('hide')
-		if ($.type(opts) === 'string' && $.powerTip[opts]) {
-			return $.powerTip[opts].call(targetElements, targetElements, arg);
-		}
-
-		// extend options and instantiate TooltipController
-		options = $.extend({}, $.fn.powerTip.defaults, opts);
-		tipController = new TooltipController(options);
-
-		// hook mouse and viewport dimension tracking
-		initTracking();
-
-		// setup the elements
-		targetElements.each(function elementSetup() {
-			var $this = $(this),
-				dataPowertip = $this.data(DATA_POWERTIP),
-				dataElem = $this.data(DATA_POWERTIPJQ),
-				dataTarget = $this.data(DATA_POWERTIPTARGET),
-				title;
-
-			// handle repeated powerTip calls on the same element by destroying the
-			// original instance hooked to it and replacing it with this call
-			if ($this.data(DATA_DISPLAYCONTROLLER)) {
-				$.powerTip.destroy($this);
-			}
-
-			// attempt to use title attribute text if there is no data-powertip,
-			// data-powertipjq or data-powertiptarget. If we do use the title
-			// attribute, delete the attribute so the browser will not show it
-			title = $this.attr('title');
-			if (!dataPowertip && !dataTarget && !dataElem && title) {
-				$this.data(DATA_POWERTIP, title);
-				$this.data(DATA_ORIGINALTITLE, title);
-				$this.removeAttr('title');
-			}
-
-			// create hover controllers for each element
-			$this.data(
-				DATA_DISPLAYCONTROLLER,
-				new DisplayController($this, options, tipController)
-			);
-		});
-
-		// attach events to matched elements if the manual option is not enabled
-		if (!options.manual) {
-			// attach open events
-			$.each(options.openEvents, function(idx, evt) {
-				if ($.inArray(evt, options.closeEvents) > -1) {
-					// event is in both openEvents and closeEvents, so toggle it
-					targetElements.on(evt + EVENT_NAMESPACE, function elementToggle(event) {
-						$.powerTip.toggle(this, event);
-					});
-				} else {
-					targetElements.on(evt + EVENT_NAMESPACE, function elementOpen(event) {
-						$.powerTip.show(this, event);
-					});
-				}
-			});
-
-			// attach close events
-			$.each(options.closeEvents, function(idx, evt) {
-				if ($.inArray(evt, options.openEvents) < 0) {
-					targetElements.on(evt + EVENT_NAMESPACE, function elementClose(event) {
-						// set immediate to true for any event without mouse info
-						$.powerTip.hide(this, !isMouseEvent(event));
-					});
-				}
-			});
-
-			// attach escape key close event
-			targetElements.on('keydown' + EVENT_NAMESPACE, function elementKeyDown(event) {
-				// always close tooltip when the escape key is pressed
-				if (event.keyCode === 27) {
-					$.powerTip.hide(this, true);
-				}
-			});
-		}
-
-		// remember elements that the plugin is attached to
-		session.elements = session.elements ? session.elements.add(targetElements) : targetElements;
-
-		return targetElements;
-	};
-
-	/**
-	 * Default options for the powerTip plugin.
-	 */
-	$.fn.powerTip.defaults = {
-		fadeInTime: 200,
-		fadeOutTime: 100,
-		followMouse: false,
-		popupId: 'powerTip',
-		popupClass: null,
-		intentSensitivity: 7,
-		intentPollInterval: 100,
-		closeDelay: 100,
-		placement: 'n',
-		smartPlacement: false,
-		offset: 10,
-		mouseOnToPopup: false,
-		manual: false,
-		openEvents: [ 'mouseenter', 'focus' ],
-		closeEvents: [ 'mouseleave', 'blur' ]
-	};
-
-	/**
-	 * Default smart placement priority lists.
-	 * The first item in the array is the highest priority, the last is the lowest.
-	 * The last item is also the default, which will be used if all previous options
-	 * do not fit.
-	 */
-	$.fn.powerTip.smartPlacementLists = {
-		n: [ 'n', 'ne', 'nw', 's' ],
-		e: [ 'e', 'ne', 'se', 'w', 'nw', 'sw', 'n', 's', 'e' ],
-		s: [ 's', 'se', 'sw', 'n' ],
-		w: [ 'w', 'nw', 'sw', 'e', 'ne', 'se', 'n', 's', 'w' ],
-		nw: [ 'nw', 'w', 'sw', 'n', 's', 'se', 'nw' ],
-		ne: [ 'ne', 'e', 'se', 'n', 's', 'sw', 'ne' ],
-		sw: [ 'sw', 'w', 'nw', 's', 'n', 'ne', 'sw' ],
-		se: [ 'se', 'e', 'ne', 's', 'n', 'nw', 'se' ],
-		'nw-alt': [ 'nw-alt', 'n', 'ne-alt', 'sw-alt', 's', 'se-alt', 'w', 'e' ],
-		'ne-alt': [ 'ne-alt', 'n', 'nw-alt', 'se-alt', 's', 'sw-alt', 'e', 'w' ],
-		'sw-alt': [ 'sw-alt', 's', 'se-alt', 'nw-alt', 'n', 'ne-alt', 'w', 'e' ],
-		'se-alt': [ 'se-alt', 's', 'sw-alt', 'ne-alt', 'n', 'nw-alt', 'e', 'w' ]
-	};
-
-	/**
-	 * Public API
-	 */
-	$.powerTip = {
-		/**
-		 * Attempts to show the tooltip for the specified element.
-		 * @param {jQuery|Element} element The element to open the tooltip for.
-		 * @param {jQuery.Event=} event jQuery event for hover intent and mouse
-		 *     tracking (optional).
-		 * @return {jQuery|Element} The original jQuery object or DOM Element.
-		 */
-		show: function apiShowTip(element, event) {
-			// if we were given a mouse event then run the hover intent testing,
-			// otherwise, simply show the tooltip asap
-			if (isMouseEvent(event)) {
-				trackMouse(event);
-				session.previousX = event.pageX;
-				session.previousY = event.pageY;
-				$(element).data(DATA_DISPLAYCONTROLLER).show();
-			} else {
-				$(element).first().data(DATA_DISPLAYCONTROLLER).show(true, true);
-			}
-			return element;
-		},
-
-		/**
-		 * Repositions the tooltip on the element.
-		 * @param {jQuery|Element} element The element the tooltip is shown for.
-		 * @return {jQuery|Element} The original jQuery object or DOM Element.
-		 */
-		reposition: function apiResetPosition(element) {
-			$(element).first().data(DATA_DISPLAYCONTROLLER).resetPosition();
-			return element;
-		},
-
-		/**
-		 * Attempts to close any open tooltips.
-		 * @param {(jQuery|Element)=} element The element with the tooltip that
-		 *     should be closed (optional).
-		 * @param {boolean=} immediate Disable close delay (optional).
-		 * @return {jQuery|Element|undefined} The original jQuery object or DOM
-		 *     Element, if one was specified.
-		 */
-		hide: function apiCloseTip(element, immediate) {
-			var displayController;
-
-			// set immediate to true when no element is specified
-			immediate = element ? immediate : true;
-
-			// find the relevant display controller
-			if (element) {
-				displayController = $(element).first().data(DATA_DISPLAYCONTROLLER);
-			} else if (session.activeHover) {
-				displayController = session.activeHover.data(DATA_DISPLAYCONTROLLER);
-			}
-
-			// if found, hide the tip
-			if (displayController) {
-				displayController.hide(immediate);
-			}
-
-			return element;
-		},
-
-		/**
-		 * Toggles the tooltip for the specified element. This will open a closed
-		 * tooltip, or close an open tooltip.
-		 * @param {jQuery|Element} element The element with the tooltip that
-		 *     should be toggled.
-		 * @param {jQuery.Event=} event jQuery event for hover intent and mouse
-		 *     tracking (optional).
-		 * @return {jQuery|Element} The original jQuery object or DOM Element.
-		 */
-		toggle: function apiToggle(element, event) {
-			if (session.activeHover && session.activeHover.is(element)) {
-				// tooltip for element is active, so close it
-				$.powerTip.hide(element, !isMouseEvent(event));
-			} else {
-				// tooltip for element is not active, so open it
-				$.powerTip.show(element, event);
-			}
-			return element;
-		},
-
-		/**
-		 * Destroy and roll back any powerTip() instance on the specified elements.
-		 * If no elements are specified then all elements that the plugin is
-		 * currently attached to will be rolled back.
-		 * @param {(jQuery|Element)=} element The element with the powerTip instance.
-		 * @return {jQuery|Element|undefined} The original jQuery object or DOM
-		 *     Element, if one was specified.
-		 */
-		destroy: function apiDestroy(element) {
-			var $element = element ? $(element) : session.elements;
-
-			// if the plugin is not hooked to any elements then there is no point
-			// trying to destroy anything, or dealing with the possible errors
-			if (!session.elements || session.elements.length === 0) {
-				return element;
-			}
-
-			// unhook events and destroy plugin changes to each element
-			$element.off(EVENT_NAMESPACE).each(function destroy() {
-				var $this = $(this),
-					dataAttributes = [
-						DATA_ORIGINALTITLE,
-						DATA_DISPLAYCONTROLLER,
-						DATA_HASACTIVEHOVER,
-						DATA_FORCEDOPEN
-					];
-
-				// revert title attribute
-				if ($this.data(DATA_ORIGINALTITLE)) {
-					$this.attr('title', $this.data(DATA_ORIGINALTITLE));
-					dataAttributes.push(DATA_POWERTIP);
-				}
-
-				// remove data attributes
-				$this.removeData(dataAttributes);
-			});
-
-			// remove destroyed element from active elements collection
-			session.elements = session.elements.not($element);
-
-			// if there are no active elements left then we will unhook all of the
-			// events that we've bound code to and remove the tooltip elements
-			if (session.elements.length === 0) {
-				$window.off(EVENT_NAMESPACE);
-				$document.off(EVENT_NAMESPACE);
-				session.mouseTrackingActive = false;
-				session.tooltips.remove();
-				session.tooltips = null;
-			}
-
-			return element;
-		}
-	};
-
-	// API aliasing
-	$.powerTip.showTip = $.powerTip.show;
-	$.powerTip.closeTip = $.powerTip.hide;
-
-	/**
-	 * Creates a new CSSCoordinates object.
-	 * @private
-	 * @constructor
-	 */
-	function CSSCoordinates() {
-		var me = this;
-
-		// initialize object properties
-		me.top = 'auto';
-		me.left = 'auto';
-		me.right = 'auto';
-		me.bottom = 'auto';
-
-		/**
-		 * Set a property to a value.
-		 * @private
-		 * @param {string} property The name of the property.
-		 * @param {number} value The value of the property.
-		 */
-		me.set = function(property, value) {
-			if ($.isNumeric(value)) {
-				me[property] = Math.round(value);
-			}
-		};
-	}
-
-	/**
-	 * Creates a new tooltip display controller.
-	 * @private
-	 * @constructor
-	 * @param {jQuery} element The element that this controller will handle.
-	 * @param {Object} options Options object containing settings.
-	 * @param {TooltipController} tipController The TooltipController object for
-	 *     this instance.
-	 */
-	function DisplayController(element, options, tipController) {
-		var hoverTimer = null,
-			myCloseDelay = null;
-
-		/**
-		 * Begins the process of showing a tooltip.
-		 * @private
-		 * @param {boolean=} immediate Skip intent testing (optional).
-		 * @param {boolean=} forceOpen Ignore cursor position and force tooltip to
-		 *     open (optional).
-		 */
-		function openTooltip(immediate, forceOpen) {
-			cancelTimer();
-			if (!element.data(DATA_HASACTIVEHOVER)) {
-				if (!immediate) {
-					session.tipOpenImminent = true;
-					hoverTimer = setTimeout(
-						function intentDelay() {
-							hoverTimer = null;
-							checkForIntent();
-						},
-						options.intentPollInterval
-					);
-				} else {
-					if (forceOpen) {
-						element.data(DATA_FORCEDOPEN, true);
-					}
-					closeAnyDelayed();
-					tipController.showTip(element);
-				}
-			} else {
-				// cursor left and returned to this element, cancel close
-				cancelClose();
-			}
-		}
-
-		/**
-		 * Begins the process of closing a tooltip.
-		 * @private
-		 * @param {boolean=} disableDelay Disable close delay (optional).
-		 */
-		function closeTooltip(disableDelay) {
-			// if this instance already has a close delay in progress then halt it
-			if (myCloseDelay) {
-				myCloseDelay = session.closeDelayTimeout = clearTimeout(myCloseDelay);
-				session.delayInProgress = false;
-			}
-			cancelTimer();
-			session.tipOpenImminent = false;
-			if (element.data(DATA_HASACTIVEHOVER)) {
-				element.data(DATA_FORCEDOPEN, false);
-				if (!disableDelay) {
-					session.delayInProgress = true;
-					session.closeDelayTimeout = setTimeout(
-						function closeDelay() {
-							session.closeDelayTimeout = null;
-							tipController.hideTip(element);
-							session.delayInProgress = false;
-							myCloseDelay = null;
-						},
-						options.closeDelay
-					);
-					// save internal reference close delay id so we can check if the
-					// active close delay belongs to this instance
-					myCloseDelay = session.closeDelayTimeout;
-				} else {
-					tipController.hideTip(element);
-				}
-			}
-		}
-
-		/**
-		 * Checks mouse position to make sure that the user intended to hover on the
-		 * specified element before showing the tooltip.
-		 * @private
-		 */
-		function checkForIntent() {
-			// calculate mouse position difference
-			var xDifference = Math.abs(session.previousX - session.currentX),
-				yDifference = Math.abs(session.previousY - session.currentY),
-				totalDifference = xDifference + yDifference;
-
-			// check if difference has passed the sensitivity threshold
-			if (totalDifference < options.intentSensitivity) {
-				cancelClose();
-				closeAnyDelayed();
-				tipController.showTip(element);
-			} else {
-				// try again
-				session.previousX = session.currentX;
-				session.previousY = session.currentY;
-				openTooltip();
-			}
-		}
-
-		/**
-		 * Cancels active hover timer.
-		 * @private
-		 * @param {boolean=} stopClose Cancel any active close delay timer.
-		 */
-		function cancelTimer(stopClose) {
-			hoverTimer = clearTimeout(hoverTimer);
-			// cancel the current close delay if the active close delay is for this
-			// element or the stopClose argument is true
-			if (session.closeDelayTimeout && myCloseDelay === session.closeDelayTimeout || stopClose) {
-				cancelClose();
-			}
-		}
-
-		/**
-		 * Cancels any active close delay timer.
-		 * @private
-		 */
-		function cancelClose() {
-			session.closeDelayTimeout = clearTimeout(session.closeDelayTimeout);
-			session.delayInProgress = false;
-		}
-
-		/**
-		 * Asks any tooltips waiting on their close delay to close now.
-		 * @private
-		 */
-		function closeAnyDelayed() {
-			// if another element is waiting for its close delay then we should ask
-			// it to close immediately so we can proceed without unexpected timeout
-			// code being run during this tooltip's lifecycle
-			if (session.delayInProgress && session.activeHover && !session.activeHover.is(element)) {
-				session.activeHover.data(DATA_DISPLAYCONTROLLER).hide(true);
-			}
-		}
-
-		/**
-		 * Repositions the tooltip on this element.
-		 * @private
-		 */
-		function repositionTooltip() {
-			tipController.resetPosition(element);
-		}
-
-		// expose the methods
-		this.show = openTooltip;
-		this.hide = closeTooltip;
-		this.cancel = cancelTimer;
-		this.resetPosition = repositionTooltip;
-	}
-
-	/**
-	 * Creates a new Placement Calculator.
-	 * @private
-	 * @constructor
-	 */
-	function PlacementCalculator() {
-		/**
-		 * Compute the CSS position to display a tooltip at the specified placement
-		 * relative to the specified element.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 * @param {string} placement The placement for the tooltip.
-		 * @param {number} tipWidth Width of the tooltip element in pixels.
-		 * @param {number} tipHeight Height of the tooltip element in pixels.
-		 * @param {number} offset Distance to offset tooltips in pixels.
-		 * @return {CSSCoordinates} A CSSCoordinates object with the position.
-		 */
-		function computePlacementCoords(element, placement, tipWidth, tipHeight, offset) {
-			var placementBase = placement.split('-')[0], // ignore 'alt' for corners
-				coords = new CSSCoordinates(),
-				position;
-
-			if (isSvgElement(element)) {
-				position = getSvgPlacement(element, placementBase);
-			} else {
-				position = getHtmlPlacement(element, placementBase);
-			}
-
-			// calculate the appropriate x and y position in the document
-			switch (placement) {
-				case 'n':
-					coords.set('left', position.left - (tipWidth / 2));
-					coords.set('bottom', session.windowHeight - position.top + offset);
-					break;
-				case 'e':
-					coords.set('left', position.left + offset);
-					coords.set('top', position.top - (tipHeight / 2));
-					break;
-				case 's':
-					coords.set('left', position.left - (tipWidth / 2));
-					coords.set('top', position.top + offset);
-					break;
-				case 'w':
-					coords.set('top', position.top - (tipHeight / 2));
-					coords.set('right', session.windowWidth - position.left + offset);
-					break;
-				case 'nw':
-					coords.set('bottom', session.windowHeight - position.top + offset);
-					coords.set('right', session.windowWidth - position.left - 20);
-					break;
-				case 'nw-alt':
-					coords.set('left', position.left);
-					coords.set('bottom', session.windowHeight - position.top + offset);
-					break;
-				case 'ne':
-					coords.set('left', position.left - 20);
-					coords.set('bottom', session.windowHeight - position.top + offset);
-					break;
-				case 'ne-alt':
-					coords.set('bottom', session.windowHeight - position.top + offset);
-					coords.set('right', session.windowWidth - position.left);
-					break;
-				case 'sw':
-					coords.set('top', position.top + offset);
-					coords.set('right', session.windowWidth - position.left - 20);
-					break;
-				case 'sw-alt':
-					coords.set('left', position.left);
-					coords.set('top', position.top + offset);
-					break;
-				case 'se':
-					coords.set('left', position.left - 20);
-					coords.set('top', position.top + offset);
-					break;
-				case 'se-alt':
-					coords.set('top', position.top + offset);
-					coords.set('right', session.windowWidth - position.left);
-					break;
-			}
-
-			return coords;
-		}
-
-		/**
-		 * Finds the tooltip attachment point in the document for a HTML DOM element
-		 * for the specified placement.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 * @param {string} placement The placement for the tooltip.
-		 * @return {Object} An object with the top,left position values.
-		 */
-		function getHtmlPlacement(element, placement) {
-			var objectOffset = element.offset(),
-				objectWidth = element.outerWidth(),
-				objectHeight = element.outerHeight(),
-				left,
-				top;
-
-			// calculate the appropriate x and y position in the document
-			switch (placement) {
-				case 'n':
-					left = objectOffset.left + objectWidth / 2;
-					top = objectOffset.top;
-					break;
-				case 'e':
-					left = objectOffset.left + objectWidth;
-					top = objectOffset.top + objectHeight / 2;
-					break;
-				case 's':
-					left = objectOffset.left + objectWidth / 2;
-					top = objectOffset.top + objectHeight;
-					break;
-				case 'w':
-					left = objectOffset.left;
-					top = objectOffset.top + objectHeight / 2;
-					break;
-				case 'nw':
-					left = objectOffset.left;
-					top = objectOffset.top;
-					break;
-				case 'ne':
-					left = objectOffset.left + objectWidth;
-					top = objectOffset.top;
-					break;
-				case 'sw':
-					left = objectOffset.left;
-					top = objectOffset.top + objectHeight;
-					break;
-				case 'se':
-					left = objectOffset.left + objectWidth;
-					top = objectOffset.top + objectHeight;
-					break;
-			}
-
-			return {
-				top: top,
-				left: left
-			};
-		}
-
-		/**
-		 * Finds the tooltip attachment point in the document for a SVG element for
-		 * the specified placement.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 * @param {string} placement The placement for the tooltip.
-		 * @return {Object} An object with the top,left position values.
-		 */
-		function getSvgPlacement(element, placement) {
-			var svgElement = element.closest('svg')[0],
-				domElement = element[0],
-				point = svgElement.createSVGPoint(),
-				boundingBox = domElement.getBBox(),
-				matrix = domElement.getScreenCTM(),
-				halfWidth = boundingBox.width / 2,
-				halfHeight = boundingBox.height / 2,
-				placements = [],
-				placementKeys = [ 'nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w' ],
-				coords,
-				rotation,
-				steps,
-				x;
-
-			function pushPlacement() {
-				placements.push(point.matrixTransform(matrix));
-			}
-
-			// get bounding box corners and midpoints
-			point.x = boundingBox.x;
-			point.y = boundingBox.y;
-			pushPlacement();
-			point.x += halfWidth;
-			pushPlacement();
-			point.x += halfWidth;
-			pushPlacement();
-			point.y += halfHeight;
-			pushPlacement();
-			point.y += halfHeight;
-			pushPlacement();
-			point.x -= halfWidth;
-			pushPlacement();
-			point.x -= halfWidth;
-			pushPlacement();
-			point.y -= halfHeight;
-			pushPlacement();
-
-			// determine rotation
-			if (placements[0].y !== placements[1].y || placements[0].x !== placements[7].x) {
-				rotation = Math.atan2(matrix.b, matrix.a) * RAD2DEG;
-				steps = Math.ceil(((rotation % 360) - 22.5) / 45);
-				if (steps < 1) {
-					steps += 8;
-				}
-				while (steps--) {
-					placementKeys.push(placementKeys.shift());
-				}
-			}
-
-			// find placement
-			for (x = 0; x < placements.length; x++) {
-				if (placementKeys[x] === placement) {
-					coords = placements[x];
-					break;
-				}
-			}
-
-			return {
-				top: coords.y + session.scrollTop,
-				left: coords.x + session.scrollLeft
-			};
-		}
-
-		// expose methods
-		this.compute = computePlacementCoords;
-	}
-
-	/**
-	 * Creates a new tooltip controller.
-	 * @private
-	 * @constructor
-	 * @param {Object} options Options object containing settings.
-	 */
-	function TooltipController(options) {
-		var placementCalculator = new PlacementCalculator(),
-			tipElement = $('#' + options.popupId);
-
-		// build and append tooltip div if it does not already exist
-		if (tipElement.length === 0) {
-			tipElement = $('<div/>', { id: options.popupId });
-			// grab body element if it was not populated when the script loaded
-			// note: this hack exists solely for jsfiddle support
-			if ($body.length === 0) {
-				$body = $('body');
-			}
-			$body.append(tipElement);
-			// remember the tooltip elements that the plugin has created
-			session.tooltips = session.tooltips ? session.tooltips.add(tipElement) : tipElement;
-		}
-
-		// hook mousemove for cursor follow tooltips
-		if (options.followMouse) {
-			// only one positionTipOnCursor hook per tooltip element, please
-			if (!tipElement.data(DATA_HASMOUSEMOVE)) {
-				$document.on('mousemove' + EVENT_NAMESPACE, positionTipOnCursor);
-				$window.on('scroll' + EVENT_NAMESPACE, positionTipOnCursor);
-				tipElement.data(DATA_HASMOUSEMOVE, true);
-			}
-		}
-
-		/**
-		 * Gives the specified element the active-hover state and queues up the
-		 * showTip function.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 */
-		function beginShowTip(element) {
-			element.data(DATA_HASACTIVEHOVER, true);
-			// show tooltip, asap
-			tipElement.queue(function queueTipInit(next) {
-				showTip(element);
-				next();
-			});
-		}
-
-		/**
-		 * Shows the tooltip, as soon as possible.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 */
-		function showTip(element) {
-			var tipContent;
-
-			// it is possible, especially with keyboard navigation, to move on to
-			// another element with a tooltip during the queue to get to this point
-			// in the code. if that happens then we need to not proceed or we may
-			// have the fadeout callback for the last tooltip execute immediately
-			// after this code runs, causing bugs.
-			if (!element.data(DATA_HASACTIVEHOVER)) {
-				return;
-			}
-
-			// if the tooltip is open and we got asked to open another one then the
-			// old one is still in its fadeOut cycle, so wait and try again
-			if (session.isTipOpen) {
-				if (!session.isClosing) {
-					hideTip(session.activeHover);
-				}
-				tipElement.delay(100).queue(function queueTipAgain(next) {
-					showTip(element);
-					next();
-				});
-				return;
-			}
-
-			// trigger powerTipPreRender event
-			element.trigger('powerTipPreRender');
-
-			// set tooltip content
-			tipContent = getTooltipContent(element);
-			if (tipContent) {
-				tipElement.empty().append(tipContent);
-			} else {
-				// we have no content to display, give up
-				return;
-			}
-
-			// trigger powerTipRender event
-			element.trigger('powerTipRender');
-
-			session.activeHover = element;
-			session.isTipOpen = true;
-
-			tipElement.data(DATA_MOUSEONTOTIP, options.mouseOnToPopup);
-
-			// set tooltip position
-			if (!options.followMouse) {
-				positionTipOnElement(element);
-				session.isFixedTipOpen = true;
-			} else {
-				positionTipOnCursor();
-			}
-
-			// add custom class to tooltip element
-			tipElement.addClass(options.popupClass);
-
-			// close tooltip when clicking anywhere on the page, with the exception
-			// of the tooltip's trigger element and any elements that are within a
-			// tooltip that has 'mouseOnToPopup' option enabled
-			if (!element.data(DATA_FORCEDOPEN)) {
-				$document.on('click' + EVENT_NAMESPACE, function documentClick(event) {
-					var target = event.target;
-					if (target !== element[0]) {
-						if (options.mouseOnToPopup) {
-							if (target !== tipElement[0] && !$.contains(tipElement[0], target)) {
-								$.powerTip.hide();
-							}
-						} else {
-							$.powerTip.hide();
-						}
-					}
-				});
-			}
-
-			// if we want to be able to mouse on to the tooltip then we need to
-			// attach hover events to the tooltip that will cancel a close request
-			// on mouseenter and start a new close request on mouseleave
-			// only hook these listeners if we're not in manual mode
-			if (options.mouseOnToPopup && !options.manual) {
-				tipElement.on('mouseenter' + EVENT_NAMESPACE, function tipMouseEnter() {
-					// check activeHover in case the mouse cursor entered the
-					// tooltip during the fadeOut and close cycle
-					if (session.activeHover) {
-						session.activeHover.data(DATA_DISPLAYCONTROLLER).cancel();
-					}
-				});
-				tipElement.on('mouseleave' + EVENT_NAMESPACE, function tipMouseLeave() {
-					// check activeHover in case the mouse cursor left the tooltip
-					// during the fadeOut and close cycle
-					if (session.activeHover) {
-						session.activeHover.data(DATA_DISPLAYCONTROLLER).hide();
-					}
-				});
-			}
-
-			// fadein
-			tipElement.fadeIn(options.fadeInTime, function fadeInCallback() {
-				// start desync polling
-				if (!session.desyncTimeout) {
-					session.desyncTimeout = setInterval(closeDesyncedTip, 500);
-				}
-
-				// trigger powerTipOpen event
-				element.trigger('powerTipOpen');
-			});
-		}
-
-		/**
-		 * Hides the tooltip.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 */
-		function hideTip(element) {
-			// reset session
-			session.isClosing = true;
-			session.isTipOpen = false;
-
-			// stop desync polling
-			session.desyncTimeout = clearInterval(session.desyncTimeout);
-
-			// reset element state
-			element.data(DATA_HASACTIVEHOVER, false);
-			element.data(DATA_FORCEDOPEN, false);
-
-			// remove document click handler
-			$document.off('click' + EVENT_NAMESPACE);
-
-			// unbind the mouseOnToPopup events if they were set
-			tipElement.off(EVENT_NAMESPACE);
-
-			// fade out
-			tipElement.fadeOut(options.fadeOutTime, function fadeOutCallback() {
-				var coords = new CSSCoordinates();
-
-				// reset session and tooltip element
-				session.activeHover = null;
-				session.isClosing = false;
-				session.isFixedTipOpen = false;
-				tipElement.removeClass();
-
-				// support mouse-follow and fixed position tips at the same time by
-				// moving the tooltip to the last cursor location after it is hidden
-				coords.set('top', session.currentY + options.offset);
-				coords.set('left', session.currentX + options.offset);
-				tipElement.css(coords);
-
-				// trigger powerTipClose event
-				element.trigger('powerTipClose');
-			});
-		}
-
-		/**
-		 * Moves the tooltip to the users mouse cursor.
-		 * @private
-		 */
-		function positionTipOnCursor() {
-			// to support having fixed tooltips on the same page as cursor tooltips,
-			// where both instances are referencing the same tooltip element, we
-			// need to keep track of the mouse position constantly, but we should
-			// only set the tip location if a fixed tip is not currently open, a tip
-			// open is imminent or active, and the tooltip element in question does
-			// have a mouse-follow using it.
-			if (!session.isFixedTipOpen && (session.isTipOpen || (session.tipOpenImminent && tipElement.data(DATA_HASMOUSEMOVE)))) {
-				// grab measurements
-				var tipWidth = tipElement.outerWidth(),
-					tipHeight = tipElement.outerHeight(),
-					coords = new CSSCoordinates(),
-					collisions,
-					collisionCount;
-
-				// grab collisions
-				coords.set('top', session.currentY + options.offset);
-				coords.set('left', session.currentX + options.offset);
-				collisions = getViewportCollisions(
-					coords,
-					tipWidth,
-					tipHeight
-				);
-
-				// handle tooltip view port collisions
-				if (collisions !== Collision.none) {
-					collisionCount = countFlags(collisions);
-					if (collisionCount === 1) {
-						// if there is only one collision (bottom or right) then
-						// simply constrain the tooltip to the view port
-						if (collisions === Collision.right) {
-							coords.set('left', session.windowWidth - tipWidth);
-						} else if (collisions === Collision.bottom) {
-							coords.set('top', session.scrollTop + session.windowHeight - tipHeight);
-						}
-					} else {
-						// if the tooltip has more than one collision then it is
-						// trapped in the corner and should be flipped to get it out
-						// of the users way
-						coords.set('left', session.currentX - tipWidth - options.offset);
-						coords.set('top', session.currentY - tipHeight - options.offset);
-					}
-				}
-
-				// position the tooltip
-				tipElement.css(coords);
-			}
-		}
-
-		/**
-		 * Sets the tooltip to the correct position relative to the specified target
-		 * element. Based on options settings.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 */
-		function positionTipOnElement(element) {
-			var priorityList,
-				finalPlacement;
-
-			if (options.smartPlacement) {
-				priorityList = $.fn.powerTip.smartPlacementLists[options.placement];
-
-				// iterate over the priority list and use the first placement option
-				// that does not collide with the view port. if they all collide
-				// then the last placement in the list will be used.
-				$.each(priorityList, function(idx, pos) {
-					// place tooltip and find collisions
-					var collisions = getViewportCollisions(
-						placeTooltip(element, pos),
-						tipElement.outerWidth(),
-						tipElement.outerHeight()
-					);
-
-					// update the final placement variable
-					finalPlacement = pos;
-
-					// break if there were no collisions
-					if (collisions === Collision.none) {
-						return false;
-					}
-				});
-			} else {
-				// if we're not going to use the smart placement feature then just
-				// compute the coordinates and do it
-				placeTooltip(element, options.placement);
-				finalPlacement = options.placement;
-			}
-
-			// add placement as class for CSS arrows
-			tipElement.removeClass('w nw sw e ne se n s w se-alt sw-alt ne-alt nw-alt');
-			tipElement.addClass(finalPlacement);
-		}
-
-		/**
-		 * Sets the tooltip position to the appropriate values to show the tip at
-		 * the specified placement. This function will iterate and test the tooltip
-		 * to support elastic tooltips.
-		 * @private
-		 * @param {jQuery} element The element that the tooltip should target.
-		 * @param {string} placement The placement for the tooltip.
-		 * @return {CSSCoordinates} A CSSCoordinates object with the top, left, and
-		 *     right position values.
-		 */
-		function placeTooltip(element, placement) {
-			var iterationCount = 0,
-				tipWidth,
-				tipHeight,
-				coords = new CSSCoordinates();
-
-			// set the tip to 0,0 to get the full expanded width
-			coords.set('top', 0);
-			coords.set('left', 0);
-			tipElement.css(coords);
-
-			// to support elastic tooltips we need to check for a change in the
-			// rendered dimensions after the tooltip has been positioned
-			do {
-				// grab the current tip dimensions
-				tipWidth = tipElement.outerWidth();
-				tipHeight = tipElement.outerHeight();
-
-				// get placement coordinates
-				coords = placementCalculator.compute(
-					element,
-					placement,
-					tipWidth,
-					tipHeight,
-					options.offset
-				);
-
-				// place the tooltip
-				tipElement.css(coords);
-			} while (
-				// sanity check: limit to 5 iterations, and...
-				++iterationCount <= 5 &&
-				// try again if the dimensions changed after placement
-				(tipWidth !== tipElement.outerWidth() || tipHeight !== tipElement.outerHeight())
-			);
-
-			return coords;
-		}
-
-		/**
-		 * Checks for a tooltip desync and closes the tooltip if one occurs.
-		 * @private
-		 */
-		function closeDesyncedTip() {
-			var isDesynced = false;
-			// It is possible for the mouse cursor to leave an element without
-			// firing the mouseleave or blur event. This most commonly happens when
-			// the element is disabled under mouse cursor. If this happens it will
-			// result in a desynced tooltip because the tooltip was never asked to
-			// close. So we should periodically check for a desync situation and
-			// close the tip if such a situation arises.
-			if (session.isTipOpen && !session.isClosing && !session.delayInProgress && ($.inArray('mouseleave', options.closeEvents) > -1 || $.inArray('mouseout', options.closeEvents) > -1 || $.inArray('blur', options.closeEvents) > -1 || $.inArray('focusout', options.closeEvents) > -1)) {
-				// user moused onto another tip or active hover is disabled
-				if (session.activeHover.data(DATA_HASACTIVEHOVER) === false || session.activeHover.is(':disabled')) {
-					isDesynced = true;
-				} else {
-					// hanging tip - have to test if mouse position is not over the
-					// active hover and not over a tooltip set to let the user
-					// interact with it.
-					// for keyboard navigation: this only counts if the element does
-					// not have focus.
-					// for tooltips opened via the api: we need to check if it has
-					// the forcedOpen flag.
-					if (!isMouseOver(session.activeHover) && !session.activeHover.is(':focus') && !session.activeHover.data(DATA_FORCEDOPEN)) {
-						if (tipElement.data(DATA_MOUSEONTOTIP)) {
-							if (!isMouseOver(tipElement)) {
-								isDesynced = true;
-							}
-						} else {
-							isDesynced = true;
-						}
-					}
-				}
-
-				if (isDesynced) {
-					// close the desynced tip
-					hideTip(session.activeHover);
-				}
-			}
-		}
-
-		// expose methods
-		this.showTip = beginShowTip;
-		this.hideTip = hideTip;
-		this.resetPosition = positionTipOnElement;
-	}
-
-	/**
-	 * Determine whether a jQuery object is an SVG element
-	 * @private
-	 * @param {jQuery} element The element to check
-	 * @return {boolean} Whether this is an SVG element
-	 */
-	function isSvgElement(element) {
-		return Boolean(window.SVGElement && element[0] instanceof SVGElement);
-	}
-
-	/**
-	 * Determines if the specified jQuery.Event object has mouse data.
-	 * @private
-	 * @param {jQuery.Event=} event The jQuery.Event object to test.
-	 * @return {boolean} True if there is mouse data, otherwise false.
-	 */
-	function isMouseEvent(event) {
-		return Boolean(event && typeof event.pageX === 'number');
-	}
-
-	/**
-	 * Initializes the viewport dimension cache and hooks up the mouse position
-	 * tracking and viewport dimension tracking events.
-	 * Prevents attaching the events more than once.
-	 * @private
-	 */
-	function initTracking() {
-		if (!session.mouseTrackingActive) {
-			session.mouseTrackingActive = true;
-
-			// grab the current viewport dimensions on load
-			getViewportDimensions();
-			$(getViewportDimensions);
-
-			// hook mouse move tracking
-			$document.on('mousemove' + EVENT_NAMESPACE, trackMouse);
-
-			// hook viewport dimensions tracking
-			$window.on('resize' + EVENT_NAMESPACE, trackResize);
-			$window.on('scroll' + EVENT_NAMESPACE, trackScroll);
-		}
-	}
-
-	/**
-	 * Updates the viewport dimensions cache.
-	 * @private
-	 */
-	function getViewportDimensions() {
-		session.scrollLeft = $window.scrollLeft();
-		session.scrollTop = $window.scrollTop();
-		session.windowWidth = $window.width();
-		session.windowHeight = $window.height();
-	}
-
-	/**
-	 * Updates the window size info in the viewport dimensions cache.
-	 * @private
-	 */
-	function trackResize() {
-		session.windowWidth = $window.width();
-		session.windowHeight = $window.height();
-	}
-
-	/**
-	 * Updates the scroll offset info in the viewport dimensions cache.
-	 * @private
-	 */
-	function trackScroll() {
-		var x = $window.scrollLeft(),
-			y = $window.scrollTop();
-		if (x !== session.scrollLeft) {
-			session.currentX += x - session.scrollLeft;
-			session.scrollLeft = x;
-		}
-		if (y !== session.scrollTop) {
-			session.currentY += y - session.scrollTop;
-			session.scrollTop = y;
-		}
-	}
-
-	/**
-	 * Saves the current mouse coordinates to the session object.
-	 * @private
-	 * @param {jQuery.Event} event The mousemove event for the document.
-	 */
-	function trackMouse(event) {
-		session.currentX = event.pageX;
-		session.currentY = event.pageY;
-	}
-
-	/**
-	 * Tests if the mouse is currently over the specified element.
-	 * @private
-	 * @param {jQuery} element The element to check for hover.
-	 * @return {boolean}
-	 */
-	function isMouseOver(element) {
-		// use getBoundingClientRect() because jQuery's width() and height()
-		// methods do not work with SVG elements
-		// compute width/height because those properties do not exist on the object
-		// returned by getBoundingClientRect() in older versions of IE
-		var elementPosition = element.offset(),
-			elementBox = element[0].getBoundingClientRect(),
-			elementWidth = elementBox.right - elementBox.left,
-			elementHeight = elementBox.bottom - elementBox.top;
-
-		return session.currentX >= elementPosition.left &&
-			session.currentX <= elementPosition.left + elementWidth &&
-			session.currentY >= elementPosition.top &&
-			session.currentY <= elementPosition.top + elementHeight;
-	}
-
-	/**
-	 * Fetches the tooltip content from the specified element's data attributes.
-	 * @private
-	 * @param {jQuery} element The element to get the tooltip content for.
-	 * @return {(string|jQuery|undefined)} The text/HTML string, jQuery object, or
-	 *     undefined if there was no tooltip content for the element.
-	 */
-	function getTooltipContent(element) {
-		var tipText = element.data(DATA_POWERTIP),
-			tipObject = element.data(DATA_POWERTIPJQ),
-			tipTarget = element.data(DATA_POWERTIPTARGET),
-			targetElement,
-			content;
-
-		if (tipText) {
-			if ($.isFunction(tipText)) {
-				tipText = tipText.call(element[0]);
-			}
-			content = tipText;
-		} else if (tipObject) {
-			if ($.isFunction(tipObject)) {
-				tipObject = tipObject.call(element[0]);
-			}
-			if (tipObject.length > 0) {
-				content = tipObject.clone(true, true);
-			}
-		} else if (tipTarget) {
-			targetElement = $('#' + tipTarget);
-			if (targetElement.length > 0) {
-				content = targetElement.html();
-			}
-		}
-
-		return content;
-	}
-
-	/**
-	 * Finds any viewport collisions that an element (the tooltip) would have if it
-	 * were absolutely positioned at the specified coordinates.
-	 * @private
-	 * @param {CSSCoordinates} coords Coordinates for the element.
-	 * @param {number} elementWidth Width of the element in pixels.
-	 * @param {number} elementHeight Height of the element in pixels.
-	 * @return {number} Value with the collision flags.
-	 */
-	function getViewportCollisions(coords, elementWidth, elementHeight) {
-		var viewportTop = session.scrollTop,
-			viewportLeft =  session.scrollLeft,
-			viewportBottom = viewportTop + session.windowHeight,
-			viewportRight = viewportLeft + session.windowWidth,
-			collisions = Collision.none;
-
-		if (coords.top < viewportTop || Math.abs(coords.bottom - session.windowHeight) - elementHeight < viewportTop) {
-			collisions |= Collision.top;
-		}
-		if (coords.top + elementHeight > viewportBottom || Math.abs(coords.bottom - session.windowHeight) > viewportBottom) {
-			collisions |= Collision.bottom;
-		}
-		if (coords.left < viewportLeft || coords.right + elementWidth > viewportRight) {
-			collisions |= Collision.left;
-		}
-		if (coords.left + elementWidth > viewportRight || coords.right < viewportLeft) {
-			collisions |= Collision.right;
-		}
-
-		return collisions;
-	}
-
-	/**
-	 * Counts the number of bits set on a flags value.
-	 * @param {number} value The flags value.
-	 * @return {number} The number of bits that have been set.
-	 */
-	function countFlags(value) {
-		var count = 0;
-		while (value) {
-			value &= value - 1;
-			count++;
-		}
-		return count;
-	}
-
-// return api for commonjs and amd environments
-	return $.powerTip;
-}));
-
-
-/***/ }),
-/* 239 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * jQuery Validation Plugin v1.17.0
- *
- * https://jqueryvalidation.org/
- *
- * Copyright (c) 2017 Jörn Zaefferer
- * Released under the MIT license
- */
-(function( factory ) {
-	if ( true ) {
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else if (typeof module === "object" && module.exports) {
-		module.exports = factory( require( "jquery" ) );
-	} else {
-		factory( jQuery );
-	}
-}(function( $ ) {
-
-$.extend( $.fn, {
-
-	// https://jqueryvalidation.org/validate/
-	validate: function( options ) {
-
-		// If nothing is selected, return nothing; can't chain anyway
-		if ( !this.length ) {
-			if ( options && options.debug && window.console ) {
-				console.warn( "Nothing selected, can't validate, returning nothing." );
-			}
-			return;
-		}
-
-		// Check if a validator for this form was already created
-		var validator = $.data( this[ 0 ], "validator" );
-		if ( validator ) {
-			return validator;
-		}
-
-		// Add novalidate tag if HTML5.
-		this.attr( "novalidate", "novalidate" );
-
-		validator = new $.validator( options, this[ 0 ] );
-		$.data( this[ 0 ], "validator", validator );
-
-		if ( validator.settings.onsubmit ) {
-
-			this.on( "click.validate", ":submit", function( event ) {
-
-				// Track the used submit button to properly handle scripted
-				// submits later.
-				validator.submitButton = event.currentTarget;
-
-				// Allow suppressing validation by adding a cancel class to the submit button
-				if ( $( this ).hasClass( "cancel" ) ) {
-					validator.cancelSubmit = true;
-				}
-
-				// Allow suppressing validation by adding the html5 formnovalidate attribute to the submit button
-				if ( $( this ).attr( "formnovalidate" ) !== undefined ) {
-					validator.cancelSubmit = true;
-				}
-			} );
-
-			// Validate the form on submit
-			this.on( "submit.validate", function( event ) {
-				if ( validator.settings.debug ) {
-
-					// Prevent form submit to be able to see console output
-					event.preventDefault();
-				}
-				function handle() {
-					var hidden, result;
-
-					// Insert a hidden input as a replacement for the missing submit button
-					// The hidden input is inserted in two cases:
-					//   - A user defined a `submitHandler`
-					//   - There was a pending request due to `remote` method and `stopRequest()`
-					//     was called to submit the form in case it's valid
-					if ( validator.submitButton && ( validator.settings.submitHandler || validator.formSubmitted ) ) {
-						hidden = $( "<input type='hidden'/>" )
-							.attr( "name", validator.submitButton.name )
-							.val( $( validator.submitButton ).val() )
-							.appendTo( validator.currentForm );
-					}
-
-					if ( validator.settings.submitHandler ) {
-						result = validator.settings.submitHandler.call( validator, validator.currentForm, event );
-						if ( hidden ) {
-
-							// And clean up afterwards; thanks to no-block-scope, hidden can be referenced
-							hidden.remove();
-						}
-						if ( result !== undefined ) {
-							return result;
-						}
-						return false;
-					}
-					return true;
-				}
-
-				// Prevent submit for invalid forms or custom submit handlers
-				if ( validator.cancelSubmit ) {
-					validator.cancelSubmit = false;
-					return handle();
-				}
-				if ( validator.form() ) {
-					if ( validator.pendingRequest ) {
-						validator.formSubmitted = true;
-						return false;
-					}
-					return handle();
-				} else {
-					validator.focusInvalid();
-					return false;
-				}
-			} );
-		}
-
-		return validator;
-	},
-
-	// https://jqueryvalidation.org/valid/
-	valid: function() {
-		var valid, validator, errorList;
-
-		if ( $( this[ 0 ] ).is( "form" ) ) {
-			valid = this.validate().form();
-		} else {
-			errorList = [];
-			valid = true;
-			validator = $( this[ 0 ].form ).validate();
-			this.each( function() {
-				valid = validator.element( this ) && valid;
-				if ( !valid ) {
-					errorList = errorList.concat( validator.errorList );
-				}
-			} );
-			validator.errorList = errorList;
-		}
-		return valid;
-	},
-
-	// https://jqueryvalidation.org/rules/
-	rules: function( command, argument ) {
-		var element = this[ 0 ],
-			settings, staticRules, existingRules, data, param, filtered;
-
-		// If nothing is selected, return empty object; can't chain anyway
-		if ( element == null ) {
-			return;
-		}
-
-		if ( !element.form && element.hasAttribute( "contenteditable" ) ) {
-			element.form = this.closest( "form" )[ 0 ];
-			element.name = this.attr( "name" );
-		}
-
-		if ( element.form == null ) {
-			return;
-		}
-
-		if ( command ) {
-			settings = $.data( element.form, "validator" ).settings;
-			staticRules = settings.rules;
-			existingRules = $.validator.staticRules( element );
-			switch ( command ) {
-			case "add":
-				$.extend( existingRules, $.validator.normalizeRule( argument ) );
-
-				// Remove messages from rules, but allow them to be set separately
-				delete existingRules.messages;
-				staticRules[ element.name ] = existingRules;
-				if ( argument.messages ) {
-					settings.messages[ element.name ] = $.extend( settings.messages[ element.name ], argument.messages );
-				}
-				break;
-			case "remove":
-				if ( !argument ) {
-					delete staticRules[ element.name ];
-					return existingRules;
-				}
-				filtered = {};
-				$.each( argument.split( /\s/ ), function( index, method ) {
-					filtered[ method ] = existingRules[ method ];
-					delete existingRules[ method ];
-				} );
-				return filtered;
-			}
-		}
-
-		data = $.validator.normalizeRules(
-		$.extend(
-			{},
-			$.validator.classRules( element ),
-			$.validator.attributeRules( element ),
-			$.validator.dataRules( element ),
-			$.validator.staticRules( element )
-		), element );
-
-		// Make sure required is at front
-		if ( data.required ) {
-			param = data.required;
-			delete data.required;
-			data = $.extend( { required: param }, data );
-		}
-
-		// Make sure remote is at back
-		if ( data.remote ) {
-			param = data.remote;
-			delete data.remote;
-			data = $.extend( data, { remote: param } );
-		}
-
-		return data;
-	}
-} );
-
-// Custom selectors
-$.extend( $.expr.pseudos || $.expr[ ":" ], {		// '|| $.expr[ ":" ]' here enables backwards compatibility to jQuery 1.7. Can be removed when dropping jQ 1.7.x support
-
-	// https://jqueryvalidation.org/blank-selector/
-	blank: function( a ) {
-		return !$.trim( "" + $( a ).val() );
-	},
-
-	// https://jqueryvalidation.org/filled-selector/
-	filled: function( a ) {
-		var val = $( a ).val();
-		return val !== null && !!$.trim( "" + val );
-	},
-
-	// https://jqueryvalidation.org/unchecked-selector/
-	unchecked: function( a ) {
-		return !$( a ).prop( "checked" );
-	}
-} );
-
-// Constructor for validator
-$.validator = function( options, form ) {
-	this.settings = $.extend( true, {}, $.validator.defaults, options );
-	this.currentForm = form;
-	this.init();
-};
-
-// https://jqueryvalidation.org/jQuery.validator.format/
-$.validator.format = function( source, params ) {
-	if ( arguments.length === 1 ) {
-		return function() {
-			var args = $.makeArray( arguments );
-			args.unshift( source );
-			return $.validator.format.apply( this, args );
-		};
-	}
-	if ( params === undefined ) {
-		return source;
-	}
-	if ( arguments.length > 2 && params.constructor !== Array  ) {
-		params = $.makeArray( arguments ).slice( 1 );
-	}
-	if ( params.constructor !== Array ) {
-		params = [ params ];
-	}
-	$.each( params, function( i, n ) {
-		source = source.replace( new RegExp( "\\{" + i + "\\}", "g" ), function() {
-			return n;
-		} );
-	} );
-	return source;
-};
-
-$.extend( $.validator, {
-
-	defaults: {
-		messages: {},
-		groups: {},
-		rules: {},
-		errorClass: "error",
-		pendingClass: "pending",
-		validClass: "valid",
-		errorElement: "label",
-		focusCleanup: false,
-		focusInvalid: true,
-		errorContainer: $( [] ),
-		errorLabelContainer: $( [] ),
-		onsubmit: true,
-		ignore: ":hidden",
-		ignoreTitle: false,
-		onfocusin: function( element ) {
-			this.lastActive = element;
-
-			// Hide error label and remove error class on focus if enabled
-			if ( this.settings.focusCleanup ) {
-				if ( this.settings.unhighlight ) {
-					this.settings.unhighlight.call( this, element, this.settings.errorClass, this.settings.validClass );
-				}
-				this.hideThese( this.errorsFor( element ) );
-			}
-		},
-		onfocusout: function( element ) {
-			if ( !this.checkable( element ) && ( element.name in this.submitted || !this.optional( element ) ) ) {
-				this.element( element );
-			}
-		},
-		onkeyup: function( element, event ) {
-
-			// Avoid revalidate the field when pressing one of the following keys
-			// Shift       => 16
-			// Ctrl        => 17
-			// Alt         => 18
-			// Caps lock   => 20
-			// End         => 35
-			// Home        => 36
-			// Left arrow  => 37
-			// Up arrow    => 38
-			// Right arrow => 39
-			// Down arrow  => 40
-			// Insert      => 45
-			// Num lock    => 144
-			// AltGr key   => 225
-			var excludedKeys = [
-				16, 17, 18, 20, 35, 36, 37,
-				38, 39, 40, 45, 144, 225
-			];
-
-			if ( event.which === 9 && this.elementValue( element ) === "" || $.inArray( event.keyCode, excludedKeys ) !== -1 ) {
-				return;
-			} else if ( element.name in this.submitted || element.name in this.invalid ) {
-				this.element( element );
-			}
-		},
-		onclick: function( element ) {
-
-			// Click on selects, radiobuttons and checkboxes
-			if ( element.name in this.submitted ) {
-				this.element( element );
-
-			// Or option elements, check parent select in that case
-			} else if ( element.parentNode.name in this.submitted ) {
-				this.element( element.parentNode );
-			}
-		},
-		highlight: function( element, errorClass, validClass ) {
-			if ( element.type === "radio" ) {
-				this.findByName( element.name ).addClass( errorClass ).removeClass( validClass );
-			} else {
-				$( element ).addClass( errorClass ).removeClass( validClass );
-			}
-		},
-		unhighlight: function( element, errorClass, validClass ) {
-			if ( element.type === "radio" ) {
-				this.findByName( element.name ).removeClass( errorClass ).addClass( validClass );
-			} else {
-				$( element ).removeClass( errorClass ).addClass( validClass );
-			}
-		}
-	},
-
-	// https://jqueryvalidation.org/jQuery.validator.setDefaults/
-	setDefaults: function( settings ) {
-		$.extend( $.validator.defaults, settings );
-	},
-
-	messages: {
-		required: "This field is required.",
-		remote: "Please fix this field.",
-		email: "Please enter a valid email address.",
-		url: "Please enter a valid URL.",
-		date: "Please enter a valid date.",
-		dateISO: "Please enter a valid date (ISO).",
-		number: "Please enter a valid number.",
-		digits: "Please enter only digits.",
-		equalTo: "Please enter the same value again.",
-		maxlength: $.validator.format( "Please enter no more than {0} characters." ),
-		minlength: $.validator.format( "Please enter at least {0} characters." ),
-		rangelength: $.validator.format( "Please enter a value between {0} and {1} characters long." ),
-		range: $.validator.format( "Please enter a value between {0} and {1}." ),
-		max: $.validator.format( "Please enter a value less than or equal to {0}." ),
-		min: $.validator.format( "Please enter a value greater than or equal to {0}." ),
-		step: $.validator.format( "Please enter a multiple of {0}." )
-	},
-
-	autoCreateRanges: false,
-
-	prototype: {
-
-		init: function() {
-			this.labelContainer = $( this.settings.errorLabelContainer );
-			this.errorContext = this.labelContainer.length && this.labelContainer || $( this.currentForm );
-			this.containers = $( this.settings.errorContainer ).add( this.settings.errorLabelContainer );
-			this.submitted = {};
-			this.valueCache = {};
-			this.pendingRequest = 0;
-			this.pending = {};
-			this.invalid = {};
-			this.reset();
-
-			var groups = ( this.groups = {} ),
-				rules;
-			$.each( this.settings.groups, function( key, value ) {
-				if ( typeof value === "string" ) {
-					value = value.split( /\s/ );
-				}
-				$.each( value, function( index, name ) {
-					groups[ name ] = key;
-				} );
-			} );
-			rules = this.settings.rules;
-			$.each( rules, function( key, value ) {
-				rules[ key ] = $.validator.normalizeRule( value );
-			} );
-
-			function delegate( event ) {
-
-				// Set form expando on contenteditable
-				if ( !this.form && this.hasAttribute( "contenteditable" ) ) {
-					this.form = $( this ).closest( "form" )[ 0 ];
-					this.name = $( this ).attr( "name" );
-				}
-
-				var validator = $.data( this.form, "validator" ),
-					eventType = "on" + event.type.replace( /^validate/, "" ),
-					settings = validator.settings;
-				if ( settings[ eventType ] && !$( this ).is( settings.ignore ) ) {
-					settings[ eventType ].call( validator, this, event );
-				}
-			}
-
-			$( this.currentForm )
-				.on( "focusin.validate focusout.validate keyup.validate",
-					":text, [type='password'], [type='file'], select, textarea, [type='number'], [type='search'], " +
-					"[type='tel'], [type='url'], [type='email'], [type='datetime'], [type='date'], [type='month'], " +
-					"[type='week'], [type='time'], [type='datetime-local'], [type='range'], [type='color'], " +
-					"[type='radio'], [type='checkbox'], [contenteditable], [type='button']", delegate )
-
-				// Support: Chrome, oldIE
-				// "select" is provided as event.target when clicking a option
-				.on( "click.validate", "select, option, [type='radio'], [type='checkbox']", delegate );
-
-			if ( this.settings.invalidHandler ) {
-				$( this.currentForm ).on( "invalid-form.validate", this.settings.invalidHandler );
-			}
-		},
-
-		// https://jqueryvalidation.org/Validator.form/
-		form: function() {
-			this.checkForm();
-			$.extend( this.submitted, this.errorMap );
-			this.invalid = $.extend( {}, this.errorMap );
-			if ( !this.valid() ) {
-				$( this.currentForm ).triggerHandler( "invalid-form", [ this ] );
-			}
-			this.showErrors();
-			return this.valid();
-		},
-
-		checkForm: function() {
-			this.prepareForm();
-			for ( var i = 0, elements = ( this.currentElements = this.elements() ); elements[ i ]; i++ ) {
-				this.check( elements[ i ] );
-			}
-			return this.valid();
-		},
-
-		// https://jqueryvalidation.org/Validator.element/
-		element: function( element ) {
-			var cleanElement = this.clean( element ),
-				checkElement = this.validationTargetFor( cleanElement ),
-				v = this,
-				result = true,
-				rs, group;
-
-			if ( checkElement === undefined ) {
-				delete this.invalid[ cleanElement.name ];
-			} else {
-				this.prepareElement( checkElement );
-				this.currentElements = $( checkElement );
-
-				// If this element is grouped, then validate all group elements already
-				// containing a value
-				group = this.groups[ checkElement.name ];
-				if ( group ) {
-					$.each( this.groups, function( name, testgroup ) {
-						if ( testgroup === group && name !== checkElement.name ) {
-							cleanElement = v.validationTargetFor( v.clean( v.findByName( name ) ) );
-							if ( cleanElement && cleanElement.name in v.invalid ) {
-								v.currentElements.push( cleanElement );
-								result = v.check( cleanElement ) && result;
-							}
-						}
-					} );
-				}
-
-				rs = this.check( checkElement ) !== false;
-				result = result && rs;
-				if ( rs ) {
-					this.invalid[ checkElement.name ] = false;
-				} else {
-					this.invalid[ checkElement.name ] = true;
-				}
-
-				if ( !this.numberOfInvalids() ) {
-
-					// Hide error containers on last error
-					this.toHide = this.toHide.add( this.containers );
-				}
-				this.showErrors();
-
-				// Add aria-invalid status for screen readers
-				$( element ).attr( "aria-invalid", !rs );
-			}
-
-			return result;
-		},
-
-		// https://jqueryvalidation.org/Validator.showErrors/
-		showErrors: function( errors ) {
-			if ( errors ) {
-				var validator = this;
-
-				// Add items to error list and map
-				$.extend( this.errorMap, errors );
-				this.errorList = $.map( this.errorMap, function( message, name ) {
-					return {
-						message: message,
-						element: validator.findByName( name )[ 0 ]
-					};
-				} );
-
-				// Remove items from success list
-				this.successList = $.grep( this.successList, function( element ) {
-					return !( element.name in errors );
-				} );
-			}
-			if ( this.settings.showErrors ) {
-				this.settings.showErrors.call( this, this.errorMap, this.errorList );
-			} else {
-				this.defaultShowErrors();
-			}
-		},
-
-		// https://jqueryvalidation.org/Validator.resetForm/
-		resetForm: function() {
-			if ( $.fn.resetForm ) {
-				$( this.currentForm ).resetForm();
-			}
-			this.invalid = {};
-			this.submitted = {};
-			this.prepareForm();
-			this.hideErrors();
-			var elements = this.elements()
-				.removeData( "previousValue" )
-				.removeAttr( "aria-invalid" );
-
-			this.resetElements( elements );
-		},
-
-		resetElements: function( elements ) {
-			var i;
-
-			if ( this.settings.unhighlight ) {
-				for ( i = 0; elements[ i ]; i++ ) {
-					this.settings.unhighlight.call( this, elements[ i ],
-						this.settings.errorClass, "" );
-					this.findByName( elements[ i ].name ).removeClass( this.settings.validClass );
-				}
-			} else {
-				elements
-					.removeClass( this.settings.errorClass )
-					.removeClass( this.settings.validClass );
-			}
-		},
-
-		numberOfInvalids: function() {
-			return this.objectLength( this.invalid );
-		},
-
-		objectLength: function( obj ) {
-			/* jshint unused: false */
-			var count = 0,
-				i;
-			for ( i in obj ) {
-
-				// This check allows counting elements with empty error
-				// message as invalid elements
-				if ( obj[ i ] !== undefined && obj[ i ] !== null && obj[ i ] !== false ) {
-					count++;
-				}
-			}
-			return count;
-		},
-
-		hideErrors: function() {
-			this.hideThese( this.toHide );
-		},
-
-		hideThese: function( errors ) {
-			errors.not( this.containers ).text( "" );
-			this.addWrapper( errors ).hide();
-		},
-
-		valid: function() {
-			return this.size() === 0;
-		},
-
-		size: function() {
-			return this.errorList.length;
-		},
-
-		focusInvalid: function() {
-			if ( this.settings.focusInvalid ) {
-				try {
-					$( this.findLastActive() || this.errorList.length && this.errorList[ 0 ].element || [] )
-					.filter( ":visible" )
-					.focus()
-
-					// Manually trigger focusin event; without it, focusin handler isn't called, findLastActive won't have anything to find
-					.trigger( "focusin" );
-				} catch ( e ) {
-
-					// Ignore IE throwing errors when focusing hidden elements
-				}
-			}
-		},
-
-		findLastActive: function() {
-			var lastActive = this.lastActive;
-			return lastActive && $.grep( this.errorList, function( n ) {
-				return n.element.name === lastActive.name;
-			} ).length === 1 && lastActive;
-		},
-
-		elements: function() {
-			var validator = this,
-				rulesCache = {};
-
-			// Select all valid inputs inside the form (no submit or reset buttons)
-			return $( this.currentForm )
-			.find( "input, select, textarea, [contenteditable]" )
-			.not( ":submit, :reset, :image, :disabled" )
-			.not( this.settings.ignore )
-			.filter( function() {
-				var name = this.name || $( this ).attr( "name" ); // For contenteditable
-				if ( !name && validator.settings.debug && window.console ) {
-					console.error( "%o has no name assigned", this );
-				}
-
-				// Set form expando on contenteditable
-				if ( this.hasAttribute( "contenteditable" ) ) {
-					this.form = $( this ).closest( "form" )[ 0 ];
-					this.name = name;
-				}
-
-				// Select only the first element for each name, and only those with rules specified
-				if ( name in rulesCache || !validator.objectLength( $( this ).rules() ) ) {
-					return false;
-				}
-
-				rulesCache[ name ] = true;
-				return true;
-			} );
-		},
-
-		clean: function( selector ) {
-			return $( selector )[ 0 ];
-		},
-
-		errors: function() {
-			var errorClass = this.settings.errorClass.split( " " ).join( "." );
-			return $( this.settings.errorElement + "." + errorClass, this.errorContext );
-		},
-
-		resetInternals: function() {
-			this.successList = [];
-			this.errorList = [];
-			this.errorMap = {};
-			this.toShow = $( [] );
-			this.toHide = $( [] );
-		},
-
-		reset: function() {
-			this.resetInternals();
-			this.currentElements = $( [] );
-		},
-
-		prepareForm: function() {
-			this.reset();
-			this.toHide = this.errors().add( this.containers );
-		},
-
-		prepareElement: function( element ) {
-			this.reset();
-			this.toHide = this.errorsFor( element );
-		},
-
-		elementValue: function( element ) {
-			var $element = $( element ),
-				type = element.type,
-				val, idx;
-
-			if ( type === "radio" || type === "checkbox" ) {
-				return this.findByName( element.name ).filter( ":checked" ).val();
-			} else if ( type === "number" && typeof element.validity !== "undefined" ) {
-				return element.validity.badInput ? "NaN" : $element.val();
-			}
-
-			if ( element.hasAttribute( "contenteditable" ) ) {
-				val = $element.text();
-			} else {
-				val = $element.val();
-			}
-
-			if ( type === "file" ) {
-
-				// Modern browser (chrome & safari)
-				if ( val.substr( 0, 12 ) === "C:\\fakepath\\" ) {
-					return val.substr( 12 );
-				}
-
-				// Legacy browsers
-				// Unix-based path
-				idx = val.lastIndexOf( "/" );
-				if ( idx >= 0 ) {
-					return val.substr( idx + 1 );
-				}
-
-				// Windows-based path
-				idx = val.lastIndexOf( "\\" );
-				if ( idx >= 0 ) {
-					return val.substr( idx + 1 );
-				}
-
-				// Just the file name
-				return val;
-			}
-
-			if ( typeof val === "string" ) {
-				return val.replace( /\r/g, "" );
-			}
-			return val;
-		},
-
-		check: function( element ) {
-			element = this.validationTargetFor( this.clean( element ) );
-
-			var rules = $( element ).rules(),
-				rulesCount = $.map( rules, function( n, i ) {
-					return i;
-				} ).length,
-				dependencyMismatch = false,
-				val = this.elementValue( element ),
-				result, method, rule, normalizer;
-
-			// Prioritize the local normalizer defined for this element over the global one
-			// if the former exists, otherwise user the global one in case it exists.
-			if ( typeof rules.normalizer === "function" ) {
-				normalizer = rules.normalizer;
-			} else if (	typeof this.settings.normalizer === "function" ) {
-				normalizer = this.settings.normalizer;
-			}
-
-			// If normalizer is defined, then call it to retreive the changed value instead
-			// of using the real one.
-			// Note that `this` in the normalizer is `element`.
-			if ( normalizer ) {
-				val = normalizer.call( element, val );
-
-				if ( typeof val !== "string" ) {
-					throw new TypeError( "The normalizer should return a string value." );
-				}
-
-				// Delete the normalizer from rules to avoid treating it as a pre-defined method.
-				delete rules.normalizer;
-			}
-
-			for ( method in rules ) {
-				rule = { method: method, parameters: rules[ method ] };
-				try {
-					result = $.validator.methods[ method ].call( this, val, element, rule.parameters );
-
-					// If a method indicates that the field is optional and therefore valid,
-					// don't mark it as valid when there are no other rules
-					if ( result === "dependency-mismatch" && rulesCount === 1 ) {
-						dependencyMismatch = true;
-						continue;
-					}
-					dependencyMismatch = false;
-
-					if ( result === "pending" ) {
-						this.toHide = this.toHide.not( this.errorsFor( element ) );
-						return;
-					}
-
-					if ( !result ) {
-						this.formatAndAdd( element, rule );
-						return false;
-					}
-				} catch ( e ) {
-					if ( this.settings.debug && window.console ) {
-						console.log( "Exception occurred when checking element " + element.id + ", check the '" + rule.method + "' method.", e );
-					}
-					if ( e instanceof TypeError ) {
-						e.message += ".  Exception occurred when checking element " + element.id + ", check the '" + rule.method + "' method.";
-					}
-
-					throw e;
-				}
-			}
-			if ( dependencyMismatch ) {
-				return;
-			}
-			if ( this.objectLength( rules ) ) {
-				this.successList.push( element );
-			}
-			return true;
-		},
-
-		// Return the custom message for the given element and validation method
-		// specified in the element's HTML5 data attribute
-		// return the generic message if present and no method specific message is present
-		customDataMessage: function( element, method ) {
-			return $( element ).data( "msg" + method.charAt( 0 ).toUpperCase() +
-				method.substring( 1 ).toLowerCase() ) || $( element ).data( "msg" );
-		},
-
-		// Return the custom message for the given element name and validation method
-		customMessage: function( name, method ) {
-			var m = this.settings.messages[ name ];
-			return m && ( m.constructor === String ? m : m[ method ] );
-		},
-
-		// Return the first defined argument, allowing empty strings
-		findDefined: function() {
-			for ( var i = 0; i < arguments.length; i++ ) {
-				if ( arguments[ i ] !== undefined ) {
-					return arguments[ i ];
-				}
-			}
-			return undefined;
-		},
-
-		// The second parameter 'rule' used to be a string, and extended to an object literal
-		// of the following form:
-		// rule = {
-		//     method: "method name",
-		//     parameters: "the given method parameters"
-		// }
-		//
-		// The old behavior still supported, kept to maintain backward compatibility with
-		// old code, and will be removed in the next major release.
-		defaultMessage: function( element, rule ) {
-			if ( typeof rule === "string" ) {
-				rule = { method: rule };
-			}
-
-			var message = this.findDefined(
-					this.customMessage( element.name, rule.method ),
-					this.customDataMessage( element, rule.method ),
-
-					// 'title' is never undefined, so handle empty string as undefined
-					!this.settings.ignoreTitle && element.title || undefined,
-					$.validator.messages[ rule.method ],
-					"<strong>Warning: No message defined for " + element.name + "</strong>"
-				),
-				theregex = /\$?\{(\d+)\}/g;
-			if ( typeof message === "function" ) {
-				message = message.call( this, rule.parameters, element );
-			} else if ( theregex.test( message ) ) {
-				message = $.validator.format( message.replace( theregex, "{$1}" ), rule.parameters );
-			}
-
-			return message;
-		},
-
-		formatAndAdd: function( element, rule ) {
-			var message = this.defaultMessage( element, rule );
-
-			this.errorList.push( {
-				message: message,
-				element: element,
-				method: rule.method
-			} );
-
-			this.errorMap[ element.name ] = message;
-			this.submitted[ element.name ] = message;
-		},
-
-		addWrapper: function( toToggle ) {
-			if ( this.settings.wrapper ) {
-				toToggle = toToggle.add( toToggle.parent( this.settings.wrapper ) );
-			}
-			return toToggle;
-		},
-
-		defaultShowErrors: function() {
-			var i, elements, error;
-			for ( i = 0; this.errorList[ i ]; i++ ) {
-				error = this.errorList[ i ];
-				if ( this.settings.highlight ) {
-					this.settings.highlight.call( this, error.element, this.settings.errorClass, this.settings.validClass );
-				}
-				this.showLabel( error.element, error.message );
-			}
-			if ( this.errorList.length ) {
-				this.toShow = this.toShow.add( this.containers );
-			}
-			if ( this.settings.success ) {
-				for ( i = 0; this.successList[ i ]; i++ ) {
-					this.showLabel( this.successList[ i ] );
-				}
-			}
-			if ( this.settings.unhighlight ) {
-				for ( i = 0, elements = this.validElements(); elements[ i ]; i++ ) {
-					this.settings.unhighlight.call( this, elements[ i ], this.settings.errorClass, this.settings.validClass );
-				}
-			}
-			this.toHide = this.toHide.not( this.toShow );
-			this.hideErrors();
-			this.addWrapper( this.toShow ).show();
-		},
-
-		validElements: function() {
-			return this.currentElements.not( this.invalidElements() );
-		},
-
-		invalidElements: function() {
-			return $( this.errorList ).map( function() {
-				return this.element;
-			} );
-		},
-
-		showLabel: function( element, message ) {
-			var place, group, errorID, v,
-				error = this.errorsFor( element ),
-				elementID = this.idOrName( element ),
-				describedBy = $( element ).attr( "aria-describedby" );
-
-			if ( error.length ) {
-
-				// Refresh error/success class
-				error.removeClass( this.settings.validClass ).addClass( this.settings.errorClass );
-
-				// Replace message on existing label
-				error.html( message );
-			} else {
-
-				// Create error element
-				error = $( "<" + this.settings.errorElement + ">" )
-					.attr( "id", elementID + "-error" )
-					.addClass( this.settings.errorClass )
-					.html( message || "" );
-
-				// Maintain reference to the element to be placed into the DOM
-				place = error;
-				if ( this.settings.wrapper ) {
-
-					// Make sure the element is visible, even in IE
-					// actually showing the wrapped element is handled elsewhere
-					place = error.hide().show().wrap( "<" + this.settings.wrapper + "/>" ).parent();
-				}
-				if ( this.labelContainer.length ) {
-					this.labelContainer.append( place );
-				} else if ( this.settings.errorPlacement ) {
-					this.settings.errorPlacement.call( this, place, $( element ) );
-				} else {
-					place.insertAfter( element );
-				}
-
-				// Link error back to the element
-				if ( error.is( "label" ) ) {
-
-					// If the error is a label, then associate using 'for'
-					error.attr( "for", elementID );
-
-					// If the element is not a child of an associated label, then it's necessary
-					// to explicitly apply aria-describedby
-				} else if ( error.parents( "label[for='" + this.escapeCssMeta( elementID ) + "']" ).length === 0 ) {
-					errorID = error.attr( "id" );
-
-					// Respect existing non-error aria-describedby
-					if ( !describedBy ) {
-						describedBy = errorID;
-					} else if ( !describedBy.match( new RegExp( "\\b" + this.escapeCssMeta( errorID ) + "\\b" ) ) ) {
-
-						// Add to end of list if not already present
-						describedBy += " " + errorID;
-					}
-					$( element ).attr( "aria-describedby", describedBy );
-
-					// If this element is grouped, then assign to all elements in the same group
-					group = this.groups[ element.name ];
-					if ( group ) {
-						v = this;
-						$.each( v.groups, function( name, testgroup ) {
-							if ( testgroup === group ) {
-								$( "[name='" + v.escapeCssMeta( name ) + "']", v.currentForm )
-									.attr( "aria-describedby", error.attr( "id" ) );
-							}
-						} );
-					}
-				}
-			}
-			if ( !message && this.settings.success ) {
-				error.text( "" );
-				if ( typeof this.settings.success === "string" ) {
-					error.addClass( this.settings.success );
-				} else {
-					this.settings.success( error, element );
-				}
-			}
-			this.toShow = this.toShow.add( error );
-		},
-
-		errorsFor: function( element ) {
-			var name = this.escapeCssMeta( this.idOrName( element ) ),
-				describer = $( element ).attr( "aria-describedby" ),
-				selector = "label[for='" + name + "'], label[for='" + name + "'] *";
-
-			// 'aria-describedby' should directly reference the error element
-			if ( describer ) {
-				selector = selector + ", #" + this.escapeCssMeta( describer )
-					.replace( /\s+/g, ", #" );
-			}
-
-			return this
-				.errors()
-				.filter( selector );
-		},
-
-		// See https://api.jquery.com/category/selectors/, for CSS
-		// meta-characters that should be escaped in order to be used with JQuery
-		// as a literal part of a name/id or any selector.
-		escapeCssMeta: function( string ) {
-			return string.replace( /([\\!"#$%&'()*+,./:;<=>?@\[\]^`{|}~])/g, "\\$1" );
-		},
-
-		idOrName: function( element ) {
-			return this.groups[ element.name ] || ( this.checkable( element ) ? element.name : element.id || element.name );
-		},
-
-		validationTargetFor: function( element ) {
-
-			// If radio/checkbox, validate first element in group instead
-			if ( this.checkable( element ) ) {
-				element = this.findByName( element.name );
-			}
-
-			// Always apply ignore filter
-			return $( element ).not( this.settings.ignore )[ 0 ];
-		},
-
-		checkable: function( element ) {
-			return ( /radio|checkbox/i ).test( element.type );
-		},
-
-		findByName: function( name ) {
-			return $( this.currentForm ).find( "[name='" + this.escapeCssMeta( name ) + "']" );
-		},
-
-		getLength: function( value, element ) {
-			switch ( element.nodeName.toLowerCase() ) {
-			case "select":
-				return $( "option:selected", element ).length;
-			case "input":
-				if ( this.checkable( element ) ) {
-					return this.findByName( element.name ).filter( ":checked" ).length;
-				}
-			}
-			return value.length;
-		},
-
-		depend: function( param, element ) {
-			return this.dependTypes[ typeof param ] ? this.dependTypes[ typeof param ]( param, element ) : true;
-		},
-
-		dependTypes: {
-			"boolean": function( param ) {
-				return param;
-			},
-			"string": function( param, element ) {
-				return !!$( param, element.form ).length;
-			},
-			"function": function( param, element ) {
-				return param( element );
-			}
-		},
-
-		optional: function( element ) {
-			var val = this.elementValue( element );
-			return !$.validator.methods.required.call( this, val, element ) && "dependency-mismatch";
-		},
-
-		startRequest: function( element ) {
-			if ( !this.pending[ element.name ] ) {
-				this.pendingRequest++;
-				$( element ).addClass( this.settings.pendingClass );
-				this.pending[ element.name ] = true;
-			}
-		},
-
-		stopRequest: function( element, valid ) {
-			this.pendingRequest--;
-
-			// Sometimes synchronization fails, make sure pendingRequest is never < 0
-			if ( this.pendingRequest < 0 ) {
-				this.pendingRequest = 0;
-			}
-			delete this.pending[ element.name ];
-			$( element ).removeClass( this.settings.pendingClass );
-			if ( valid && this.pendingRequest === 0 && this.formSubmitted && this.form() ) {
-				$( this.currentForm ).submit();
-
-				// Remove the hidden input that was used as a replacement for the
-				// missing submit button. The hidden input is added by `handle()`
-				// to ensure that the value of the used submit button is passed on
-				// for scripted submits triggered by this method
-				if ( this.submitButton ) {
-					$( "input:hidden[name='" + this.submitButton.name + "']", this.currentForm ).remove();
-				}
-
-				this.formSubmitted = false;
-			} else if ( !valid && this.pendingRequest === 0 && this.formSubmitted ) {
-				$( this.currentForm ).triggerHandler( "invalid-form", [ this ] );
-				this.formSubmitted = false;
-			}
-		},
-
-		previousValue: function( element, method ) {
-			method = typeof method === "string" && method || "remote";
-
-			return $.data( element, "previousValue" ) || $.data( element, "previousValue", {
-				old: null,
-				valid: true,
-				message: this.defaultMessage( element, { method: method } )
-			} );
-		},
-
-		// Cleans up all forms and elements, removes validator-specific events
-		destroy: function() {
-			this.resetForm();
-
-			$( this.currentForm )
-				.off( ".validate" )
-				.removeData( "validator" )
-				.find( ".validate-equalTo-blur" )
-					.off( ".validate-equalTo" )
-					.removeClass( "validate-equalTo-blur" );
-		}
-
-	},
-
-	classRuleSettings: {
-		required: { required: true },
-		email: { email: true },
-		url: { url: true },
-		date: { date: true },
-		dateISO: { dateISO: true },
-		number: { number: true },
-		digits: { digits: true },
-		creditcard: { creditcard: true }
-	},
-
-	addClassRules: function( className, rules ) {
-		if ( className.constructor === String ) {
-			this.classRuleSettings[ className ] = rules;
-		} else {
-			$.extend( this.classRuleSettings, className );
-		}
-	},
-
-	classRules: function( element ) {
-		var rules = {},
-			classes = $( element ).attr( "class" );
-
-		if ( classes ) {
-			$.each( classes.split( " " ), function() {
-				if ( this in $.validator.classRuleSettings ) {
-					$.extend( rules, $.validator.classRuleSettings[ this ] );
-				}
-			} );
-		}
-		return rules;
-	},
-
-	normalizeAttributeRule: function( rules, type, method, value ) {
-
-		// Convert the value to a number for number inputs, and for text for backwards compability
-		// allows type="date" and others to be compared as strings
-		if ( /min|max|step/.test( method ) && ( type === null || /number|range|text/.test( type ) ) ) {
-			value = Number( value );
-
-			// Support Opera Mini, which returns NaN for undefined minlength
-			if ( isNaN( value ) ) {
-				value = undefined;
-			}
-		}
-
-		if ( value || value === 0 ) {
-			rules[ method ] = value;
-		} else if ( type === method && type !== "range" ) {
-
-			// Exception: the jquery validate 'range' method
-			// does not test for the html5 'range' type
-			rules[ method ] = true;
-		}
-	},
-
-	attributeRules: function( element ) {
-		var rules = {},
-			$element = $( element ),
-			type = element.getAttribute( "type" ),
-			method, value;
-
-		for ( method in $.validator.methods ) {
-
-			// Support for <input required> in both html5 and older browsers
-			if ( method === "required" ) {
-				value = element.getAttribute( method );
-
-				// Some browsers return an empty string for the required attribute
-				// and non-HTML5 browsers might have required="" markup
-				if ( value === "" ) {
-					value = true;
-				}
-
-				// Force non-HTML5 browsers to return bool
-				value = !!value;
-			} else {
-				value = $element.attr( method );
-			}
-
-			this.normalizeAttributeRule( rules, type, method, value );
-		}
-
-		// 'maxlength' may be returned as -1, 2147483647 ( IE ) and 524288 ( safari ) for text inputs
-		if ( rules.maxlength && /-1|2147483647|524288/.test( rules.maxlength ) ) {
-			delete rules.maxlength;
-		}
-
-		return rules;
-	},
-
-	dataRules: function( element ) {
-		var rules = {},
-			$element = $( element ),
-			type = element.getAttribute( "type" ),
-			method, value;
-
-		for ( method in $.validator.methods ) {
-			value = $element.data( "rule" + method.charAt( 0 ).toUpperCase() + method.substring( 1 ).toLowerCase() );
-			this.normalizeAttributeRule( rules, type, method, value );
-		}
-		return rules;
-	},
-
-	staticRules: function( element ) {
-		var rules = {},
-			validator = $.data( element.form, "validator" );
-
-		if ( validator.settings.rules ) {
-			rules = $.validator.normalizeRule( validator.settings.rules[ element.name ] ) || {};
-		}
-		return rules;
-	},
-
-	normalizeRules: function( rules, element ) {
-
-		// Handle dependency check
-		$.each( rules, function( prop, val ) {
-
-			// Ignore rule when param is explicitly false, eg. required:false
-			if ( val === false ) {
-				delete rules[ prop ];
-				return;
-			}
-			if ( val.param || val.depends ) {
-				var keepRule = true;
-				switch ( typeof val.depends ) {
-				case "string":
-					keepRule = !!$( val.depends, element.form ).length;
-					break;
-				case "function":
-					keepRule = val.depends.call( element, element );
-					break;
-				}
-				if ( keepRule ) {
-					rules[ prop ] = val.param !== undefined ? val.param : true;
-				} else {
-					$.data( element.form, "validator" ).resetElements( $( element ) );
-					delete rules[ prop ];
-				}
-			}
-		} );
-
-		// Evaluate parameters
-		$.each( rules, function( rule, parameter ) {
-			rules[ rule ] = $.isFunction( parameter ) && rule !== "normalizer" ? parameter( element ) : parameter;
-		} );
-
-		// Clean number parameters
-		$.each( [ "minlength", "maxlength" ], function() {
-			if ( rules[ this ] ) {
-				rules[ this ] = Number( rules[ this ] );
-			}
-		} );
-		$.each( [ "rangelength", "range" ], function() {
-			var parts;
-			if ( rules[ this ] ) {
-				if ( $.isArray( rules[ this ] ) ) {
-					rules[ this ] = [ Number( rules[ this ][ 0 ] ), Number( rules[ this ][ 1 ] ) ];
-				} else if ( typeof rules[ this ] === "string" ) {
-					parts = rules[ this ].replace( /[\[\]]/g, "" ).split( /[\s,]+/ );
-					rules[ this ] = [ Number( parts[ 0 ] ), Number( parts[ 1 ] ) ];
-				}
-			}
-		} );
-
-		if ( $.validator.autoCreateRanges ) {
-
-			// Auto-create ranges
-			if ( rules.min != null && rules.max != null ) {
-				rules.range = [ rules.min, rules.max ];
-				delete rules.min;
-				delete rules.max;
-			}
-			if ( rules.minlength != null && rules.maxlength != null ) {
-				rules.rangelength = [ rules.minlength, rules.maxlength ];
-				delete rules.minlength;
-				delete rules.maxlength;
-			}
-		}
-
-		return rules;
-	},
-
-	// Converts a simple string to a {string: true} rule, e.g., "required" to {required:true}
-	normalizeRule: function( data ) {
-		if ( typeof data === "string" ) {
-			var transformed = {};
-			$.each( data.split( /\s/ ), function() {
-				transformed[ this ] = true;
-			} );
-			data = transformed;
-		}
-		return data;
-	},
-
-	// https://jqueryvalidation.org/jQuery.validator.addMethod/
-	addMethod: function( name, method, message ) {
-		$.validator.methods[ name ] = method;
-		$.validator.messages[ name ] = message !== undefined ? message : $.validator.messages[ name ];
-		if ( method.length < 3 ) {
-			$.validator.addClassRules( name, $.validator.normalizeRule( name ) );
-		}
-	},
-
-	// https://jqueryvalidation.org/jQuery.validator.methods/
-	methods: {
-
-		// https://jqueryvalidation.org/required-method/
-		required: function( value, element, param ) {
-
-			// Check if dependency is met
-			if ( !this.depend( param, element ) ) {
-				return "dependency-mismatch";
-			}
-			if ( element.nodeName.toLowerCase() === "select" ) {
-
-				// Could be an array for select-multiple or a string, both are fine this way
-				var val = $( element ).val();
-				return val && val.length > 0;
-			}
-			if ( this.checkable( element ) ) {
-				return this.getLength( value, element ) > 0;
-			}
-			return value.length > 0;
-		},
-
-		// https://jqueryvalidation.org/email-method/
-		email: function( value, element ) {
-
-			// From https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
-			// Retrieved 2014-01-14
-			// If you have a problem with this implementation, report a bug against the above spec
-			// Or use custom methods to implement your own email validation
-			return this.optional( element ) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test( value );
-		},
-
-		// https://jqueryvalidation.org/url-method/
-		url: function( value, element ) {
-
-			// Copyright (c) 2010-2013 Diego Perini, MIT licensed
-			// https://gist.github.com/dperini/729294
-			// see also https://mathiasbynens.be/demo/url-regex
-			// modified to allow protocol-relative URLs
-			return this.optional( element ) || /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test( value );
-		},
-
-		// https://jqueryvalidation.org/date-method/
-		date: function( value, element ) {
-			return this.optional( element ) || !/Invalid|NaN/.test( new Date( value ).toString() );
-		},
-
-		// https://jqueryvalidation.org/dateISO-method/
-		dateISO: function( value, element ) {
-			return this.optional( element ) || /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test( value );
-		},
-
-		// https://jqueryvalidation.org/number-method/
-		number: function( value, element ) {
-			return this.optional( element ) || /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test( value );
-		},
-
-		// https://jqueryvalidation.org/digits-method/
-		digits: function( value, element ) {
-			return this.optional( element ) || /^\d+$/.test( value );
-		},
-
-		// https://jqueryvalidation.org/minlength-method/
-		minlength: function( value, element, param ) {
-			var length = $.isArray( value ) ? value.length : this.getLength( value, element );
-			return this.optional( element ) || length >= param;
-		},
-
-		// https://jqueryvalidation.org/maxlength-method/
-		maxlength: function( value, element, param ) {
-			var length = $.isArray( value ) ? value.length : this.getLength( value, element );
-			return this.optional( element ) || length <= param;
-		},
-
-		// https://jqueryvalidation.org/rangelength-method/
-		rangelength: function( value, element, param ) {
-			var length = $.isArray( value ) ? value.length : this.getLength( value, element );
-			return this.optional( element ) || ( length >= param[ 0 ] && length <= param[ 1 ] );
-		},
-
-		// https://jqueryvalidation.org/min-method/
-		min: function( value, element, param ) {
-			return this.optional( element ) || value >= param;
-		},
-
-		// https://jqueryvalidation.org/max-method/
-		max: function( value, element, param ) {
-			return this.optional( element ) || value <= param;
-		},
-
-		// https://jqueryvalidation.org/range-method/
-		range: function( value, element, param ) {
-			return this.optional( element ) || ( value >= param[ 0 ] && value <= param[ 1 ] );
-		},
-
-		// https://jqueryvalidation.org/step-method/
-		step: function( value, element, param ) {
-			var type = $( element ).attr( "type" ),
-				errorMessage = "Step attribute on input type " + type + " is not supported.",
-				supportedTypes = [ "text", "number", "range" ],
-				re = new RegExp( "\\b" + type + "\\b" ),
-				notSupported = type && !re.test( supportedTypes.join() ),
-				decimalPlaces = function( num ) {
-					var match = ( "" + num ).match( /(?:\.(\d+))?$/ );
-					if ( !match ) {
-						return 0;
-					}
-
-					// Number of digits right of decimal point.
-					return match[ 1 ] ? match[ 1 ].length : 0;
-				},
-				toInt = function( num ) {
-					return Math.round( num * Math.pow( 10, decimals ) );
-				},
-				valid = true,
-				decimals;
-
-			// Works only for text, number and range input types
-			// TODO find a way to support input types date, datetime, datetime-local, month, time and week
-			if ( notSupported ) {
-				throw new Error( errorMessage );
-			}
-
-			decimals = decimalPlaces( param );
-
-			// Value can't have too many decimals
-			if ( decimalPlaces( value ) > decimals || toInt( value ) % toInt( param ) !== 0 ) {
-				valid = false;
-			}
-
-			return this.optional( element ) || valid;
-		},
-
-		// https://jqueryvalidation.org/equalTo-method/
-		equalTo: function( value, element, param ) {
-
-			// Bind to the blur event of the target in order to revalidate whenever the target field is updated
-			var target = $( param );
-			if ( this.settings.onfocusout && target.not( ".validate-equalTo-blur" ).length ) {
-				target.addClass( "validate-equalTo-blur" ).on( "blur.validate-equalTo", function() {
-					$( element ).valid();
-				} );
-			}
-			return value === target.val();
-		},
-
-		// https://jqueryvalidation.org/remote-method/
-		remote: function( value, element, param, method ) {
-			if ( this.optional( element ) ) {
-				return "dependency-mismatch";
-			}
-
-			method = typeof method === "string" && method || "remote";
-
-			var previous = this.previousValue( element, method ),
-				validator, data, optionDataString;
-
-			if ( !this.settings.messages[ element.name ] ) {
-				this.settings.messages[ element.name ] = {};
-			}
-			previous.originalMessage = previous.originalMessage || this.settings.messages[ element.name ][ method ];
-			this.settings.messages[ element.name ][ method ] = previous.message;
-
-			param = typeof param === "string" && { url: param } || param;
-			optionDataString = $.param( $.extend( { data: value }, param.data ) );
-			if ( previous.old === optionDataString ) {
-				return previous.valid;
-			}
-
-			previous.old = optionDataString;
-			validator = this;
-			this.startRequest( element );
-			data = {};
-			data[ element.name ] = value;
-			$.ajax( $.extend( true, {
-				mode: "abort",
-				port: "validate" + element.name,
-				dataType: "json",
-				data: data,
-				context: validator.currentForm,
-				success: function( response ) {
-					var valid = response === true || response === "true",
-						errors, message, submitted;
-
-					validator.settings.messages[ element.name ][ method ] = previous.originalMessage;
-					if ( valid ) {
-						submitted = validator.formSubmitted;
-						validator.resetInternals();
-						validator.toHide = validator.errorsFor( element );
-						validator.formSubmitted = submitted;
-						validator.successList.push( element );
-						validator.invalid[ element.name ] = false;
-						validator.showErrors();
-					} else {
-						errors = {};
-						message = response || validator.defaultMessage( element, { method: method, parameters: value } );
-						errors[ element.name ] = previous.message = message;
-						validator.invalid[ element.name ] = true;
-						validator.showErrors( errors );
-					}
-					previous.valid = valid;
-					validator.stopRequest( element, valid );
-				}
-			}, param ) );
-			return "pending";
-		}
-	}
-
-} );
-
-// Ajax mode: abort
-// usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
-// if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort()
-
-var pendingRequests = {},
-	ajax;
-
-// Use a prefilter if available (1.5+)
-if ( $.ajaxPrefilter ) {
-	$.ajaxPrefilter( function( settings, _, xhr ) {
-		var port = settings.port;
-		if ( settings.mode === "abort" ) {
-			if ( pendingRequests[ port ] ) {
-				pendingRequests[ port ].abort();
-			}
-			pendingRequests[ port ] = xhr;
-		}
-	} );
-} else {
-
-	// Proxy ajax
-	ajax = $.ajax;
-	$.ajax = function( settings ) {
-		var mode = ( "mode" in settings ? settings : $.ajaxSettings ).mode,
-			port = ( "port" in settings ? settings : $.ajaxSettings ).port;
-		if ( mode === "abort" ) {
-			if ( pendingRequests[ port ] ) {
-				pendingRequests[ port ].abort();
-			}
-			pendingRequests[ port ] = ajax.apply( this, arguments );
-			return pendingRequests[ port ];
-		}
-		return ajax.apply( this, arguments );
-	};
-}
-return $;
-}));
-
-/***/ }),
-/* 240 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(14);
-__webpack_require__(160);
-__webpack_require__(241);
-__webpack_require__(161);
-__webpack_require__(242);
-__webpack_require__(162);
-__webpack_require__(243);
-__webpack_require__(246);
-
-/***/ }),
-/* 241 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * jQuery UI Disable Selection 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: disableSelection
-//>>group: Core
-//>>description: Disable selection of text content within the set of matched elements.
-//>>docs: http://api.jqueryui.com/disableSelection/
-
-// This file is deprecated
-( function( factory ) {
-	if ( true ) {
-
-		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1), __webpack_require__(4) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else {
-
-		// Browser globals
-		factory( jQuery );
-	}
-} ( function( $ ) {
-
-return $.fn.extend( {
-	disableSelection: ( function() {
-		var eventType = "onselectstart" in document.createElement( "div" ) ?
-			"selectstart" :
-			"mousedown";
-
-		return function() {
-			return this.on( eventType + ".ui-disableSelection", function( event ) {
-				event.preventDefault();
-			} );
-		};
-	} )(),
-
-	enableSelection: function() {
-		return this.off( ".ui-disableSelection" );
-	}
-} );
-
-} ) );
-
-
-/***/ }),
-/* 242 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * jQuery UI Sortable 1.12.1
- * http://jqueryui.com
- *
- * Copyright jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-
-//>>label: Sortable
-//>>group: Interactions
-//>>description: Enables items in a list to be sorted using the mouse.
-//>>docs: http://api.jqueryui.com/sortable/
-//>>demos: http://jqueryui.com/sortable/
-//>>css.structure: ../../themes/base/sortable.css
-
-( function( factory ) {
-	if ( true ) {
-
-		// AMD. Register as an anonymous module.
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-			__webpack_require__(1),
-			__webpack_require__(162),
-			__webpack_require__(160),
-			__webpack_require__(163),
-			__webpack_require__(161),
-			__webpack_require__(4),
-			__webpack_require__(14)
-		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else {
-
-		// Browser globals
-		factory( jQuery );
-	}
-}( function( $ ) {
-
-return $.widget( "ui.sortable", $.ui.mouse, {
-	version: "1.12.1",
-	widgetEventPrefix: "sort",
-	ready: false,
-	options: {
-		appendTo: "parent",
-		axis: false,
-		connectWith: false,
-		containment: false,
-		cursor: "auto",
-		cursorAt: false,
-		dropOnEmpty: true,
-		forcePlaceholderSize: false,
-		forceHelperSize: false,
-		grid: false,
-		handle: false,
-		helper: "original",
-		items: "> *",
-		opacity: false,
-		placeholder: false,
-		revert: false,
-		scroll: true,
-		scrollSensitivity: 20,
-		scrollSpeed: 20,
-		scope: "default",
-		tolerance: "intersect",
-		zIndex: 1000,
-
-		// Callbacks
-		activate: null,
-		beforeStop: null,
-		change: null,
-		deactivate: null,
-		out: null,
-		over: null,
-		receive: null,
-		remove: null,
-		sort: null,
-		start: null,
-		stop: null,
-		update: null
-	},
-
-	_isOverAxis: function( x, reference, size ) {
-		return ( x >= reference ) && ( x < ( reference + size ) );
-	},
-
-	_isFloating: function( item ) {
-		return ( /left|right/ ).test( item.css( "float" ) ) ||
-			( /inline|table-cell/ ).test( item.css( "display" ) );
-	},
-
-	_create: function() {
-		this.containerCache = {};
-		this._addClass( "ui-sortable" );
-
-		//Get the items
-		this.refresh();
-
-		//Let's determine the parent's offset
-		this.offset = this.element.offset();
-
-		//Initialize mouse events for interaction
-		this._mouseInit();
-
-		this._setHandleClassName();
-
-		//We're ready to go
-		this.ready = true;
-
-	},
-
-	_setOption: function( key, value ) {
-		this._super( key, value );
-
-		if ( key === "handle" ) {
-			this._setHandleClassName();
-		}
-	},
-
-	_setHandleClassName: function() {
-		var that = this;
-		this._removeClass( this.element.find( ".ui-sortable-handle" ), "ui-sortable-handle" );
-		$.each( this.items, function() {
-			that._addClass(
-				this.instance.options.handle ?
-					this.item.find( this.instance.options.handle ) :
-					this.item,
-				"ui-sortable-handle"
-			);
-		} );
-	},
-
-	_destroy: function() {
-		this._mouseDestroy();
-
-		for ( var i = this.items.length - 1; i >= 0; i-- ) {
-			this.items[ i ].item.removeData( this.widgetName + "-item" );
-		}
-
-		return this;
-	},
-
-	_mouseCapture: function( event, overrideHandle ) {
-		var currentItem = null,
-			validHandle = false,
-			that = this;
-
-		if ( this.reverting ) {
-			return false;
-		}
-
-		if ( this.options.disabled || this.options.type === "static" ) {
-			return false;
-		}
-
-		//We have to refresh the items data once first
-		this._refreshItems( event );
-
-		//Find out if the clicked node (or one of its parents) is a actual item in this.items
-		$( event.target ).parents().each( function() {
-			if ( $.data( this, that.widgetName + "-item" ) === that ) {
-				currentItem = $( this );
-				return false;
-			}
-		} );
-		if ( $.data( event.target, that.widgetName + "-item" ) === that ) {
-			currentItem = $( event.target );
-		}
-
-		if ( !currentItem ) {
-			return false;
-		}
-		if ( this.options.handle && !overrideHandle ) {
-			$( this.options.handle, currentItem ).find( "*" ).addBack().each( function() {
-				if ( this === event.target ) {
-					validHandle = true;
-				}
-			} );
-			if ( !validHandle ) {
-				return false;
-			}
-		}
-
-		this.currentItem = currentItem;
-		this._removeCurrentsFromItems();
-		return true;
-
-	},
-
-	_mouseStart: function( event, overrideHandle, noActivation ) {
-
-		var i, body,
-			o = this.options;
-
-		this.currentContainer = this;
-
-		//We only need to call refreshPositions, because the refreshItems call has been moved to
-		// mouseCapture
-		this.refreshPositions();
-
-		//Create and append the visible helper
-		this.helper = this._createHelper( event );
-
-		//Cache the helper size
-		this._cacheHelperProportions();
-
-		/*
-		 * - Position generation -
-		 * This block generates everything position related - it's the core of draggables.
-		 */
-
-		//Cache the margins of the original element
-		this._cacheMargins();
-
-		//Get the next scrolling parent
-		this.scrollParent = this.helper.scrollParent();
-
-		//The element's absolute position on the page minus margins
-		this.offset = this.currentItem.offset();
-		this.offset = {
-			top: this.offset.top - this.margins.top,
-			left: this.offset.left - this.margins.left
-		};
-
-		$.extend( this.offset, {
-			click: { //Where the click happened, relative to the element
-				left: event.pageX - this.offset.left,
-				top: event.pageY - this.offset.top
-			},
-			parent: this._getParentOffset(),
-
-			// This is a relative to absolute position minus the actual position calculation -
-			// only used for relative positioned helper
-			relative: this._getRelativeOffset()
-		} );
-
-		// Only after we got the offset, we can change the helper's position to absolute
-		// TODO: Still need to figure out a way to make relative sorting possible
-		this.helper.css( "position", "absolute" );
-		this.cssPosition = this.helper.css( "position" );
-
-		//Generate the original position
-		this.originalPosition = this._generatePosition( event );
-		this.originalPageX = event.pageX;
-		this.originalPageY = event.pageY;
-
-		//Adjust the mouse offset relative to the helper if "cursorAt" is supplied
-		( o.cursorAt && this._adjustOffsetFromHelper( o.cursorAt ) );
-
-		//Cache the former DOM position
-		this.domPosition = {
-			prev: this.currentItem.prev()[ 0 ],
-			parent: this.currentItem.parent()[ 0 ]
-		};
-
-		// If the helper is not the original, hide the original so it's not playing any role during
-		// the drag, won't cause anything bad this way
-		if ( this.helper[ 0 ] !== this.currentItem[ 0 ] ) {
-			this.currentItem.hide();
-		}
-
-		//Create the placeholder
-		this._createPlaceholder();
-
-		//Set a containment if given in the options
-		if ( o.containment ) {
-			this._setContainment();
-		}
-
-		if ( o.cursor && o.cursor !== "auto" ) { // cursor option
-			body = this.document.find( "body" );
-
-			// Support: IE
-			this.storedCursor = body.css( "cursor" );
-			body.css( "cursor", o.cursor );
-
-			this.storedStylesheet =
-				$( "<style>*{ cursor: " + o.cursor + " !important; }</style>" ).appendTo( body );
-		}
-
-		if ( o.opacity ) { // opacity option
-			if ( this.helper.css( "opacity" ) ) {
-				this._storedOpacity = this.helper.css( "opacity" );
-			}
-			this.helper.css( "opacity", o.opacity );
-		}
-
-		if ( o.zIndex ) { // zIndex option
-			if ( this.helper.css( "zIndex" ) ) {
-				this._storedZIndex = this.helper.css( "zIndex" );
-			}
-			this.helper.css( "zIndex", o.zIndex );
-		}
-
-		//Prepare scrolling
-		if ( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
-				this.scrollParent[ 0 ].tagName !== "HTML" ) {
-			this.overflowOffset = this.scrollParent.offset();
-		}
-
-		//Call callbacks
-		this._trigger( "start", event, this._uiHash() );
-
-		//Recache the helper size
-		if ( !this._preserveHelperProportions ) {
-			this._cacheHelperProportions();
-		}
-
-		//Post "activate" events to possible containers
-		if ( !noActivation ) {
-			for ( i = this.containers.length - 1; i >= 0; i-- ) {
-				this.containers[ i ]._trigger( "activate", event, this._uiHash( this ) );
-			}
-		}
-
-		//Prepare possible droppables
-		if ( $.ui.ddmanager ) {
-			$.ui.ddmanager.current = this;
-		}
-
-		if ( $.ui.ddmanager && !o.dropBehaviour ) {
-			$.ui.ddmanager.prepareOffsets( this, event );
-		}
-
-		this.dragging = true;
-
-		this._addClass( this.helper, "ui-sortable-helper" );
-
-		// Execute the drag once - this causes the helper not to be visiblebefore getting its
-		// correct position
-		this._mouseDrag( event );
-		return true;
-
-	},
-
-	_mouseDrag: function( event ) {
-		var i, item, itemElement, intersection,
-			o = this.options,
-			scrolled = false;
-
-		//Compute the helpers position
-		this.position = this._generatePosition( event );
-		this.positionAbs = this._convertPositionTo( "absolute" );
-
-		if ( !this.lastPositionAbs ) {
-			this.lastPositionAbs = this.positionAbs;
-		}
-
-		//Do scrolling
-		if ( this.options.scroll ) {
-			if ( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
-					this.scrollParent[ 0 ].tagName !== "HTML" ) {
-
-				if ( ( this.overflowOffset.top + this.scrollParent[ 0 ].offsetHeight ) -
-						event.pageY < o.scrollSensitivity ) {
-					this.scrollParent[ 0 ].scrollTop =
-						scrolled = this.scrollParent[ 0 ].scrollTop + o.scrollSpeed;
-				} else if ( event.pageY - this.overflowOffset.top < o.scrollSensitivity ) {
-					this.scrollParent[ 0 ].scrollTop =
-						scrolled = this.scrollParent[ 0 ].scrollTop - o.scrollSpeed;
-				}
-
-				if ( ( this.overflowOffset.left + this.scrollParent[ 0 ].offsetWidth ) -
-						event.pageX < o.scrollSensitivity ) {
-					this.scrollParent[ 0 ].scrollLeft = scrolled =
-						this.scrollParent[ 0 ].scrollLeft + o.scrollSpeed;
-				} else if ( event.pageX - this.overflowOffset.left < o.scrollSensitivity ) {
-					this.scrollParent[ 0 ].scrollLeft = scrolled =
-						this.scrollParent[ 0 ].scrollLeft - o.scrollSpeed;
-				}
-
-			} else {
-
-				if ( event.pageY - this.document.scrollTop() < o.scrollSensitivity ) {
-					scrolled = this.document.scrollTop( this.document.scrollTop() - o.scrollSpeed );
-				} else if ( this.window.height() - ( event.pageY - this.document.scrollTop() ) <
-						o.scrollSensitivity ) {
-					scrolled = this.document.scrollTop( this.document.scrollTop() + o.scrollSpeed );
-				}
-
-				if ( event.pageX - this.document.scrollLeft() < o.scrollSensitivity ) {
-					scrolled = this.document.scrollLeft(
-						this.document.scrollLeft() - o.scrollSpeed
-					);
-				} else if ( this.window.width() - ( event.pageX - this.document.scrollLeft() ) <
-						o.scrollSensitivity ) {
-					scrolled = this.document.scrollLeft(
-						this.document.scrollLeft() + o.scrollSpeed
-					);
-				}
-
-			}
-
-			if ( scrolled !== false && $.ui.ddmanager && !o.dropBehaviour ) {
-				$.ui.ddmanager.prepareOffsets( this, event );
-			}
-		}
-
-		//Regenerate the absolute position used for position checks
-		this.positionAbs = this._convertPositionTo( "absolute" );
-
-		//Set the helper position
-		if ( !this.options.axis || this.options.axis !== "y" ) {
-			this.helper[ 0 ].style.left = this.position.left + "px";
-		}
-		if ( !this.options.axis || this.options.axis !== "x" ) {
-			this.helper[ 0 ].style.top = this.position.top + "px";
-		}
-
-		//Rearrange
-		for ( i = this.items.length - 1; i >= 0; i-- ) {
-
-			//Cache variables and intersection, continue if no intersection
-			item = this.items[ i ];
-			itemElement = item.item[ 0 ];
-			intersection = this._intersectsWithPointer( item );
-			if ( !intersection ) {
-				continue;
-			}
-
-			// Only put the placeholder inside the current Container, skip all
-			// items from other containers. This works because when moving
-			// an item from one container to another the
-			// currentContainer is switched before the placeholder is moved.
-			//
-			// Without this, moving items in "sub-sortables" can cause
-			// the placeholder to jitter between the outer and inner container.
-			if ( item.instance !== this.currentContainer ) {
-				continue;
-			}
-
-			// Cannot intersect with itself
-			// no useless actions that have been done before
-			// no action if the item moved is the parent of the item checked
-			if ( itemElement !== this.currentItem[ 0 ] &&
-				this.placeholder[ intersection === 1 ? "next" : "prev" ]()[ 0 ] !== itemElement &&
-				!$.contains( this.placeholder[ 0 ], itemElement ) &&
-				( this.options.type === "semi-dynamic" ?
-					!$.contains( this.element[ 0 ], itemElement ) :
-					true
-				)
-			) {
-
-				this.direction = intersection === 1 ? "down" : "up";
-
-				if ( this.options.tolerance === "pointer" || this._intersectsWithSides( item ) ) {
-					this._rearrange( event, item );
-				} else {
-					break;
-				}
-
-				this._trigger( "change", event, this._uiHash() );
-				break;
-			}
-		}
-
-		//Post events to containers
-		this._contactContainers( event );
-
-		//Interconnect with droppables
-		if ( $.ui.ddmanager ) {
-			$.ui.ddmanager.drag( this, event );
-		}
-
-		//Call callbacks
-		this._trigger( "sort", event, this._uiHash() );
-
-		this.lastPositionAbs = this.positionAbs;
-		return false;
-
-	},
-
-	_mouseStop: function( event, noPropagation ) {
-
-		if ( !event ) {
-			return;
-		}
-
-		//If we are using droppables, inform the manager about the drop
-		if ( $.ui.ddmanager && !this.options.dropBehaviour ) {
-			$.ui.ddmanager.drop( this, event );
-		}
-
-		if ( this.options.revert ) {
-			var that = this,
-				cur = this.placeholder.offset(),
-				axis = this.options.axis,
-				animation = {};
-
-			if ( !axis || axis === "x" ) {
-				animation.left = cur.left - this.offset.parent.left - this.margins.left +
-					( this.offsetParent[ 0 ] === this.document[ 0 ].body ?
-						0 :
-						this.offsetParent[ 0 ].scrollLeft
-					);
-			}
-			if ( !axis || axis === "y" ) {
-				animation.top = cur.top - this.offset.parent.top - this.margins.top +
-					( this.offsetParent[ 0 ] === this.document[ 0 ].body ?
-						0 :
-						this.offsetParent[ 0 ].scrollTop
-					);
-			}
-			this.reverting = true;
-			$( this.helper ).animate(
-				animation,
-				parseInt( this.options.revert, 10 ) || 500,
-				function() {
-					that._clear( event );
-				}
-			);
-		} else {
-			this._clear( event, noPropagation );
-		}
-
-		return false;
-
-	},
-
-	cancel: function() {
-
-		if ( this.dragging ) {
-
-			this._mouseUp( new $.Event( "mouseup", { target: null } ) );
-
-			if ( this.options.helper === "original" ) {
-				this.currentItem.css( this._storedCSS );
-				this._removeClass( this.currentItem, "ui-sortable-helper" );
-			} else {
-				this.currentItem.show();
-			}
-
-			//Post deactivating events to containers
-			for ( var i = this.containers.length - 1; i >= 0; i-- ) {
-				this.containers[ i ]._trigger( "deactivate", null, this._uiHash( this ) );
-				if ( this.containers[ i ].containerCache.over ) {
-					this.containers[ i ]._trigger( "out", null, this._uiHash( this ) );
-					this.containers[ i ].containerCache.over = 0;
-				}
-			}
-
-		}
-
-		if ( this.placeholder ) {
-
-			//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately,
-			// it unbinds ALL events from the original node!
-			if ( this.placeholder[ 0 ].parentNode ) {
-				this.placeholder[ 0 ].parentNode.removeChild( this.placeholder[ 0 ] );
-			}
-			if ( this.options.helper !== "original" && this.helper &&
-					this.helper[ 0 ].parentNode ) {
-				this.helper.remove();
-			}
-
-			$.extend( this, {
-				helper: null,
-				dragging: false,
-				reverting: false,
-				_noFinalSort: null
-			} );
-
-			if ( this.domPosition.prev ) {
-				$( this.domPosition.prev ).after( this.currentItem );
-			} else {
-				$( this.domPosition.parent ).prepend( this.currentItem );
-			}
-		}
-
-		return this;
-
-	},
-
-	serialize: function( o ) {
-
-		var items = this._getItemsAsjQuery( o && o.connected ),
-			str = [];
-		o = o || {};
-
-		$( items ).each( function() {
-			var res = ( $( o.item || this ).attr( o.attribute || "id" ) || "" )
-				.match( o.expression || ( /(.+)[\-=_](.+)/ ) );
-			if ( res ) {
-				str.push(
-					( o.key || res[ 1 ] + "[]" ) +
-					"=" + ( o.key && o.expression ? res[ 1 ] : res[ 2 ] ) );
-			}
-		} );
-
-		if ( !str.length && o.key ) {
-			str.push( o.key + "=" );
-		}
-
-		return str.join( "&" );
-
-	},
-
-	toArray: function( o ) {
-
-		var items = this._getItemsAsjQuery( o && o.connected ),
-			ret = [];
-
-		o = o || {};
-
-		items.each( function() {
-			ret.push( $( o.item || this ).attr( o.attribute || "id" ) || "" );
-		} );
-		return ret;
-
-	},
-
-	/* Be careful with the following core functions */
-	_intersectsWith: function( item ) {
-
-		var x1 = this.positionAbs.left,
-			x2 = x1 + this.helperProportions.width,
-			y1 = this.positionAbs.top,
-			y2 = y1 + this.helperProportions.height,
-			l = item.left,
-			r = l + item.width,
-			t = item.top,
-			b = t + item.height,
-			dyClick = this.offset.click.top,
-			dxClick = this.offset.click.left,
-			isOverElementHeight = ( this.options.axis === "x" ) || ( ( y1 + dyClick ) > t &&
-				( y1 + dyClick ) < b ),
-			isOverElementWidth = ( this.options.axis === "y" ) || ( ( x1 + dxClick ) > l &&
-				( x1 + dxClick ) < r ),
-			isOverElement = isOverElementHeight && isOverElementWidth;
-
-		if ( this.options.tolerance === "pointer" ||
-			this.options.forcePointerForContainers ||
-			( this.options.tolerance !== "pointer" &&
-				this.helperProportions[ this.floating ? "width" : "height" ] >
-				item[ this.floating ? "width" : "height" ] )
-		) {
-			return isOverElement;
-		} else {
-
-			return ( l < x1 + ( this.helperProportions.width / 2 ) && // Right Half
-				x2 - ( this.helperProportions.width / 2 ) < r && // Left Half
-				t < y1 + ( this.helperProportions.height / 2 ) && // Bottom Half
-				y2 - ( this.helperProportions.height / 2 ) < b ); // Top Half
-
-		}
-	},
-
-	_intersectsWithPointer: function( item ) {
-		var verticalDirection, horizontalDirection,
-			isOverElementHeight = ( this.options.axis === "x" ) ||
-				this._isOverAxis(
-					this.positionAbs.top + this.offset.click.top, item.top, item.height ),
-			isOverElementWidth = ( this.options.axis === "y" ) ||
-				this._isOverAxis(
-					this.positionAbs.left + this.offset.click.left, item.left, item.width ),
-			isOverElement = isOverElementHeight && isOverElementWidth;
-
-		if ( !isOverElement ) {
-			return false;
-		}
-
-		verticalDirection = this._getDragVerticalDirection();
-		horizontalDirection = this._getDragHorizontalDirection();
-
-		return this.floating ?
-			( ( horizontalDirection === "right" || verticalDirection === "down" ) ? 2 : 1 )
-			: ( verticalDirection && ( verticalDirection === "down" ? 2 : 1 ) );
-
-	},
-
-	_intersectsWithSides: function( item ) {
-
-		var isOverBottomHalf = this._isOverAxis( this.positionAbs.top +
-				this.offset.click.top, item.top + ( item.height / 2 ), item.height ),
-			isOverRightHalf = this._isOverAxis( this.positionAbs.left +
-				this.offset.click.left, item.left + ( item.width / 2 ), item.width ),
-			verticalDirection = this._getDragVerticalDirection(),
-			horizontalDirection = this._getDragHorizontalDirection();
-
-		if ( this.floating && horizontalDirection ) {
-			return ( ( horizontalDirection === "right" && isOverRightHalf ) ||
-				( horizontalDirection === "left" && !isOverRightHalf ) );
-		} else {
-			return verticalDirection && ( ( verticalDirection === "down" && isOverBottomHalf ) ||
-				( verticalDirection === "up" && !isOverBottomHalf ) );
-		}
-
-	},
-
-	_getDragVerticalDirection: function() {
-		var delta = this.positionAbs.top - this.lastPositionAbs.top;
-		return delta !== 0 && ( delta > 0 ? "down" : "up" );
-	},
-
-	_getDragHorizontalDirection: function() {
-		var delta = this.positionAbs.left - this.lastPositionAbs.left;
-		return delta !== 0 && ( delta > 0 ? "right" : "left" );
-	},
-
-	refresh: function( event ) {
-		this._refreshItems( event );
-		this._setHandleClassName();
-		this.refreshPositions();
-		return this;
-	},
-
-	_connectWith: function() {
-		var options = this.options;
-		return options.connectWith.constructor === String ?
-			[ options.connectWith ] :
-			options.connectWith;
-	},
-
-	_getItemsAsjQuery: function( connected ) {
-
-		var i, j, cur, inst,
-			items = [],
-			queries = [],
-			connectWith = this._connectWith();
-
-		if ( connectWith && connected ) {
-			for ( i = connectWith.length - 1; i >= 0; i-- ) {
-				cur = $( connectWith[ i ], this.document[ 0 ] );
-				for ( j = cur.length - 1; j >= 0; j-- ) {
-					inst = $.data( cur[ j ], this.widgetFullName );
-					if ( inst && inst !== this && !inst.options.disabled ) {
-						queries.push( [ $.isFunction( inst.options.items ) ?
-							inst.options.items.call( inst.element ) :
-							$( inst.options.items, inst.element )
-								.not( ".ui-sortable-helper" )
-								.not( ".ui-sortable-placeholder" ), inst ] );
-					}
-				}
-			}
-		}
-
-		queries.push( [ $.isFunction( this.options.items ) ?
-			this.options.items
-				.call( this.element, null, { options: this.options, item: this.currentItem } ) :
-			$( this.options.items, this.element )
-				.not( ".ui-sortable-helper" )
-				.not( ".ui-sortable-placeholder" ), this ] );
-
-		function addItems() {
-			items.push( this );
-		}
-		for ( i = queries.length - 1; i >= 0; i-- ) {
-			queries[ i ][ 0 ].each( addItems );
-		}
-
-		return $( items );
-
-	},
-
-	_removeCurrentsFromItems: function() {
-
-		var list = this.currentItem.find( ":data(" + this.widgetName + "-item)" );
-
-		this.items = $.grep( this.items, function( item ) {
-			for ( var j = 0; j < list.length; j++ ) {
-				if ( list[ j ] === item.item[ 0 ] ) {
-					return false;
-				}
-			}
-			return true;
-		} );
-
-	},
-
-	_refreshItems: function( event ) {
-
-		this.items = [];
-		this.containers = [ this ];
-
-		var i, j, cur, inst, targetData, _queries, item, queriesLength,
-			items = this.items,
-			queries = [ [ $.isFunction( this.options.items ) ?
-				this.options.items.call( this.element[ 0 ], event, { item: this.currentItem } ) :
-				$( this.options.items, this.element ), this ] ],
-			connectWith = this._connectWith();
-
-		//Shouldn't be run the first time through due to massive slow-down
-		if ( connectWith && this.ready ) {
-			for ( i = connectWith.length - 1; i >= 0; i-- ) {
-				cur = $( connectWith[ i ], this.document[ 0 ] );
-				for ( j = cur.length - 1; j >= 0; j-- ) {
-					inst = $.data( cur[ j ], this.widgetFullName );
-					if ( inst && inst !== this && !inst.options.disabled ) {
-						queries.push( [ $.isFunction( inst.options.items ) ?
-							inst.options.items
-								.call( inst.element[ 0 ], event, { item: this.currentItem } ) :
-							$( inst.options.items, inst.element ), inst ] );
-						this.containers.push( inst );
-					}
-				}
-			}
-		}
-
-		for ( i = queries.length - 1; i >= 0; i-- ) {
-			targetData = queries[ i ][ 1 ];
-			_queries = queries[ i ][ 0 ];
-
-			for ( j = 0, queriesLength = _queries.length; j < queriesLength; j++ ) {
-				item = $( _queries[ j ] );
-
-				// Data for target checking (mouse manager)
-				item.data( this.widgetName + "-item", targetData );
-
-				items.push( {
-					item: item,
-					instance: targetData,
-					width: 0, height: 0,
-					left: 0, top: 0
-				} );
-			}
-		}
-
-	},
-
-	refreshPositions: function( fast ) {
-
-		// Determine whether items are being displayed horizontally
-		this.floating = this.items.length ?
-			this.options.axis === "x" || this._isFloating( this.items[ 0 ].item ) :
-			false;
-
-		//This has to be redone because due to the item being moved out/into the offsetParent,
-		// the offsetParent's position will change
-		if ( this.offsetParent && this.helper ) {
-			this.offset.parent = this._getParentOffset();
-		}
-
-		var i, item, t, p;
-
-		for ( i = this.items.length - 1; i >= 0; i-- ) {
-			item = this.items[ i ];
-
-			//We ignore calculating positions of all connected containers when we're not over them
-			if ( item.instance !== this.currentContainer && this.currentContainer &&
-					item.item[ 0 ] !== this.currentItem[ 0 ] ) {
-				continue;
-			}
-
-			t = this.options.toleranceElement ?
-				$( this.options.toleranceElement, item.item ) :
-				item.item;
-
-			if ( !fast ) {
-				item.width = t.outerWidth();
-				item.height = t.outerHeight();
-			}
-
-			p = t.offset();
-			item.left = p.left;
-			item.top = p.top;
-		}
-
-		if ( this.options.custom && this.options.custom.refreshContainers ) {
-			this.options.custom.refreshContainers.call( this );
-		} else {
-			for ( i = this.containers.length - 1; i >= 0; i-- ) {
-				p = this.containers[ i ].element.offset();
-				this.containers[ i ].containerCache.left = p.left;
-				this.containers[ i ].containerCache.top = p.top;
-				this.containers[ i ].containerCache.width =
-					this.containers[ i ].element.outerWidth();
-				this.containers[ i ].containerCache.height =
-					this.containers[ i ].element.outerHeight();
-			}
-		}
-
-		return this;
-	},
-
-	_createPlaceholder: function( that ) {
-		that = that || this;
-		var className,
-			o = that.options;
-
-		if ( !o.placeholder || o.placeholder.constructor === String ) {
-			className = o.placeholder;
-			o.placeholder = {
-				element: function() {
-
-					var nodeName = that.currentItem[ 0 ].nodeName.toLowerCase(),
-						element = $( "<" + nodeName + ">", that.document[ 0 ] );
-
-						that._addClass( element, "ui-sortable-placeholder",
-								className || that.currentItem[ 0 ].className )
-							._removeClass( element, "ui-sortable-helper" );
-
-					if ( nodeName === "tbody" ) {
-						that._createTrPlaceholder(
-							that.currentItem.find( "tr" ).eq( 0 ),
-							$( "<tr>", that.document[ 0 ] ).appendTo( element )
-						);
-					} else if ( nodeName === "tr" ) {
-						that._createTrPlaceholder( that.currentItem, element );
-					} else if ( nodeName === "img" ) {
-						element.attr( "src", that.currentItem.attr( "src" ) );
-					}
-
-					if ( !className ) {
-						element.css( "visibility", "hidden" );
-					}
-
-					return element;
-				},
-				update: function( container, p ) {
-
-					// 1. If a className is set as 'placeholder option, we don't force sizes -
-					// the class is responsible for that
-					// 2. The option 'forcePlaceholderSize can be enabled to force it even if a
-					// class name is specified
-					if ( className && !o.forcePlaceholderSize ) {
-						return;
-					}
-
-					//If the element doesn't have a actual height by itself (without styles coming
-					// from a stylesheet), it receives the inline height from the dragged item
-					if ( !p.height() ) {
-						p.height(
-							that.currentItem.innerHeight() -
-							parseInt( that.currentItem.css( "paddingTop" ) || 0, 10 ) -
-							parseInt( that.currentItem.css( "paddingBottom" ) || 0, 10 ) );
-					}
-					if ( !p.width() ) {
-						p.width(
-							that.currentItem.innerWidth() -
-							parseInt( that.currentItem.css( "paddingLeft" ) || 0, 10 ) -
-							parseInt( that.currentItem.css( "paddingRight" ) || 0, 10 ) );
-					}
-				}
-			};
-		}
-
-		//Create the placeholder
-		that.placeholder = $( o.placeholder.element.call( that.element, that.currentItem ) );
-
-		//Append it after the actual current item
-		that.currentItem.after( that.placeholder );
-
-		//Update the size of the placeholder (TODO: Logic to fuzzy, see line 316/317)
-		o.placeholder.update( that, that.placeholder );
-
-	},
-
-	_createTrPlaceholder: function( sourceTr, targetTr ) {
-		var that = this;
-
-		sourceTr.children().each( function() {
-			$( "<td>&#160;</td>", that.document[ 0 ] )
-				.attr( "colspan", $( this ).attr( "colspan" ) || 1 )
-				.appendTo( targetTr );
-		} );
-	},
-
-	_contactContainers: function( event ) {
-		var i, j, dist, itemWithLeastDistance, posProperty, sizeProperty, cur, nearBottom,
-			floating, axis,
-			innermostContainer = null,
-			innermostIndex = null;
-
-		// Get innermost container that intersects with item
-		for ( i = this.containers.length - 1; i >= 0; i-- ) {
-
-			// Never consider a container that's located within the item itself
-			if ( $.contains( this.currentItem[ 0 ], this.containers[ i ].element[ 0 ] ) ) {
-				continue;
-			}
-
-			if ( this._intersectsWith( this.containers[ i ].containerCache ) ) {
-
-				// If we've already found a container and it's more "inner" than this, then continue
-				if ( innermostContainer &&
-						$.contains(
-							this.containers[ i ].element[ 0 ],
-							innermostContainer.element[ 0 ] ) ) {
-					continue;
-				}
-
-				innermostContainer = this.containers[ i ];
-				innermostIndex = i;
-
-			} else {
-
-				// container doesn't intersect. trigger "out" event if necessary
-				if ( this.containers[ i ].containerCache.over ) {
-					this.containers[ i ]._trigger( "out", event, this._uiHash( this ) );
-					this.containers[ i ].containerCache.over = 0;
-				}
-			}
-
-		}
-
-		// If no intersecting containers found, return
-		if ( !innermostContainer ) {
-			return;
-		}
-
-		// Move the item into the container if it's not there already
-		if ( this.containers.length === 1 ) {
-			if ( !this.containers[ innermostIndex ].containerCache.over ) {
-				this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash( this ) );
-				this.containers[ innermostIndex ].containerCache.over = 1;
-			}
-		} else {
-
-			// When entering a new container, we will find the item with the least distance and
-			// append our item near it
-			dist = 10000;
-			itemWithLeastDistance = null;
-			floating = innermostContainer.floating || this._isFloating( this.currentItem );
-			posProperty = floating ? "left" : "top";
-			sizeProperty = floating ? "width" : "height";
-			axis = floating ? "pageX" : "pageY";
-
-			for ( j = this.items.length - 1; j >= 0; j-- ) {
-				if ( !$.contains(
-						this.containers[ innermostIndex ].element[ 0 ], this.items[ j ].item[ 0 ] )
-				) {
-					continue;
-				}
-				if ( this.items[ j ].item[ 0 ] === this.currentItem[ 0 ] ) {
-					continue;
-				}
-
-				cur = this.items[ j ].item.offset()[ posProperty ];
-				nearBottom = false;
-				if ( event[ axis ] - cur > this.items[ j ][ sizeProperty ] / 2 ) {
-					nearBottom = true;
-				}
-
-				if ( Math.abs( event[ axis ] - cur ) < dist ) {
-					dist = Math.abs( event[ axis ] - cur );
-					itemWithLeastDistance = this.items[ j ];
-					this.direction = nearBottom ? "up" : "down";
-				}
-			}
-
-			//Check if dropOnEmpty is enabled
-			if ( !itemWithLeastDistance && !this.options.dropOnEmpty ) {
-				return;
-			}
-
-			if ( this.currentContainer === this.containers[ innermostIndex ] ) {
-				if ( !this.currentContainer.containerCache.over ) {
-					this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash() );
-					this.currentContainer.containerCache.over = 1;
-				}
-				return;
-			}
-
-			itemWithLeastDistance ?
-				this._rearrange( event, itemWithLeastDistance, null, true ) :
-				this._rearrange( event, null, this.containers[ innermostIndex ].element, true );
-			this._trigger( "change", event, this._uiHash() );
-			this.containers[ innermostIndex ]._trigger( "change", event, this._uiHash( this ) );
-			this.currentContainer = this.containers[ innermostIndex ];
-
-			//Update the placeholder
-			this.options.placeholder.update( this.currentContainer, this.placeholder );
-
-			this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash( this ) );
-			this.containers[ innermostIndex ].containerCache.over = 1;
-		}
-
-	},
-
-	_createHelper: function( event ) {
-
-		var o = this.options,
-			helper = $.isFunction( o.helper ) ?
-				$( o.helper.apply( this.element[ 0 ], [ event, this.currentItem ] ) ) :
-				( o.helper === "clone" ? this.currentItem.clone() : this.currentItem );
-
-		//Add the helper to the DOM if that didn't happen already
-		if ( !helper.parents( "body" ).length ) {
-			$( o.appendTo !== "parent" ?
-				o.appendTo :
-				this.currentItem[ 0 ].parentNode )[ 0 ].appendChild( helper[ 0 ] );
-		}
-
-		if ( helper[ 0 ] === this.currentItem[ 0 ] ) {
-			this._storedCSS = {
-				width: this.currentItem[ 0 ].style.width,
-				height: this.currentItem[ 0 ].style.height,
-				position: this.currentItem.css( "position" ),
-				top: this.currentItem.css( "top" ),
-				left: this.currentItem.css( "left" )
-			};
-		}
-
-		if ( !helper[ 0 ].style.width || o.forceHelperSize ) {
-			helper.width( this.currentItem.width() );
-		}
-		if ( !helper[ 0 ].style.height || o.forceHelperSize ) {
-			helper.height( this.currentItem.height() );
-		}
-
-		return helper;
-
-	},
-
-	_adjustOffsetFromHelper: function( obj ) {
-		if ( typeof obj === "string" ) {
-			obj = obj.split( " " );
-		}
-		if ( $.isArray( obj ) ) {
-			obj = { left: +obj[ 0 ], top: +obj[ 1 ] || 0 };
-		}
-		if ( "left" in obj ) {
-			this.offset.click.left = obj.left + this.margins.left;
-		}
-		if ( "right" in obj ) {
-			this.offset.click.left = this.helperProportions.width - obj.right + this.margins.left;
-		}
-		if ( "top" in obj ) {
-			this.offset.click.top = obj.top + this.margins.top;
-		}
-		if ( "bottom" in obj ) {
-			this.offset.click.top = this.helperProportions.height - obj.bottom + this.margins.top;
-		}
-	},
-
-	_getParentOffset: function() {
-
-		//Get the offsetParent and cache its position
-		this.offsetParent = this.helper.offsetParent();
-		var po = this.offsetParent.offset();
-
-		// This is a special case where we need to modify a offset calculated on start, since the
-		// following happened:
-		// 1. The position of the helper is absolute, so it's position is calculated based on the
-		// next positioned parent
-		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't
-		// the document, which means that the scroll is included in the initial calculation of the
-		// offset of the parent, and never recalculated upon drag
-		if ( this.cssPosition === "absolute" && this.scrollParent[ 0 ] !== this.document[ 0 ] &&
-				$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) {
-			po.left += this.scrollParent.scrollLeft();
-			po.top += this.scrollParent.scrollTop();
-		}
-
-		// This needs to be actually done for all browsers, since pageX/pageY includes this
-		// information with an ugly IE fix
-		if ( this.offsetParent[ 0 ] === this.document[ 0 ].body ||
-				( this.offsetParent[ 0 ].tagName &&
-				this.offsetParent[ 0 ].tagName.toLowerCase() === "html" && $.ui.ie ) ) {
-			po = { top: 0, left: 0 };
-		}
-
-		return {
-			top: po.top + ( parseInt( this.offsetParent.css( "borderTopWidth" ), 10 ) || 0 ),
-			left: po.left + ( parseInt( this.offsetParent.css( "borderLeftWidth" ), 10 ) || 0 )
-		};
-
-	},
-
-	_getRelativeOffset: function() {
-
-		if ( this.cssPosition === "relative" ) {
-			var p = this.currentItem.position();
-			return {
-				top: p.top - ( parseInt( this.helper.css( "top" ), 10 ) || 0 ) +
-					this.scrollParent.scrollTop(),
-				left: p.left - ( parseInt( this.helper.css( "left" ), 10 ) || 0 ) +
-					this.scrollParent.scrollLeft()
-			};
-		} else {
-			return { top: 0, left: 0 };
-		}
-
-	},
-
-	_cacheMargins: function() {
-		this.margins = {
-			left: ( parseInt( this.currentItem.css( "marginLeft" ), 10 ) || 0 ),
-			top: ( parseInt( this.currentItem.css( "marginTop" ), 10 ) || 0 )
-		};
-	},
-
-	_cacheHelperProportions: function() {
-		this.helperProportions = {
-			width: this.helper.outerWidth(),
-			height: this.helper.outerHeight()
-		};
-	},
-
-	_setContainment: function() {
-
-		var ce, co, over,
-			o = this.options;
-		if ( o.containment === "parent" ) {
-			o.containment = this.helper[ 0 ].parentNode;
-		}
-		if ( o.containment === "document" || o.containment === "window" ) {
-			this.containment = [
-				0 - this.offset.relative.left - this.offset.parent.left,
-				0 - this.offset.relative.top - this.offset.parent.top,
-				o.containment === "document" ?
-					this.document.width() :
-					this.window.width() - this.helperProportions.width - this.margins.left,
-				( o.containment === "document" ?
-					( this.document.height() || document.body.parentNode.scrollHeight ) :
-					this.window.height() || this.document[ 0 ].body.parentNode.scrollHeight
-				) - this.helperProportions.height - this.margins.top
-			];
-		}
-
-		if ( !( /^(document|window|parent)$/ ).test( o.containment ) ) {
-			ce = $( o.containment )[ 0 ];
-			co = $( o.containment ).offset();
-			over = ( $( ce ).css( "overflow" ) !== "hidden" );
-
-			this.containment = [
-				co.left + ( parseInt( $( ce ).css( "borderLeftWidth" ), 10 ) || 0 ) +
-					( parseInt( $( ce ).css( "paddingLeft" ), 10 ) || 0 ) - this.margins.left,
-				co.top + ( parseInt( $( ce ).css( "borderTopWidth" ), 10 ) || 0 ) +
-					( parseInt( $( ce ).css( "paddingTop" ), 10 ) || 0 ) - this.margins.top,
-				co.left + ( over ? Math.max( ce.scrollWidth, ce.offsetWidth ) : ce.offsetWidth ) -
-					( parseInt( $( ce ).css( "borderLeftWidth" ), 10 ) || 0 ) -
-					( parseInt( $( ce ).css( "paddingRight" ), 10 ) || 0 ) -
-					this.helperProportions.width - this.margins.left,
-				co.top + ( over ? Math.max( ce.scrollHeight, ce.offsetHeight ) : ce.offsetHeight ) -
-					( parseInt( $( ce ).css( "borderTopWidth" ), 10 ) || 0 ) -
-					( parseInt( $( ce ).css( "paddingBottom" ), 10 ) || 0 ) -
-					this.helperProportions.height - this.margins.top
-			];
-		}
-
-	},
-
-	_convertPositionTo: function( d, pos ) {
-
-		if ( !pos ) {
-			pos = this.position;
-		}
-		var mod = d === "absolute" ? 1 : -1,
-			scroll = this.cssPosition === "absolute" &&
-				!( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
-				$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ?
-					this.offsetParent :
-					this.scrollParent,
-			scrollIsRootNode = ( /(html|body)/i ).test( scroll[ 0 ].tagName );
-
-		return {
-			top: (
-
-				// The absolute mouse position
-				pos.top	+
-
-				// Only for relative positioned nodes: Relative offset from element to offset parent
-				this.offset.relative.top * mod +
-
-				// The offsetParent's offset without borders (offset + border)
-				this.offset.parent.top * mod -
-				( ( this.cssPosition === "fixed" ?
-					-this.scrollParent.scrollTop() :
-					( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod )
-			),
-			left: (
-
-				// The absolute mouse position
-				pos.left +
-
-				// Only for relative positioned nodes: Relative offset from element to offset parent
-				this.offset.relative.left * mod +
-
-				// The offsetParent's offset without borders (offset + border)
-				this.offset.parent.left * mod	-
-				( ( this.cssPosition === "fixed" ?
-					-this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 :
-					scroll.scrollLeft() ) * mod )
-			)
-		};
-
-	},
-
-	_generatePosition: function( event ) {
-
-		var top, left,
-			o = this.options,
-			pageX = event.pageX,
-			pageY = event.pageY,
-			scroll = this.cssPosition === "absolute" &&
-				!( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
-				$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ?
-					this.offsetParent :
-					this.scrollParent,
-				scrollIsRootNode = ( /(html|body)/i ).test( scroll[ 0 ].tagName );
-
-		// This is another very weird special case that only happens for relative elements:
-		// 1. If the css position is relative
-		// 2. and the scroll parent is the document or similar to the offset parent
-		// we have to refresh the relative offset during the scroll so there are no jumps
-		if ( this.cssPosition === "relative" && !( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
-				this.scrollParent[ 0 ] !== this.offsetParent[ 0 ] ) ) {
-			this.offset.relative = this._getRelativeOffset();
-		}
-
-		/*
-		 * - Position constraining -
-		 * Constrain the position to a mix of grid, containment.
-		 */
-
-		if ( this.originalPosition ) { //If we are not dragging yet, we won't check for options
-
-			if ( this.containment ) {
-				if ( event.pageX - this.offset.click.left < this.containment[ 0 ] ) {
-					pageX = this.containment[ 0 ] + this.offset.click.left;
-				}
-				if ( event.pageY - this.offset.click.top < this.containment[ 1 ] ) {
-					pageY = this.containment[ 1 ] + this.offset.click.top;
-				}
-				if ( event.pageX - this.offset.click.left > this.containment[ 2 ] ) {
-					pageX = this.containment[ 2 ] + this.offset.click.left;
-				}
-				if ( event.pageY - this.offset.click.top > this.containment[ 3 ] ) {
-					pageY = this.containment[ 3 ] + this.offset.click.top;
-				}
-			}
-
-			if ( o.grid ) {
-				top = this.originalPageY + Math.round( ( pageY - this.originalPageY ) /
-					o.grid[ 1 ] ) * o.grid[ 1 ];
-				pageY = this.containment ?
-					( ( top - this.offset.click.top >= this.containment[ 1 ] &&
-						top - this.offset.click.top <= this.containment[ 3 ] ) ?
-							top :
-							( ( top - this.offset.click.top >= this.containment[ 1 ] ) ?
-								top - o.grid[ 1 ] : top + o.grid[ 1 ] ) ) :
-								top;
-
-				left = this.originalPageX + Math.round( ( pageX - this.originalPageX ) /
-					o.grid[ 0 ] ) * o.grid[ 0 ];
-				pageX = this.containment ?
-					( ( left - this.offset.click.left >= this.containment[ 0 ] &&
-						left - this.offset.click.left <= this.containment[ 2 ] ) ?
-							left :
-							( ( left - this.offset.click.left >= this.containment[ 0 ] ) ?
-								left - o.grid[ 0 ] : left + o.grid[ 0 ] ) ) :
-								left;
-			}
-
-		}
-
-		return {
-			top: (
-
-				// The absolute mouse position
-				pageY -
-
-				// Click offset (relative to the element)
-				this.offset.click.top -
-
-				// Only for relative positioned nodes: Relative offset from element to offset parent
-				this.offset.relative.top -
-
-				// The offsetParent's offset without borders (offset + border)
-				this.offset.parent.top +
-				( ( this.cssPosition === "fixed" ?
-					-this.scrollParent.scrollTop() :
-					( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) )
-			),
-			left: (
-
-				// The absolute mouse position
-				pageX -
-
-				// Click offset (relative to the element)
-				this.offset.click.left -
-
-				// Only for relative positioned nodes: Relative offset from element to offset parent
-				this.offset.relative.left -
-
-				// The offsetParent's offset without borders (offset + border)
-				this.offset.parent.left +
-				( ( this.cssPosition === "fixed" ?
-					-this.scrollParent.scrollLeft() :
-					scrollIsRootNode ? 0 : scroll.scrollLeft() ) )
-			)
-		};
-
-	},
-
-	_rearrange: function( event, i, a, hardRefresh ) {
-
-		a ? a[ 0 ].appendChild( this.placeholder[ 0 ] ) :
-			i.item[ 0 ].parentNode.insertBefore( this.placeholder[ 0 ],
-				( this.direction === "down" ? i.item[ 0 ] : i.item[ 0 ].nextSibling ) );
-
-		//Various things done here to improve the performance:
-		// 1. we create a setTimeout, that calls refreshPositions
-		// 2. on the instance, we have a counter variable, that get's higher after every append
-		// 3. on the local scope, we copy the counter variable, and check in the timeout,
-		// if it's still the same
-		// 4. this lets only the last addition to the timeout stack through
-		this.counter = this.counter ? ++this.counter : 1;
-		var counter = this.counter;
-
-		this._delay( function() {
-			if ( counter === this.counter ) {
-
-				//Precompute after each DOM insertion, NOT on mousemove
-				this.refreshPositions( !hardRefresh );
-			}
-		} );
-
-	},
-
-	_clear: function( event, noPropagation ) {
-
-		this.reverting = false;
-
-		// We delay all events that have to be triggered to after the point where the placeholder
-		// has been removed and everything else normalized again
-		var i,
-			delayedTriggers = [];
-
-		// We first have to update the dom position of the actual currentItem
-		// Note: don't do it if the current item is already removed (by a user), or it gets
-		// reappended (see #4088)
-		if ( !this._noFinalSort && this.currentItem.parent().length ) {
-			this.placeholder.before( this.currentItem );
-		}
-		this._noFinalSort = null;
-
-		if ( this.helper[ 0 ] === this.currentItem[ 0 ] ) {
-			for ( i in this._storedCSS ) {
-				if ( this._storedCSS[ i ] === "auto" || this._storedCSS[ i ] === "static" ) {
-					this._storedCSS[ i ] = "";
-				}
-			}
-			this.currentItem.css( this._storedCSS );
-			this._removeClass( this.currentItem, "ui-sortable-helper" );
-		} else {
-			this.currentItem.show();
-		}
-
-		if ( this.fromOutside && !noPropagation ) {
-			delayedTriggers.push( function( event ) {
-				this._trigger( "receive", event, this._uiHash( this.fromOutside ) );
-			} );
-		}
-		if ( ( this.fromOutside ||
-				this.domPosition.prev !==
-				this.currentItem.prev().not( ".ui-sortable-helper" )[ 0 ] ||
-				this.domPosition.parent !== this.currentItem.parent()[ 0 ] ) && !noPropagation ) {
-
-			// Trigger update callback if the DOM position has changed
-			delayedTriggers.push( function( event ) {
-				this._trigger( "update", event, this._uiHash() );
-			} );
-		}
-
-		// Check if the items Container has Changed and trigger appropriate
-		// events.
-		if ( this !== this.currentContainer ) {
-			if ( !noPropagation ) {
-				delayedTriggers.push( function( event ) {
-					this._trigger( "remove", event, this._uiHash() );
-				} );
-				delayedTriggers.push( ( function( c ) {
-					return function( event ) {
-						c._trigger( "receive", event, this._uiHash( this ) );
-					};
-				} ).call( this, this.currentContainer ) );
-				delayedTriggers.push( ( function( c ) {
-					return function( event ) {
-						c._trigger( "update", event, this._uiHash( this ) );
-					};
-				} ).call( this, this.currentContainer ) );
-			}
-		}
-
-		//Post events to containers
-		function delayEvent( type, instance, container ) {
-			return function( event ) {
-				container._trigger( type, event, instance._uiHash( instance ) );
-			};
-		}
-		for ( i = this.containers.length - 1; i >= 0; i-- ) {
-			if ( !noPropagation ) {
-				delayedTriggers.push( delayEvent( "deactivate", this, this.containers[ i ] ) );
-			}
-			if ( this.containers[ i ].containerCache.over ) {
-				delayedTriggers.push( delayEvent( "out", this, this.containers[ i ] ) );
-				this.containers[ i ].containerCache.over = 0;
-			}
-		}
-
-		//Do what was originally in plugins
-		if ( this.storedCursor ) {
-			this.document.find( "body" ).css( "cursor", this.storedCursor );
-			this.storedStylesheet.remove();
-		}
-		if ( this._storedOpacity ) {
-			this.helper.css( "opacity", this._storedOpacity );
-		}
-		if ( this._storedZIndex ) {
-			this.helper.css( "zIndex", this._storedZIndex === "auto" ? "" : this._storedZIndex );
-		}
-
-		this.dragging = false;
-
-		if ( !noPropagation ) {
-			this._trigger( "beforeStop", event, this._uiHash() );
-		}
-
-		//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately,
-		// it unbinds ALL events from the original node!
-		this.placeholder[ 0 ].parentNode.removeChild( this.placeholder[ 0 ] );
-
-		if ( !this.cancelHelperRemoval ) {
-			if ( this.helper[ 0 ] !== this.currentItem[ 0 ] ) {
-				this.helper.remove();
-			}
-			this.helper = null;
-		}
-
-		if ( !noPropagation ) {
-			for ( i = 0; i < delayedTriggers.length; i++ ) {
-
-				// Trigger all delayed events
-				delayedTriggers[ i ].call( this, event );
-			}
-			this._trigger( "stop", event, this._uiHash() );
-		}
-
-		this.fromOutside = false;
-		return !this.cancelHelperRemoval;
-
-	},
-
-	_trigger: function() {
-		if ( $.Widget.prototype._trigger.apply( this, arguments ) === false ) {
-			this.cancel();
-		}
-	},
-
-	_uiHash: function( _inst ) {
-		var inst = _inst || this;
-		return {
-			helper: inst.helper,
-			placeholder: inst.placeholder || $( [] ),
-			position: inst.position,
-			originalPosition: inst.originalPosition,
-			offset: inst.positionAbs,
-			item: inst.currentItem,
-			sender: _inst ? _inst.element : null
-		};
-	}
-
-} );
-
-} ) );
-
-
-/***/ }),
-/* 243 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(244);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(165)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../css-loader/index.js!./core.css", function() {
-			var newContent = require("!!../../../css-loader/index.js!./core.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 244 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(164)(false);
-// imports
-
-
-// module
-exports.push([module.i, "/*!\n * jQuery UI CSS Framework 1.12.1\n * http://jqueryui.com\n *\n * Copyright jQuery Foundation and other contributors\n * Released under the MIT license.\n * http://jquery.org/license\n *\n * http://api.jqueryui.com/category/theming/\n */\n\n/* Layout helpers\n----------------------------------*/\n.ui-helper-hidden {\n\tdisplay: none;\n}\n.ui-helper-hidden-accessible {\n\tborder: 0;\n\tclip: rect(0 0 0 0);\n\theight: 1px;\n\tmargin: -1px;\n\toverflow: hidden;\n\tpadding: 0;\n\tposition: absolute;\n\twidth: 1px;\n}\n.ui-helper-reset {\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\toutline: 0;\n\tline-height: 1.3;\n\ttext-decoration: none;\n\tfont-size: 100%;\n\tlist-style: none;\n}\n.ui-helper-clearfix:before,\n.ui-helper-clearfix:after {\n\tcontent: \"\";\n\tdisplay: table;\n\tborder-collapse: collapse;\n}\n.ui-helper-clearfix:after {\n\tclear: both;\n}\n.ui-helper-zfix {\n\twidth: 100%;\n\theight: 100%;\n\ttop: 0;\n\tleft: 0;\n\tposition: absolute;\n\topacity: 0;\n\tfilter:Alpha(Opacity=0); /* support: IE8 */\n}\n\n.ui-front {\n\tz-index: 100;\n}\n\n\n/* Interaction Cues\n----------------------------------*/\n.ui-state-disabled {\n\tcursor: default !important;\n\tpointer-events: none;\n}\n\n\n/* Icons\n----------------------------------*/\n.ui-icon {\n\tdisplay: inline-block;\n\tvertical-align: middle;\n\tmargin-top: -.25em;\n\tposition: relative;\n\ttext-indent: -99999px;\n\toverflow: hidden;\n\tbackground-repeat: no-repeat;\n}\n\n.ui-widget-icon-block {\n\tleft: 50%;\n\tmargin-left: -8px;\n\tdisplay: block;\n}\n\n/* Misc visuals\n----------------------------------*/\n\n/* Overlays */\n.ui-widget-overlay {\n\tposition: fixed;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 245 */
-/***/ (function(module, exports) {
-
-
-/**
- * When source maps are enabled, `style-loader` uses a link element with a data-uri to
- * embed the css on the page. This breaks all relative urls because now they are relative to a
- * bundle instead of the current page.
- *
- * One solution is to only use full urls, but that may be impossible.
- *
- * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
- *
- * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
- *
- */
-
-module.exports = function (css) {
-  // get current location
-  var location = typeof window !== "undefined" && window.location;
-
-  if (!location) {
-    throw new Error("fixUrls requires window.location");
-  }
-
-	// blank or null?
-	if (!css || typeof css !== "string") {
-	  return css;
-  }
-
-  var baseUrl = location.protocol + "//" + location.host;
-  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
-
-	// convert each url(...)
-	/*
-	This regular expression is just a way to recursively match brackets within
-	a string.
-
-	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
-	   (  = Start a capturing group
-	     (?:  = Start a non-capturing group
-	         [^)(]  = Match anything that isn't a parentheses
-	         |  = OR
-	         \(  = Match a start parentheses
-	             (?:  = Start another non-capturing groups
-	                 [^)(]+  = Match anything that isn't a parentheses
-	                 |  = OR
-	                 \(  = Match a start parentheses
-	                     [^)(]*  = Match anything that isn't a parentheses
-	                 \)  = Match a end parentheses
-	             )  = End Group
-              *\) = Match anything and then a close parens
-          )  = Close non-capturing group
-          *  = Match anything
-       )  = Close capturing group
-	 \)  = Match a close parens
-
-	 /gi  = Get all matches, not the first.  Be case insensitive.
-	 */
-	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
-		// strip quotes (if they exist)
-		var unquotedOrigUrl = origUrl
-			.trim()
-			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
-			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
-
-		// already a full url? no change
-		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
-		  return fullMatch;
-		}
-
-		// convert the url to a full url
-		var newUrl;
-
-		if (unquotedOrigUrl.indexOf("//") === 0) {
-		  	//TODO: should we add protocol?
-			newUrl = unquotedOrigUrl;
-		} else if (unquotedOrigUrl.indexOf("/") === 0) {
-			// path should be relative to the base url
-			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
-		} else {
-			// path should be relative to current directory
-			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
-		}
-
-		// send back the fixed url(...)
-		return "url(" + JSON.stringify(newUrl) + ")";
-	});
-
-	// send back the fixed css
-	return fixedCss;
-};
-
-
-/***/ }),
-/* 246 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(247);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(165)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../css-loader/index.js!./sortable.css", function() {
-			var newContent = require("!!../../../css-loader/index.js!./sortable.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 247 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(164)(false);
-// imports
-
-
-// module
-exports.push([module.i, "/*!\n * jQuery UI Sortable 1.12.1\n * http://jqueryui.com\n *\n * Copyright jQuery Foundation and other contributors\n * Released under the MIT license.\n * http://jquery.org/license\n */\n.ui-sortable-handle {\n\t-ms-touch-action: none;\n\ttouch-action: none;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 248 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(249);
-__webpack_require__(250);
-__webpack_require__(251);
-
-/***/ }),
-/* 249 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-$.behavior = function (target, refineSelector) {
-  if (refineSelector) {
-    return $('[data-behavior~=' + target + ']:' + refineSelector);
-  } else {
-    return $('[data-behavior~=' + target + ']');
-  }
-};
-
-$.registerBehavior = function (dataBehavior, event, callback) {
-  callback();
-  $.behavior(dataBehavior).on(event, function () {
-    return callback();
-  });
-};
-
-$.fn.extend({
-  disable: function disable() {
-    this.each(function () {
-      $(this).addClass('disabled').prop('disabled', true);
-    });
-  },
-
-  enable: function enable() {
-    this.each(function () {
-      $(this).removeClass('disabled').prop('disabled', false);
-    });
-  },
-
-  exists: function exists() {
-    return this.length > 0;
-  },
-
-  isBlank: function isBlank() {
-    return this.val() === '';
-  },
-
-  uncheck: function uncheck() {
-    this.each(function () {
-      $(this).prop('checked', false).removeClass('checked');
-    }); // the checked class is for ie8
-  }
-});
-
-$.fn.exists = function () {
-  return this.length > 0;
-};
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
-/* 250 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-$.isCSSFeatureSupported = function (cssFeature) {
-  var supported = false;
-  var domPrefixes = 'Webkit Moz ms O'.split(' ');
-  var elm = document.createElement('div');
-  var cssFeatureUpperCase = null;
-
-  cssFeature = cssFeature.toLowerCase();
-
-  if (elm.style[cssFeature] !== undefined) {
-    supported = true;
-  }
-
-  if (supported === false) {
-    cssFeatureUpperCase = cssFeature.charAt(0).toUpperCase() + cssFeature.substr(1);
-
-    for (var i = 0, end = domPrefixes.length, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
-      if (elm.style[domPrefixes[i] + cssFeatureUpperCase] !== undefined) {
-        supported = true;
-        break;
-      }
-    }
-  }
-
-  return supported;
-};
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
-/* 251 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(UI, $) {
-
-// handle clicks on elements with data-behavior='clickable'.
-// these elements need a data-href attribute.
-
-// there is a hack to allow clicks on links inside 'clickable'
-// elements to be handled normally.
-
-UI.click('[data-behavior~=clickable]', function (e, el) {
-  // el is the 'clickable' element, clicked_element is the thing
-  // that actually got clicked, which could be a child
-  var clicked_element = $(e.target);
-  if (clicked_element.is('a') || clicked_element.parents('a').length !== 0) {
-    e.stopPropagation();
-    return true;
-  }
-  var href = $(el).data('href');
-  if (href) window.location.href = href;
-});
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
-
-/***/ }),
-/* 252 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(UI, $) {
-
-// click-to-toggle links with arrows
-
-UI.click('.js-arrow-toggle', function (e, el) {
-  var target = $(el.data('target'));
-  if (target.exists()) {
-    el.toggleClass('selected');
-    target.slideToggle();
-  }
-});
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
-
-/***/ }),
-/* 253 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(UI, $) {
-
-// ----------------------------------------
-// Extra behavior for jq-dropdowns. main
-// behavior is in jquery.dropdown.min.js
-// ----------------------------------------
-
-// auto-focus search field in dropdown when dropdown is shown
-UI.load(function () {
-  var dropdowns = $('.jq-dropdown');
-  dropdowns.on('show', function (e, dropdownData) {
-
-    var dropdown = $(e.currentTarget);
-    var link = $('[data-jq-dropdown=\'#' + dropdown.attr('id') + '\']');
-
-    var searchField = dropdown.find('.menu-search-field');
-    if (searchField.exists()) {
-      searchField.focus();
-    }
-
-    if (dropdown.hasClass('jq-dropdown-anchor-left')) {
-      var dropdownWidth = dropdown.children().first().width();
-      var linkWidth = link.outerWidth();
-      var left = parseInt(dropdown.css('left'));
-      var offset = left - dropdownWidth + linkWidth;
-
-      dropdown.css('left', offset + 'px');
-    }
-  });
-});
-
-// search within dropdown items
-UI.on('keyup', '.jq-dropdown .menu-search-field', function (e, el) {
-  var input = el;
-  var options = input.parent().siblings('li');
-  var selection = __guard__(input.val(), function (x) {
-    return x.toLowerCase();
-  });
-  if (selection) {
-    options.each(function () {
-      var text = $(this).find('.item-text').text().toLowerCase();
-      if (text.indexOf(selection) > -1) {
-        $(this).show();
-      } else {
-        $(this).hide();
-      }
-    });
-  } else {
-    options.show();
-  }
-});
-
-// close the dropdown whenever you click a link
-UI.click('.jq-dropdown li a', function (e, el) {
-  el.closest('.jq-dropdown').hide();
-  return true;
-});
-
-// FIXME - check need for input.val()?, if not needed remove this function, replace line 34 with input.val().toLowerCase()
-function __guard__(value, transform) {
-  return typeof value !== 'undefined' && value !== null ? transform(value) : undefined;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
-
-/***/ }),
-/* 254 */,
-/* 255 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Uses AMD or browser globals to create a jQuery plugin.
@@ -70003,6 +62082,8128 @@ function __guardMethod__(obj, methodName, transform) {
 }));
 
 /***/ }),
+/* 236 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Load sprinkle dependencies
+ */
+
+__webpack_require__(237);
+__webpack_require__(250);
+
+/**
+ * Load sprinkles
+ */
+__webpack_require__(254);
+__webpack_require__(255);
+__webpack_require__(256);
+__webpack_require__(257);
+__webpack_require__(258);
+__webpack_require__(259);
+__webpack_require__(260);
+__webpack_require__(261);
+__webpack_require__(262);
+__webpack_require__(263);
+__webpack_require__(264);
+__webpack_require__(265);
+__webpack_require__(270);
+
+/***/ }),
+/* 237 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(238);
+__webpack_require__(239);
+__webpack_require__(240);
+__webpack_require__(158);
+__webpack_require__(241);
+__webpack_require__(159);
+__webpack_require__(27);
+__webpack_require__(242);
+
+/***/ }),
+/* 238 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * fullPage 2.9.6
+ * https://github.com/alvarotrigo/fullPage.js
+ * @license MIT licensed
+ *
+ * Copyright (C) 2015 alvarotrigo.com - A project by Alvaro Trigo
+ */
+(function(global, factory) {
+    'use strict';
+    if (true) {
+        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1)], __WEBPACK_AMD_DEFINE_RESULT__ = (function($) {
+          return factory($, global, global.document, global.Math);
+        }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else if (typeof exports === "object" && exports) {
+        module.exports = factory(require('jquery'), global, global.document, global.Math);
+    } else {
+        factory(jQuery, global, global.document, global.Math);
+    }
+})(typeof window !== 'undefined' ? window : this, function($, window, document, Math, undefined) {
+    'use strict';
+
+    // keeping central set of classnames and selectors
+    var WRAPPER =               'fullpage-wrapper';
+    var WRAPPER_SEL =           '.' + WRAPPER;
+
+    // slimscroll
+    var SCROLLABLE =            'fp-scrollable';
+    var SCROLLABLE_SEL =        '.' + SCROLLABLE;
+
+    // util
+    var RESPONSIVE =            'fp-responsive';
+    var NO_TRANSITION =         'fp-notransition';
+    var DESTROYED =             'fp-destroyed';
+    var ENABLED =               'fp-enabled';
+    var VIEWING_PREFIX =        'fp-viewing';
+    var ACTIVE =                'active';
+    var ACTIVE_SEL =            '.' + ACTIVE;
+    var COMPLETELY =            'fp-completely';
+    var COMPLETELY_SEL =        '.' + COMPLETELY;
+
+    // section
+    var SECTION_DEFAULT_SEL =   '.section';
+    var SECTION =               'fp-section';
+    var SECTION_SEL =           '.' + SECTION;
+    var SECTION_ACTIVE_SEL =    SECTION_SEL + ACTIVE_SEL;
+    var SECTION_FIRST_SEL =     SECTION_SEL + ':first';
+    var SECTION_LAST_SEL =      SECTION_SEL + ':last';
+    var TABLE_CELL =            'fp-tableCell';
+    var TABLE_CELL_SEL =        '.' + TABLE_CELL;
+    var AUTO_HEIGHT =           'fp-auto-height';
+    var AUTO_HEIGHT_SEL =       '.fp-auto-height';
+    var NORMAL_SCROLL =         'fp-normal-scroll';
+    var NORMAL_SCROLL_SEL =     '.fp-normal-scroll';
+
+    // section nav
+    var SECTION_NAV =           'fp-nav';
+    var SECTION_NAV_SEL =       '#' + SECTION_NAV;
+    var SECTION_NAV_TOOLTIP =   'fp-tooltip';
+    var SECTION_NAV_TOOLTIP_SEL='.'+SECTION_NAV_TOOLTIP;
+    var SHOW_ACTIVE_TOOLTIP =   'fp-show-active';
+
+    // slide
+    var SLIDE_DEFAULT_SEL =     '.slide';
+    var SLIDE =                 'fp-slide';
+    var SLIDE_SEL =             '.' + SLIDE;
+    var SLIDE_ACTIVE_SEL =      SLIDE_SEL + ACTIVE_SEL;
+    var SLIDES_WRAPPER =        'fp-slides';
+    var SLIDES_WRAPPER_SEL =    '.' + SLIDES_WRAPPER;
+    var SLIDES_CONTAINER =      'fp-slidesContainer';
+    var SLIDES_CONTAINER_SEL =  '.' + SLIDES_CONTAINER;
+    var TABLE =                 'fp-table';
+
+    // slide nav
+    var SLIDES_NAV =            'fp-slidesNav';
+    var SLIDES_NAV_SEL =        '.' + SLIDES_NAV;
+    var SLIDES_NAV_LINK_SEL =   SLIDES_NAV_SEL + ' a';
+    var SLIDES_ARROW =          'fp-controlArrow';
+    var SLIDES_ARROW_SEL =      '.' + SLIDES_ARROW;
+    var SLIDES_PREV =           'fp-prev';
+    var SLIDES_PREV_SEL =       '.' + SLIDES_PREV;
+    var SLIDES_ARROW_PREV =     SLIDES_ARROW + ' ' + SLIDES_PREV;
+    var SLIDES_ARROW_PREV_SEL = SLIDES_ARROW_SEL + SLIDES_PREV_SEL;
+    var SLIDES_NEXT =           'fp-next';
+    var SLIDES_NEXT_SEL =       '.' + SLIDES_NEXT;
+    var SLIDES_ARROW_NEXT =     SLIDES_ARROW + ' ' + SLIDES_NEXT;
+    var SLIDES_ARROW_NEXT_SEL = SLIDES_ARROW_SEL + SLIDES_NEXT_SEL;
+
+    var $window = $(window);
+    var $document = $(document);
+
+    $.fn.fullpage = function(options) {
+        //only once my friend!
+        if($('html').hasClass(ENABLED)){ displayWarnings(); return; }
+
+        // common jQuery objects
+        var $htmlBody = $('html, body');
+        var $body = $('body');
+
+        var FP = $.fn.fullpage;
+
+        // Creating some defaults, extending them with any options that were provided
+        options = $.extend({
+            //navigation
+            menu: false,
+            anchors:[],
+            lockAnchors: false,
+            navigation: false,
+            navigationPosition: 'right',
+            navigationTooltips: [],
+            showActiveTooltip: false,
+            slidesNavigation: false,
+            slidesNavPosition: 'bottom',
+            scrollBar: false,
+            hybrid: false,
+
+            //scrolling
+            css3: true,
+            scrollingSpeed: 700,
+            autoScrolling: true,
+            fitToSection: true,
+            fitToSectionDelay: 1000,
+            easing: 'easeInOutCubic',
+            easingcss3: 'ease',
+            loopBottom: false,
+            loopTop: false,
+            loopHorizontal: true,
+            continuousVertical: false,
+            continuousHorizontal: false,
+            scrollHorizontally: false,
+            interlockedSlides: false,
+            dragAndMove: false,
+            offsetSections: false,
+            resetSliders: false,
+            fadingEffect: false,
+            normalScrollElements: null,
+            scrollOverflow: false,
+            scrollOverflowReset: false,
+            scrollOverflowHandler: $.fn.fp_scrolloverflow ? $.fn.fp_scrolloverflow.iscrollHandler : null,
+            scrollOverflowOptions: null,
+            touchSensitivity: 5,
+            normalScrollElementTouchThreshold: 5,
+            bigSectionsDestination: null,
+
+            //Accessibility
+            keyboardScrolling: true,
+            animateAnchor: true,
+            recordHistory: true,
+
+            //design
+            controlArrows: true,
+            controlArrowColor: '#fff',
+            verticalCentered: true,
+            sectionsColor : [],
+            paddingTop: 0,
+            paddingBottom: 0,
+            fixedElements: null,
+            responsive: 0, //backwards compabitility with responsiveWiddth
+            responsiveWidth: 0,
+            responsiveHeight: 0,
+            responsiveSlides: false,
+            parallax: false,
+            parallaxOptions: {
+                type: 'reveal',
+                percentage: 62,
+                property: 'translate'
+            },
+
+            //Custom selectors
+            sectionSelector: SECTION_DEFAULT_SEL,
+            slideSelector: SLIDE_DEFAULT_SEL,
+
+            //events
+            afterLoad: null,
+            onLeave: null,
+            afterRender: null,
+            afterResize: null,
+            afterReBuild: null,
+            afterSlideLoad: null,
+            onSlideLeave: null,
+            afterResponsive: null,
+
+            lazyLoading: true
+        }, options);
+
+        //flag to avoid very fast sliding for landscape sliders
+        var slideMoving = false;
+
+        var isTouchDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|playbook|silk|BlackBerry|BB10|Windows Phone|Tizen|Bada|webOS|IEMobile|Opera Mini)/);
+        var isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0) || (navigator.maxTouchPoints));
+        var container = $(this);
+        var windowsHeight = $window.height();
+        var isResizing = false;
+        var isWindowFocused = true;
+        var lastScrolledDestiny;
+        var lastScrolledSlide;
+        var canScroll = true;
+        var scrollings = [];
+        var controlPressed;
+        var startingSection;
+        var isScrollAllowed = {};
+        isScrollAllowed.m = {  'up':true, 'down':true, 'left':true, 'right':true };
+        isScrollAllowed.k = $.extend(true,{}, isScrollAllowed.m);
+        var MSPointer = getMSPointer();
+        var events = {
+            touchmove: 'ontouchmove' in window ? 'touchmove' :  MSPointer.move,
+            touchstart: 'ontouchstart' in window ? 'touchstart' :  MSPointer.down
+        };
+        var scrollBarHandler;
+
+        // taken from https://github.com/udacity/ud891/blob/gh-pages/lesson2-focus/07-modals-and-keyboard-traps/solution/modal.js
+        var focusableElementsString = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]';
+
+        //timeouts
+        var resizeId;
+        var afterSectionLoadsId;
+        var afterSlideLoadsId;
+        var scrollId;
+        var scrollId2;
+        var keydownId;
+        var originals = $.extend(true, {}, options); //deep copy
+
+        displayWarnings();
+
+        //easeInOutCubic animation included in the plugin
+        $.extend($.easing,{ easeInOutCubic: function (x, t, b, c, d) {if ((t/=d/2) < 1) return c/2*t*t*t + b;return c/2*((t-=2)*t*t + 2) + b;}});
+
+        /**
+        * Sets the autoScroll option.
+        * It changes the scroll bar visibility and the history of the site as a result.
+        */
+        function setAutoScrolling(value, type){
+            //removing the transformation
+            if(!value){
+                silentScroll(0);
+            }
+
+            setVariableState('autoScrolling', value, type);
+
+            var element = $(SECTION_ACTIVE_SEL);
+
+            if(options.autoScrolling && !options.scrollBar){
+                $htmlBody.css({
+                    'overflow' : 'hidden',
+                    'height' : '100%'
+                });
+
+                setRecordHistory(originals.recordHistory, 'internal');
+
+                //for IE touch devices
+                container.css({
+                    '-ms-touch-action': 'none',
+                    'touch-action': 'none'
+                });
+
+                if(element.length){
+                    //moving the container up
+                    silentScroll(element.position().top);
+                }
+
+            }else{
+                $htmlBody.css({
+                    'overflow' : 'visible',
+                    'height' : 'initial'
+                });
+
+                setRecordHistory(false, 'internal');
+
+                //for IE touch devices
+                container.css({
+                    '-ms-touch-action': '',
+                    'touch-action': ''
+                });
+
+                //scrolling the page to the section with no animation
+                if (element.length) {
+                    $htmlBody.scrollTop(element.position().top);
+                }
+            }
+        }
+
+        /**
+        * Defines wheter to record the history for each hash change in the URL.
+        */
+        function setRecordHistory(value, type){
+            setVariableState('recordHistory', value, type);
+        }
+
+        /**
+        * Defines the scrolling speed
+        */
+        function setScrollingSpeed(value, type){
+            setVariableState('scrollingSpeed', value, type);
+        }
+
+        /**
+        * Sets fitToSection
+        */
+        function setFitToSection(value, type){
+            setVariableState('fitToSection', value, type);
+        }
+
+        /**
+        * Sets lockAnchors
+        */
+        function setLockAnchors(value){
+            options.lockAnchors = value;
+        }
+
+        /**
+        * Adds or remove the possibility of scrolling through sections by using the mouse wheel or the trackpad.
+        */
+        function setMouseWheelScrolling(value){
+            if(value){
+                addMouseWheelHandler();
+                addMiddleWheelHandler();
+            }else{
+                removeMouseWheelHandler();
+                removeMiddleWheelHandler();
+            }
+        }
+
+        /**
+        * Adds or remove the possibility of scrolling through sections by using the mouse wheel/trackpad or touch gestures.
+        * Optionally a second parameter can be used to specify the direction for which the action will be applied.
+        *
+        * @param directions string containing the direction or directions separated by comma.
+        */
+        function setAllowScrolling(value, directions){
+            if(typeof directions !== 'undefined'){
+                directions = directions.replace(/ /g,'').split(',');
+
+                $.each(directions, function (index, direction){
+                    setIsScrollAllowed(value, direction, 'm');
+                });
+            }
+            else{
+                setIsScrollAllowed(value, 'all', 'm');
+
+                if(value){
+                    setMouseWheelScrolling(true);
+                    addTouchHandler();
+                }else{
+                    setMouseWheelScrolling(false);
+                    removeTouchHandler();
+                }
+            }
+        }
+
+        /**
+        * Adds or remove the possibility of scrolling through sections by using the keyboard arrow keys
+        */
+        function setKeyboardScrolling(value, directions){
+            if(typeof directions !== 'undefined'){
+                directions = directions.replace(/ /g,'').split(',');
+
+                $.each(directions, function (index, direction){
+                    setIsScrollAllowed(value, direction, 'k');
+                });
+            }else{
+                setIsScrollAllowed(value, 'all', 'k');
+                options.keyboardScrolling = value;
+            }
+        }
+
+        /**
+        * Moves the page up one section.
+        */
+        function moveSectionUp(){
+            var prev = $(SECTION_ACTIVE_SEL).prev(SECTION_SEL);
+
+            //looping to the bottom if there's no more sections above
+            if (!prev.length && (options.loopTop || options.continuousVertical)) {
+                prev = $(SECTION_SEL).last();
+            }
+
+            if (prev.length) {
+                scrollPage(prev, null, true);
+            }
+        }
+
+        /**
+        * Moves the page down one section.
+        */
+        function moveSectionDown(){
+            var next = $(SECTION_ACTIVE_SEL).next(SECTION_SEL);
+
+            //looping to the top if there's no more sections below
+            if(!next.length &&
+                (options.loopBottom || options.continuousVertical)){
+                next = $(SECTION_SEL).first();
+            }
+
+            if(next.length){
+                scrollPage(next, null, false);
+            }
+        }
+
+        /**
+        * Moves the page to the given section and slide with no animation.
+        * Anchors or index positions can be used as params.
+        */
+        function silentMoveTo(sectionAnchor, slideAnchor){
+            setScrollingSpeed (0, 'internal');
+            moveTo(sectionAnchor, slideAnchor);
+            setScrollingSpeed (originals.scrollingSpeed, 'internal');
+        }
+
+        /**
+        * Moves the page to the given section and slide.
+        * Anchors or index positions can be used as params.
+        */
+        function moveTo(sectionAnchor, slideAnchor){
+            var destiny = getSectionByAnchor(sectionAnchor);
+
+            if (typeof slideAnchor !== 'undefined'){
+                scrollPageAndSlide(sectionAnchor, slideAnchor);
+            }else if(destiny.length > 0){
+                scrollPage(destiny);
+            }
+        }
+
+        /**
+        * Slides right the slider of the active section.
+        * Optional `section` param.
+        */
+        function moveSlideRight(section){
+            moveSlide('right', section);
+        }
+
+        /**
+        * Slides left the slider of the active section.
+        * Optional `section` param.
+        */
+        function moveSlideLeft(section){
+            moveSlide('left', section);
+        }
+
+        /**
+         * When resizing is finished, we adjust the slides sizes and positions
+         */
+        function reBuild(resizing){
+            if(container.hasClass(DESTROYED)){ return; }  //nothing to do if the plugin was destroyed
+
+            isResizing = true;
+
+            windowsHeight = $window.height();  //updating global var
+
+            $(SECTION_SEL).each(function(){
+                var slidesWrap = $(this).find(SLIDES_WRAPPER_SEL);
+                var slides = $(this).find(SLIDE_SEL);
+
+                //adjusting the height of the table-cell for IE and Firefox
+                if(options.verticalCentered){
+                    $(this).find(TABLE_CELL_SEL).css('height', getTableHeight($(this)) + 'px');
+                }
+
+                $(this).css('height', windowsHeight + 'px');
+
+                //adjusting the position fo the FULL WIDTH slides...
+                if (slides.length > 1) {
+                    landscapeScroll(slidesWrap, slidesWrap.find(SLIDE_ACTIVE_SEL));
+                }
+            });
+
+            if(options.scrollOverflow){
+                scrollBarHandler.createScrollBarForAll();
+            }
+
+            var activeSection = $(SECTION_ACTIVE_SEL);
+            var sectionIndex = activeSection.index(SECTION_SEL);
+
+            //isn't it the first section?
+            if(sectionIndex){
+                //adjusting the position for the current section
+                silentMoveTo(sectionIndex + 1);
+            }
+
+            isResizing = false;
+            $.isFunction( options.afterResize ) && resizing && options.afterResize.call(container);
+            $.isFunction( options.afterReBuild ) && !resizing && options.afterReBuild.call(container);
+        }
+
+        /**
+        * Turns fullPage.js to normal scrolling mode when the viewport `width` or `height`
+        * are smaller than the set limit values.
+        */
+        function setResponsive(active){
+            var isResponsive = $body.hasClass(RESPONSIVE);
+
+            if(active){
+                if(!isResponsive){
+                    setAutoScrolling(false, 'internal');
+                    setFitToSection(false, 'internal');
+                    $(SECTION_NAV_SEL).hide();
+                    $body.addClass(RESPONSIVE);
+                    $.isFunction( options.afterResponsive ) && options.afterResponsive.call( container, active);
+                }
+            }
+            else if(isResponsive){
+                setAutoScrolling(originals.autoScrolling, 'internal');
+                setFitToSection(originals.autoScrolling, 'internal');
+                $(SECTION_NAV_SEL).show();
+                $body.removeClass(RESPONSIVE);
+                $.isFunction( options.afterResponsive ) && options.afterResponsive.call( container, active);
+            }
+        }
+
+        if($(this).length){
+            //public functions
+            FP.version = '2.9.5';
+            FP.setAutoScrolling = setAutoScrolling;
+            FP.setRecordHistory = setRecordHistory;
+            FP.setScrollingSpeed = setScrollingSpeed;
+            FP.setFitToSection = setFitToSection;
+            FP.setLockAnchors = setLockAnchors;
+            FP.setMouseWheelScrolling = setMouseWheelScrolling;
+            FP.setAllowScrolling = setAllowScrolling;
+            FP.setKeyboardScrolling = setKeyboardScrolling;
+            FP.moveSectionUp = moveSectionUp;
+            FP.moveSectionDown = moveSectionDown;
+            FP.silentMoveTo = silentMoveTo;
+            FP.moveTo = moveTo;
+            FP.moveSlideRight = moveSlideRight;
+            FP.moveSlideLeft = moveSlideLeft;
+            FP.fitToSection = fitToSection;
+            FP.reBuild = reBuild;
+            FP.setResponsive = setResponsive;
+            FP.destroy = destroy;
+
+            //functions we want to share across files but which are not
+            //mean to be used on their own by developers
+            FP.shared ={
+                afterRenderActions: afterRenderActions
+            };
+
+            init();
+
+            bindEvents();
+        }
+
+        function init(){
+            //if css3 is not supported, it will use jQuery animations
+            if(options.css3){
+                options.css3 = support3d();
+            }
+
+            options.scrollBar = options.scrollBar || options.hybrid;
+
+            setOptionsFromDOM();
+            prepareDom();
+            setAllowScrolling(true);
+            setAutoScrolling(options.autoScrolling, 'internal');
+            responsive();
+
+            //setting the class for the body element
+            setBodyClass();
+
+            if(document.readyState === 'complete'){
+                scrollToAnchor();
+            }
+            $window.on('load', scrollToAnchor);
+        }
+
+        function bindEvents(){
+            $window
+                //when scrolling...
+                .on('scroll', scrollHandler)
+
+                //detecting any change on the URL to scroll to the given anchor link
+                //(a way to detect back history button as we play with the hashes on the URL)
+                .on('hashchange', hashChangeHandler)
+
+                //when opening a new tab (ctrl + t), `control` won't be pressed when coming back.
+                .blur(blurHandler)
+
+                //when resizing the site, we adjust the heights of the sections, slimScroll...
+                .resize(resizeHandler);
+
+            $document
+                //Sliding with arrow keys, both, vertical and horizontal
+                .keydown(keydownHandler)
+
+                //to prevent scrolling while zooming
+                .keyup(keyUpHandler)
+
+                //Scrolls to the section when clicking the navigation bullet
+                .on('click touchstart', SECTION_NAV_SEL + ' a', sectionBulletHandler)
+
+                //Scrolls the slider to the given slide destination for the given section
+                .on('click touchstart', SLIDES_NAV_LINK_SEL, slideBulletHandler)
+
+                .on('click', SECTION_NAV_TOOLTIP_SEL, tooltipTextHandler);
+
+            //Scrolling horizontally when clicking on the slider controls.
+            $(SECTION_SEL).on('click touchstart', SLIDES_ARROW_SEL, slideArrowHandler);
+
+            /**
+            * Applying normalScroll elements.
+            * Ignoring the scrolls over the specified selectors.
+            */
+            if(options.normalScrollElements){
+                $document.on('mouseenter touchstart', options.normalScrollElements, function () {
+                    setAllowScrolling(false);
+                });
+
+                $document.on('mouseleave touchend', options.normalScrollElements, function(){
+                    setAllowScrolling(true);
+                });
+            }
+        }
+
+        /**
+        * Setting options from DOM elements if they are not provided.
+        */
+        function setOptionsFromDOM(){
+            var sections = container.find(options.sectionSelector);
+
+            //no anchors option? Checking for them in the DOM attributes
+            if(!options.anchors.length){
+                options.anchors = sections.filter('[data-anchor]').map(function(){
+                    return $(this).data('anchor').toString();
+                }).get();
+            }
+
+            //no tooltips option? Checking for them in the DOM attributes
+            if(!options.navigationTooltips.length){
+                options.navigationTooltips = sections.filter('[data-tooltip]').map(function(){
+                    return $(this).data('tooltip').toString();
+                }).get();
+            }
+        }
+
+        /**
+        * Works over the DOM structure to set it up for the current fullpage options.
+        */
+        function prepareDom(){
+            container.css({
+                'height': '100%',
+                'position': 'relative'
+            });
+
+            //adding a class to recognize the container internally in the code
+            container.addClass(WRAPPER);
+            $('html').addClass(ENABLED);
+
+            //due to https://github.com/alvarotrigo/fullPage.js/issues/1502
+            windowsHeight = $window.height();
+
+            container.removeClass(DESTROYED); //in case it was destroyed before initializing it again
+
+            addInternalSelectors();
+
+            //styling the sections / slides / menu
+            $(SECTION_SEL).each(function(index){
+                var section = $(this);
+                var slides = section.find(SLIDE_SEL);
+                var numSlides = slides.length;
+
+                //caching the original styles to add them back on destroy('all')
+                section.data('fp-styles', section.attr('style'));
+
+                styleSection(section, index);
+                styleMenu(section, index);
+
+                // if there's any slide
+                if (numSlides > 0) {
+                    styleSlides(section, slides, numSlides);
+                }else{
+                    if(options.verticalCentered){
+                        addTableClass(section);
+                    }
+                }
+            });
+
+            //fixed elements need to be moved out of the plugin container due to problems with CSS3.
+            if(options.fixedElements && options.css3){
+                $(options.fixedElements).appendTo($body);
+            }
+
+            //vertical centered of the navigation + active bullet
+            if(options.navigation){
+                addVerticalNavigation();
+            }
+
+            enableYoutubeAPI();
+
+            if(options.scrollOverflow){
+                scrollBarHandler = options.scrollOverflowHandler.init(options);
+            }else{
+                afterRenderActions();
+            }
+        }
+
+        /**
+        * Styles the horizontal slides for a section.
+        */
+        function styleSlides(section, slides, numSlides){
+            var sliderWidth = numSlides * 100;
+            var slideWidth = 100 / numSlides;
+
+            slides.wrapAll('<div class="' + SLIDES_CONTAINER + '" />');
+            slides.parent().wrap('<div class="' + SLIDES_WRAPPER + '" />');
+
+            section.find(SLIDES_CONTAINER_SEL).css('width', sliderWidth + '%');
+
+            if(numSlides > 1){
+                if(options.controlArrows){
+                    createSlideArrows(section);
+                }
+
+                if(options.slidesNavigation){
+                    addSlidesNavigation(section, numSlides);
+                }
+            }
+
+            slides.each(function(index) {
+                $(this).css('width', slideWidth + '%');
+
+                if(options.verticalCentered){
+                    addTableClass($(this));
+                }
+            });
+
+            var startingSlide = section.find(SLIDE_ACTIVE_SEL);
+
+            //if the slide won't be an starting point, the default will be the first one
+            //the active section isn't the first one? Is not the first slide of the first section? Then we load that section/slide by default.
+            if( startingSlide.length &&  ($(SECTION_ACTIVE_SEL).index(SECTION_SEL) !== 0 || ($(SECTION_ACTIVE_SEL).index(SECTION_SEL) === 0 && startingSlide.index() !== 0))){
+                silentLandscapeScroll(startingSlide, 'internal');
+            }else{
+                slides.eq(0).addClass(ACTIVE);
+            }
+        }
+
+        /**
+        * Styling vertical sections
+        */
+        function styleSection(section, index){
+            //if no active section is defined, the 1st one will be the default one
+            if(!index && $(SECTION_ACTIVE_SEL).length === 0) {
+                section.addClass(ACTIVE);
+            }
+            startingSection = $(SECTION_ACTIVE_SEL);
+
+            section.css('height', windowsHeight + 'px');
+
+            if(options.paddingTop){
+                section.css('padding-top', options.paddingTop);
+            }
+
+            if(options.paddingBottom){
+                section.css('padding-bottom', options.paddingBottom);
+            }
+
+            if (typeof options.sectionsColor[index] !==  'undefined') {
+                section.css('background-color', options.sectionsColor[index]);
+            }
+
+            if (typeof options.anchors[index] !== 'undefined') {
+                section.attr('data-anchor', options.anchors[index]);
+            }
+        }
+
+        /**
+        * Sets the data-anchor attributes to the menu elements and activates the current one.
+        */
+        function styleMenu(section, index){
+            if (typeof options.anchors[index] !== 'undefined') {
+                //activating the menu / nav element on load
+                if(section.hasClass(ACTIVE)){
+                    activateMenuAndNav(options.anchors[index], index);
+                }
+            }
+
+            //moving the menu outside the main container if it is inside (avoid problems with fixed positions when using CSS3 tranforms)
+            if(options.menu && options.css3 && $(options.menu).closest(WRAPPER_SEL).length){
+                $(options.menu).appendTo($body);
+            }
+        }
+
+        /**
+        * Adds internal classes to be able to provide customizable selectors
+        * keeping the link with the style sheet.
+        */
+        function addInternalSelectors(){
+            container.find(options.sectionSelector).addClass(SECTION);
+            container.find(options.slideSelector).addClass(SLIDE);
+        }
+
+        /**
+        * Creates the control arrows for the given section
+        */
+        function createSlideArrows(section){
+            section.find(SLIDES_WRAPPER_SEL).after('<div class="' + SLIDES_ARROW_PREV + '"></div><div class="' + SLIDES_ARROW_NEXT + '"></div>');
+
+            if(options.controlArrowColor!='#fff'){
+                section.find(SLIDES_ARROW_NEXT_SEL).css('border-color', 'transparent transparent transparent '+options.controlArrowColor);
+                section.find(SLIDES_ARROW_PREV_SEL).css('border-color', 'transparent '+ options.controlArrowColor + ' transparent transparent');
+            }
+
+            if(!options.loopHorizontal){
+                section.find(SLIDES_ARROW_PREV_SEL).hide();
+            }
+        }
+
+        /**
+        * Creates a vertical navigation bar.
+        */
+        function addVerticalNavigation(){
+            $body.append('<div id="' + SECTION_NAV + '"><ul></ul></div>');
+            var nav = $(SECTION_NAV_SEL);
+
+            nav.addClass(function() {
+                return options.showActiveTooltip ? SHOW_ACTIVE_TOOLTIP + ' ' + options.navigationPosition : options.navigationPosition;
+            });
+
+            for (var i = 0; i < $(SECTION_SEL).length; i++) {
+                var link = '';
+                if (options.anchors.length) {
+                    link = options.anchors[i];
+                }
+
+                var li = '<li><a href="#' + link + '"><span></span></a>';
+
+                // Only add tooltip if needed (defined by user)
+                var tooltip = options.navigationTooltips[i];
+
+                if (typeof tooltip !== 'undefined' && tooltip !== '') {
+                    li += '<div class="' + SECTION_NAV_TOOLTIP + ' ' + options.navigationPosition + '">' + tooltip + '</div>';
+                }
+
+                li += '</li>';
+
+                nav.find('ul').append(li);
+            }
+
+            //centering it vertically
+            $(SECTION_NAV_SEL).css('margin-top', '-' + ($(SECTION_NAV_SEL).height()/2) + 'px');
+
+            //activating the current active section
+            $(SECTION_NAV_SEL).find('li').eq($(SECTION_ACTIVE_SEL).index(SECTION_SEL)).find('a').addClass(ACTIVE);
+        }
+
+        /*
+        * Enables the Youtube videos API so we can control their flow if necessary.
+        */
+        function enableYoutubeAPI(){
+            container.find('iframe[src*="youtube.com/embed/"]').each(function(){
+                addURLParam($(this), 'enablejsapi=1');
+            });
+        }
+
+        /**
+        * Adds a new parameter and its value to the `src` of a given element
+        */
+        function addURLParam(element, newParam){
+            var originalSrc = element.attr('src');
+            element.attr('src', originalSrc + getUrlParamSign(originalSrc) + newParam);
+        }
+
+        /*
+        * Returns the prefix sign to use for a new parameter in an existen URL.
+        *
+        * @return {String}  ? | &
+        */
+        function getUrlParamSign(url){
+            return ( !/\?/.test( url ) ) ? '?' : '&';
+        }
+
+        /**
+        * Actions and callbacks to fire afterRender
+        */
+        function afterRenderActions(){
+            var section = $(SECTION_ACTIVE_SEL);
+
+            section.addClass(COMPLETELY);
+
+            lazyLoad(section);
+            playMedia(section);
+
+            if(options.scrollOverflow){
+                options.scrollOverflowHandler.afterLoad();
+            }
+
+            if(isDestinyTheStartingSection()){
+                $.isFunction( options.afterLoad ) && options.afterLoad.call(section, section.data('anchor'), (section.index(SECTION_SEL) + 1));
+            }
+
+            $.isFunction( options.afterRender ) && options.afterRender.call(container);
+        }
+
+        /**
+        * Determines if the URL anchor destiny is the starting section (the one using 'active' class before initialization)
+        */
+        function isDestinyTheStartingSection(){
+            var destinationSection = getSectionByAnchor(getAnchorsURL().section);
+            return !destinationSection || destinationSection.length && destinationSection.index() === startingSection.index();
+        }
+
+
+        var isScrolling = false;
+        var lastScroll = 0;
+
+        //when scrolling...
+        function scrollHandler(){
+            var currentSection;
+
+            if(!options.autoScrolling || options.scrollBar){
+                var currentScroll = $window.scrollTop();
+                var scrollDirection = getScrollDirection(currentScroll);
+                var visibleSectionIndex = 0;
+                var screen_mid = currentScroll + ($window.height() / 2.0);
+                var isAtBottom = $body.height() - $window.height() === currentScroll;
+                var sections =  document.querySelectorAll(SECTION_SEL);
+
+                //when using `auto-height` for a small last section it won't be centered in the viewport
+                if(isAtBottom){
+                    visibleSectionIndex = sections.length - 1;
+                }
+                //is at top? when using `auto-height` for a small first section it won't be centered in the viewport
+                else if(!currentScroll){
+                    visibleSectionIndex = 0;
+                }
+
+                //taking the section which is showing more content in the viewport
+                else{
+                    for (var i = 0; i < sections.length; ++i) {
+                        var section = sections[i];
+
+                        // Pick the the last section which passes the middle line of the screen.
+                        if (section.offsetTop <= screen_mid)
+                        {
+                            visibleSectionIndex = i;
+                        }
+                    }
+                }
+
+                if(isCompletelyInViewPort(scrollDirection)){
+                    if(!$(SECTION_ACTIVE_SEL).hasClass(COMPLETELY)){
+                        $(SECTION_ACTIVE_SEL).addClass(COMPLETELY).siblings().removeClass(COMPLETELY);
+                    }
+                }
+
+                //geting the last one, the current one on the screen
+                currentSection = $(sections).eq(visibleSectionIndex);
+
+                //setting the visible section as active when manually scrolling
+                //executing only once the first time we reach the section
+                if(!currentSection.hasClass(ACTIVE)){
+                    isScrolling = true;
+                    var leavingSection = $(SECTION_ACTIVE_SEL);
+                    var leavingSectionIndex = leavingSection.index(SECTION_SEL) + 1;
+                    var yMovement = getYmovement(currentSection);
+                    var anchorLink  = currentSection.data('anchor');
+                    var sectionIndex = currentSection.index(SECTION_SEL) + 1;
+                    var activeSlide = currentSection.find(SLIDE_ACTIVE_SEL);
+                    var slideIndex;
+                    var slideAnchorLink;
+
+                    if(activeSlide.length){
+                        slideAnchorLink = activeSlide.data('anchor');
+                        slideIndex = activeSlide.index();
+                    }
+
+                    if(canScroll){
+                        currentSection.addClass(ACTIVE).siblings().removeClass(ACTIVE);
+
+                        $.isFunction( options.onLeave ) && options.onLeave.call( leavingSection, leavingSectionIndex, sectionIndex, yMovement);
+                        $.isFunction( options.afterLoad ) && options.afterLoad.call( currentSection, anchorLink, sectionIndex);
+
+                        stopMedia(leavingSection);
+                        lazyLoad(currentSection);
+                        playMedia(currentSection);
+
+                        activateMenuAndNav(anchorLink, sectionIndex - 1);
+
+                        if(options.anchors.length){
+                            //needed to enter in hashChange event when using the menu with anchor links
+                            lastScrolledDestiny = anchorLink;
+                        }
+                        setState(slideIndex, slideAnchorLink, anchorLink, sectionIndex);
+                    }
+
+                    //small timeout in order to avoid entering in hashChange event when scrolling is not finished yet
+                    clearTimeout(scrollId);
+                    scrollId = setTimeout(function(){
+                        isScrolling = false;
+                    }, 100);
+                }
+
+                if(options.fitToSection){
+                    //for the auto adjust of the viewport to fit a whole section
+                    clearTimeout(scrollId2);
+
+                    scrollId2 = setTimeout(function(){
+                        //checking it again in case it changed during the delay
+                        if(options.fitToSection &&
+
+                            //is the destination element bigger than the viewport?
+                            $(SECTION_ACTIVE_SEL).outerHeight() <= windowsHeight
+                        ){
+                            fitToSection();
+                        }
+                    }, options.fitToSectionDelay);
+                }
+            }
+        }
+
+        /**
+        * Fits the site to the nearest active section
+        */
+        function fitToSection(){
+            //checking fitToSection again in case it was set to false before the timeout delay
+            if(canScroll){
+                //allows to scroll to an active section and
+                //if the section is already active, we prevent firing callbacks
+                isResizing = true;
+
+                scrollPage($(SECTION_ACTIVE_SEL));
+                isResizing = false;
+            }
+        }
+
+        /**
+        * Determines whether the active section has seen in its whole or not.
+        */
+        function isCompletelyInViewPort(movement){
+            var top = $(SECTION_ACTIVE_SEL).position().top;
+            var bottom = top + $window.height();
+
+            if(movement == 'up'){
+                return bottom >= ($window.scrollTop() + $window.height());
+            }
+            return top <= $window.scrollTop();
+        }
+
+        /**
+        * Gets the directon of the the scrolling fired by the scroll event.
+        */
+        function getScrollDirection(currentScroll){
+            var direction = currentScroll > lastScroll ? 'down' : 'up';
+
+            lastScroll = currentScroll;
+
+            //needed for auto-height sections to determine if we want to scroll to the top or bottom of the destination
+            previousDestTop = currentScroll;
+
+            return direction;
+        }
+
+        /**
+        * Determines the way of scrolling up or down:
+        * by 'automatically' scrolling a section or by using the default and normal scrolling.
+        */
+        function scrolling(type){
+            if (!isScrollAllowed.m[type]){
+                return;
+            }
+
+            var scrollSection = (type === 'down') ? moveSectionDown : moveSectionUp;
+
+            if(options.scrollOverflow){
+                var scrollable = options.scrollOverflowHandler.scrollable($(SECTION_ACTIVE_SEL));
+                var check = (type === 'down') ? 'bottom' : 'top';
+
+                if(scrollable.length > 0 ){
+                    //is the scrollbar at the start/end of the scroll?
+                    if(options.scrollOverflowHandler.isScrolled(check, scrollable)){
+                        scrollSection();
+                    }else{
+                        return true;
+                    }
+                }else{
+                    // moved up/down
+                    scrollSection();
+                }
+            }else{
+                // moved up/down
+                scrollSection();
+            }
+        }
+
+        /*
+        * Preventing bouncing in iOS #2285
+        */
+        function preventBouncing(event){
+            var e = event.originalEvent;
+            if(options.autoScrolling && isReallyTouch(e)){
+                //preventing the easing on iOS devices
+                event.preventDefault();
+            }
+        }
+
+        var touchStartY = 0;
+        var touchStartX = 0;
+        var touchEndY = 0;
+        var touchEndX = 0;
+
+        /* Detecting touch events
+
+        * As we are changing the top property of the page on scrolling, we can not use the traditional way to detect it.
+        * This way, the touchstart and the touch moves shows an small difference between them which is the
+        * used one to determine the direction.
+        */
+        function touchMoveHandler(event){
+            var e = event.originalEvent;
+            var activeSection = $(e.target).closest(SECTION_SEL);
+
+            // additional: if one of the normalScrollElements isn't within options.normalScrollElementTouchThreshold hops up the DOM chain
+            if (isReallyTouch(e) ) {
+
+                if(options.autoScrolling){
+                    //preventing the easing on iOS devices
+                    event.preventDefault();
+                }
+
+                var touchEvents = getEventsPage(e);
+
+                touchEndY = touchEvents.y;
+                touchEndX = touchEvents.x;
+
+                //if movement in the X axys is greater than in the Y and the currect section has slides...
+                if (activeSection.find(SLIDES_WRAPPER_SEL).length && Math.abs(touchStartX - touchEndX) > (Math.abs(touchStartY - touchEndY))) {
+
+                    //is the movement greater than the minimum resistance to scroll?
+                    if (!slideMoving && Math.abs(touchStartX - touchEndX) > ($window.outerWidth() / 100 * options.touchSensitivity)) {
+                        if (touchStartX > touchEndX) {
+                            if(isScrollAllowed.m.right){
+                                moveSlideRight(activeSection); //next
+                            }
+                        } else {
+                            if(isScrollAllowed.m.left){
+                                moveSlideLeft(activeSection); //prev
+                            }
+                        }
+                    }
+                }
+
+                //vertical scrolling (only when autoScrolling is enabled)
+                else if(options.autoScrolling && canScroll){
+
+                    //is the movement greater than the minimum resistance to scroll?
+                    if (Math.abs(touchStartY - touchEndY) > ($window.height() / 100 * options.touchSensitivity)) {
+                        if (touchStartY > touchEndY) {
+                            scrolling('down');
+                        } else if (touchEndY > touchStartY) {
+                            scrolling('up');
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+        * As IE >= 10 fires both touch and mouse events when using a mouse in a touchscreen
+        * this way we make sure that is really a touch event what IE is detecting.
+        */
+        function isReallyTouch(e){
+            //if is not IE   ||  IE is detecting `touch` or `pen`
+            return typeof e.pointerType === 'undefined' || e.pointerType != 'mouse';
+        }
+
+        /**
+        * Handler for the touch start event.
+        */
+        function touchStartHandler(event){
+            var e = event.originalEvent;
+
+            //stopping the auto scroll to adjust to a section
+            if(options.fitToSection){
+                $htmlBody.stop();
+            }
+
+            if(isReallyTouch(e)){
+                var touchEvents = getEventsPage(e);
+                touchStartY = touchEvents.y;
+                touchStartX = touchEvents.x;
+            }
+        }
+
+        /**
+        * Gets the average of the last `number` elements of the given array.
+        */
+        function getAverage(elements, number){
+            var sum = 0;
+
+            //taking `number` elements from the end to make the average, if there are not enought, 1
+            var lastElements = elements.slice(Math.max(elements.length - number, 1));
+
+            for(var i = 0; i < lastElements.length; i++){
+                sum = sum + lastElements[i];
+            }
+
+            return Math.ceil(sum/number);
+        }
+
+        /**
+         * Detecting mousewheel scrolling
+         *
+         * http://blogs.sitepointstatic.com/examples/tech/mouse-wheel/index.html
+         * http://www.sitepoint.com/html5-javascript-mouse-wheel/
+         */
+        var prevTime = new Date().getTime();
+
+        function MouseWheelHandler(e) {
+            var curTime = new Date().getTime();
+            var isNormalScroll = $(COMPLETELY_SEL).hasClass(NORMAL_SCROLL);
+
+            //autoscrolling and not zooming?
+            if(options.autoScrolling && !controlPressed && !isNormalScroll){
+                // cross-browser wheel delta
+                e = e || window.event;
+                var value = e.wheelDelta || -e.deltaY || -e.detail;
+                var delta = Math.max(-1, Math.min(1, value));
+
+                var horizontalDetection = typeof e.wheelDeltaX !== 'undefined' || typeof e.deltaX !== 'undefined';
+                var isScrollingVertically = (Math.abs(e.wheelDeltaX) < Math.abs(e.wheelDelta)) || (Math.abs(e.deltaX ) < Math.abs(e.deltaY) || !horizontalDetection);
+
+                //Limiting the array to 150 (lets not waste memory!)
+                if(scrollings.length > 149){
+                    scrollings.shift();
+                }
+
+                //keeping record of the previous scrollings
+                scrollings.push(Math.abs(value));
+
+                //preventing to scroll the site on mouse wheel when scrollbar is present
+                if(options.scrollBar){
+                    e.preventDefault ? e.preventDefault() : e.returnValue = false;
+                }
+
+                //time difference between the last scroll and the current one
+                var timeDiff = curTime-prevTime;
+                prevTime = curTime;
+
+                //haven't they scrolled in a while?
+                //(enough to be consider a different scrolling action to scroll another section)
+                if(timeDiff > 200){
+                    //emptying the array, we dont care about old scrollings for our averages
+                    scrollings = [];
+                }
+
+                if(canScroll){
+                    var averageEnd = getAverage(scrollings, 10);
+                    var averageMiddle = getAverage(scrollings, 70);
+                    var isAccelerating = averageEnd >= averageMiddle;
+
+                    //to avoid double swipes...
+                    if(isAccelerating && isScrollingVertically){
+                        //scrolling down?
+                        if (delta < 0) {
+                            scrolling('down');
+
+                        //scrolling up?
+                        }else {
+                            scrolling('up');
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+            if(options.fitToSection){
+                //stopping the auto scroll to adjust to a section
+                $htmlBody.stop();
+            }
+        }
+
+        /**
+        * Slides a slider to the given direction.
+        * Optional `section` param.
+        */
+        function moveSlide(direction, section){
+            var activeSection = typeof section === 'undefined' ? $(SECTION_ACTIVE_SEL) : section;
+            var slides = activeSection.find(SLIDES_WRAPPER_SEL);
+            var numSlides = slides.find(SLIDE_SEL).length;
+
+            // more than one slide needed and nothing should be sliding
+            if (!slides.length || slideMoving || numSlides < 2) {
+                return;
+            }
+
+            var currentSlide = slides.find(SLIDE_ACTIVE_SEL);
+            var destiny = null;
+
+            if(direction === 'left'){
+                destiny = currentSlide.prev(SLIDE_SEL);
+            }else{
+                destiny = currentSlide.next(SLIDE_SEL);
+            }
+
+            //isn't there a next slide in the secuence?
+            if(!destiny.length){
+                //respect loopHorizontal settin
+                if (!options.loopHorizontal) return;
+
+                if(direction === 'left'){
+                    destiny = currentSlide.siblings(':last');
+                }else{
+                    destiny = currentSlide.siblings(':first');
+                }
+            }
+
+            slideMoving = true;
+
+            landscapeScroll(slides, destiny, direction);
+        }
+
+        /**
+        * Maintains the active slides in the viewport
+        * (Because the `scroll` animation might get lost with some actions, such as when using continuousVertical)
+        */
+        function keepSlidesPosition(){
+            $(SLIDE_ACTIVE_SEL).each(function(){
+                silentLandscapeScroll($(this), 'internal');
+            });
+        }
+
+        var previousDestTop = 0;
+        /**
+        * Returns the destination Y position based on the scrolling direction and
+        * the height of the section.
+        */
+        function getDestinationPosition(element){
+            var elemPosition = element.position();
+
+            //top of the desination will be at the top of the viewport
+            var position = elemPosition.top;
+            var isScrollingDown =  elemPosition.top > previousDestTop;
+            var sectionBottom = position - windowsHeight + element.outerHeight();
+            var bigSectionsDestination = options.bigSectionsDestination;
+
+            //is the destination element bigger than the viewport?
+            if(element.outerHeight() > windowsHeight){
+                //scrolling up?
+                if(!isScrollingDown && !bigSectionsDestination || bigSectionsDestination === 'bottom' ){
+                    position = sectionBottom;
+                }
+            }
+
+            //sections equal or smaller than the viewport height && scrolling down? ||  is resizing and its in the last section
+            else if(isScrollingDown || (isResizing && element.is(':last-child')) ){
+                //The bottom of the destination will be at the bottom of the viewport
+                position = sectionBottom;
+            }
+
+            /*
+            Keeping record of the last scrolled position to determine the scrolling direction.
+            No conventional methods can be used as the scroll bar might not be present
+            AND the section might not be active if it is auto-height and didnt reach the middle
+            of the viewport.
+            */
+            previousDestTop = position;
+            return position;
+        }
+
+        /**
+        * Scrolls the site to the given element and scrolls to the slide if a callback is given.
+        */
+        function scrollPage(element, callback, isMovementUp){
+            if(typeof element === 'undefined'){ return; } //there's no element to scroll, leaving the function
+
+            var dtop = getDestinationPosition(element);
+            var slideAnchorLink;
+            var slideIndex;
+
+            //local variables
+            var v = {
+                element: element,
+                callback: callback,
+                isMovementUp: isMovementUp,
+                dtop: dtop,
+                yMovement: getYmovement(element),
+                anchorLink: element.data('anchor'),
+                sectionIndex: element.index(SECTION_SEL),
+                activeSlide: element.find(SLIDE_ACTIVE_SEL),
+                activeSection: $(SECTION_ACTIVE_SEL),
+                leavingSection: $(SECTION_ACTIVE_SEL).index(SECTION_SEL) + 1,
+
+                //caching the value of isResizing at the momment the function is called
+                //because it will be checked later inside a setTimeout and the value might change
+                localIsResizing: isResizing
+            };
+
+            //quiting when destination scroll is the same as the current one
+            if((v.activeSection.is(element) && !isResizing) || (options.scrollBar && $window.scrollTop() === v.dtop && !element.hasClass(AUTO_HEIGHT) )){ return; }
+
+            if(v.activeSlide.length){
+                slideAnchorLink = v.activeSlide.data('anchor');
+                slideIndex = v.activeSlide.index();
+            }
+
+            //callback (onLeave) if the site is not just resizing and readjusting the slides
+            if($.isFunction(options.onLeave) && !v.localIsResizing){
+                if(options.onLeave.call(v.activeSection, v.leavingSection, (v.sectionIndex + 1), v.yMovement) === false){
+                    return;
+                }
+            }
+
+            // If continuousVertical && we need to wrap around
+            if (options.autoScrolling && options.continuousVertical && typeof (v.isMovementUp) !== "undefined" &&
+                ((!v.isMovementUp && v.yMovement == 'up') || // Intending to scroll down but about to go up or
+                (v.isMovementUp && v.yMovement == 'down'))) { // intending to scroll up but about to go down
+
+                v = createInfiniteSections(v);
+            }
+
+            //pausing media of the leaving section (if we are not just resizing, as destinatino will be the same one)
+            if(!v.localIsResizing){
+                stopMedia(v.activeSection);
+            }
+
+            if(options.scrollOverflow){
+                options.scrollOverflowHandler.beforeLeave();
+            }
+
+            element.addClass(ACTIVE).siblings().removeClass(ACTIVE);
+            lazyLoad(element);
+
+            if(options.scrollOverflow){
+                options.scrollOverflowHandler.onLeave();
+            }
+
+            //preventing from activating the MouseWheelHandler event
+            //more than once if the page is scrolling
+            canScroll = false;
+
+            setState(slideIndex, slideAnchorLink, v.anchorLink, v.sectionIndex);
+
+            performMovement(v);
+
+            //flag to avoid callingn `scrollPage()` twice in case of using anchor links
+            lastScrolledDestiny = v.anchorLink;
+
+            //avoid firing it twice (as it does also on scroll)
+            activateMenuAndNav(v.anchorLink, v.sectionIndex);
+        }
+
+        /**
+        * Performs the vertical movement (by CSS3 or by jQuery)
+        */
+        function performMovement(v){
+            // using CSS3 translate functionality
+            if (options.css3 && options.autoScrolling && !options.scrollBar) {
+
+                // The first section can have a negative value in iOS 10. Not quite sure why: -0.0142822265625
+                // that's why we round it to 0.
+                var translate3d = 'translate3d(0px, -' + Math.round(v.dtop) + 'px, 0px)';
+                transformContainer(translate3d, true);
+
+                //even when the scrollingSpeed is 0 there's a little delay, which might cause the
+                //scrollingSpeed to change in case of using silentMoveTo();
+                if(options.scrollingSpeed){
+                    clearTimeout(afterSectionLoadsId);
+                    afterSectionLoadsId = setTimeout(function () {
+                        afterSectionLoads(v);
+                    }, options.scrollingSpeed);
+                }else{
+                    afterSectionLoads(v);
+                }
+            }
+
+            // using jQuery animate
+            else{
+                var scrollSettings = getScrollSettings(v);
+
+                $(scrollSettings.element).animate(
+                    scrollSettings.options,
+                options.scrollingSpeed, options.easing).promise().done(function () { //only one single callback in case of animating  `html, body`
+                    if(options.scrollBar){
+
+                        /* Hack!
+                        The timeout prevents setting the most dominant section in the viewport as "active" when the user
+                        scrolled to a smaller section by using the mousewheel (auto scrolling) rather than draging the scroll bar.
+
+                        When using scrollBar:true It seems like the scroll events still getting propagated even after the scrolling animation has finished.
+                        */
+                        setTimeout(function(){
+                            afterSectionLoads(v);
+                        },30);
+                    }else{
+                        afterSectionLoads(v);
+                    }
+                });
+            }
+        }
+
+        /**
+        * Gets the scrolling settings depending on the plugin autoScrolling option
+        */
+        function getScrollSettings(v){
+            var scroll = {};
+
+            if(options.autoScrolling && !options.scrollBar){
+                scroll.options = { 'top': -v.dtop};
+                scroll.element = WRAPPER_SEL;
+            }else{
+                scroll.options = { 'scrollTop': v.dtop};
+                scroll.element = 'html, body';
+            }
+
+            return scroll;
+        }
+
+        /**
+        * Adds sections before or after the current one to create the infinite effect.
+        */
+        function createInfiniteSections(v){
+            // Scrolling down
+            if (!v.isMovementUp) {
+                // Move all previous sections to after the active section
+                $(SECTION_ACTIVE_SEL).after(v.activeSection.prevAll(SECTION_SEL).get().reverse());
+            }
+            else { // Scrolling up
+                // Move all next sections to before the active section
+                $(SECTION_ACTIVE_SEL).before(v.activeSection.nextAll(SECTION_SEL));
+            }
+
+            // Maintain the displayed position (now that we changed the element order)
+            silentScroll($(SECTION_ACTIVE_SEL).position().top);
+
+            // Maintain the active slides visible in the viewport
+            keepSlidesPosition();
+
+            // save for later the elements that still need to be reordered
+            v.wrapAroundElements = v.activeSection;
+
+            // Recalculate animation variables
+            v.dtop = v.element.position().top;
+            v.yMovement = getYmovement(v.element);
+
+            //sections will temporally have another position in the DOM
+            //updating this values in case we need them
+            v.leavingSection = v.activeSection.index(SECTION_SEL) + 1;
+            v.sectionIndex = v.element.index(SECTION_SEL);
+
+            return v;
+        }
+
+        /**
+        * Fix section order after continuousVertical changes have been animated
+        */
+        function continuousVerticalFixSectionOrder (v) {
+            // If continuousVertical is in effect (and autoScrolling would also be in effect then),
+            // finish moving the elements around so the direct navigation will function more simply
+            if (!v.wrapAroundElements || !v.wrapAroundElements.length) {
+                return;
+            }
+
+            if (v.isMovementUp) {
+                $(SECTION_FIRST_SEL).before(v.wrapAroundElements);
+            }
+            else {
+                $(SECTION_LAST_SEL).after(v.wrapAroundElements);
+            }
+
+            silentScroll($(SECTION_ACTIVE_SEL).position().top);
+
+            // Maintain the active slides visible in the viewport
+            keepSlidesPosition();
+        }
+
+
+        /**
+        * Actions to do once the section is loaded.
+        */
+        function afterSectionLoads (v){
+            continuousVerticalFixSectionOrder(v);
+
+            //callback (afterLoad) if the site is not just resizing and readjusting the slides
+            $.isFunction(options.afterLoad) && !v.localIsResizing && options.afterLoad.call(v.element, v.anchorLink, (v.sectionIndex + 1));
+
+            if(options.scrollOverflow){
+                options.scrollOverflowHandler.afterLoad();
+            }
+
+            if(!v.localIsResizing){
+                playMedia(v.element);
+            }
+
+            v.element.addClass(COMPLETELY).siblings().removeClass(COMPLETELY);
+
+            canScroll = true;
+
+            $.isFunction(v.callback) && v.callback.call(this);
+        }
+
+        /**
+        * Sets the value for the given attribute from the `data-` attribute with the same suffix
+        * ie: data-srcset ==> srcset  |  data-src ==> src
+        */
+        function setSrc(element, attribute){
+            element
+                .attr(attribute, element.data(attribute))
+                .removeAttr('data-' + attribute);
+        }
+
+        /**
+        * Lazy loads image, video and audio elements.
+        */
+        function lazyLoad(destiny){
+            if (!options.lazyLoading){
+                return;
+            }
+
+            var panel = getSlideOrSection(destiny);
+            var element;
+
+            panel.find('img[data-src], img[data-srcset], source[data-src], source[data-srcset], video[data-src], audio[data-src], iframe[data-src]').each(function(){
+                element = $(this);
+
+                $.each(['src', 'srcset'], function(index, type){
+                    var attribute = element.attr('data-' + type);
+                    if(typeof attribute !== 'undefined' && attribute){
+                        setSrc(element, type);
+                    }
+                });
+
+                if(element.is('source')){
+                    var typeToPlay = element.closest('video').length ? 'video' : 'audio';
+                    element.closest(typeToPlay).get(0).load();
+                }
+            });
+        }
+
+        /**
+        * Plays video and audio elements.
+        */
+        function playMedia(destiny){
+            var panel = getSlideOrSection(destiny);
+
+            //playing HTML5 media elements
+            panel.find('video, audio').each(function(){
+                var element = $(this).get(0);
+
+                if( element.hasAttribute('data-autoplay') && typeof element.play === 'function' ) {
+                    element.play();
+                }
+            });
+
+            //youtube videos
+            panel.find('iframe[src*="youtube.com/embed/"]').each(function(){
+                var element = $(this).get(0);
+
+                if ( element.hasAttribute('data-autoplay') ){
+                    playYoutube(element);
+                }
+
+                //in case the URL was not loaded yet. On page load we need time for the new URL (with the API string) to load.
+                element.onload = function() {
+                    if ( element.hasAttribute('data-autoplay') ){
+                        playYoutube(element);
+                    }
+                };
+            });
+        }
+
+        /**
+        * Plays a youtube video
+        */
+        function playYoutube(element){
+            element.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        }
+
+        /**
+        * Stops video and audio elements.
+        */
+        function stopMedia(destiny){
+            var panel = getSlideOrSection(destiny);
+
+            //stopping HTML5 media elements
+            panel.find('video, audio').each(function(){
+                var element = $(this).get(0);
+
+                if( !element.hasAttribute('data-keepplaying') && typeof element.pause === 'function' ) {
+                    element.pause();
+                }
+            });
+
+            //youtube videos
+            panel.find('iframe[src*="youtube.com/embed/"]').each(function(){
+                var element = $(this).get(0);
+
+                if( /youtube\.com\/embed\//.test($(this).attr('src')) && !element.hasAttribute('data-keepplaying')){
+                    $(this).get(0).contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');
+                }
+            });
+        }
+
+        /**
+        * Gets the active slide (or section) for the given section
+        */
+        function getSlideOrSection(destiny){
+            var slide = destiny.find(SLIDE_ACTIVE_SEL);
+            if( slide.length ) {
+                destiny = $(slide);
+            }
+
+            return destiny;
+        }
+
+        /**
+        * Scrolls to the anchor in the URL when loading the site
+        */
+        function scrollToAnchor(){
+            var anchors =  getAnchorsURL();
+            var sectionAnchor = anchors.section;
+            var slideAnchor = anchors.slide;
+
+            if(sectionAnchor){  //if theres any #
+                if(options.animateAnchor){
+                    scrollPageAndSlide(sectionAnchor, slideAnchor);
+                }else{
+                    silentMoveTo(sectionAnchor, slideAnchor);
+                }
+            }
+        }
+
+        /**
+        * Detecting any change on the URL to scroll to the given anchor link
+        * (a way to detect back history button as we play with the hashes on the URL)
+        */
+        function hashChangeHandler(){
+            if(!isScrolling && !options.lockAnchors){
+                var anchors = getAnchorsURL();
+                var sectionAnchor = anchors.section;
+                var slideAnchor = anchors.slide;
+
+                //when moving to a slide in the first section for the first time (first time to add an anchor to the URL)
+                var isFirstSlideMove =  (typeof lastScrolledDestiny === 'undefined');
+                var isFirstScrollMove = (typeof lastScrolledDestiny === 'undefined' && typeof slideAnchor === 'undefined' && !slideMoving);
+
+                if(sectionAnchor.length){
+                    /*in order to call scrollpage() only once for each destination at a time
+                    It is called twice for each scroll otherwise, as in case of using anchorlinks `hashChange`
+                    event is fired on every scroll too.*/
+                    if ((sectionAnchor && sectionAnchor !== lastScrolledDestiny) && !isFirstSlideMove
+                        || isFirstScrollMove
+                        || (!slideMoving && lastScrolledSlide != slideAnchor )){
+
+                        scrollPageAndSlide(sectionAnchor, slideAnchor);
+                    }
+                }
+            }
+        }
+
+        //gets the URL anchors (section and slide)
+        function getAnchorsURL(){
+            var section;
+            var slide;
+            var hash = window.location.hash;
+
+            if(hash.length){
+                //getting the anchor link in the URL and deleting the `#`
+                var anchorsParts =  hash.replace('#', '').split('/');
+
+                //using / for visual reasons and not as a section/slide separator #2803
+                var isFunkyAnchor = hash.indexOf('#/') > -1;
+
+                section = isFunkyAnchor ? '/' + anchorsParts[1] : decodeURIComponent(anchorsParts[0]);
+
+                var slideAnchor = isFunkyAnchor ? anchorsParts[2] : anchorsParts[1];
+                if(slideAnchor && slideAnchor.length){
+                    slide = decodeURIComponent(slideAnchor);
+                }
+            }
+
+            return {
+                section: section,
+                slide: slide
+            }
+        }
+
+        //Sliding with arrow keys, both, vertical and horizontal
+        function keydownHandler(e) {
+            clearTimeout(keydownId);
+
+            var activeElement = $(':focus');
+            var keyCode = e.which;
+
+            //tab?
+            if(keyCode === 9){
+                onTab(e);
+            }
+
+            else if(!activeElement.is('textarea') && !activeElement.is('input') && !activeElement.is('select') &&
+                activeElement.attr('contentEditable') !== "true" && activeElement.attr('contentEditable') !== '' &&
+                options.keyboardScrolling && options.autoScrolling){
+
+                //preventing the scroll with arrow keys & spacebar & Page Up & Down keys
+                var keyControls = [40, 38, 32, 33, 34];
+                if($.inArray(keyCode, keyControls) > -1){
+                    e.preventDefault();
+                }
+
+                controlPressed = e.ctrlKey;
+
+                keydownId = setTimeout(function(){
+                    onkeydown(e);
+                },150);
+            }
+        }
+
+        function tooltipTextHandler(){
+            $(this).prev().trigger('click');
+        }
+
+        //to prevent scrolling while zooming
+        function keyUpHandler(e){
+            if(isWindowFocused){ //the keyup gets fired on new tab ctrl + t in Firefox
+                controlPressed = e.ctrlKey;
+            }
+        }
+
+        //binding the mousemove when the mouse's middle button is released
+        function mouseDownHandler(e){
+            //middle button
+            if (e.which == 2){
+                oldPageY = e.pageY;
+                container.on('mousemove', mouseMoveHandler);
+            }
+        }
+
+        //unbinding the mousemove when the mouse's middle button is released
+        function mouseUpHandler(e){
+            //middle button
+            if (e.which == 2){
+                container.off('mousemove');
+            }
+        }
+
+        //Scrolling horizontally when clicking on the slider controls.
+        function slideArrowHandler(){
+            var section = $(this).closest(SECTION_SEL);
+
+            if ($(this).hasClass(SLIDES_PREV)) {
+                if(isScrollAllowed.m.left){
+                    moveSlideLeft(section);
+                }
+            } else {
+                if(isScrollAllowed.m.right){
+                    moveSlideRight(section);
+                }
+            }
+        }
+
+        //when opening a new tab (ctrl + t), `control` won't be pressed when coming back.
+        function blurHandler(){
+            isWindowFocused = false;
+            controlPressed = false;
+        }
+
+        //Scrolls to the section when clicking the navigation bullet
+        function sectionBulletHandler(e){
+            e.preventDefault();
+            var index = $(this).parent().index();
+            scrollPage($(SECTION_SEL).eq(index));
+        }
+
+        //Scrolls the slider to the given slide destination for the given section
+        function slideBulletHandler(e){
+            e.preventDefault();
+            var slides = $(this).closest(SECTION_SEL).find(SLIDES_WRAPPER_SEL);
+            var destiny = slides.find(SLIDE_SEL).eq($(this).closest('li').index());
+
+            landscapeScroll(slides, destiny);
+        }
+
+        /**
+        * Keydown event
+        */
+        function onkeydown(e){
+            var shiftPressed = e.shiftKey;
+
+            //do nothing if we can not scroll or we are not using horizotnal key arrows.
+            if(!canScroll && [37,39].indexOf(e.which) < 0){
+                return;
+            }
+
+            switch (e.which) {
+                //up
+                case 38:
+                case 33:
+                    if(isScrollAllowed.k.up){
+                        moveSectionUp();
+                    }
+                    break;
+
+                //down
+                case 32: //spacebar
+                    if(shiftPressed && isScrollAllowed.k.up){
+                        moveSectionUp();
+                        break;
+                    }
+                /* falls through */
+                case 40:
+                case 34:
+                    if(isScrollAllowed.k.down){
+                        moveSectionDown();
+                    }
+                    break;
+
+                //Home
+                case 36:
+                    if(isScrollAllowed.k.up){
+                        moveTo(1);
+                    }
+                    break;
+
+                //End
+                case 35:
+                     if(isScrollAllowed.k.down){
+                        moveTo( $(SECTION_SEL).length );
+                    }
+                    break;
+
+                //left
+                case 37:
+                    if(isScrollAllowed.k.left){
+                        moveSlideLeft();
+                    }
+                    break;
+
+                //right
+                case 39:
+                    if(isScrollAllowed.k.right){
+                        moveSlideRight();
+                    }
+                    break;
+
+                default:
+                    return; // exit this handler for other keys
+            }
+        }
+
+        /**
+        * Makes sure the tab key will only focus elements within the current section/slide
+        * preventing this way from breaking the page.
+        * Based on "Modals and keyboard traps"
+        * from https://developers.google.com/web/fundamentals/accessibility/focus/using-tabindex
+        */
+        function onTab(e){
+            var isShiftPressed = e.shiftKey;
+            var activeElement = $(':focus');
+            var activeSection = $(SECTION_ACTIVE_SEL);
+            var activeSlide = activeSection.find(SLIDE_ACTIVE_SEL);
+            var focusableWrapper = activeSlide.length ? activeSlide : activeSection;
+            var focusableElements = focusableWrapper.find(focusableElementsString);
+
+            function preventAndFocusFirst(e){
+                e.preventDefault();
+                return focusableElements.first().focus();
+            }
+
+            //is there an element with focus?
+            if(activeElement.length){
+                if(!activeElement.closest(SECTION_ACTIVE_SEL, SLIDE_ACTIVE_SEL).length){
+                    activeElement = preventAndFocusFirst(e);
+                }
+            }
+
+            //no element if focused? Let's focus the first one of the section/slide
+            else{
+                preventAndFocusFirst(e);
+            }
+
+            //when reached the first or last focusable element of the section/slide
+            //we prevent the tab action to keep it in the last focusable element
+            if(!isShiftPressed && activeElement.is(focusableElements.last()) ||
+                isShiftPressed && activeElement.is(focusableElements.first())
+            ){
+                e.preventDefault();
+            }
+        }
+
+        /**
+        * Detecting the direction of the mouse movement.
+        * Used only for the middle button of the mouse.
+        */
+        var oldPageY = 0;
+        function mouseMoveHandler(e){
+            if(canScroll){
+                // moving up
+                if (e.pageY < oldPageY && isScrollAllowed.m.up){
+                    moveSectionUp();
+                }
+
+                // moving down
+                else if(e.pageY > oldPageY && isScrollAllowed.m.down){
+                    moveSectionDown();
+                }
+            }
+            oldPageY = e.pageY;
+        }
+
+        /**
+        * Scrolls horizontal sliders.
+        */
+        function landscapeScroll(slides, destiny, direction){
+            var section = slides.closest(SECTION_SEL);
+            var v = {
+                slides: slides,
+                destiny: destiny,
+                direction: direction,
+                destinyPos: destiny.position(),
+                slideIndex: destiny.index(),
+                section: section,
+                sectionIndex: section.index(SECTION_SEL),
+                anchorLink: section.data('anchor'),
+                slidesNav: section.find(SLIDES_NAV_SEL),
+                slideAnchor:  getAnchor(destiny),
+                prevSlide: section.find(SLIDE_ACTIVE_SEL),
+                prevSlideIndex: section.find(SLIDE_ACTIVE_SEL).index(),
+
+                //caching the value of isResizing at the momment the function is called
+                //because it will be checked later inside a setTimeout and the value might change
+                localIsResizing: isResizing
+            };
+            v.xMovement = getXmovement(v.prevSlideIndex, v.slideIndex);
+
+            //important!! Only do it when not resizing
+            if(!v.localIsResizing){
+                //preventing from scrolling to the next/prev section when using scrollHorizontally
+                canScroll = false;
+            }
+
+            if(options.onSlideLeave){
+
+                //if the site is not just resizing and readjusting the slides
+                if(!v.localIsResizing && v.xMovement!=='none'){
+                    if($.isFunction( options.onSlideLeave )){
+                        if(options.onSlideLeave.call( v.prevSlide, v.anchorLink, (v.sectionIndex + 1), v.prevSlideIndex, v.direction, v.slideIndex ) === false){
+                            slideMoving = false;
+                            return;
+                        }
+                    }
+                }
+            }
+
+            destiny.addClass(ACTIVE).siblings().removeClass(ACTIVE);
+
+            if(!v.localIsResizing){
+                stopMedia(v.prevSlide);
+                lazyLoad(destiny);
+            }
+
+            if(!options.loopHorizontal && options.controlArrows){
+                //hidding it for the fist slide, showing for the rest
+                section.find(SLIDES_ARROW_PREV_SEL).toggle(v.slideIndex!==0);
+
+                //hidding it for the last slide, showing for the rest
+                section.find(SLIDES_ARROW_NEXT_SEL).toggle(!destiny.is(':last-child'));
+            }
+
+            //only changing the URL if the slides are in the current section (not for resize re-adjusting)
+            if(section.hasClass(ACTIVE) && !v.localIsResizing){
+                setState(v.slideIndex, v.slideAnchor, v.anchorLink, v.sectionIndex);
+            }
+
+            performHorizontalMove(slides, v, true);
+        }
+
+
+        function afterSlideLoads(v){
+            activeSlidesNavigation(v.slidesNav, v.slideIndex);
+
+            //if the site is not just resizing and readjusting the slides
+            if(!v.localIsResizing){
+                $.isFunction( options.afterSlideLoad ) && options.afterSlideLoad.call( v.destiny, v.anchorLink, (v.sectionIndex + 1), v.slideAnchor, v.slideIndex);
+
+                //needs to be inside the condition to prevent problems with continuousVertical and scrollHorizontally
+                //and to prevent double scroll right after a windows resize
+                canScroll = true;
+
+                playMedia(v.destiny);
+            }
+
+            //letting them slide again
+            slideMoving = false;
+        }
+
+        /**
+        * Performs the horizontal movement. (CSS3 or jQuery)
+        *
+        * @param fireCallback {Bool} - determines whether or not to fire the callback
+        */
+        function performHorizontalMove(slides, v, fireCallback){
+            var destinyPos = v.destinyPos;
+
+            if(options.css3){
+                var translate3d = 'translate3d(-' + Math.round(destinyPos.left) + 'px, 0px, 0px)';
+
+                addAnimation(slides.find(SLIDES_CONTAINER_SEL)).css(getTransforms(translate3d));
+
+                afterSlideLoadsId = setTimeout(function(){
+                    fireCallback && afterSlideLoads(v);
+                }, options.scrollingSpeed, options.easing);
+            }else{
+                slides.animate({
+                    scrollLeft : Math.round(destinyPos.left)
+                }, options.scrollingSpeed, options.easing, function() {
+
+                    fireCallback && afterSlideLoads(v);
+                });
+            }
+        }
+
+        /**
+        * Sets the state for the horizontal bullet navigations.
+        */
+        function activeSlidesNavigation(slidesNav, slideIndex){
+            slidesNav.find(ACTIVE_SEL).removeClass(ACTIVE);
+            slidesNav.find('li').eq(slideIndex).find('a').addClass(ACTIVE);
+        }
+
+        var previousHeight = windowsHeight;
+
+        //when resizing the site, we adjust the heights of the sections, slimScroll...
+        function resizeHandler(){
+            //checking if it needs to get responsive
+            responsive();
+
+            // rebuild immediately on touch devices
+            if (isTouchDevice) {
+                var activeElement = $(document.activeElement);
+
+                //if the keyboard is NOT visible
+                if (!activeElement.is('textarea') && !activeElement.is('input') && !activeElement.is('select')) {
+                    var currentHeight = $window.height();
+
+                    //making sure the change in the viewport size is enough to force a rebuild. (20 % of the window to avoid problems when hidding scroll bars)
+                    if( Math.abs(currentHeight - previousHeight) > (20 * Math.max(previousHeight, currentHeight) / 100) ){
+                        reBuild(true);
+                        previousHeight = currentHeight;
+                    }
+                }
+            }else{
+                //in order to call the functions only when the resize is finished
+                //http://stackoverflow.com/questions/4298612/jquery-how-to-call-resize-event-only-once-its-finished-resizing
+                clearTimeout(resizeId);
+
+                resizeId = setTimeout(function(){
+                    reBuild(true);
+                }, 350);
+            }
+        }
+
+        /**
+        * Checks if the site needs to get responsive and disables autoScrolling if so.
+        * A class `fp-responsive` is added to the plugin's container in case the user wants to use it for his own responsive CSS.
+        */
+        function responsive(){
+            var widthLimit = options.responsive || options.responsiveWidth; //backwards compatiblity
+            var heightLimit = options.responsiveHeight;
+
+            //only calculating what we need. Remember its called on the resize event.
+            var isBreakingPointWidth = widthLimit && $window.outerWidth() < widthLimit;
+            var isBreakingPointHeight = heightLimit && $window.height() < heightLimit;
+
+            if(widthLimit && heightLimit){
+                setResponsive(isBreakingPointWidth || isBreakingPointHeight);
+            }
+            else if(widthLimit){
+                setResponsive(isBreakingPointWidth);
+            }
+            else if(heightLimit){
+                setResponsive(isBreakingPointHeight);
+            }
+        }
+
+        /**
+        * Adds transition animations for the given element
+        */
+        function addAnimation(element){
+            var transition = 'all ' + options.scrollingSpeed + 'ms ' + options.easingcss3;
+
+            element.removeClass(NO_TRANSITION);
+            return element.css({
+                '-webkit-transition': transition,
+                'transition': transition
+            });
+        }
+
+        /**
+        * Remove transition animations for the given element
+        */
+        function removeAnimation(element){
+            return element.addClass(NO_TRANSITION);
+        }
+
+        /**
+        * Activating the vertical navigation bullets according to the given slide name.
+        */
+        function activateNavDots(name, sectionIndex){
+            if(options.navigation){
+                $(SECTION_NAV_SEL).find(ACTIVE_SEL).removeClass(ACTIVE);
+                if(name){
+                    $(SECTION_NAV_SEL).find('a[href="#' + name + '"]').addClass(ACTIVE);
+                }else{
+                    $(SECTION_NAV_SEL).find('li').eq(sectionIndex).find('a').addClass(ACTIVE);
+                }
+            }
+        }
+
+        /**
+        * Activating the website main menu elements according to the given slide name.
+        */
+        function activateMenuElement(name){
+            if(options.menu){
+                $(options.menu).find(ACTIVE_SEL).removeClass(ACTIVE);
+                $(options.menu).find('[data-menuanchor="'+name+'"]').addClass(ACTIVE);
+            }
+        }
+
+        /**
+        * Sets to active the current menu and vertical nav items.
+        */
+        function activateMenuAndNav(anchor, index){
+            activateMenuElement(anchor);
+            activateNavDots(anchor, index);
+        }
+
+        /**
+        * Retuns `up` or `down` depending on the scrolling movement to reach its destination
+        * from the current section.
+        */
+        function getYmovement(destiny){
+            var fromIndex = $(SECTION_ACTIVE_SEL).index(SECTION_SEL);
+            var toIndex = destiny.index(SECTION_SEL);
+            if( fromIndex == toIndex){
+                return 'none';
+            }
+            if(fromIndex > toIndex){
+                return 'up';
+            }
+            return 'down';
+        }
+
+        /**
+        * Retuns `right` or `left` depending on the scrolling movement to reach its destination
+        * from the current slide.
+        */
+        function getXmovement(fromIndex, toIndex){
+            if( fromIndex == toIndex){
+                return 'none';
+            }
+            if(fromIndex > toIndex){
+                return 'left';
+            }
+            return 'right';
+        }
+
+        function addTableClass(element){
+            //In case we are styling for the 2nd time as in with reponsiveSlides
+            if(!element.hasClass(TABLE)){
+                element.addClass(TABLE).wrapInner('<div class="' + TABLE_CELL + '" style="height:' + getTableHeight(element) + 'px;" />');
+            }
+        }
+
+        function getTableHeight(element){
+            var sectionHeight = windowsHeight;
+
+            if(options.paddingTop || options.paddingBottom){
+                var section = element;
+                if(!section.hasClass(SECTION)){
+                    section = element.closest(SECTION_SEL);
+                }
+
+                var paddings = parseInt(section.css('padding-top')) + parseInt(section.css('padding-bottom'));
+                sectionHeight = (windowsHeight - paddings);
+            }
+
+            return sectionHeight;
+        }
+
+        /**
+        * Adds a css3 transform property to the container class with or without animation depending on the animated param.
+        */
+        function transformContainer(translate3d, animated){
+            if(animated){
+                addAnimation(container);
+            }else{
+                removeAnimation(container);
+            }
+
+            container.css(getTransforms(translate3d));
+
+            //syncronously removing the class after the animation has been applied.
+            setTimeout(function(){
+                container.removeClass(NO_TRANSITION);
+            },10);
+        }
+
+        /**
+        * Gets a section by its anchor / index
+        */
+        function getSectionByAnchor(sectionAnchor){
+            var section = container.find(SECTION_SEL + '[data-anchor="'+sectionAnchor+'"]');
+            if(!section.length){
+                var sectionIndex = typeof sectionAnchor !== 'undefined' ? sectionAnchor -1 : 0;
+                section = $(SECTION_SEL).eq(sectionIndex);
+            }
+
+            return section;
+        }
+
+        /**
+        * Gets a slide inside a given section by its anchor / index
+        */
+        function getSlideByAnchor(slideAnchor, section){
+            var slide = section.find(SLIDE_SEL + '[data-anchor="'+slideAnchor+'"]');
+            if(!slide.length){
+                slideAnchor = typeof slideAnchor !== 'undefined' ? slideAnchor : 0;
+                slide = section.find(SLIDE_SEL).eq(slideAnchor);
+            }
+
+            return slide;
+        }
+
+        /**
+        * Scrolls to the given section and slide anchors
+        */
+        function scrollPageAndSlide(sectionAnchor, slideAnchor){
+            var section = getSectionByAnchor(sectionAnchor);
+
+            //do nothing if there's no section with the given anchor name
+            if(!section.length) return;
+
+            var slide = getSlideByAnchor(slideAnchor, section);
+
+            //we need to scroll to the section and then to the slide
+            if (sectionAnchor !== lastScrolledDestiny && !section.hasClass(ACTIVE)){
+                scrollPage(section, function(){
+                    scrollSlider(slide);
+                });
+            }
+            //if we were already in the section
+            else{
+                scrollSlider(slide);
+            }
+        }
+
+        /**
+        * Scrolls the slider to the given slide destination for the given section
+        */
+        function scrollSlider(slide){
+            if(slide.length){
+                landscapeScroll(slide.closest(SLIDES_WRAPPER_SEL), slide);
+            }
+        }
+
+        /**
+        * Creates a landscape navigation bar with dots for horizontal sliders.
+        */
+        function addSlidesNavigation(section, numSlides){
+            section.append('<div class="' + SLIDES_NAV + '"><ul></ul></div>');
+            var nav = section.find(SLIDES_NAV_SEL);
+
+            //top or bottom
+            nav.addClass(options.slidesNavPosition);
+
+            for(var i=0; i< numSlides; i++){
+                nav.find('ul').append('<li><a href="#"><span></span></a></li>');
+            }
+
+            //centering it
+            nav.css('margin-left', '-' + (nav.width()/2) + 'px');
+
+            nav.find('li').first().find('a').addClass(ACTIVE);
+        }
+
+
+        /**
+        * Sets the state of the website depending on the active section/slide.
+        * It changes the URL hash when needed and updates the body class.
+        */
+        function setState(slideIndex, slideAnchor, anchorLink, sectionIndex){
+            var sectionHash = '';
+
+            if(options.anchors.length && !options.lockAnchors){
+
+                //isn't it the first slide?
+                if(slideIndex){
+                    if(typeof anchorLink !== 'undefined'){
+                        sectionHash = anchorLink;
+                    }
+
+                    //slide without anchor link? We take the index instead.
+                    if(typeof slideAnchor === 'undefined'){
+                        slideAnchor = slideIndex;
+                    }
+
+                    lastScrolledSlide = slideAnchor;
+                    setUrlHash(sectionHash + '/' + slideAnchor);
+
+                //first slide won't have slide anchor, just the section one
+                }else if(typeof slideIndex !== 'undefined'){
+                    lastScrolledSlide = slideAnchor;
+                    setUrlHash(anchorLink);
+                }
+
+                //section without slides
+                else{
+                    setUrlHash(anchorLink);
+                }
+            }
+
+            setBodyClass();
+        }
+
+        /**
+        * Sets the URL hash.
+        */
+        function setUrlHash(url){
+            if(options.recordHistory){
+                location.hash = url;
+            }else{
+                //Mobile Chrome doesn't work the normal way, so... lets use HTML5 for phones :)
+                if(isTouchDevice || isTouch){
+                    window.history.replaceState(undefined, undefined, '#' + url);
+                }else{
+                    var baseUrl = window.location.href.split('#')[0];
+                    window.location.replace( baseUrl + '#' + url );
+                }
+            }
+        }
+
+        /**
+        * Gets the anchor for the given slide / section. Its index will be used if there's none.
+        */
+        function getAnchor(element){
+            var anchor = element.data('anchor');
+            var index = element.index();
+
+            //Slide without anchor link? We take the index instead.
+            if(typeof anchor === 'undefined'){
+                anchor = index;
+            }
+
+            return anchor;
+        }
+
+        /**
+        * Sets a class for the body of the page depending on the active section / slide
+        */
+        function setBodyClass(){
+            var section = $(SECTION_ACTIVE_SEL);
+            var slide = section.find(SLIDE_ACTIVE_SEL);
+
+            var sectionAnchor = getAnchor(section);
+            var slideAnchor = getAnchor(slide);
+
+            var text = String(sectionAnchor);
+
+            if(slide.length){
+                text = text + '-' + slideAnchor;
+            }
+
+            //changing slash for dash to make it a valid CSS style
+            text = text.replace('/', '-').replace('#','');
+
+            //removing previous anchor classes
+            var classRe = new RegExp('\\b\\s?' + VIEWING_PREFIX + '-[^\\s]+\\b', "g");
+            $body[0].className = $body[0].className.replace(classRe, '');
+
+            //adding the current anchor
+            $body.addClass(VIEWING_PREFIX + '-' + text);
+        }
+
+        /**
+        * Checks for translate3d support
+        * @return boolean
+        * http://stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
+        */
+        function support3d() {
+            var el = document.createElement('p'),
+                has3d,
+                transforms = {
+                    'webkitTransform':'-webkit-transform',
+                    'OTransform':'-o-transform',
+                    'msTransform':'-ms-transform',
+                    'MozTransform':'-moz-transform',
+                    'transform':'transform'
+                };
+
+            // Add it to the body to get the computed style.
+            document.body.insertBefore(el, null);
+
+            for (var t in transforms) {
+                if (el.style[t] !== undefined) {
+                    el.style[t] = 'translate3d(1px,1px,1px)';
+                    has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
+                }
+            }
+
+            document.body.removeChild(el);
+
+            return (has3d !== undefined && has3d.length > 0 && has3d !== 'none');
+        }
+
+        /**
+        * Removes the auto scrolling action fired by the mouse wheel and trackpad.
+        * After this function is called, the mousewheel and trackpad movements won't scroll through sections.
+        */
+        function removeMouseWheelHandler(){
+            if (document.addEventListener) {
+                document.removeEventListener('mousewheel', MouseWheelHandler, false); //IE9, Chrome, Safari, Oper
+                document.removeEventListener('wheel', MouseWheelHandler, false); //Firefox
+                document.removeEventListener('MozMousePixelScroll', MouseWheelHandler, false); //old Firefox
+            } else {
+                document.detachEvent('onmousewheel', MouseWheelHandler); //IE 6/7/8
+            }
+        }
+
+        /**
+        * Adds the auto scrolling action for the mouse wheel and trackpad.
+        * After this function is called, the mousewheel and trackpad movements will scroll through sections
+        * https://developer.mozilla.org/en-US/docs/Web/Events/wheel
+        */
+        function addMouseWheelHandler(){
+            var prefix = '';
+            var _addEventListener;
+
+            if (window.addEventListener){
+                _addEventListener = "addEventListener";
+            }else{
+                _addEventListener = "attachEvent";
+                prefix = 'on';
+            }
+
+             // detect available wheel event
+            var support = 'onwheel' in document.createElement('div') ? 'wheel' : // Modern browsers support "wheel"
+                      document.onmousewheel !== undefined ? 'mousewheel' : // Webkit and IE support at least "mousewheel"
+                      'DOMMouseScroll'; // let's assume that remaining browsers are older Firefox
+
+
+            if(support == 'DOMMouseScroll'){
+                document[ _addEventListener ](prefix + 'MozMousePixelScroll', MouseWheelHandler, false);
+            }
+
+            //handle MozMousePixelScroll in older Firefox
+            else{
+                document[ _addEventListener ](prefix + support, MouseWheelHandler, false);
+            }
+        }
+
+        /**
+        * Binding the mousemove when the mouse's middle button is pressed
+        */
+        function addMiddleWheelHandler(){
+            container
+                .on('mousedown', mouseDownHandler)
+                .on('mouseup', mouseUpHandler);
+        }
+
+        /**
+        * Unbinding the mousemove when the mouse's middle button is released
+        */
+        function removeMiddleWheelHandler(){
+            container
+                .off('mousedown', mouseDownHandler)
+                .off('mouseup', mouseUpHandler);
+        }
+
+        /**
+        * Adds the possibility to auto scroll through sections on touch devices.
+        */
+        function addTouchHandler(){
+            if(isTouchDevice || isTouch){
+                if(options.autoScrolling){
+                    $body.off(events.touchmove).on(events.touchmove, preventBouncing);
+                }
+
+                $(WRAPPER_SEL)
+                    .off(events.touchstart).on(events.touchstart, touchStartHandler)
+                    .off(events.touchmove).on(events.touchmove, touchMoveHandler);
+            }
+        }
+
+        /**
+        * Removes the auto scrolling for touch devices.
+        */
+        function removeTouchHandler(){
+            if(isTouchDevice || isTouch){
+                if(options.autoScrolling){
+                    $body.off(events.touchmove);
+                }
+
+                $(WRAPPER_SEL)
+                    .off(events.touchstart)
+                    .off(events.touchmove);
+            }
+        }
+
+        /*
+        * Returns and object with Microsoft pointers (for IE<11 and for IE >= 11)
+        * http://msdn.microsoft.com/en-us/library/ie/dn304886(v=vs.85).aspx
+        */
+        function getMSPointer(){
+            var pointer;
+
+            //IE >= 11 & rest of browsers
+            if(window.PointerEvent){
+                pointer = { down: 'pointerdown', move: 'pointermove'};
+            }
+
+            //IE < 11
+            else{
+                pointer = { down: 'MSPointerDown', move: 'MSPointerMove'};
+            }
+
+            return pointer;
+        }
+
+        /**
+        * Gets the pageX and pageY properties depending on the browser.
+        * https://github.com/alvarotrigo/fullPage.js/issues/194#issuecomment-34069854
+        */
+        function getEventsPage(e){
+            var events = [];
+
+            events.y = (typeof e.pageY !== 'undefined' && (e.pageY || e.pageX) ? e.pageY : e.touches[0].pageY);
+            events.x = (typeof e.pageX !== 'undefined' && (e.pageY || e.pageX) ? e.pageX : e.touches[0].pageX);
+
+            //in touch devices with scroll bar, e.pageY is detected, but we have to deal with touch events. #1008
+            if(isTouch && isReallyTouch(e) && (options.scrollBar || !options.autoScrolling)){
+                events.y = e.touches[0].pageY;
+                events.x = e.touches[0].pageX;
+            }
+
+            return events;
+        }
+
+        /**
+        * Slides silently (with no animation) the active slider to the given slide.
+        * @param noCallback {bool} true or defined -> no callbacks
+        */
+        function silentLandscapeScroll(activeSlide, noCallbacks){
+            setScrollingSpeed (0, 'internal');
+
+            if(typeof noCallbacks !== 'undefined'){
+                //preventing firing callbacks afterSlideLoad etc.
+                isResizing = true;
+            }
+
+            landscapeScroll(activeSlide.closest(SLIDES_WRAPPER_SEL), activeSlide);
+
+            if(typeof noCallbacks !== 'undefined'){
+                isResizing = false;
+            }
+
+            setScrollingSpeed(originals.scrollingSpeed, 'internal');
+        }
+
+        /**
+        * Scrolls silently (with no animation) the page to the given Y position.
+        */
+        function silentScroll(top){
+            // The first section can have a negative value in iOS 10. Not quite sure why: -0.0142822265625
+            // that's why we round it to 0.
+            var roundedTop = Math.round(top);
+
+            if (options.css3 && options.autoScrolling && !options.scrollBar){
+                var translate3d = 'translate3d(0px, -' + roundedTop + 'px, 0px)';
+                transformContainer(translate3d, false);
+            }
+            else if(options.autoScrolling && !options.scrollBar){
+                container.css('top', -roundedTop);
+            }
+            else{
+                $htmlBody.scrollTop(roundedTop);
+            }
+        }
+
+        /**
+        * Returns the cross-browser transform string.
+        */
+        function getTransforms(translate3d){
+            return {
+                '-webkit-transform': translate3d,
+                '-moz-transform': translate3d,
+                '-ms-transform':translate3d,
+                'transform': translate3d
+            };
+        }
+
+        /**
+        * Allowing or disallowing the mouse/swipe scroll in a given direction. (not for keyboard)
+        * @type  m (mouse) or k (keyboard)
+        */
+        function setIsScrollAllowed(value, direction, type){
+            //up, down, left, right
+            if(direction !== 'all'){
+                isScrollAllowed[type][direction] = value;
+            }
+
+            //all directions?
+            else{
+                $.each(Object.keys(isScrollAllowed[type]), function(index, key){
+                    isScrollAllowed[type][key] = value;
+                });
+            }
+        }
+
+        /*
+        * Destroys fullpage.js plugin events and optinally its html markup and styles
+        */
+        function destroy(all){
+            setAutoScrolling(false, 'internal');
+            setAllowScrolling(false);
+            setKeyboardScrolling(false);
+            container.addClass(DESTROYED);
+
+            clearTimeout(afterSlideLoadsId);
+            clearTimeout(afterSectionLoadsId);
+            clearTimeout(resizeId);
+            clearTimeout(scrollId);
+            clearTimeout(scrollId2);
+
+            $window
+                .off('scroll', scrollHandler)
+                .off('hashchange', hashChangeHandler)
+                .off('resize', resizeHandler);
+
+            $document
+                .off('click touchstart', SECTION_NAV_SEL + ' a')
+                .off('mouseenter', SECTION_NAV_SEL + ' li')
+                .off('mouseleave', SECTION_NAV_SEL + ' li')
+                .off('click touchstart', SLIDES_NAV_LINK_SEL)
+                .off('mouseover', options.normalScrollElements)
+                .off('mouseout', options.normalScrollElements);
+
+            $(SECTION_SEL)
+                .off('click touchstart', SLIDES_ARROW_SEL);
+
+            clearTimeout(afterSlideLoadsId);
+            clearTimeout(afterSectionLoadsId);
+
+            //lets make a mess!
+            if(all){
+                destroyStructure();
+            }
+        }
+
+        /*
+        * Removes inline styles added by fullpage.js
+        */
+        function destroyStructure(){
+            //reseting the `top` or `translate` properties to 0
+            silentScroll(0);
+
+            //loading all the lazy load content
+            container.find('img[data-src], source[data-src], audio[data-src], iframe[data-src]').each(function(){
+                setSrc($(this), 'src');
+            });
+
+            container.find('img[data-srcset]').each(function(){
+                setSrc($(this), 'srcset');
+            });
+
+            $(SECTION_NAV_SEL + ', ' + SLIDES_NAV_SEL +  ', ' + SLIDES_ARROW_SEL).remove();
+
+            //removing inline styles
+            $(SECTION_SEL).css( {
+                'height': '',
+                'background-color' : '',
+                'padding': ''
+            });
+
+            $(SLIDE_SEL).css( {
+                'width': ''
+            });
+
+            container.css({
+                'height': '',
+                'position': '',
+                '-ms-touch-action': '',
+                'touch-action': ''
+            });
+
+            $htmlBody.css({
+                'overflow': '',
+                'height': ''
+            });
+
+            // remove .fp-enabled class
+            $('html').removeClass(ENABLED);
+
+            // remove .fp-responsive class
+            $body.removeClass(RESPONSIVE);
+
+            // remove all of the .fp-viewing- classes
+            $.each($body.get(0).className.split(/\s+/), function (index, className) {
+                if (className.indexOf(VIEWING_PREFIX) === 0) {
+                    $body.removeClass(className);
+                }
+            });
+
+            //removing added classes
+            $(SECTION_SEL + ', ' + SLIDE_SEL).each(function(){
+                if(options.scrollOverflowHandler){
+                    options.scrollOverflowHandler.remove($(this));
+                }
+                $(this).removeClass(TABLE + ' ' + ACTIVE);
+                $(this).attr('style', $(this).data('fp-styles'));
+            });
+
+            removeAnimation(container);
+
+            //Unwrapping content
+            container.find(TABLE_CELL_SEL + ', ' + SLIDES_CONTAINER_SEL + ', ' + SLIDES_WRAPPER_SEL).each(function(){
+                //unwrap not being use in case there's no child element inside and its just text
+                $(this).replaceWith(this.childNodes);
+            });
+
+            //removing the applied transition from the fullpage wrapper
+            container.css({
+                '-webkit-transition': 'none',
+                'transition': 'none'
+            });
+
+            //scrolling the page to the top with no animation
+            $htmlBody.scrollTop(0);
+
+            //removing selectors
+            var usedSelectors = [SECTION, SLIDE, SLIDES_CONTAINER];
+            $.each(usedSelectors, function(index, value){
+                $('.' + value).removeClass(value);
+            });
+        }
+
+        /*
+        * Sets the state for a variable with multiple states (original, and temporal)
+        * Some variables such as `autoScrolling` or `recordHistory` might change automatically its state when using `responsive` or `autoScrolling:false`.
+        * This function is used to keep track of both states, the original and the temporal one.
+        * If type is not 'internal', then we assume the user is globally changing the variable.
+        */
+        function setVariableState(variable, value, type){
+            options[variable] = value;
+            if(type !== 'internal'){
+                originals[variable] = value;
+            }
+        }
+
+        /**
+        * Displays warnings
+        */
+        function displayWarnings(){
+            var extensions = ['fadingEffect', 'continuousHorizontal', 'scrollHorizontally', 'interlockedSlides', 'resetSliders', 'responsiveSlides', 'offsetSections', 'dragAndMove', 'scrollOverflowReset', 'parallax'];
+            if($('html').hasClass(ENABLED)){
+                showError('error', 'Fullpage.js can only be initialized once and you are doing it multiple times!');
+                return;
+            }
+
+            // Disable mutually exclusive settings
+            if (options.continuousVertical &&
+                (options.loopTop || options.loopBottom)) {
+                options.continuousVertical = false;
+                showError('warn', 'Option `loopTop/loopBottom` is mutually exclusive with `continuousVertical`; `continuousVertical` disabled');
+            }
+
+            if(options.scrollBar && options.scrollOverflow){
+                showError('warn', 'Option `scrollBar` is mutually exclusive with `scrollOverflow`. Sections with scrollOverflow might not work well in Firefox');
+            }
+
+            if(options.continuousVertical && (options.scrollBar || !options.autoScrolling)){
+                options.continuousVertical = false;
+                showError('warn', 'Scroll bars (`scrollBar:true` or `autoScrolling:false`) are mutually exclusive with `continuousVertical`; `continuousVertical` disabled');
+            }
+
+            if(options.scrollOverflow && !options.scrollOverflowHandler){
+                options.scrollOverflow = false;
+                showError('error', 'The option `scrollOverflow:true` requires the file `scrolloverflow.min.js`. Please include it before fullPage.js.');
+            }
+
+            //using extensions? Wrong file!
+            $.each(extensions, function(index, extension){
+                //is the option set to true?
+                if(options[extension]){
+                    showError('warn', 'fullpage.js extensions require jquery.fullpage.extensions.min.js file instead of the usual jquery.fullpage.js. Requested: '+ extension);
+                }
+            });
+
+            //anchors can not have the same value as any element ID or NAME
+            $.each(options.anchors, function(index, name){
+
+                //case insensitive selectors (http://stackoverflow.com/a/19465187/1081396)
+                var nameAttr = $document.find('[name]').filter(function() {
+                    return $(this).attr('name') && $(this).attr('name').toLowerCase() == name.toLowerCase();
+                });
+
+                var idAttr = $document.find('[id]').filter(function() {
+                    return $(this).attr('id') && $(this).attr('id').toLowerCase() == name.toLowerCase();
+                });
+
+                if(idAttr.length || nameAttr.length ){
+                    showError('error', 'data-anchor tags can not have the same value as any `id` element on the site (or `name` element for IE).');
+                    idAttr.length && showError('error', '"' + name + '" is is being used by another element `id` property');
+                    nameAttr.length && showError('error', '"' + name + '" is is being used by another element `name` property');
+                }
+            });
+        }
+
+        /**
+        * Shows a message in the console of the given type.
+        */
+        function showError(type, text){
+            console && console[type] && console[type]('fullPage: ' + text);
+        }
+
+    }; //end of $.fn.fullpage
+});
+
+
+/***/ }),
+/* 239 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(jQuery) {/*
+ * jQuery Dropdown: A simple dropdown plugin
+ *
+ * Contribute: https://github.com/claviska/jquery-dropdown
+ *
+ * @license: MIT license: http://opensource.org/licenses/MIT
+ *
+ */
+if (jQuery) (function ($) {
+
+    $.extend($.fn, {
+        jqDropdown: function (method, data) {
+
+            switch (method) {
+                case 'show':
+                    show(null, $(this));
+                    return $(this);
+                case 'hide':
+                    hide();
+                    return $(this);
+                case 'attach':
+                    return $(this).attr('data-jq-dropdown', data);
+                case 'detach':
+                    hide();
+                    return $(this).removeAttr('data-jq-dropdown');
+                case 'disable':
+                    return $(this).addClass('jq-dropdown-disabled');
+                case 'enable':
+                    hide();
+                    return $(this).removeClass('jq-dropdown-disabled');
+            }
+
+        }
+    });
+
+    function show(event, object) {
+
+        var trigger = event ? $(this) : object,
+            jqDropdown = $(trigger.attr('data-jq-dropdown')),
+            isOpen = trigger.hasClass('jq-dropdown-open');
+
+        // In some cases we don't want to show it
+        if (event) {
+            if ($(event.target).hasClass('jq-dropdown-ignore')) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+            if (trigger !== object.target && $(object.target).hasClass('jq-dropdown-ignore')) return;
+        }
+        hide();
+
+        if (isOpen || trigger.hasClass('jq-dropdown-disabled')) return;
+
+        // Show it
+        trigger.addClass('jq-dropdown-open');
+        jqDropdown
+            .data('jq-dropdown-trigger', trigger)
+            .show();
+
+        // Position it
+        position();
+
+        // Trigger the show callback
+        jqDropdown
+            .trigger('show', {
+                jqDropdown: jqDropdown,
+                trigger: trigger
+            });
+
+    }
+
+    function hide(event) {
+
+        // In some cases we don't hide them
+        var targetGroup = event ? $(event.target).parents().addBack() : null;
+
+        // Are we clicking anywhere in a jq-dropdown?
+        if (targetGroup && targetGroup.is('.jq-dropdown')) {
+            // Is it a jq-dropdown menu?
+            if (targetGroup.is('.jq-dropdown-menu')) {
+                // Did we click on an option? If so close it.
+                if (!targetGroup.is('A')) return;
+            } else {
+                // Nope, it's a panel. Leave it open.
+                return;
+            }
+        }
+
+        // Trigger the event early, so that it might be prevented on the visible popups
+        var hideEvent = jQuery.Event("hide");
+
+        $(document).find('.jq-dropdown:visible').each(function () {
+            var jqDropdown = $(this);
+            jqDropdown
+                .hide()
+                .removeData('jq-dropdown-trigger')
+                .trigger('hide', { jqDropdown: jqDropdown });
+        });
+
+        if(!hideEvent.isDefaultPrevented()) {
+            // Hide any jq-dropdown that may be showing
+            $(document).find('.jq-dropdown:visible').each(function () {
+                var jqDropdown = $(this);
+                jqDropdown
+                    .hide()
+                    .removeData('jq-dropdown-trigger')
+                    .trigger('hide', { jqDropdown: jqDropdown });
+            });
+
+            // Remove all jq-dropdown-open classes
+            $(document).find('.jq-dropdown-open').removeClass('jq-dropdown-open');
+        }
+    }
+
+    function position() {
+
+        var jqDropdown = $('.jq-dropdown:visible').eq(0),
+            trigger = jqDropdown.data('jq-dropdown-trigger'),
+            hOffset = trigger ? parseInt(trigger.attr('data-horizontal-offset') || 0, 10) : null,
+            vOffset = trigger ? parseInt(trigger.attr('data-vertical-offset') || 0, 10) : null;
+
+        if (jqDropdown.length === 0 || !trigger) return;
+
+        // Position the jq-dropdown relative-to-parent...
+        if (jqDropdown.hasClass('jq-dropdown-relative')) {
+            jqDropdown.css({
+                left: jqDropdown.hasClass('jq-dropdown-anchor-right') ?
+                    trigger.position().left - (jqDropdown.outerWidth(true) - trigger.outerWidth(true)) - parseInt(trigger.css('margin-right'), 10) + hOffset :
+                    trigger.position().left + parseInt(trigger.css('margin-left'), 10) + hOffset,
+                top: trigger.position().top + trigger.outerHeight(true) - parseInt(trigger.css('margin-top'), 10) + vOffset
+            });
+        } else {
+            // ...or relative to document
+            jqDropdown.css({
+                left: jqDropdown.hasClass('jq-dropdown-anchor-right') ?
+                    trigger.offset().left - (jqDropdown.outerWidth() - trigger.outerWidth()) + hOffset : trigger.offset().left + hOffset,
+                top: trigger.offset().top + trigger.outerHeight() + vOffset
+            });
+        }
+    }
+
+    $(document).on('click.jq-dropdown', '[data-jq-dropdown]', show);
+    $(document).on('click.jq-dropdown', hide);
+    $(window).on('resize', position);
+
+})(jQuery);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 240 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ PowerTip v1.3.0 (2017-01-15)
+ https://stevenbenner.github.io/jquery-powertip/
+ Copyright (c) 2017 Steven Benner (http://stevenbenner.com/).
+ Released under MIT license.
+ https://raw.github.com/stevenbenner/jquery-powertip/master/LICENSE.txt
+*/
+(function(root, factory) {
+	// support loading the plugin via common patterns
+	if (true) {
+		// load the plugin as an amd module
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else if (typeof module === 'object' && module.exports) {
+		// load the plugin as a commonjs module
+		module.exports = factory(require('jquery'));
+	} else {
+		// load the plugin as a global
+		factory(root.jQuery);
+	}
+}(this, function($) {
+
+	// useful private variables
+	var $document = $(document),
+		$window = $(window),
+		$body = $('body');
+
+	// constants
+	var DATA_DISPLAYCONTROLLER = 'displayController',
+		DATA_HASACTIVEHOVER = 'hasActiveHover',
+		DATA_FORCEDOPEN = 'forcedOpen',
+		DATA_HASMOUSEMOVE = 'hasMouseMove',
+		DATA_MOUSEONTOTIP = 'mouseOnToPopup',
+		DATA_ORIGINALTITLE = 'originalTitle',
+		DATA_POWERTIP = 'powertip',
+		DATA_POWERTIPJQ = 'powertipjq',
+		DATA_POWERTIPTARGET = 'powertiptarget',
+		EVENT_NAMESPACE = '.powertip',
+		RAD2DEG = 180 / Math.PI;
+
+	/**
+	 * Session data
+	 * Private properties global to all powerTip instances
+	 */
+	var session = {
+		elements: null,
+		tooltips: null,
+		isTipOpen: false,
+		isFixedTipOpen: false,
+		isClosing: false,
+		tipOpenImminent: false,
+		activeHover: null,
+		currentX: 0,
+		currentY: 0,
+		previousX: 0,
+		previousY: 0,
+		desyncTimeout: null,
+		closeDelayTimeout: null,
+		mouseTrackingActive: false,
+		delayInProgress: false,
+		windowWidth: 0,
+		windowHeight: 0,
+		scrollTop: 0,
+		scrollLeft: 0
+	};
+
+	/**
+	 * Collision enumeration
+	 * @enum {number}
+	 */
+	var Collision = {
+		none: 0,
+		top: 1,
+		bottom: 2,
+		left: 4,
+		right: 8
+	};
+
+	/**
+	 * Display hover tooltips on the matched elements.
+	 * @param {(Object|string)=} opts The options object to use for the plugin, or
+	 *     the name of a method to invoke on the first matched element.
+	 * @param {*=} [arg] Argument for an invoked method (optional).
+	 * @return {jQuery} jQuery object for the matched selectors.
+	 */
+	$.fn.powerTip = function(opts, arg) {
+		var targetElements = this,
+			options,
+			tipController;
+
+		// don't do any work if there were no matched elements
+		if (!targetElements.length) {
+			return targetElements;
+		}
+
+		// handle api method calls on the plugin, e.g. powerTip('hide')
+		if ($.type(opts) === 'string' && $.powerTip[opts]) {
+			return $.powerTip[opts].call(targetElements, targetElements, arg);
+		}
+
+		// extend options and instantiate TooltipController
+		options = $.extend({}, $.fn.powerTip.defaults, opts);
+		tipController = new TooltipController(options);
+
+		// hook mouse and viewport dimension tracking
+		initTracking();
+
+		// setup the elements
+		targetElements.each(function elementSetup() {
+			var $this = $(this),
+				dataPowertip = $this.data(DATA_POWERTIP),
+				dataElem = $this.data(DATA_POWERTIPJQ),
+				dataTarget = $this.data(DATA_POWERTIPTARGET),
+				title;
+
+			// handle repeated powerTip calls on the same element by destroying the
+			// original instance hooked to it and replacing it with this call
+			if ($this.data(DATA_DISPLAYCONTROLLER)) {
+				$.powerTip.destroy($this);
+			}
+
+			// attempt to use title attribute text if there is no data-powertip,
+			// data-powertipjq or data-powertiptarget. If we do use the title
+			// attribute, delete the attribute so the browser will not show it
+			title = $this.attr('title');
+			if (!dataPowertip && !dataTarget && !dataElem && title) {
+				$this.data(DATA_POWERTIP, title);
+				$this.data(DATA_ORIGINALTITLE, title);
+				$this.removeAttr('title');
+			}
+
+			// create hover controllers for each element
+			$this.data(
+				DATA_DISPLAYCONTROLLER,
+				new DisplayController($this, options, tipController)
+			);
+		});
+
+		// attach events to matched elements if the manual option is not enabled
+		if (!options.manual) {
+			// attach open events
+			$.each(options.openEvents, function(idx, evt) {
+				if ($.inArray(evt, options.closeEvents) > -1) {
+					// event is in both openEvents and closeEvents, so toggle it
+					targetElements.on(evt + EVENT_NAMESPACE, function elementToggle(event) {
+						$.powerTip.toggle(this, event);
+					});
+				} else {
+					targetElements.on(evt + EVENT_NAMESPACE, function elementOpen(event) {
+						$.powerTip.show(this, event);
+					});
+				}
+			});
+
+			// attach close events
+			$.each(options.closeEvents, function(idx, evt) {
+				if ($.inArray(evt, options.openEvents) < 0) {
+					targetElements.on(evt + EVENT_NAMESPACE, function elementClose(event) {
+						// set immediate to true for any event without mouse info
+						$.powerTip.hide(this, !isMouseEvent(event));
+					});
+				}
+			});
+
+			// attach escape key close event
+			targetElements.on('keydown' + EVENT_NAMESPACE, function elementKeyDown(event) {
+				// always close tooltip when the escape key is pressed
+				if (event.keyCode === 27) {
+					$.powerTip.hide(this, true);
+				}
+			});
+		}
+
+		// remember elements that the plugin is attached to
+		session.elements = session.elements ? session.elements.add(targetElements) : targetElements;
+
+		return targetElements;
+	};
+
+	/**
+	 * Default options for the powerTip plugin.
+	 */
+	$.fn.powerTip.defaults = {
+		fadeInTime: 200,
+		fadeOutTime: 100,
+		followMouse: false,
+		popupId: 'powerTip',
+		popupClass: null,
+		intentSensitivity: 7,
+		intentPollInterval: 100,
+		closeDelay: 100,
+		placement: 'n',
+		smartPlacement: false,
+		offset: 10,
+		mouseOnToPopup: false,
+		manual: false,
+		openEvents: [ 'mouseenter', 'focus' ],
+		closeEvents: [ 'mouseleave', 'blur' ]
+	};
+
+	/**
+	 * Default smart placement priority lists.
+	 * The first item in the array is the highest priority, the last is the lowest.
+	 * The last item is also the default, which will be used if all previous options
+	 * do not fit.
+	 */
+	$.fn.powerTip.smartPlacementLists = {
+		n: [ 'n', 'ne', 'nw', 's' ],
+		e: [ 'e', 'ne', 'se', 'w', 'nw', 'sw', 'n', 's', 'e' ],
+		s: [ 's', 'se', 'sw', 'n' ],
+		w: [ 'w', 'nw', 'sw', 'e', 'ne', 'se', 'n', 's', 'w' ],
+		nw: [ 'nw', 'w', 'sw', 'n', 's', 'se', 'nw' ],
+		ne: [ 'ne', 'e', 'se', 'n', 's', 'sw', 'ne' ],
+		sw: [ 'sw', 'w', 'nw', 's', 'n', 'ne', 'sw' ],
+		se: [ 'se', 'e', 'ne', 's', 'n', 'nw', 'se' ],
+		'nw-alt': [ 'nw-alt', 'n', 'ne-alt', 'sw-alt', 's', 'se-alt', 'w', 'e' ],
+		'ne-alt': [ 'ne-alt', 'n', 'nw-alt', 'se-alt', 's', 'sw-alt', 'e', 'w' ],
+		'sw-alt': [ 'sw-alt', 's', 'se-alt', 'nw-alt', 'n', 'ne-alt', 'w', 'e' ],
+		'se-alt': [ 'se-alt', 's', 'sw-alt', 'ne-alt', 'n', 'nw-alt', 'e', 'w' ]
+	};
+
+	/**
+	 * Public API
+	 */
+	$.powerTip = {
+		/**
+		 * Attempts to show the tooltip for the specified element.
+		 * @param {jQuery|Element} element The element to open the tooltip for.
+		 * @param {jQuery.Event=} event jQuery event for hover intent and mouse
+		 *     tracking (optional).
+		 * @return {jQuery|Element} The original jQuery object or DOM Element.
+		 */
+		show: function apiShowTip(element, event) {
+			// if we were given a mouse event then run the hover intent testing,
+			// otherwise, simply show the tooltip asap
+			if (isMouseEvent(event)) {
+				trackMouse(event);
+				session.previousX = event.pageX;
+				session.previousY = event.pageY;
+				$(element).data(DATA_DISPLAYCONTROLLER).show();
+			} else {
+				$(element).first().data(DATA_DISPLAYCONTROLLER).show(true, true);
+			}
+			return element;
+		},
+
+		/**
+		 * Repositions the tooltip on the element.
+		 * @param {jQuery|Element} element The element the tooltip is shown for.
+		 * @return {jQuery|Element} The original jQuery object or DOM Element.
+		 */
+		reposition: function apiResetPosition(element) {
+			$(element).first().data(DATA_DISPLAYCONTROLLER).resetPosition();
+			return element;
+		},
+
+		/**
+		 * Attempts to close any open tooltips.
+		 * @param {(jQuery|Element)=} element The element with the tooltip that
+		 *     should be closed (optional).
+		 * @param {boolean=} immediate Disable close delay (optional).
+		 * @return {jQuery|Element|undefined} The original jQuery object or DOM
+		 *     Element, if one was specified.
+		 */
+		hide: function apiCloseTip(element, immediate) {
+			var displayController;
+
+			// set immediate to true when no element is specified
+			immediate = element ? immediate : true;
+
+			// find the relevant display controller
+			if (element) {
+				displayController = $(element).first().data(DATA_DISPLAYCONTROLLER);
+			} else if (session.activeHover) {
+				displayController = session.activeHover.data(DATA_DISPLAYCONTROLLER);
+			}
+
+			// if found, hide the tip
+			if (displayController) {
+				displayController.hide(immediate);
+			}
+
+			return element;
+		},
+
+		/**
+		 * Toggles the tooltip for the specified element. This will open a closed
+		 * tooltip, or close an open tooltip.
+		 * @param {jQuery|Element} element The element with the tooltip that
+		 *     should be toggled.
+		 * @param {jQuery.Event=} event jQuery event for hover intent and mouse
+		 *     tracking (optional).
+		 * @return {jQuery|Element} The original jQuery object or DOM Element.
+		 */
+		toggle: function apiToggle(element, event) {
+			if (session.activeHover && session.activeHover.is(element)) {
+				// tooltip for element is active, so close it
+				$.powerTip.hide(element, !isMouseEvent(event));
+			} else {
+				// tooltip for element is not active, so open it
+				$.powerTip.show(element, event);
+			}
+			return element;
+		},
+
+		/**
+		 * Destroy and roll back any powerTip() instance on the specified elements.
+		 * If no elements are specified then all elements that the plugin is
+		 * currently attached to will be rolled back.
+		 * @param {(jQuery|Element)=} element The element with the powerTip instance.
+		 * @return {jQuery|Element|undefined} The original jQuery object or DOM
+		 *     Element, if one was specified.
+		 */
+		destroy: function apiDestroy(element) {
+			var $element = element ? $(element) : session.elements;
+
+			// if the plugin is not hooked to any elements then there is no point
+			// trying to destroy anything, or dealing with the possible errors
+			if (!session.elements || session.elements.length === 0) {
+				return element;
+			}
+
+			// unhook events and destroy plugin changes to each element
+			$element.off(EVENT_NAMESPACE).each(function destroy() {
+				var $this = $(this),
+					dataAttributes = [
+						DATA_ORIGINALTITLE,
+						DATA_DISPLAYCONTROLLER,
+						DATA_HASACTIVEHOVER,
+						DATA_FORCEDOPEN
+					];
+
+				// revert title attribute
+				if ($this.data(DATA_ORIGINALTITLE)) {
+					$this.attr('title', $this.data(DATA_ORIGINALTITLE));
+					dataAttributes.push(DATA_POWERTIP);
+				}
+
+				// remove data attributes
+				$this.removeData(dataAttributes);
+			});
+
+			// remove destroyed element from active elements collection
+			session.elements = session.elements.not($element);
+
+			// if there are no active elements left then we will unhook all of the
+			// events that we've bound code to and remove the tooltip elements
+			if (session.elements.length === 0) {
+				$window.off(EVENT_NAMESPACE);
+				$document.off(EVENT_NAMESPACE);
+				session.mouseTrackingActive = false;
+				session.tooltips.remove();
+				session.tooltips = null;
+			}
+
+			return element;
+		}
+	};
+
+	// API aliasing
+	$.powerTip.showTip = $.powerTip.show;
+	$.powerTip.closeTip = $.powerTip.hide;
+
+	/**
+	 * Creates a new CSSCoordinates object.
+	 * @private
+	 * @constructor
+	 */
+	function CSSCoordinates() {
+		var me = this;
+
+		// initialize object properties
+		me.top = 'auto';
+		me.left = 'auto';
+		me.right = 'auto';
+		me.bottom = 'auto';
+
+		/**
+		 * Set a property to a value.
+		 * @private
+		 * @param {string} property The name of the property.
+		 * @param {number} value The value of the property.
+		 */
+		me.set = function(property, value) {
+			if ($.isNumeric(value)) {
+				me[property] = Math.round(value);
+			}
+		};
+	}
+
+	/**
+	 * Creates a new tooltip display controller.
+	 * @private
+	 * @constructor
+	 * @param {jQuery} element The element that this controller will handle.
+	 * @param {Object} options Options object containing settings.
+	 * @param {TooltipController} tipController The TooltipController object for
+	 *     this instance.
+	 */
+	function DisplayController(element, options, tipController) {
+		var hoverTimer = null,
+			myCloseDelay = null;
+
+		/**
+		 * Begins the process of showing a tooltip.
+		 * @private
+		 * @param {boolean=} immediate Skip intent testing (optional).
+		 * @param {boolean=} forceOpen Ignore cursor position and force tooltip to
+		 *     open (optional).
+		 */
+		function openTooltip(immediate, forceOpen) {
+			cancelTimer();
+			if (!element.data(DATA_HASACTIVEHOVER)) {
+				if (!immediate) {
+					session.tipOpenImminent = true;
+					hoverTimer = setTimeout(
+						function intentDelay() {
+							hoverTimer = null;
+							checkForIntent();
+						},
+						options.intentPollInterval
+					);
+				} else {
+					if (forceOpen) {
+						element.data(DATA_FORCEDOPEN, true);
+					}
+					closeAnyDelayed();
+					tipController.showTip(element);
+				}
+			} else {
+				// cursor left and returned to this element, cancel close
+				cancelClose();
+			}
+		}
+
+		/**
+		 * Begins the process of closing a tooltip.
+		 * @private
+		 * @param {boolean=} disableDelay Disable close delay (optional).
+		 */
+		function closeTooltip(disableDelay) {
+			// if this instance already has a close delay in progress then halt it
+			if (myCloseDelay) {
+				myCloseDelay = session.closeDelayTimeout = clearTimeout(myCloseDelay);
+				session.delayInProgress = false;
+			}
+			cancelTimer();
+			session.tipOpenImminent = false;
+			if (element.data(DATA_HASACTIVEHOVER)) {
+				element.data(DATA_FORCEDOPEN, false);
+				if (!disableDelay) {
+					session.delayInProgress = true;
+					session.closeDelayTimeout = setTimeout(
+						function closeDelay() {
+							session.closeDelayTimeout = null;
+							tipController.hideTip(element);
+							session.delayInProgress = false;
+							myCloseDelay = null;
+						},
+						options.closeDelay
+					);
+					// save internal reference close delay id so we can check if the
+					// active close delay belongs to this instance
+					myCloseDelay = session.closeDelayTimeout;
+				} else {
+					tipController.hideTip(element);
+				}
+			}
+		}
+
+		/**
+		 * Checks mouse position to make sure that the user intended to hover on the
+		 * specified element before showing the tooltip.
+		 * @private
+		 */
+		function checkForIntent() {
+			// calculate mouse position difference
+			var xDifference = Math.abs(session.previousX - session.currentX),
+				yDifference = Math.abs(session.previousY - session.currentY),
+				totalDifference = xDifference + yDifference;
+
+			// check if difference has passed the sensitivity threshold
+			if (totalDifference < options.intentSensitivity) {
+				cancelClose();
+				closeAnyDelayed();
+				tipController.showTip(element);
+			} else {
+				// try again
+				session.previousX = session.currentX;
+				session.previousY = session.currentY;
+				openTooltip();
+			}
+		}
+
+		/**
+		 * Cancels active hover timer.
+		 * @private
+		 * @param {boolean=} stopClose Cancel any active close delay timer.
+		 */
+		function cancelTimer(stopClose) {
+			hoverTimer = clearTimeout(hoverTimer);
+			// cancel the current close delay if the active close delay is for this
+			// element or the stopClose argument is true
+			if (session.closeDelayTimeout && myCloseDelay === session.closeDelayTimeout || stopClose) {
+				cancelClose();
+			}
+		}
+
+		/**
+		 * Cancels any active close delay timer.
+		 * @private
+		 */
+		function cancelClose() {
+			session.closeDelayTimeout = clearTimeout(session.closeDelayTimeout);
+			session.delayInProgress = false;
+		}
+
+		/**
+		 * Asks any tooltips waiting on their close delay to close now.
+		 * @private
+		 */
+		function closeAnyDelayed() {
+			// if another element is waiting for its close delay then we should ask
+			// it to close immediately so we can proceed without unexpected timeout
+			// code being run during this tooltip's lifecycle
+			if (session.delayInProgress && session.activeHover && !session.activeHover.is(element)) {
+				session.activeHover.data(DATA_DISPLAYCONTROLLER).hide(true);
+			}
+		}
+
+		/**
+		 * Repositions the tooltip on this element.
+		 * @private
+		 */
+		function repositionTooltip() {
+			tipController.resetPosition(element);
+		}
+
+		// expose the methods
+		this.show = openTooltip;
+		this.hide = closeTooltip;
+		this.cancel = cancelTimer;
+		this.resetPosition = repositionTooltip;
+	}
+
+	/**
+	 * Creates a new Placement Calculator.
+	 * @private
+	 * @constructor
+	 */
+	function PlacementCalculator() {
+		/**
+		 * Compute the CSS position to display a tooltip at the specified placement
+		 * relative to the specified element.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 * @param {string} placement The placement for the tooltip.
+		 * @param {number} tipWidth Width of the tooltip element in pixels.
+		 * @param {number} tipHeight Height of the tooltip element in pixels.
+		 * @param {number} offset Distance to offset tooltips in pixels.
+		 * @return {CSSCoordinates} A CSSCoordinates object with the position.
+		 */
+		function computePlacementCoords(element, placement, tipWidth, tipHeight, offset) {
+			var placementBase = placement.split('-')[0], // ignore 'alt' for corners
+				coords = new CSSCoordinates(),
+				position;
+
+			if (isSvgElement(element)) {
+				position = getSvgPlacement(element, placementBase);
+			} else {
+				position = getHtmlPlacement(element, placementBase);
+			}
+
+			// calculate the appropriate x and y position in the document
+			switch (placement) {
+				case 'n':
+					coords.set('left', position.left - (tipWidth / 2));
+					coords.set('bottom', session.windowHeight - position.top + offset);
+					break;
+				case 'e':
+					coords.set('left', position.left + offset);
+					coords.set('top', position.top - (tipHeight / 2));
+					break;
+				case 's':
+					coords.set('left', position.left - (tipWidth / 2));
+					coords.set('top', position.top + offset);
+					break;
+				case 'w':
+					coords.set('top', position.top - (tipHeight / 2));
+					coords.set('right', session.windowWidth - position.left + offset);
+					break;
+				case 'nw':
+					coords.set('bottom', session.windowHeight - position.top + offset);
+					coords.set('right', session.windowWidth - position.left - 20);
+					break;
+				case 'nw-alt':
+					coords.set('left', position.left);
+					coords.set('bottom', session.windowHeight - position.top + offset);
+					break;
+				case 'ne':
+					coords.set('left', position.left - 20);
+					coords.set('bottom', session.windowHeight - position.top + offset);
+					break;
+				case 'ne-alt':
+					coords.set('bottom', session.windowHeight - position.top + offset);
+					coords.set('right', session.windowWidth - position.left);
+					break;
+				case 'sw':
+					coords.set('top', position.top + offset);
+					coords.set('right', session.windowWidth - position.left - 20);
+					break;
+				case 'sw-alt':
+					coords.set('left', position.left);
+					coords.set('top', position.top + offset);
+					break;
+				case 'se':
+					coords.set('left', position.left - 20);
+					coords.set('top', position.top + offset);
+					break;
+				case 'se-alt':
+					coords.set('top', position.top + offset);
+					coords.set('right', session.windowWidth - position.left);
+					break;
+			}
+
+			return coords;
+		}
+
+		/**
+		 * Finds the tooltip attachment point in the document for a HTML DOM element
+		 * for the specified placement.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 * @param {string} placement The placement for the tooltip.
+		 * @return {Object} An object with the top,left position values.
+		 */
+		function getHtmlPlacement(element, placement) {
+			var objectOffset = element.offset(),
+				objectWidth = element.outerWidth(),
+				objectHeight = element.outerHeight(),
+				left,
+				top;
+
+			// calculate the appropriate x and y position in the document
+			switch (placement) {
+				case 'n':
+					left = objectOffset.left + objectWidth / 2;
+					top = objectOffset.top;
+					break;
+				case 'e':
+					left = objectOffset.left + objectWidth;
+					top = objectOffset.top + objectHeight / 2;
+					break;
+				case 's':
+					left = objectOffset.left + objectWidth / 2;
+					top = objectOffset.top + objectHeight;
+					break;
+				case 'w':
+					left = objectOffset.left;
+					top = objectOffset.top + objectHeight / 2;
+					break;
+				case 'nw':
+					left = objectOffset.left;
+					top = objectOffset.top;
+					break;
+				case 'ne':
+					left = objectOffset.left + objectWidth;
+					top = objectOffset.top;
+					break;
+				case 'sw':
+					left = objectOffset.left;
+					top = objectOffset.top + objectHeight;
+					break;
+				case 'se':
+					left = objectOffset.left + objectWidth;
+					top = objectOffset.top + objectHeight;
+					break;
+			}
+
+			return {
+				top: top,
+				left: left
+			};
+		}
+
+		/**
+		 * Finds the tooltip attachment point in the document for a SVG element for
+		 * the specified placement.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 * @param {string} placement The placement for the tooltip.
+		 * @return {Object} An object with the top,left position values.
+		 */
+		function getSvgPlacement(element, placement) {
+			var svgElement = element.closest('svg')[0],
+				domElement = element[0],
+				point = svgElement.createSVGPoint(),
+				boundingBox = domElement.getBBox(),
+				matrix = domElement.getScreenCTM(),
+				halfWidth = boundingBox.width / 2,
+				halfHeight = boundingBox.height / 2,
+				placements = [],
+				placementKeys = [ 'nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w' ],
+				coords,
+				rotation,
+				steps,
+				x;
+
+			function pushPlacement() {
+				placements.push(point.matrixTransform(matrix));
+			}
+
+			// get bounding box corners and midpoints
+			point.x = boundingBox.x;
+			point.y = boundingBox.y;
+			pushPlacement();
+			point.x += halfWidth;
+			pushPlacement();
+			point.x += halfWidth;
+			pushPlacement();
+			point.y += halfHeight;
+			pushPlacement();
+			point.y += halfHeight;
+			pushPlacement();
+			point.x -= halfWidth;
+			pushPlacement();
+			point.x -= halfWidth;
+			pushPlacement();
+			point.y -= halfHeight;
+			pushPlacement();
+
+			// determine rotation
+			if (placements[0].y !== placements[1].y || placements[0].x !== placements[7].x) {
+				rotation = Math.atan2(matrix.b, matrix.a) * RAD2DEG;
+				steps = Math.ceil(((rotation % 360) - 22.5) / 45);
+				if (steps < 1) {
+					steps += 8;
+				}
+				while (steps--) {
+					placementKeys.push(placementKeys.shift());
+				}
+			}
+
+			// find placement
+			for (x = 0; x < placements.length; x++) {
+				if (placementKeys[x] === placement) {
+					coords = placements[x];
+					break;
+				}
+			}
+
+			return {
+				top: coords.y + session.scrollTop,
+				left: coords.x + session.scrollLeft
+			};
+		}
+
+		// expose methods
+		this.compute = computePlacementCoords;
+	}
+
+	/**
+	 * Creates a new tooltip controller.
+	 * @private
+	 * @constructor
+	 * @param {Object} options Options object containing settings.
+	 */
+	function TooltipController(options) {
+		var placementCalculator = new PlacementCalculator(),
+			tipElement = $('#' + options.popupId);
+
+		// build and append tooltip div if it does not already exist
+		if (tipElement.length === 0) {
+			tipElement = $('<div/>', { id: options.popupId });
+			// grab body element if it was not populated when the script loaded
+			// note: this hack exists solely for jsfiddle support
+			if ($body.length === 0) {
+				$body = $('body');
+			}
+			$body.append(tipElement);
+			// remember the tooltip elements that the plugin has created
+			session.tooltips = session.tooltips ? session.tooltips.add(tipElement) : tipElement;
+		}
+
+		// hook mousemove for cursor follow tooltips
+		if (options.followMouse) {
+			// only one positionTipOnCursor hook per tooltip element, please
+			if (!tipElement.data(DATA_HASMOUSEMOVE)) {
+				$document.on('mousemove' + EVENT_NAMESPACE, positionTipOnCursor);
+				$window.on('scroll' + EVENT_NAMESPACE, positionTipOnCursor);
+				tipElement.data(DATA_HASMOUSEMOVE, true);
+			}
+		}
+
+		/**
+		 * Gives the specified element the active-hover state and queues up the
+		 * showTip function.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 */
+		function beginShowTip(element) {
+			element.data(DATA_HASACTIVEHOVER, true);
+			// show tooltip, asap
+			tipElement.queue(function queueTipInit(next) {
+				showTip(element);
+				next();
+			});
+		}
+
+		/**
+		 * Shows the tooltip, as soon as possible.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 */
+		function showTip(element) {
+			var tipContent;
+
+			// it is possible, especially with keyboard navigation, to move on to
+			// another element with a tooltip during the queue to get to this point
+			// in the code. if that happens then we need to not proceed or we may
+			// have the fadeout callback for the last tooltip execute immediately
+			// after this code runs, causing bugs.
+			if (!element.data(DATA_HASACTIVEHOVER)) {
+				return;
+			}
+
+			// if the tooltip is open and we got asked to open another one then the
+			// old one is still in its fadeOut cycle, so wait and try again
+			if (session.isTipOpen) {
+				if (!session.isClosing) {
+					hideTip(session.activeHover);
+				}
+				tipElement.delay(100).queue(function queueTipAgain(next) {
+					showTip(element);
+					next();
+				});
+				return;
+			}
+
+			// trigger powerTipPreRender event
+			element.trigger('powerTipPreRender');
+
+			// set tooltip content
+			tipContent = getTooltipContent(element);
+			if (tipContent) {
+				tipElement.empty().append(tipContent);
+			} else {
+				// we have no content to display, give up
+				return;
+			}
+
+			// trigger powerTipRender event
+			element.trigger('powerTipRender');
+
+			session.activeHover = element;
+			session.isTipOpen = true;
+
+			tipElement.data(DATA_MOUSEONTOTIP, options.mouseOnToPopup);
+
+			// set tooltip position
+			if (!options.followMouse) {
+				positionTipOnElement(element);
+				session.isFixedTipOpen = true;
+			} else {
+				positionTipOnCursor();
+			}
+
+			// add custom class to tooltip element
+			tipElement.addClass(options.popupClass);
+
+			// close tooltip when clicking anywhere on the page, with the exception
+			// of the tooltip's trigger element and any elements that are within a
+			// tooltip that has 'mouseOnToPopup' option enabled
+			if (!element.data(DATA_FORCEDOPEN)) {
+				$document.on('click' + EVENT_NAMESPACE, function documentClick(event) {
+					var target = event.target;
+					if (target !== element[0]) {
+						if (options.mouseOnToPopup) {
+							if (target !== tipElement[0] && !$.contains(tipElement[0], target)) {
+								$.powerTip.hide();
+							}
+						} else {
+							$.powerTip.hide();
+						}
+					}
+				});
+			}
+
+			// if we want to be able to mouse on to the tooltip then we need to
+			// attach hover events to the tooltip that will cancel a close request
+			// on mouseenter and start a new close request on mouseleave
+			// only hook these listeners if we're not in manual mode
+			if (options.mouseOnToPopup && !options.manual) {
+				tipElement.on('mouseenter' + EVENT_NAMESPACE, function tipMouseEnter() {
+					// check activeHover in case the mouse cursor entered the
+					// tooltip during the fadeOut and close cycle
+					if (session.activeHover) {
+						session.activeHover.data(DATA_DISPLAYCONTROLLER).cancel();
+					}
+				});
+				tipElement.on('mouseleave' + EVENT_NAMESPACE, function tipMouseLeave() {
+					// check activeHover in case the mouse cursor left the tooltip
+					// during the fadeOut and close cycle
+					if (session.activeHover) {
+						session.activeHover.data(DATA_DISPLAYCONTROLLER).hide();
+					}
+				});
+			}
+
+			// fadein
+			tipElement.fadeIn(options.fadeInTime, function fadeInCallback() {
+				// start desync polling
+				if (!session.desyncTimeout) {
+					session.desyncTimeout = setInterval(closeDesyncedTip, 500);
+				}
+
+				// trigger powerTipOpen event
+				element.trigger('powerTipOpen');
+			});
+		}
+
+		/**
+		 * Hides the tooltip.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 */
+		function hideTip(element) {
+			// reset session
+			session.isClosing = true;
+			session.isTipOpen = false;
+
+			// stop desync polling
+			session.desyncTimeout = clearInterval(session.desyncTimeout);
+
+			// reset element state
+			element.data(DATA_HASACTIVEHOVER, false);
+			element.data(DATA_FORCEDOPEN, false);
+
+			// remove document click handler
+			$document.off('click' + EVENT_NAMESPACE);
+
+			// unbind the mouseOnToPopup events if they were set
+			tipElement.off(EVENT_NAMESPACE);
+
+			// fade out
+			tipElement.fadeOut(options.fadeOutTime, function fadeOutCallback() {
+				var coords = new CSSCoordinates();
+
+				// reset session and tooltip element
+				session.activeHover = null;
+				session.isClosing = false;
+				session.isFixedTipOpen = false;
+				tipElement.removeClass();
+
+				// support mouse-follow and fixed position tips at the same time by
+				// moving the tooltip to the last cursor location after it is hidden
+				coords.set('top', session.currentY + options.offset);
+				coords.set('left', session.currentX + options.offset);
+				tipElement.css(coords);
+
+				// trigger powerTipClose event
+				element.trigger('powerTipClose');
+			});
+		}
+
+		/**
+		 * Moves the tooltip to the users mouse cursor.
+		 * @private
+		 */
+		function positionTipOnCursor() {
+			// to support having fixed tooltips on the same page as cursor tooltips,
+			// where both instances are referencing the same tooltip element, we
+			// need to keep track of the mouse position constantly, but we should
+			// only set the tip location if a fixed tip is not currently open, a tip
+			// open is imminent or active, and the tooltip element in question does
+			// have a mouse-follow using it.
+			if (!session.isFixedTipOpen && (session.isTipOpen || (session.tipOpenImminent && tipElement.data(DATA_HASMOUSEMOVE)))) {
+				// grab measurements
+				var tipWidth = tipElement.outerWidth(),
+					tipHeight = tipElement.outerHeight(),
+					coords = new CSSCoordinates(),
+					collisions,
+					collisionCount;
+
+				// grab collisions
+				coords.set('top', session.currentY + options.offset);
+				coords.set('left', session.currentX + options.offset);
+				collisions = getViewportCollisions(
+					coords,
+					tipWidth,
+					tipHeight
+				);
+
+				// handle tooltip view port collisions
+				if (collisions !== Collision.none) {
+					collisionCount = countFlags(collisions);
+					if (collisionCount === 1) {
+						// if there is only one collision (bottom or right) then
+						// simply constrain the tooltip to the view port
+						if (collisions === Collision.right) {
+							coords.set('left', session.windowWidth - tipWidth);
+						} else if (collisions === Collision.bottom) {
+							coords.set('top', session.scrollTop + session.windowHeight - tipHeight);
+						}
+					} else {
+						// if the tooltip has more than one collision then it is
+						// trapped in the corner and should be flipped to get it out
+						// of the users way
+						coords.set('left', session.currentX - tipWidth - options.offset);
+						coords.set('top', session.currentY - tipHeight - options.offset);
+					}
+				}
+
+				// position the tooltip
+				tipElement.css(coords);
+			}
+		}
+
+		/**
+		 * Sets the tooltip to the correct position relative to the specified target
+		 * element. Based on options settings.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 */
+		function positionTipOnElement(element) {
+			var priorityList,
+				finalPlacement;
+
+			if (options.smartPlacement) {
+				priorityList = $.fn.powerTip.smartPlacementLists[options.placement];
+
+				// iterate over the priority list and use the first placement option
+				// that does not collide with the view port. if they all collide
+				// then the last placement in the list will be used.
+				$.each(priorityList, function(idx, pos) {
+					// place tooltip and find collisions
+					var collisions = getViewportCollisions(
+						placeTooltip(element, pos),
+						tipElement.outerWidth(),
+						tipElement.outerHeight()
+					);
+
+					// update the final placement variable
+					finalPlacement = pos;
+
+					// break if there were no collisions
+					if (collisions === Collision.none) {
+						return false;
+					}
+				});
+			} else {
+				// if we're not going to use the smart placement feature then just
+				// compute the coordinates and do it
+				placeTooltip(element, options.placement);
+				finalPlacement = options.placement;
+			}
+
+			// add placement as class for CSS arrows
+			tipElement.removeClass('w nw sw e ne se n s w se-alt sw-alt ne-alt nw-alt');
+			tipElement.addClass(finalPlacement);
+		}
+
+		/**
+		 * Sets the tooltip position to the appropriate values to show the tip at
+		 * the specified placement. This function will iterate and test the tooltip
+		 * to support elastic tooltips.
+		 * @private
+		 * @param {jQuery} element The element that the tooltip should target.
+		 * @param {string} placement The placement for the tooltip.
+		 * @return {CSSCoordinates} A CSSCoordinates object with the top, left, and
+		 *     right position values.
+		 */
+		function placeTooltip(element, placement) {
+			var iterationCount = 0,
+				tipWidth,
+				tipHeight,
+				coords = new CSSCoordinates();
+
+			// set the tip to 0,0 to get the full expanded width
+			coords.set('top', 0);
+			coords.set('left', 0);
+			tipElement.css(coords);
+
+			// to support elastic tooltips we need to check for a change in the
+			// rendered dimensions after the tooltip has been positioned
+			do {
+				// grab the current tip dimensions
+				tipWidth = tipElement.outerWidth();
+				tipHeight = tipElement.outerHeight();
+
+				// get placement coordinates
+				coords = placementCalculator.compute(
+					element,
+					placement,
+					tipWidth,
+					tipHeight,
+					options.offset
+				);
+
+				// place the tooltip
+				tipElement.css(coords);
+			} while (
+				// sanity check: limit to 5 iterations, and...
+				++iterationCount <= 5 &&
+				// try again if the dimensions changed after placement
+				(tipWidth !== tipElement.outerWidth() || tipHeight !== tipElement.outerHeight())
+			);
+
+			return coords;
+		}
+
+		/**
+		 * Checks for a tooltip desync and closes the tooltip if one occurs.
+		 * @private
+		 */
+		function closeDesyncedTip() {
+			var isDesynced = false;
+			// It is possible for the mouse cursor to leave an element without
+			// firing the mouseleave or blur event. This most commonly happens when
+			// the element is disabled under mouse cursor. If this happens it will
+			// result in a desynced tooltip because the tooltip was never asked to
+			// close. So we should periodically check for a desync situation and
+			// close the tip if such a situation arises.
+			if (session.isTipOpen && !session.isClosing && !session.delayInProgress && ($.inArray('mouseleave', options.closeEvents) > -1 || $.inArray('mouseout', options.closeEvents) > -1 || $.inArray('blur', options.closeEvents) > -1 || $.inArray('focusout', options.closeEvents) > -1)) {
+				// user moused onto another tip or active hover is disabled
+				if (session.activeHover.data(DATA_HASACTIVEHOVER) === false || session.activeHover.is(':disabled')) {
+					isDesynced = true;
+				} else {
+					// hanging tip - have to test if mouse position is not over the
+					// active hover and not over a tooltip set to let the user
+					// interact with it.
+					// for keyboard navigation: this only counts if the element does
+					// not have focus.
+					// for tooltips opened via the api: we need to check if it has
+					// the forcedOpen flag.
+					if (!isMouseOver(session.activeHover) && !session.activeHover.is(':focus') && !session.activeHover.data(DATA_FORCEDOPEN)) {
+						if (tipElement.data(DATA_MOUSEONTOTIP)) {
+							if (!isMouseOver(tipElement)) {
+								isDesynced = true;
+							}
+						} else {
+							isDesynced = true;
+						}
+					}
+				}
+
+				if (isDesynced) {
+					// close the desynced tip
+					hideTip(session.activeHover);
+				}
+			}
+		}
+
+		// expose methods
+		this.showTip = beginShowTip;
+		this.hideTip = hideTip;
+		this.resetPosition = positionTipOnElement;
+	}
+
+	/**
+	 * Determine whether a jQuery object is an SVG element
+	 * @private
+	 * @param {jQuery} element The element to check
+	 * @return {boolean} Whether this is an SVG element
+	 */
+	function isSvgElement(element) {
+		return Boolean(window.SVGElement && element[0] instanceof SVGElement);
+	}
+
+	/**
+	 * Determines if the specified jQuery.Event object has mouse data.
+	 * @private
+	 * @param {jQuery.Event=} event The jQuery.Event object to test.
+	 * @return {boolean} True if there is mouse data, otherwise false.
+	 */
+	function isMouseEvent(event) {
+		return Boolean(event && typeof event.pageX === 'number');
+	}
+
+	/**
+	 * Initializes the viewport dimension cache and hooks up the mouse position
+	 * tracking and viewport dimension tracking events.
+	 * Prevents attaching the events more than once.
+	 * @private
+	 */
+	function initTracking() {
+		if (!session.mouseTrackingActive) {
+			session.mouseTrackingActive = true;
+
+			// grab the current viewport dimensions on load
+			getViewportDimensions();
+			$(getViewportDimensions);
+
+			// hook mouse move tracking
+			$document.on('mousemove' + EVENT_NAMESPACE, trackMouse);
+
+			// hook viewport dimensions tracking
+			$window.on('resize' + EVENT_NAMESPACE, trackResize);
+			$window.on('scroll' + EVENT_NAMESPACE, trackScroll);
+		}
+	}
+
+	/**
+	 * Updates the viewport dimensions cache.
+	 * @private
+	 */
+	function getViewportDimensions() {
+		session.scrollLeft = $window.scrollLeft();
+		session.scrollTop = $window.scrollTop();
+		session.windowWidth = $window.width();
+		session.windowHeight = $window.height();
+	}
+
+	/**
+	 * Updates the window size info in the viewport dimensions cache.
+	 * @private
+	 */
+	function trackResize() {
+		session.windowWidth = $window.width();
+		session.windowHeight = $window.height();
+	}
+
+	/**
+	 * Updates the scroll offset info in the viewport dimensions cache.
+	 * @private
+	 */
+	function trackScroll() {
+		var x = $window.scrollLeft(),
+			y = $window.scrollTop();
+		if (x !== session.scrollLeft) {
+			session.currentX += x - session.scrollLeft;
+			session.scrollLeft = x;
+		}
+		if (y !== session.scrollTop) {
+			session.currentY += y - session.scrollTop;
+			session.scrollTop = y;
+		}
+	}
+
+	/**
+	 * Saves the current mouse coordinates to the session object.
+	 * @private
+	 * @param {jQuery.Event} event The mousemove event for the document.
+	 */
+	function trackMouse(event) {
+		session.currentX = event.pageX;
+		session.currentY = event.pageY;
+	}
+
+	/**
+	 * Tests if the mouse is currently over the specified element.
+	 * @private
+	 * @param {jQuery} element The element to check for hover.
+	 * @return {boolean}
+	 */
+	function isMouseOver(element) {
+		// use getBoundingClientRect() because jQuery's width() and height()
+		// methods do not work with SVG elements
+		// compute width/height because those properties do not exist on the object
+		// returned by getBoundingClientRect() in older versions of IE
+		var elementPosition = element.offset(),
+			elementBox = element[0].getBoundingClientRect(),
+			elementWidth = elementBox.right - elementBox.left,
+			elementHeight = elementBox.bottom - elementBox.top;
+
+		return session.currentX >= elementPosition.left &&
+			session.currentX <= elementPosition.left + elementWidth &&
+			session.currentY >= elementPosition.top &&
+			session.currentY <= elementPosition.top + elementHeight;
+	}
+
+	/**
+	 * Fetches the tooltip content from the specified element's data attributes.
+	 * @private
+	 * @param {jQuery} element The element to get the tooltip content for.
+	 * @return {(string|jQuery|undefined)} The text/HTML string, jQuery object, or
+	 *     undefined if there was no tooltip content for the element.
+	 */
+	function getTooltipContent(element) {
+		var tipText = element.data(DATA_POWERTIP),
+			tipObject = element.data(DATA_POWERTIPJQ),
+			tipTarget = element.data(DATA_POWERTIPTARGET),
+			targetElement,
+			content;
+
+		if (tipText) {
+			if ($.isFunction(tipText)) {
+				tipText = tipText.call(element[0]);
+			}
+			content = tipText;
+		} else if (tipObject) {
+			if ($.isFunction(tipObject)) {
+				tipObject = tipObject.call(element[0]);
+			}
+			if (tipObject.length > 0) {
+				content = tipObject.clone(true, true);
+			}
+		} else if (tipTarget) {
+			targetElement = $('#' + tipTarget);
+			if (targetElement.length > 0) {
+				content = targetElement.html();
+			}
+		}
+
+		return content;
+	}
+
+	/**
+	 * Finds any viewport collisions that an element (the tooltip) would have if it
+	 * were absolutely positioned at the specified coordinates.
+	 * @private
+	 * @param {CSSCoordinates} coords Coordinates for the element.
+	 * @param {number} elementWidth Width of the element in pixels.
+	 * @param {number} elementHeight Height of the element in pixels.
+	 * @return {number} Value with the collision flags.
+	 */
+	function getViewportCollisions(coords, elementWidth, elementHeight) {
+		var viewportTop = session.scrollTop,
+			viewportLeft =  session.scrollLeft,
+			viewportBottom = viewportTop + session.windowHeight,
+			viewportRight = viewportLeft + session.windowWidth,
+			collisions = Collision.none;
+
+		if (coords.top < viewportTop || Math.abs(coords.bottom - session.windowHeight) - elementHeight < viewportTop) {
+			collisions |= Collision.top;
+		}
+		if (coords.top + elementHeight > viewportBottom || Math.abs(coords.bottom - session.windowHeight) > viewportBottom) {
+			collisions |= Collision.bottom;
+		}
+		if (coords.left < viewportLeft || coords.right + elementWidth > viewportRight) {
+			collisions |= Collision.left;
+		}
+		if (coords.left + elementWidth > viewportRight || coords.right < viewportLeft) {
+			collisions |= Collision.right;
+		}
+
+		return collisions;
+	}
+
+	/**
+	 * Counts the number of bits set on a flags value.
+	 * @param {number} value The flags value.
+	 * @return {number} The number of bits that have been set.
+	 */
+	function countFlags(value) {
+		var count = 0;
+		while (value) {
+			value &= value - 1;
+			count++;
+		}
+		return count;
+	}
+
+// return api for commonjs and amd environments
+	return $.powerTip;
+}));
+
+
+/***/ }),
+/* 241 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * jQuery Validation Plugin v1.17.0
+ *
+ * https://jqueryvalidation.org/
+ *
+ * Copyright (c) 2017 Jörn Zaefferer
+ * Released under the MIT license
+ */
+(function( factory ) {
+	if ( true ) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else if (typeof module === "object" && module.exports) {
+		module.exports = factory( require( "jquery" ) );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
+$.extend( $.fn, {
+
+	// https://jqueryvalidation.org/validate/
+	validate: function( options ) {
+
+		// If nothing is selected, return nothing; can't chain anyway
+		if ( !this.length ) {
+			if ( options && options.debug && window.console ) {
+				console.warn( "Nothing selected, can't validate, returning nothing." );
+			}
+			return;
+		}
+
+		// Check if a validator for this form was already created
+		var validator = $.data( this[ 0 ], "validator" );
+		if ( validator ) {
+			return validator;
+		}
+
+		// Add novalidate tag if HTML5.
+		this.attr( "novalidate", "novalidate" );
+
+		validator = new $.validator( options, this[ 0 ] );
+		$.data( this[ 0 ], "validator", validator );
+
+		if ( validator.settings.onsubmit ) {
+
+			this.on( "click.validate", ":submit", function( event ) {
+
+				// Track the used submit button to properly handle scripted
+				// submits later.
+				validator.submitButton = event.currentTarget;
+
+				// Allow suppressing validation by adding a cancel class to the submit button
+				if ( $( this ).hasClass( "cancel" ) ) {
+					validator.cancelSubmit = true;
+				}
+
+				// Allow suppressing validation by adding the html5 formnovalidate attribute to the submit button
+				if ( $( this ).attr( "formnovalidate" ) !== undefined ) {
+					validator.cancelSubmit = true;
+				}
+			} );
+
+			// Validate the form on submit
+			this.on( "submit.validate", function( event ) {
+				if ( validator.settings.debug ) {
+
+					// Prevent form submit to be able to see console output
+					event.preventDefault();
+				}
+				function handle() {
+					var hidden, result;
+
+					// Insert a hidden input as a replacement for the missing submit button
+					// The hidden input is inserted in two cases:
+					//   - A user defined a `submitHandler`
+					//   - There was a pending request due to `remote` method and `stopRequest()`
+					//     was called to submit the form in case it's valid
+					if ( validator.submitButton && ( validator.settings.submitHandler || validator.formSubmitted ) ) {
+						hidden = $( "<input type='hidden'/>" )
+							.attr( "name", validator.submitButton.name )
+							.val( $( validator.submitButton ).val() )
+							.appendTo( validator.currentForm );
+					}
+
+					if ( validator.settings.submitHandler ) {
+						result = validator.settings.submitHandler.call( validator, validator.currentForm, event );
+						if ( hidden ) {
+
+							// And clean up afterwards; thanks to no-block-scope, hidden can be referenced
+							hidden.remove();
+						}
+						if ( result !== undefined ) {
+							return result;
+						}
+						return false;
+					}
+					return true;
+				}
+
+				// Prevent submit for invalid forms or custom submit handlers
+				if ( validator.cancelSubmit ) {
+					validator.cancelSubmit = false;
+					return handle();
+				}
+				if ( validator.form() ) {
+					if ( validator.pendingRequest ) {
+						validator.formSubmitted = true;
+						return false;
+					}
+					return handle();
+				} else {
+					validator.focusInvalid();
+					return false;
+				}
+			} );
+		}
+
+		return validator;
+	},
+
+	// https://jqueryvalidation.org/valid/
+	valid: function() {
+		var valid, validator, errorList;
+
+		if ( $( this[ 0 ] ).is( "form" ) ) {
+			valid = this.validate().form();
+		} else {
+			errorList = [];
+			valid = true;
+			validator = $( this[ 0 ].form ).validate();
+			this.each( function() {
+				valid = validator.element( this ) && valid;
+				if ( !valid ) {
+					errorList = errorList.concat( validator.errorList );
+				}
+			} );
+			validator.errorList = errorList;
+		}
+		return valid;
+	},
+
+	// https://jqueryvalidation.org/rules/
+	rules: function( command, argument ) {
+		var element = this[ 0 ],
+			settings, staticRules, existingRules, data, param, filtered;
+
+		// If nothing is selected, return empty object; can't chain anyway
+		if ( element == null ) {
+			return;
+		}
+
+		if ( !element.form && element.hasAttribute( "contenteditable" ) ) {
+			element.form = this.closest( "form" )[ 0 ];
+			element.name = this.attr( "name" );
+		}
+
+		if ( element.form == null ) {
+			return;
+		}
+
+		if ( command ) {
+			settings = $.data( element.form, "validator" ).settings;
+			staticRules = settings.rules;
+			existingRules = $.validator.staticRules( element );
+			switch ( command ) {
+			case "add":
+				$.extend( existingRules, $.validator.normalizeRule( argument ) );
+
+				// Remove messages from rules, but allow them to be set separately
+				delete existingRules.messages;
+				staticRules[ element.name ] = existingRules;
+				if ( argument.messages ) {
+					settings.messages[ element.name ] = $.extend( settings.messages[ element.name ], argument.messages );
+				}
+				break;
+			case "remove":
+				if ( !argument ) {
+					delete staticRules[ element.name ];
+					return existingRules;
+				}
+				filtered = {};
+				$.each( argument.split( /\s/ ), function( index, method ) {
+					filtered[ method ] = existingRules[ method ];
+					delete existingRules[ method ];
+				} );
+				return filtered;
+			}
+		}
+
+		data = $.validator.normalizeRules(
+		$.extend(
+			{},
+			$.validator.classRules( element ),
+			$.validator.attributeRules( element ),
+			$.validator.dataRules( element ),
+			$.validator.staticRules( element )
+		), element );
+
+		// Make sure required is at front
+		if ( data.required ) {
+			param = data.required;
+			delete data.required;
+			data = $.extend( { required: param }, data );
+		}
+
+		// Make sure remote is at back
+		if ( data.remote ) {
+			param = data.remote;
+			delete data.remote;
+			data = $.extend( data, { remote: param } );
+		}
+
+		return data;
+	}
+} );
+
+// Custom selectors
+$.extend( $.expr.pseudos || $.expr[ ":" ], {		// '|| $.expr[ ":" ]' here enables backwards compatibility to jQuery 1.7. Can be removed when dropping jQ 1.7.x support
+
+	// https://jqueryvalidation.org/blank-selector/
+	blank: function( a ) {
+		return !$.trim( "" + $( a ).val() );
+	},
+
+	// https://jqueryvalidation.org/filled-selector/
+	filled: function( a ) {
+		var val = $( a ).val();
+		return val !== null && !!$.trim( "" + val );
+	},
+
+	// https://jqueryvalidation.org/unchecked-selector/
+	unchecked: function( a ) {
+		return !$( a ).prop( "checked" );
+	}
+} );
+
+// Constructor for validator
+$.validator = function( options, form ) {
+	this.settings = $.extend( true, {}, $.validator.defaults, options );
+	this.currentForm = form;
+	this.init();
+};
+
+// https://jqueryvalidation.org/jQuery.validator.format/
+$.validator.format = function( source, params ) {
+	if ( arguments.length === 1 ) {
+		return function() {
+			var args = $.makeArray( arguments );
+			args.unshift( source );
+			return $.validator.format.apply( this, args );
+		};
+	}
+	if ( params === undefined ) {
+		return source;
+	}
+	if ( arguments.length > 2 && params.constructor !== Array  ) {
+		params = $.makeArray( arguments ).slice( 1 );
+	}
+	if ( params.constructor !== Array ) {
+		params = [ params ];
+	}
+	$.each( params, function( i, n ) {
+		source = source.replace( new RegExp( "\\{" + i + "\\}", "g" ), function() {
+			return n;
+		} );
+	} );
+	return source;
+};
+
+$.extend( $.validator, {
+
+	defaults: {
+		messages: {},
+		groups: {},
+		rules: {},
+		errorClass: "error",
+		pendingClass: "pending",
+		validClass: "valid",
+		errorElement: "label",
+		focusCleanup: false,
+		focusInvalid: true,
+		errorContainer: $( [] ),
+		errorLabelContainer: $( [] ),
+		onsubmit: true,
+		ignore: ":hidden",
+		ignoreTitle: false,
+		onfocusin: function( element ) {
+			this.lastActive = element;
+
+			// Hide error label and remove error class on focus if enabled
+			if ( this.settings.focusCleanup ) {
+				if ( this.settings.unhighlight ) {
+					this.settings.unhighlight.call( this, element, this.settings.errorClass, this.settings.validClass );
+				}
+				this.hideThese( this.errorsFor( element ) );
+			}
+		},
+		onfocusout: function( element ) {
+			if ( !this.checkable( element ) && ( element.name in this.submitted || !this.optional( element ) ) ) {
+				this.element( element );
+			}
+		},
+		onkeyup: function( element, event ) {
+
+			// Avoid revalidate the field when pressing one of the following keys
+			// Shift       => 16
+			// Ctrl        => 17
+			// Alt         => 18
+			// Caps lock   => 20
+			// End         => 35
+			// Home        => 36
+			// Left arrow  => 37
+			// Up arrow    => 38
+			// Right arrow => 39
+			// Down arrow  => 40
+			// Insert      => 45
+			// Num lock    => 144
+			// AltGr key   => 225
+			var excludedKeys = [
+				16, 17, 18, 20, 35, 36, 37,
+				38, 39, 40, 45, 144, 225
+			];
+
+			if ( event.which === 9 && this.elementValue( element ) === "" || $.inArray( event.keyCode, excludedKeys ) !== -1 ) {
+				return;
+			} else if ( element.name in this.submitted || element.name in this.invalid ) {
+				this.element( element );
+			}
+		},
+		onclick: function( element ) {
+
+			// Click on selects, radiobuttons and checkboxes
+			if ( element.name in this.submitted ) {
+				this.element( element );
+
+			// Or option elements, check parent select in that case
+			} else if ( element.parentNode.name in this.submitted ) {
+				this.element( element.parentNode );
+			}
+		},
+		highlight: function( element, errorClass, validClass ) {
+			if ( element.type === "radio" ) {
+				this.findByName( element.name ).addClass( errorClass ).removeClass( validClass );
+			} else {
+				$( element ).addClass( errorClass ).removeClass( validClass );
+			}
+		},
+		unhighlight: function( element, errorClass, validClass ) {
+			if ( element.type === "radio" ) {
+				this.findByName( element.name ).removeClass( errorClass ).addClass( validClass );
+			} else {
+				$( element ).removeClass( errorClass ).addClass( validClass );
+			}
+		}
+	},
+
+	// https://jqueryvalidation.org/jQuery.validator.setDefaults/
+	setDefaults: function( settings ) {
+		$.extend( $.validator.defaults, settings );
+	},
+
+	messages: {
+		required: "This field is required.",
+		remote: "Please fix this field.",
+		email: "Please enter a valid email address.",
+		url: "Please enter a valid URL.",
+		date: "Please enter a valid date.",
+		dateISO: "Please enter a valid date (ISO).",
+		number: "Please enter a valid number.",
+		digits: "Please enter only digits.",
+		equalTo: "Please enter the same value again.",
+		maxlength: $.validator.format( "Please enter no more than {0} characters." ),
+		minlength: $.validator.format( "Please enter at least {0} characters." ),
+		rangelength: $.validator.format( "Please enter a value between {0} and {1} characters long." ),
+		range: $.validator.format( "Please enter a value between {0} and {1}." ),
+		max: $.validator.format( "Please enter a value less than or equal to {0}." ),
+		min: $.validator.format( "Please enter a value greater than or equal to {0}." ),
+		step: $.validator.format( "Please enter a multiple of {0}." )
+	},
+
+	autoCreateRanges: false,
+
+	prototype: {
+
+		init: function() {
+			this.labelContainer = $( this.settings.errorLabelContainer );
+			this.errorContext = this.labelContainer.length && this.labelContainer || $( this.currentForm );
+			this.containers = $( this.settings.errorContainer ).add( this.settings.errorLabelContainer );
+			this.submitted = {};
+			this.valueCache = {};
+			this.pendingRequest = 0;
+			this.pending = {};
+			this.invalid = {};
+			this.reset();
+
+			var groups = ( this.groups = {} ),
+				rules;
+			$.each( this.settings.groups, function( key, value ) {
+				if ( typeof value === "string" ) {
+					value = value.split( /\s/ );
+				}
+				$.each( value, function( index, name ) {
+					groups[ name ] = key;
+				} );
+			} );
+			rules = this.settings.rules;
+			$.each( rules, function( key, value ) {
+				rules[ key ] = $.validator.normalizeRule( value );
+			} );
+
+			function delegate( event ) {
+
+				// Set form expando on contenteditable
+				if ( !this.form && this.hasAttribute( "contenteditable" ) ) {
+					this.form = $( this ).closest( "form" )[ 0 ];
+					this.name = $( this ).attr( "name" );
+				}
+
+				var validator = $.data( this.form, "validator" ),
+					eventType = "on" + event.type.replace( /^validate/, "" ),
+					settings = validator.settings;
+				if ( settings[ eventType ] && !$( this ).is( settings.ignore ) ) {
+					settings[ eventType ].call( validator, this, event );
+				}
+			}
+
+			$( this.currentForm )
+				.on( "focusin.validate focusout.validate keyup.validate",
+					":text, [type='password'], [type='file'], select, textarea, [type='number'], [type='search'], " +
+					"[type='tel'], [type='url'], [type='email'], [type='datetime'], [type='date'], [type='month'], " +
+					"[type='week'], [type='time'], [type='datetime-local'], [type='range'], [type='color'], " +
+					"[type='radio'], [type='checkbox'], [contenteditable], [type='button']", delegate )
+
+				// Support: Chrome, oldIE
+				// "select" is provided as event.target when clicking a option
+				.on( "click.validate", "select, option, [type='radio'], [type='checkbox']", delegate );
+
+			if ( this.settings.invalidHandler ) {
+				$( this.currentForm ).on( "invalid-form.validate", this.settings.invalidHandler );
+			}
+		},
+
+		// https://jqueryvalidation.org/Validator.form/
+		form: function() {
+			this.checkForm();
+			$.extend( this.submitted, this.errorMap );
+			this.invalid = $.extend( {}, this.errorMap );
+			if ( !this.valid() ) {
+				$( this.currentForm ).triggerHandler( "invalid-form", [ this ] );
+			}
+			this.showErrors();
+			return this.valid();
+		},
+
+		checkForm: function() {
+			this.prepareForm();
+			for ( var i = 0, elements = ( this.currentElements = this.elements() ); elements[ i ]; i++ ) {
+				this.check( elements[ i ] );
+			}
+			return this.valid();
+		},
+
+		// https://jqueryvalidation.org/Validator.element/
+		element: function( element ) {
+			var cleanElement = this.clean( element ),
+				checkElement = this.validationTargetFor( cleanElement ),
+				v = this,
+				result = true,
+				rs, group;
+
+			if ( checkElement === undefined ) {
+				delete this.invalid[ cleanElement.name ];
+			} else {
+				this.prepareElement( checkElement );
+				this.currentElements = $( checkElement );
+
+				// If this element is grouped, then validate all group elements already
+				// containing a value
+				group = this.groups[ checkElement.name ];
+				if ( group ) {
+					$.each( this.groups, function( name, testgroup ) {
+						if ( testgroup === group && name !== checkElement.name ) {
+							cleanElement = v.validationTargetFor( v.clean( v.findByName( name ) ) );
+							if ( cleanElement && cleanElement.name in v.invalid ) {
+								v.currentElements.push( cleanElement );
+								result = v.check( cleanElement ) && result;
+							}
+						}
+					} );
+				}
+
+				rs = this.check( checkElement ) !== false;
+				result = result && rs;
+				if ( rs ) {
+					this.invalid[ checkElement.name ] = false;
+				} else {
+					this.invalid[ checkElement.name ] = true;
+				}
+
+				if ( !this.numberOfInvalids() ) {
+
+					// Hide error containers on last error
+					this.toHide = this.toHide.add( this.containers );
+				}
+				this.showErrors();
+
+				// Add aria-invalid status for screen readers
+				$( element ).attr( "aria-invalid", !rs );
+			}
+
+			return result;
+		},
+
+		// https://jqueryvalidation.org/Validator.showErrors/
+		showErrors: function( errors ) {
+			if ( errors ) {
+				var validator = this;
+
+				// Add items to error list and map
+				$.extend( this.errorMap, errors );
+				this.errorList = $.map( this.errorMap, function( message, name ) {
+					return {
+						message: message,
+						element: validator.findByName( name )[ 0 ]
+					};
+				} );
+
+				// Remove items from success list
+				this.successList = $.grep( this.successList, function( element ) {
+					return !( element.name in errors );
+				} );
+			}
+			if ( this.settings.showErrors ) {
+				this.settings.showErrors.call( this, this.errorMap, this.errorList );
+			} else {
+				this.defaultShowErrors();
+			}
+		},
+
+		// https://jqueryvalidation.org/Validator.resetForm/
+		resetForm: function() {
+			if ( $.fn.resetForm ) {
+				$( this.currentForm ).resetForm();
+			}
+			this.invalid = {};
+			this.submitted = {};
+			this.prepareForm();
+			this.hideErrors();
+			var elements = this.elements()
+				.removeData( "previousValue" )
+				.removeAttr( "aria-invalid" );
+
+			this.resetElements( elements );
+		},
+
+		resetElements: function( elements ) {
+			var i;
+
+			if ( this.settings.unhighlight ) {
+				for ( i = 0; elements[ i ]; i++ ) {
+					this.settings.unhighlight.call( this, elements[ i ],
+						this.settings.errorClass, "" );
+					this.findByName( elements[ i ].name ).removeClass( this.settings.validClass );
+				}
+			} else {
+				elements
+					.removeClass( this.settings.errorClass )
+					.removeClass( this.settings.validClass );
+			}
+		},
+
+		numberOfInvalids: function() {
+			return this.objectLength( this.invalid );
+		},
+
+		objectLength: function( obj ) {
+			/* jshint unused: false */
+			var count = 0,
+				i;
+			for ( i in obj ) {
+
+				// This check allows counting elements with empty error
+				// message as invalid elements
+				if ( obj[ i ] !== undefined && obj[ i ] !== null && obj[ i ] !== false ) {
+					count++;
+				}
+			}
+			return count;
+		},
+
+		hideErrors: function() {
+			this.hideThese( this.toHide );
+		},
+
+		hideThese: function( errors ) {
+			errors.not( this.containers ).text( "" );
+			this.addWrapper( errors ).hide();
+		},
+
+		valid: function() {
+			return this.size() === 0;
+		},
+
+		size: function() {
+			return this.errorList.length;
+		},
+
+		focusInvalid: function() {
+			if ( this.settings.focusInvalid ) {
+				try {
+					$( this.findLastActive() || this.errorList.length && this.errorList[ 0 ].element || [] )
+					.filter( ":visible" )
+					.focus()
+
+					// Manually trigger focusin event; without it, focusin handler isn't called, findLastActive won't have anything to find
+					.trigger( "focusin" );
+				} catch ( e ) {
+
+					// Ignore IE throwing errors when focusing hidden elements
+				}
+			}
+		},
+
+		findLastActive: function() {
+			var lastActive = this.lastActive;
+			return lastActive && $.grep( this.errorList, function( n ) {
+				return n.element.name === lastActive.name;
+			} ).length === 1 && lastActive;
+		},
+
+		elements: function() {
+			var validator = this,
+				rulesCache = {};
+
+			// Select all valid inputs inside the form (no submit or reset buttons)
+			return $( this.currentForm )
+			.find( "input, select, textarea, [contenteditable]" )
+			.not( ":submit, :reset, :image, :disabled" )
+			.not( this.settings.ignore )
+			.filter( function() {
+				var name = this.name || $( this ).attr( "name" ); // For contenteditable
+				if ( !name && validator.settings.debug && window.console ) {
+					console.error( "%o has no name assigned", this );
+				}
+
+				// Set form expando on contenteditable
+				if ( this.hasAttribute( "contenteditable" ) ) {
+					this.form = $( this ).closest( "form" )[ 0 ];
+					this.name = name;
+				}
+
+				// Select only the first element for each name, and only those with rules specified
+				if ( name in rulesCache || !validator.objectLength( $( this ).rules() ) ) {
+					return false;
+				}
+
+				rulesCache[ name ] = true;
+				return true;
+			} );
+		},
+
+		clean: function( selector ) {
+			return $( selector )[ 0 ];
+		},
+
+		errors: function() {
+			var errorClass = this.settings.errorClass.split( " " ).join( "." );
+			return $( this.settings.errorElement + "." + errorClass, this.errorContext );
+		},
+
+		resetInternals: function() {
+			this.successList = [];
+			this.errorList = [];
+			this.errorMap = {};
+			this.toShow = $( [] );
+			this.toHide = $( [] );
+		},
+
+		reset: function() {
+			this.resetInternals();
+			this.currentElements = $( [] );
+		},
+
+		prepareForm: function() {
+			this.reset();
+			this.toHide = this.errors().add( this.containers );
+		},
+
+		prepareElement: function( element ) {
+			this.reset();
+			this.toHide = this.errorsFor( element );
+		},
+
+		elementValue: function( element ) {
+			var $element = $( element ),
+				type = element.type,
+				val, idx;
+
+			if ( type === "radio" || type === "checkbox" ) {
+				return this.findByName( element.name ).filter( ":checked" ).val();
+			} else if ( type === "number" && typeof element.validity !== "undefined" ) {
+				return element.validity.badInput ? "NaN" : $element.val();
+			}
+
+			if ( element.hasAttribute( "contenteditable" ) ) {
+				val = $element.text();
+			} else {
+				val = $element.val();
+			}
+
+			if ( type === "file" ) {
+
+				// Modern browser (chrome & safari)
+				if ( val.substr( 0, 12 ) === "C:\\fakepath\\" ) {
+					return val.substr( 12 );
+				}
+
+				// Legacy browsers
+				// Unix-based path
+				idx = val.lastIndexOf( "/" );
+				if ( idx >= 0 ) {
+					return val.substr( idx + 1 );
+				}
+
+				// Windows-based path
+				idx = val.lastIndexOf( "\\" );
+				if ( idx >= 0 ) {
+					return val.substr( idx + 1 );
+				}
+
+				// Just the file name
+				return val;
+			}
+
+			if ( typeof val === "string" ) {
+				return val.replace( /\r/g, "" );
+			}
+			return val;
+		},
+
+		check: function( element ) {
+			element = this.validationTargetFor( this.clean( element ) );
+
+			var rules = $( element ).rules(),
+				rulesCount = $.map( rules, function( n, i ) {
+					return i;
+				} ).length,
+				dependencyMismatch = false,
+				val = this.elementValue( element ),
+				result, method, rule, normalizer;
+
+			// Prioritize the local normalizer defined for this element over the global one
+			// if the former exists, otherwise user the global one in case it exists.
+			if ( typeof rules.normalizer === "function" ) {
+				normalizer = rules.normalizer;
+			} else if (	typeof this.settings.normalizer === "function" ) {
+				normalizer = this.settings.normalizer;
+			}
+
+			// If normalizer is defined, then call it to retreive the changed value instead
+			// of using the real one.
+			// Note that `this` in the normalizer is `element`.
+			if ( normalizer ) {
+				val = normalizer.call( element, val );
+
+				if ( typeof val !== "string" ) {
+					throw new TypeError( "The normalizer should return a string value." );
+				}
+
+				// Delete the normalizer from rules to avoid treating it as a pre-defined method.
+				delete rules.normalizer;
+			}
+
+			for ( method in rules ) {
+				rule = { method: method, parameters: rules[ method ] };
+				try {
+					result = $.validator.methods[ method ].call( this, val, element, rule.parameters );
+
+					// If a method indicates that the field is optional and therefore valid,
+					// don't mark it as valid when there are no other rules
+					if ( result === "dependency-mismatch" && rulesCount === 1 ) {
+						dependencyMismatch = true;
+						continue;
+					}
+					dependencyMismatch = false;
+
+					if ( result === "pending" ) {
+						this.toHide = this.toHide.not( this.errorsFor( element ) );
+						return;
+					}
+
+					if ( !result ) {
+						this.formatAndAdd( element, rule );
+						return false;
+					}
+				} catch ( e ) {
+					if ( this.settings.debug && window.console ) {
+						console.log( "Exception occurred when checking element " + element.id + ", check the '" + rule.method + "' method.", e );
+					}
+					if ( e instanceof TypeError ) {
+						e.message += ".  Exception occurred when checking element " + element.id + ", check the '" + rule.method + "' method.";
+					}
+
+					throw e;
+				}
+			}
+			if ( dependencyMismatch ) {
+				return;
+			}
+			if ( this.objectLength( rules ) ) {
+				this.successList.push( element );
+			}
+			return true;
+		},
+
+		// Return the custom message for the given element and validation method
+		// specified in the element's HTML5 data attribute
+		// return the generic message if present and no method specific message is present
+		customDataMessage: function( element, method ) {
+			return $( element ).data( "msg" + method.charAt( 0 ).toUpperCase() +
+				method.substring( 1 ).toLowerCase() ) || $( element ).data( "msg" );
+		},
+
+		// Return the custom message for the given element name and validation method
+		customMessage: function( name, method ) {
+			var m = this.settings.messages[ name ];
+			return m && ( m.constructor === String ? m : m[ method ] );
+		},
+
+		// Return the first defined argument, allowing empty strings
+		findDefined: function() {
+			for ( var i = 0; i < arguments.length; i++ ) {
+				if ( arguments[ i ] !== undefined ) {
+					return arguments[ i ];
+				}
+			}
+			return undefined;
+		},
+
+		// The second parameter 'rule' used to be a string, and extended to an object literal
+		// of the following form:
+		// rule = {
+		//     method: "method name",
+		//     parameters: "the given method parameters"
+		// }
+		//
+		// The old behavior still supported, kept to maintain backward compatibility with
+		// old code, and will be removed in the next major release.
+		defaultMessage: function( element, rule ) {
+			if ( typeof rule === "string" ) {
+				rule = { method: rule };
+			}
+
+			var message = this.findDefined(
+					this.customMessage( element.name, rule.method ),
+					this.customDataMessage( element, rule.method ),
+
+					// 'title' is never undefined, so handle empty string as undefined
+					!this.settings.ignoreTitle && element.title || undefined,
+					$.validator.messages[ rule.method ],
+					"<strong>Warning: No message defined for " + element.name + "</strong>"
+				),
+				theregex = /\$?\{(\d+)\}/g;
+			if ( typeof message === "function" ) {
+				message = message.call( this, rule.parameters, element );
+			} else if ( theregex.test( message ) ) {
+				message = $.validator.format( message.replace( theregex, "{$1}" ), rule.parameters );
+			}
+
+			return message;
+		},
+
+		formatAndAdd: function( element, rule ) {
+			var message = this.defaultMessage( element, rule );
+
+			this.errorList.push( {
+				message: message,
+				element: element,
+				method: rule.method
+			} );
+
+			this.errorMap[ element.name ] = message;
+			this.submitted[ element.name ] = message;
+		},
+
+		addWrapper: function( toToggle ) {
+			if ( this.settings.wrapper ) {
+				toToggle = toToggle.add( toToggle.parent( this.settings.wrapper ) );
+			}
+			return toToggle;
+		},
+
+		defaultShowErrors: function() {
+			var i, elements, error;
+			for ( i = 0; this.errorList[ i ]; i++ ) {
+				error = this.errorList[ i ];
+				if ( this.settings.highlight ) {
+					this.settings.highlight.call( this, error.element, this.settings.errorClass, this.settings.validClass );
+				}
+				this.showLabel( error.element, error.message );
+			}
+			if ( this.errorList.length ) {
+				this.toShow = this.toShow.add( this.containers );
+			}
+			if ( this.settings.success ) {
+				for ( i = 0; this.successList[ i ]; i++ ) {
+					this.showLabel( this.successList[ i ] );
+				}
+			}
+			if ( this.settings.unhighlight ) {
+				for ( i = 0, elements = this.validElements(); elements[ i ]; i++ ) {
+					this.settings.unhighlight.call( this, elements[ i ], this.settings.errorClass, this.settings.validClass );
+				}
+			}
+			this.toHide = this.toHide.not( this.toShow );
+			this.hideErrors();
+			this.addWrapper( this.toShow ).show();
+		},
+
+		validElements: function() {
+			return this.currentElements.not( this.invalidElements() );
+		},
+
+		invalidElements: function() {
+			return $( this.errorList ).map( function() {
+				return this.element;
+			} );
+		},
+
+		showLabel: function( element, message ) {
+			var place, group, errorID, v,
+				error = this.errorsFor( element ),
+				elementID = this.idOrName( element ),
+				describedBy = $( element ).attr( "aria-describedby" );
+
+			if ( error.length ) {
+
+				// Refresh error/success class
+				error.removeClass( this.settings.validClass ).addClass( this.settings.errorClass );
+
+				// Replace message on existing label
+				error.html( message );
+			} else {
+
+				// Create error element
+				error = $( "<" + this.settings.errorElement + ">" )
+					.attr( "id", elementID + "-error" )
+					.addClass( this.settings.errorClass )
+					.html( message || "" );
+
+				// Maintain reference to the element to be placed into the DOM
+				place = error;
+				if ( this.settings.wrapper ) {
+
+					// Make sure the element is visible, even in IE
+					// actually showing the wrapped element is handled elsewhere
+					place = error.hide().show().wrap( "<" + this.settings.wrapper + "/>" ).parent();
+				}
+				if ( this.labelContainer.length ) {
+					this.labelContainer.append( place );
+				} else if ( this.settings.errorPlacement ) {
+					this.settings.errorPlacement.call( this, place, $( element ) );
+				} else {
+					place.insertAfter( element );
+				}
+
+				// Link error back to the element
+				if ( error.is( "label" ) ) {
+
+					// If the error is a label, then associate using 'for'
+					error.attr( "for", elementID );
+
+					// If the element is not a child of an associated label, then it's necessary
+					// to explicitly apply aria-describedby
+				} else if ( error.parents( "label[for='" + this.escapeCssMeta( elementID ) + "']" ).length === 0 ) {
+					errorID = error.attr( "id" );
+
+					// Respect existing non-error aria-describedby
+					if ( !describedBy ) {
+						describedBy = errorID;
+					} else if ( !describedBy.match( new RegExp( "\\b" + this.escapeCssMeta( errorID ) + "\\b" ) ) ) {
+
+						// Add to end of list if not already present
+						describedBy += " " + errorID;
+					}
+					$( element ).attr( "aria-describedby", describedBy );
+
+					// If this element is grouped, then assign to all elements in the same group
+					group = this.groups[ element.name ];
+					if ( group ) {
+						v = this;
+						$.each( v.groups, function( name, testgroup ) {
+							if ( testgroup === group ) {
+								$( "[name='" + v.escapeCssMeta( name ) + "']", v.currentForm )
+									.attr( "aria-describedby", error.attr( "id" ) );
+							}
+						} );
+					}
+				}
+			}
+			if ( !message && this.settings.success ) {
+				error.text( "" );
+				if ( typeof this.settings.success === "string" ) {
+					error.addClass( this.settings.success );
+				} else {
+					this.settings.success( error, element );
+				}
+			}
+			this.toShow = this.toShow.add( error );
+		},
+
+		errorsFor: function( element ) {
+			var name = this.escapeCssMeta( this.idOrName( element ) ),
+				describer = $( element ).attr( "aria-describedby" ),
+				selector = "label[for='" + name + "'], label[for='" + name + "'] *";
+
+			// 'aria-describedby' should directly reference the error element
+			if ( describer ) {
+				selector = selector + ", #" + this.escapeCssMeta( describer )
+					.replace( /\s+/g, ", #" );
+			}
+
+			return this
+				.errors()
+				.filter( selector );
+		},
+
+		// See https://api.jquery.com/category/selectors/, for CSS
+		// meta-characters that should be escaped in order to be used with JQuery
+		// as a literal part of a name/id or any selector.
+		escapeCssMeta: function( string ) {
+			return string.replace( /([\\!"#$%&'()*+,./:;<=>?@\[\]^`{|}~])/g, "\\$1" );
+		},
+
+		idOrName: function( element ) {
+			return this.groups[ element.name ] || ( this.checkable( element ) ? element.name : element.id || element.name );
+		},
+
+		validationTargetFor: function( element ) {
+
+			// If radio/checkbox, validate first element in group instead
+			if ( this.checkable( element ) ) {
+				element = this.findByName( element.name );
+			}
+
+			// Always apply ignore filter
+			return $( element ).not( this.settings.ignore )[ 0 ];
+		},
+
+		checkable: function( element ) {
+			return ( /radio|checkbox/i ).test( element.type );
+		},
+
+		findByName: function( name ) {
+			return $( this.currentForm ).find( "[name='" + this.escapeCssMeta( name ) + "']" );
+		},
+
+		getLength: function( value, element ) {
+			switch ( element.nodeName.toLowerCase() ) {
+			case "select":
+				return $( "option:selected", element ).length;
+			case "input":
+				if ( this.checkable( element ) ) {
+					return this.findByName( element.name ).filter( ":checked" ).length;
+				}
+			}
+			return value.length;
+		},
+
+		depend: function( param, element ) {
+			return this.dependTypes[ typeof param ] ? this.dependTypes[ typeof param ]( param, element ) : true;
+		},
+
+		dependTypes: {
+			"boolean": function( param ) {
+				return param;
+			},
+			"string": function( param, element ) {
+				return !!$( param, element.form ).length;
+			},
+			"function": function( param, element ) {
+				return param( element );
+			}
+		},
+
+		optional: function( element ) {
+			var val = this.elementValue( element );
+			return !$.validator.methods.required.call( this, val, element ) && "dependency-mismatch";
+		},
+
+		startRequest: function( element ) {
+			if ( !this.pending[ element.name ] ) {
+				this.pendingRequest++;
+				$( element ).addClass( this.settings.pendingClass );
+				this.pending[ element.name ] = true;
+			}
+		},
+
+		stopRequest: function( element, valid ) {
+			this.pendingRequest--;
+
+			// Sometimes synchronization fails, make sure pendingRequest is never < 0
+			if ( this.pendingRequest < 0 ) {
+				this.pendingRequest = 0;
+			}
+			delete this.pending[ element.name ];
+			$( element ).removeClass( this.settings.pendingClass );
+			if ( valid && this.pendingRequest === 0 && this.formSubmitted && this.form() ) {
+				$( this.currentForm ).submit();
+
+				// Remove the hidden input that was used as a replacement for the
+				// missing submit button. The hidden input is added by `handle()`
+				// to ensure that the value of the used submit button is passed on
+				// for scripted submits triggered by this method
+				if ( this.submitButton ) {
+					$( "input:hidden[name='" + this.submitButton.name + "']", this.currentForm ).remove();
+				}
+
+				this.formSubmitted = false;
+			} else if ( !valid && this.pendingRequest === 0 && this.formSubmitted ) {
+				$( this.currentForm ).triggerHandler( "invalid-form", [ this ] );
+				this.formSubmitted = false;
+			}
+		},
+
+		previousValue: function( element, method ) {
+			method = typeof method === "string" && method || "remote";
+
+			return $.data( element, "previousValue" ) || $.data( element, "previousValue", {
+				old: null,
+				valid: true,
+				message: this.defaultMessage( element, { method: method } )
+			} );
+		},
+
+		// Cleans up all forms and elements, removes validator-specific events
+		destroy: function() {
+			this.resetForm();
+
+			$( this.currentForm )
+				.off( ".validate" )
+				.removeData( "validator" )
+				.find( ".validate-equalTo-blur" )
+					.off( ".validate-equalTo" )
+					.removeClass( "validate-equalTo-blur" );
+		}
+
+	},
+
+	classRuleSettings: {
+		required: { required: true },
+		email: { email: true },
+		url: { url: true },
+		date: { date: true },
+		dateISO: { dateISO: true },
+		number: { number: true },
+		digits: { digits: true },
+		creditcard: { creditcard: true }
+	},
+
+	addClassRules: function( className, rules ) {
+		if ( className.constructor === String ) {
+			this.classRuleSettings[ className ] = rules;
+		} else {
+			$.extend( this.classRuleSettings, className );
+		}
+	},
+
+	classRules: function( element ) {
+		var rules = {},
+			classes = $( element ).attr( "class" );
+
+		if ( classes ) {
+			$.each( classes.split( " " ), function() {
+				if ( this in $.validator.classRuleSettings ) {
+					$.extend( rules, $.validator.classRuleSettings[ this ] );
+				}
+			} );
+		}
+		return rules;
+	},
+
+	normalizeAttributeRule: function( rules, type, method, value ) {
+
+		// Convert the value to a number for number inputs, and for text for backwards compability
+		// allows type="date" and others to be compared as strings
+		if ( /min|max|step/.test( method ) && ( type === null || /number|range|text/.test( type ) ) ) {
+			value = Number( value );
+
+			// Support Opera Mini, which returns NaN for undefined minlength
+			if ( isNaN( value ) ) {
+				value = undefined;
+			}
+		}
+
+		if ( value || value === 0 ) {
+			rules[ method ] = value;
+		} else if ( type === method && type !== "range" ) {
+
+			// Exception: the jquery validate 'range' method
+			// does not test for the html5 'range' type
+			rules[ method ] = true;
+		}
+	},
+
+	attributeRules: function( element ) {
+		var rules = {},
+			$element = $( element ),
+			type = element.getAttribute( "type" ),
+			method, value;
+
+		for ( method in $.validator.methods ) {
+
+			// Support for <input required> in both html5 and older browsers
+			if ( method === "required" ) {
+				value = element.getAttribute( method );
+
+				// Some browsers return an empty string for the required attribute
+				// and non-HTML5 browsers might have required="" markup
+				if ( value === "" ) {
+					value = true;
+				}
+
+				// Force non-HTML5 browsers to return bool
+				value = !!value;
+			} else {
+				value = $element.attr( method );
+			}
+
+			this.normalizeAttributeRule( rules, type, method, value );
+		}
+
+		// 'maxlength' may be returned as -1, 2147483647 ( IE ) and 524288 ( safari ) for text inputs
+		if ( rules.maxlength && /-1|2147483647|524288/.test( rules.maxlength ) ) {
+			delete rules.maxlength;
+		}
+
+		return rules;
+	},
+
+	dataRules: function( element ) {
+		var rules = {},
+			$element = $( element ),
+			type = element.getAttribute( "type" ),
+			method, value;
+
+		for ( method in $.validator.methods ) {
+			value = $element.data( "rule" + method.charAt( 0 ).toUpperCase() + method.substring( 1 ).toLowerCase() );
+			this.normalizeAttributeRule( rules, type, method, value );
+		}
+		return rules;
+	},
+
+	staticRules: function( element ) {
+		var rules = {},
+			validator = $.data( element.form, "validator" );
+
+		if ( validator.settings.rules ) {
+			rules = $.validator.normalizeRule( validator.settings.rules[ element.name ] ) || {};
+		}
+		return rules;
+	},
+
+	normalizeRules: function( rules, element ) {
+
+		// Handle dependency check
+		$.each( rules, function( prop, val ) {
+
+			// Ignore rule when param is explicitly false, eg. required:false
+			if ( val === false ) {
+				delete rules[ prop ];
+				return;
+			}
+			if ( val.param || val.depends ) {
+				var keepRule = true;
+				switch ( typeof val.depends ) {
+				case "string":
+					keepRule = !!$( val.depends, element.form ).length;
+					break;
+				case "function":
+					keepRule = val.depends.call( element, element );
+					break;
+				}
+				if ( keepRule ) {
+					rules[ prop ] = val.param !== undefined ? val.param : true;
+				} else {
+					$.data( element.form, "validator" ).resetElements( $( element ) );
+					delete rules[ prop ];
+				}
+			}
+		} );
+
+		// Evaluate parameters
+		$.each( rules, function( rule, parameter ) {
+			rules[ rule ] = $.isFunction( parameter ) && rule !== "normalizer" ? parameter( element ) : parameter;
+		} );
+
+		// Clean number parameters
+		$.each( [ "minlength", "maxlength" ], function() {
+			if ( rules[ this ] ) {
+				rules[ this ] = Number( rules[ this ] );
+			}
+		} );
+		$.each( [ "rangelength", "range" ], function() {
+			var parts;
+			if ( rules[ this ] ) {
+				if ( $.isArray( rules[ this ] ) ) {
+					rules[ this ] = [ Number( rules[ this ][ 0 ] ), Number( rules[ this ][ 1 ] ) ];
+				} else if ( typeof rules[ this ] === "string" ) {
+					parts = rules[ this ].replace( /[\[\]]/g, "" ).split( /[\s,]+/ );
+					rules[ this ] = [ Number( parts[ 0 ] ), Number( parts[ 1 ] ) ];
+				}
+			}
+		} );
+
+		if ( $.validator.autoCreateRanges ) {
+
+			// Auto-create ranges
+			if ( rules.min != null && rules.max != null ) {
+				rules.range = [ rules.min, rules.max ];
+				delete rules.min;
+				delete rules.max;
+			}
+			if ( rules.minlength != null && rules.maxlength != null ) {
+				rules.rangelength = [ rules.minlength, rules.maxlength ];
+				delete rules.minlength;
+				delete rules.maxlength;
+			}
+		}
+
+		return rules;
+	},
+
+	// Converts a simple string to a {string: true} rule, e.g., "required" to {required:true}
+	normalizeRule: function( data ) {
+		if ( typeof data === "string" ) {
+			var transformed = {};
+			$.each( data.split( /\s/ ), function() {
+				transformed[ this ] = true;
+			} );
+			data = transformed;
+		}
+		return data;
+	},
+
+	// https://jqueryvalidation.org/jQuery.validator.addMethod/
+	addMethod: function( name, method, message ) {
+		$.validator.methods[ name ] = method;
+		$.validator.messages[ name ] = message !== undefined ? message : $.validator.messages[ name ];
+		if ( method.length < 3 ) {
+			$.validator.addClassRules( name, $.validator.normalizeRule( name ) );
+		}
+	},
+
+	// https://jqueryvalidation.org/jQuery.validator.methods/
+	methods: {
+
+		// https://jqueryvalidation.org/required-method/
+		required: function( value, element, param ) {
+
+			// Check if dependency is met
+			if ( !this.depend( param, element ) ) {
+				return "dependency-mismatch";
+			}
+			if ( element.nodeName.toLowerCase() === "select" ) {
+
+				// Could be an array for select-multiple or a string, both are fine this way
+				var val = $( element ).val();
+				return val && val.length > 0;
+			}
+			if ( this.checkable( element ) ) {
+				return this.getLength( value, element ) > 0;
+			}
+			return value.length > 0;
+		},
+
+		// https://jqueryvalidation.org/email-method/
+		email: function( value, element ) {
+
+			// From https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
+			// Retrieved 2014-01-14
+			// If you have a problem with this implementation, report a bug against the above spec
+			// Or use custom methods to implement your own email validation
+			return this.optional( element ) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test( value );
+		},
+
+		// https://jqueryvalidation.org/url-method/
+		url: function( value, element ) {
+
+			// Copyright (c) 2010-2013 Diego Perini, MIT licensed
+			// https://gist.github.com/dperini/729294
+			// see also https://mathiasbynens.be/demo/url-regex
+			// modified to allow protocol-relative URLs
+			return this.optional( element ) || /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test( value );
+		},
+
+		// https://jqueryvalidation.org/date-method/
+		date: function( value, element ) {
+			return this.optional( element ) || !/Invalid|NaN/.test( new Date( value ).toString() );
+		},
+
+		// https://jqueryvalidation.org/dateISO-method/
+		dateISO: function( value, element ) {
+			return this.optional( element ) || /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test( value );
+		},
+
+		// https://jqueryvalidation.org/number-method/
+		number: function( value, element ) {
+			return this.optional( element ) || /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test( value );
+		},
+
+		// https://jqueryvalidation.org/digits-method/
+		digits: function( value, element ) {
+			return this.optional( element ) || /^\d+$/.test( value );
+		},
+
+		// https://jqueryvalidation.org/minlength-method/
+		minlength: function( value, element, param ) {
+			var length = $.isArray( value ) ? value.length : this.getLength( value, element );
+			return this.optional( element ) || length >= param;
+		},
+
+		// https://jqueryvalidation.org/maxlength-method/
+		maxlength: function( value, element, param ) {
+			var length = $.isArray( value ) ? value.length : this.getLength( value, element );
+			return this.optional( element ) || length <= param;
+		},
+
+		// https://jqueryvalidation.org/rangelength-method/
+		rangelength: function( value, element, param ) {
+			var length = $.isArray( value ) ? value.length : this.getLength( value, element );
+			return this.optional( element ) || ( length >= param[ 0 ] && length <= param[ 1 ] );
+		},
+
+		// https://jqueryvalidation.org/min-method/
+		min: function( value, element, param ) {
+			return this.optional( element ) || value >= param;
+		},
+
+		// https://jqueryvalidation.org/max-method/
+		max: function( value, element, param ) {
+			return this.optional( element ) || value <= param;
+		},
+
+		// https://jqueryvalidation.org/range-method/
+		range: function( value, element, param ) {
+			return this.optional( element ) || ( value >= param[ 0 ] && value <= param[ 1 ] );
+		},
+
+		// https://jqueryvalidation.org/step-method/
+		step: function( value, element, param ) {
+			var type = $( element ).attr( "type" ),
+				errorMessage = "Step attribute on input type " + type + " is not supported.",
+				supportedTypes = [ "text", "number", "range" ],
+				re = new RegExp( "\\b" + type + "\\b" ),
+				notSupported = type && !re.test( supportedTypes.join() ),
+				decimalPlaces = function( num ) {
+					var match = ( "" + num ).match( /(?:\.(\d+))?$/ );
+					if ( !match ) {
+						return 0;
+					}
+
+					// Number of digits right of decimal point.
+					return match[ 1 ] ? match[ 1 ].length : 0;
+				},
+				toInt = function( num ) {
+					return Math.round( num * Math.pow( 10, decimals ) );
+				},
+				valid = true,
+				decimals;
+
+			// Works only for text, number and range input types
+			// TODO find a way to support input types date, datetime, datetime-local, month, time and week
+			if ( notSupported ) {
+				throw new Error( errorMessage );
+			}
+
+			decimals = decimalPlaces( param );
+
+			// Value can't have too many decimals
+			if ( decimalPlaces( value ) > decimals || toInt( value ) % toInt( param ) !== 0 ) {
+				valid = false;
+			}
+
+			return this.optional( element ) || valid;
+		},
+
+		// https://jqueryvalidation.org/equalTo-method/
+		equalTo: function( value, element, param ) {
+
+			// Bind to the blur event of the target in order to revalidate whenever the target field is updated
+			var target = $( param );
+			if ( this.settings.onfocusout && target.not( ".validate-equalTo-blur" ).length ) {
+				target.addClass( "validate-equalTo-blur" ).on( "blur.validate-equalTo", function() {
+					$( element ).valid();
+				} );
+			}
+			return value === target.val();
+		},
+
+		// https://jqueryvalidation.org/remote-method/
+		remote: function( value, element, param, method ) {
+			if ( this.optional( element ) ) {
+				return "dependency-mismatch";
+			}
+
+			method = typeof method === "string" && method || "remote";
+
+			var previous = this.previousValue( element, method ),
+				validator, data, optionDataString;
+
+			if ( !this.settings.messages[ element.name ] ) {
+				this.settings.messages[ element.name ] = {};
+			}
+			previous.originalMessage = previous.originalMessage || this.settings.messages[ element.name ][ method ];
+			this.settings.messages[ element.name ][ method ] = previous.message;
+
+			param = typeof param === "string" && { url: param } || param;
+			optionDataString = $.param( $.extend( { data: value }, param.data ) );
+			if ( previous.old === optionDataString ) {
+				return previous.valid;
+			}
+
+			previous.old = optionDataString;
+			validator = this;
+			this.startRequest( element );
+			data = {};
+			data[ element.name ] = value;
+			$.ajax( $.extend( true, {
+				mode: "abort",
+				port: "validate" + element.name,
+				dataType: "json",
+				data: data,
+				context: validator.currentForm,
+				success: function( response ) {
+					var valid = response === true || response === "true",
+						errors, message, submitted;
+
+					validator.settings.messages[ element.name ][ method ] = previous.originalMessage;
+					if ( valid ) {
+						submitted = validator.formSubmitted;
+						validator.resetInternals();
+						validator.toHide = validator.errorsFor( element );
+						validator.formSubmitted = submitted;
+						validator.successList.push( element );
+						validator.invalid[ element.name ] = false;
+						validator.showErrors();
+					} else {
+						errors = {};
+						message = response || validator.defaultMessage( element, { method: method, parameters: value } );
+						errors[ element.name ] = previous.message = message;
+						validator.invalid[ element.name ] = true;
+						validator.showErrors( errors );
+					}
+					previous.valid = valid;
+					validator.stopRequest( element, valid );
+				}
+			}, param ) );
+			return "pending";
+		}
+	}
+
+} );
+
+// Ajax mode: abort
+// usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
+// if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort()
+
+var pendingRequests = {},
+	ajax;
+
+// Use a prefilter if available (1.5+)
+if ( $.ajaxPrefilter ) {
+	$.ajaxPrefilter( function( settings, _, xhr ) {
+		var port = settings.port;
+		if ( settings.mode === "abort" ) {
+			if ( pendingRequests[ port ] ) {
+				pendingRequests[ port ].abort();
+			}
+			pendingRequests[ port ] = xhr;
+		}
+	} );
+} else {
+
+	// Proxy ajax
+	ajax = $.ajax;
+	$.ajax = function( settings ) {
+		var mode = ( "mode" in settings ? settings : $.ajaxSettings ).mode,
+			port = ( "port" in settings ? settings : $.ajaxSettings ).port;
+		if ( mode === "abort" ) {
+			if ( pendingRequests[ port ] ) {
+				pendingRequests[ port ].abort();
+			}
+			pendingRequests[ port ] = ajax.apply( this, arguments );
+			return pendingRequests[ port ];
+		}
+		return ajax.apply( this, arguments );
+	};
+}
+return $;
+}));
+
+/***/ }),
+/* 242 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(14);
+__webpack_require__(160);
+__webpack_require__(243);
+__webpack_require__(161);
+__webpack_require__(244);
+__webpack_require__(162);
+__webpack_require__(245);
+__webpack_require__(248);
+
+/***/ }),
+/* 243 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * jQuery UI Disable Selection 1.12.1
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ */
+
+//>>label: disableSelection
+//>>group: Core
+//>>description: Disable selection of text content within the set of matched elements.
+//>>docs: http://api.jqueryui.com/disableSelection/
+
+// This file is deprecated
+( function( factory ) {
+	if ( true ) {
+
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(1), __webpack_require__(4) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+} ( function( $ ) {
+
+return $.fn.extend( {
+	disableSelection: ( function() {
+		var eventType = "onselectstart" in document.createElement( "div" ) ?
+			"selectstart" :
+			"mousedown";
+
+		return function() {
+			return this.on( eventType + ".ui-disableSelection", function( event ) {
+				event.preventDefault();
+			} );
+		};
+	} )(),
+
+	enableSelection: function() {
+		return this.off( ".ui-disableSelection" );
+	}
+} );
+
+} ) );
+
+
+/***/ }),
+/* 244 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * jQuery UI Sortable 1.12.1
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ */
+
+//>>label: Sortable
+//>>group: Interactions
+//>>description: Enables items in a list to be sorted using the mouse.
+//>>docs: http://api.jqueryui.com/sortable/
+//>>demos: http://jqueryui.com/sortable/
+//>>css.structure: ../../themes/base/sortable.css
+
+( function( factory ) {
+	if ( true ) {
+
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
+			__webpack_require__(1),
+			__webpack_require__(162),
+			__webpack_require__(160),
+			__webpack_require__(163),
+			__webpack_require__(161),
+			__webpack_require__(4),
+			__webpack_require__(14)
+		], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}( function( $ ) {
+
+return $.widget( "ui.sortable", $.ui.mouse, {
+	version: "1.12.1",
+	widgetEventPrefix: "sort",
+	ready: false,
+	options: {
+		appendTo: "parent",
+		axis: false,
+		connectWith: false,
+		containment: false,
+		cursor: "auto",
+		cursorAt: false,
+		dropOnEmpty: true,
+		forcePlaceholderSize: false,
+		forceHelperSize: false,
+		grid: false,
+		handle: false,
+		helper: "original",
+		items: "> *",
+		opacity: false,
+		placeholder: false,
+		revert: false,
+		scroll: true,
+		scrollSensitivity: 20,
+		scrollSpeed: 20,
+		scope: "default",
+		tolerance: "intersect",
+		zIndex: 1000,
+
+		// Callbacks
+		activate: null,
+		beforeStop: null,
+		change: null,
+		deactivate: null,
+		out: null,
+		over: null,
+		receive: null,
+		remove: null,
+		sort: null,
+		start: null,
+		stop: null,
+		update: null
+	},
+
+	_isOverAxis: function( x, reference, size ) {
+		return ( x >= reference ) && ( x < ( reference + size ) );
+	},
+
+	_isFloating: function( item ) {
+		return ( /left|right/ ).test( item.css( "float" ) ) ||
+			( /inline|table-cell/ ).test( item.css( "display" ) );
+	},
+
+	_create: function() {
+		this.containerCache = {};
+		this._addClass( "ui-sortable" );
+
+		//Get the items
+		this.refresh();
+
+		//Let's determine the parent's offset
+		this.offset = this.element.offset();
+
+		//Initialize mouse events for interaction
+		this._mouseInit();
+
+		this._setHandleClassName();
+
+		//We're ready to go
+		this.ready = true;
+
+	},
+
+	_setOption: function( key, value ) {
+		this._super( key, value );
+
+		if ( key === "handle" ) {
+			this._setHandleClassName();
+		}
+	},
+
+	_setHandleClassName: function() {
+		var that = this;
+		this._removeClass( this.element.find( ".ui-sortable-handle" ), "ui-sortable-handle" );
+		$.each( this.items, function() {
+			that._addClass(
+				this.instance.options.handle ?
+					this.item.find( this.instance.options.handle ) :
+					this.item,
+				"ui-sortable-handle"
+			);
+		} );
+	},
+
+	_destroy: function() {
+		this._mouseDestroy();
+
+		for ( var i = this.items.length - 1; i >= 0; i-- ) {
+			this.items[ i ].item.removeData( this.widgetName + "-item" );
+		}
+
+		return this;
+	},
+
+	_mouseCapture: function( event, overrideHandle ) {
+		var currentItem = null,
+			validHandle = false,
+			that = this;
+
+		if ( this.reverting ) {
+			return false;
+		}
+
+		if ( this.options.disabled || this.options.type === "static" ) {
+			return false;
+		}
+
+		//We have to refresh the items data once first
+		this._refreshItems( event );
+
+		//Find out if the clicked node (or one of its parents) is a actual item in this.items
+		$( event.target ).parents().each( function() {
+			if ( $.data( this, that.widgetName + "-item" ) === that ) {
+				currentItem = $( this );
+				return false;
+			}
+		} );
+		if ( $.data( event.target, that.widgetName + "-item" ) === that ) {
+			currentItem = $( event.target );
+		}
+
+		if ( !currentItem ) {
+			return false;
+		}
+		if ( this.options.handle && !overrideHandle ) {
+			$( this.options.handle, currentItem ).find( "*" ).addBack().each( function() {
+				if ( this === event.target ) {
+					validHandle = true;
+				}
+			} );
+			if ( !validHandle ) {
+				return false;
+			}
+		}
+
+		this.currentItem = currentItem;
+		this._removeCurrentsFromItems();
+		return true;
+
+	},
+
+	_mouseStart: function( event, overrideHandle, noActivation ) {
+
+		var i, body,
+			o = this.options;
+
+		this.currentContainer = this;
+
+		//We only need to call refreshPositions, because the refreshItems call has been moved to
+		// mouseCapture
+		this.refreshPositions();
+
+		//Create and append the visible helper
+		this.helper = this._createHelper( event );
+
+		//Cache the helper size
+		this._cacheHelperProportions();
+
+		/*
+		 * - Position generation -
+		 * This block generates everything position related - it's the core of draggables.
+		 */
+
+		//Cache the margins of the original element
+		this._cacheMargins();
+
+		//Get the next scrolling parent
+		this.scrollParent = this.helper.scrollParent();
+
+		//The element's absolute position on the page minus margins
+		this.offset = this.currentItem.offset();
+		this.offset = {
+			top: this.offset.top - this.margins.top,
+			left: this.offset.left - this.margins.left
+		};
+
+		$.extend( this.offset, {
+			click: { //Where the click happened, relative to the element
+				left: event.pageX - this.offset.left,
+				top: event.pageY - this.offset.top
+			},
+			parent: this._getParentOffset(),
+
+			// This is a relative to absolute position minus the actual position calculation -
+			// only used for relative positioned helper
+			relative: this._getRelativeOffset()
+		} );
+
+		// Only after we got the offset, we can change the helper's position to absolute
+		// TODO: Still need to figure out a way to make relative sorting possible
+		this.helper.css( "position", "absolute" );
+		this.cssPosition = this.helper.css( "position" );
+
+		//Generate the original position
+		this.originalPosition = this._generatePosition( event );
+		this.originalPageX = event.pageX;
+		this.originalPageY = event.pageY;
+
+		//Adjust the mouse offset relative to the helper if "cursorAt" is supplied
+		( o.cursorAt && this._adjustOffsetFromHelper( o.cursorAt ) );
+
+		//Cache the former DOM position
+		this.domPosition = {
+			prev: this.currentItem.prev()[ 0 ],
+			parent: this.currentItem.parent()[ 0 ]
+		};
+
+		// If the helper is not the original, hide the original so it's not playing any role during
+		// the drag, won't cause anything bad this way
+		if ( this.helper[ 0 ] !== this.currentItem[ 0 ] ) {
+			this.currentItem.hide();
+		}
+
+		//Create the placeholder
+		this._createPlaceholder();
+
+		//Set a containment if given in the options
+		if ( o.containment ) {
+			this._setContainment();
+		}
+
+		if ( o.cursor && o.cursor !== "auto" ) { // cursor option
+			body = this.document.find( "body" );
+
+			// Support: IE
+			this.storedCursor = body.css( "cursor" );
+			body.css( "cursor", o.cursor );
+
+			this.storedStylesheet =
+				$( "<style>*{ cursor: " + o.cursor + " !important; }</style>" ).appendTo( body );
+		}
+
+		if ( o.opacity ) { // opacity option
+			if ( this.helper.css( "opacity" ) ) {
+				this._storedOpacity = this.helper.css( "opacity" );
+			}
+			this.helper.css( "opacity", o.opacity );
+		}
+
+		if ( o.zIndex ) { // zIndex option
+			if ( this.helper.css( "zIndex" ) ) {
+				this._storedZIndex = this.helper.css( "zIndex" );
+			}
+			this.helper.css( "zIndex", o.zIndex );
+		}
+
+		//Prepare scrolling
+		if ( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+				this.scrollParent[ 0 ].tagName !== "HTML" ) {
+			this.overflowOffset = this.scrollParent.offset();
+		}
+
+		//Call callbacks
+		this._trigger( "start", event, this._uiHash() );
+
+		//Recache the helper size
+		if ( !this._preserveHelperProportions ) {
+			this._cacheHelperProportions();
+		}
+
+		//Post "activate" events to possible containers
+		if ( !noActivation ) {
+			for ( i = this.containers.length - 1; i >= 0; i-- ) {
+				this.containers[ i ]._trigger( "activate", event, this._uiHash( this ) );
+			}
+		}
+
+		//Prepare possible droppables
+		if ( $.ui.ddmanager ) {
+			$.ui.ddmanager.current = this;
+		}
+
+		if ( $.ui.ddmanager && !o.dropBehaviour ) {
+			$.ui.ddmanager.prepareOffsets( this, event );
+		}
+
+		this.dragging = true;
+
+		this._addClass( this.helper, "ui-sortable-helper" );
+
+		// Execute the drag once - this causes the helper not to be visiblebefore getting its
+		// correct position
+		this._mouseDrag( event );
+		return true;
+
+	},
+
+	_mouseDrag: function( event ) {
+		var i, item, itemElement, intersection,
+			o = this.options,
+			scrolled = false;
+
+		//Compute the helpers position
+		this.position = this._generatePosition( event );
+		this.positionAbs = this._convertPositionTo( "absolute" );
+
+		if ( !this.lastPositionAbs ) {
+			this.lastPositionAbs = this.positionAbs;
+		}
+
+		//Do scrolling
+		if ( this.options.scroll ) {
+			if ( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+					this.scrollParent[ 0 ].tagName !== "HTML" ) {
+
+				if ( ( this.overflowOffset.top + this.scrollParent[ 0 ].offsetHeight ) -
+						event.pageY < o.scrollSensitivity ) {
+					this.scrollParent[ 0 ].scrollTop =
+						scrolled = this.scrollParent[ 0 ].scrollTop + o.scrollSpeed;
+				} else if ( event.pageY - this.overflowOffset.top < o.scrollSensitivity ) {
+					this.scrollParent[ 0 ].scrollTop =
+						scrolled = this.scrollParent[ 0 ].scrollTop - o.scrollSpeed;
+				}
+
+				if ( ( this.overflowOffset.left + this.scrollParent[ 0 ].offsetWidth ) -
+						event.pageX < o.scrollSensitivity ) {
+					this.scrollParent[ 0 ].scrollLeft = scrolled =
+						this.scrollParent[ 0 ].scrollLeft + o.scrollSpeed;
+				} else if ( event.pageX - this.overflowOffset.left < o.scrollSensitivity ) {
+					this.scrollParent[ 0 ].scrollLeft = scrolled =
+						this.scrollParent[ 0 ].scrollLeft - o.scrollSpeed;
+				}
+
+			} else {
+
+				if ( event.pageY - this.document.scrollTop() < o.scrollSensitivity ) {
+					scrolled = this.document.scrollTop( this.document.scrollTop() - o.scrollSpeed );
+				} else if ( this.window.height() - ( event.pageY - this.document.scrollTop() ) <
+						o.scrollSensitivity ) {
+					scrolled = this.document.scrollTop( this.document.scrollTop() + o.scrollSpeed );
+				}
+
+				if ( event.pageX - this.document.scrollLeft() < o.scrollSensitivity ) {
+					scrolled = this.document.scrollLeft(
+						this.document.scrollLeft() - o.scrollSpeed
+					);
+				} else if ( this.window.width() - ( event.pageX - this.document.scrollLeft() ) <
+						o.scrollSensitivity ) {
+					scrolled = this.document.scrollLeft(
+						this.document.scrollLeft() + o.scrollSpeed
+					);
+				}
+
+			}
+
+			if ( scrolled !== false && $.ui.ddmanager && !o.dropBehaviour ) {
+				$.ui.ddmanager.prepareOffsets( this, event );
+			}
+		}
+
+		//Regenerate the absolute position used for position checks
+		this.positionAbs = this._convertPositionTo( "absolute" );
+
+		//Set the helper position
+		if ( !this.options.axis || this.options.axis !== "y" ) {
+			this.helper[ 0 ].style.left = this.position.left + "px";
+		}
+		if ( !this.options.axis || this.options.axis !== "x" ) {
+			this.helper[ 0 ].style.top = this.position.top + "px";
+		}
+
+		//Rearrange
+		for ( i = this.items.length - 1; i >= 0; i-- ) {
+
+			//Cache variables and intersection, continue if no intersection
+			item = this.items[ i ];
+			itemElement = item.item[ 0 ];
+			intersection = this._intersectsWithPointer( item );
+			if ( !intersection ) {
+				continue;
+			}
+
+			// Only put the placeholder inside the current Container, skip all
+			// items from other containers. This works because when moving
+			// an item from one container to another the
+			// currentContainer is switched before the placeholder is moved.
+			//
+			// Without this, moving items in "sub-sortables" can cause
+			// the placeholder to jitter between the outer and inner container.
+			if ( item.instance !== this.currentContainer ) {
+				continue;
+			}
+
+			// Cannot intersect with itself
+			// no useless actions that have been done before
+			// no action if the item moved is the parent of the item checked
+			if ( itemElement !== this.currentItem[ 0 ] &&
+				this.placeholder[ intersection === 1 ? "next" : "prev" ]()[ 0 ] !== itemElement &&
+				!$.contains( this.placeholder[ 0 ], itemElement ) &&
+				( this.options.type === "semi-dynamic" ?
+					!$.contains( this.element[ 0 ], itemElement ) :
+					true
+				)
+			) {
+
+				this.direction = intersection === 1 ? "down" : "up";
+
+				if ( this.options.tolerance === "pointer" || this._intersectsWithSides( item ) ) {
+					this._rearrange( event, item );
+				} else {
+					break;
+				}
+
+				this._trigger( "change", event, this._uiHash() );
+				break;
+			}
+		}
+
+		//Post events to containers
+		this._contactContainers( event );
+
+		//Interconnect with droppables
+		if ( $.ui.ddmanager ) {
+			$.ui.ddmanager.drag( this, event );
+		}
+
+		//Call callbacks
+		this._trigger( "sort", event, this._uiHash() );
+
+		this.lastPositionAbs = this.positionAbs;
+		return false;
+
+	},
+
+	_mouseStop: function( event, noPropagation ) {
+
+		if ( !event ) {
+			return;
+		}
+
+		//If we are using droppables, inform the manager about the drop
+		if ( $.ui.ddmanager && !this.options.dropBehaviour ) {
+			$.ui.ddmanager.drop( this, event );
+		}
+
+		if ( this.options.revert ) {
+			var that = this,
+				cur = this.placeholder.offset(),
+				axis = this.options.axis,
+				animation = {};
+
+			if ( !axis || axis === "x" ) {
+				animation.left = cur.left - this.offset.parent.left - this.margins.left +
+					( this.offsetParent[ 0 ] === this.document[ 0 ].body ?
+						0 :
+						this.offsetParent[ 0 ].scrollLeft
+					);
+			}
+			if ( !axis || axis === "y" ) {
+				animation.top = cur.top - this.offset.parent.top - this.margins.top +
+					( this.offsetParent[ 0 ] === this.document[ 0 ].body ?
+						0 :
+						this.offsetParent[ 0 ].scrollTop
+					);
+			}
+			this.reverting = true;
+			$( this.helper ).animate(
+				animation,
+				parseInt( this.options.revert, 10 ) || 500,
+				function() {
+					that._clear( event );
+				}
+			);
+		} else {
+			this._clear( event, noPropagation );
+		}
+
+		return false;
+
+	},
+
+	cancel: function() {
+
+		if ( this.dragging ) {
+
+			this._mouseUp( new $.Event( "mouseup", { target: null } ) );
+
+			if ( this.options.helper === "original" ) {
+				this.currentItem.css( this._storedCSS );
+				this._removeClass( this.currentItem, "ui-sortable-helper" );
+			} else {
+				this.currentItem.show();
+			}
+
+			//Post deactivating events to containers
+			for ( var i = this.containers.length - 1; i >= 0; i-- ) {
+				this.containers[ i ]._trigger( "deactivate", null, this._uiHash( this ) );
+				if ( this.containers[ i ].containerCache.over ) {
+					this.containers[ i ]._trigger( "out", null, this._uiHash( this ) );
+					this.containers[ i ].containerCache.over = 0;
+				}
+			}
+
+		}
+
+		if ( this.placeholder ) {
+
+			//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately,
+			// it unbinds ALL events from the original node!
+			if ( this.placeholder[ 0 ].parentNode ) {
+				this.placeholder[ 0 ].parentNode.removeChild( this.placeholder[ 0 ] );
+			}
+			if ( this.options.helper !== "original" && this.helper &&
+					this.helper[ 0 ].parentNode ) {
+				this.helper.remove();
+			}
+
+			$.extend( this, {
+				helper: null,
+				dragging: false,
+				reverting: false,
+				_noFinalSort: null
+			} );
+
+			if ( this.domPosition.prev ) {
+				$( this.domPosition.prev ).after( this.currentItem );
+			} else {
+				$( this.domPosition.parent ).prepend( this.currentItem );
+			}
+		}
+
+		return this;
+
+	},
+
+	serialize: function( o ) {
+
+		var items = this._getItemsAsjQuery( o && o.connected ),
+			str = [];
+		o = o || {};
+
+		$( items ).each( function() {
+			var res = ( $( o.item || this ).attr( o.attribute || "id" ) || "" )
+				.match( o.expression || ( /(.+)[\-=_](.+)/ ) );
+			if ( res ) {
+				str.push(
+					( o.key || res[ 1 ] + "[]" ) +
+					"=" + ( o.key && o.expression ? res[ 1 ] : res[ 2 ] ) );
+			}
+		} );
+
+		if ( !str.length && o.key ) {
+			str.push( o.key + "=" );
+		}
+
+		return str.join( "&" );
+
+	},
+
+	toArray: function( o ) {
+
+		var items = this._getItemsAsjQuery( o && o.connected ),
+			ret = [];
+
+		o = o || {};
+
+		items.each( function() {
+			ret.push( $( o.item || this ).attr( o.attribute || "id" ) || "" );
+		} );
+		return ret;
+
+	},
+
+	/* Be careful with the following core functions */
+	_intersectsWith: function( item ) {
+
+		var x1 = this.positionAbs.left,
+			x2 = x1 + this.helperProportions.width,
+			y1 = this.positionAbs.top,
+			y2 = y1 + this.helperProportions.height,
+			l = item.left,
+			r = l + item.width,
+			t = item.top,
+			b = t + item.height,
+			dyClick = this.offset.click.top,
+			dxClick = this.offset.click.left,
+			isOverElementHeight = ( this.options.axis === "x" ) || ( ( y1 + dyClick ) > t &&
+				( y1 + dyClick ) < b ),
+			isOverElementWidth = ( this.options.axis === "y" ) || ( ( x1 + dxClick ) > l &&
+				( x1 + dxClick ) < r ),
+			isOverElement = isOverElementHeight && isOverElementWidth;
+
+		if ( this.options.tolerance === "pointer" ||
+			this.options.forcePointerForContainers ||
+			( this.options.tolerance !== "pointer" &&
+				this.helperProportions[ this.floating ? "width" : "height" ] >
+				item[ this.floating ? "width" : "height" ] )
+		) {
+			return isOverElement;
+		} else {
+
+			return ( l < x1 + ( this.helperProportions.width / 2 ) && // Right Half
+				x2 - ( this.helperProportions.width / 2 ) < r && // Left Half
+				t < y1 + ( this.helperProportions.height / 2 ) && // Bottom Half
+				y2 - ( this.helperProportions.height / 2 ) < b ); // Top Half
+
+		}
+	},
+
+	_intersectsWithPointer: function( item ) {
+		var verticalDirection, horizontalDirection,
+			isOverElementHeight = ( this.options.axis === "x" ) ||
+				this._isOverAxis(
+					this.positionAbs.top + this.offset.click.top, item.top, item.height ),
+			isOverElementWidth = ( this.options.axis === "y" ) ||
+				this._isOverAxis(
+					this.positionAbs.left + this.offset.click.left, item.left, item.width ),
+			isOverElement = isOverElementHeight && isOverElementWidth;
+
+		if ( !isOverElement ) {
+			return false;
+		}
+
+		verticalDirection = this._getDragVerticalDirection();
+		horizontalDirection = this._getDragHorizontalDirection();
+
+		return this.floating ?
+			( ( horizontalDirection === "right" || verticalDirection === "down" ) ? 2 : 1 )
+			: ( verticalDirection && ( verticalDirection === "down" ? 2 : 1 ) );
+
+	},
+
+	_intersectsWithSides: function( item ) {
+
+		var isOverBottomHalf = this._isOverAxis( this.positionAbs.top +
+				this.offset.click.top, item.top + ( item.height / 2 ), item.height ),
+			isOverRightHalf = this._isOverAxis( this.positionAbs.left +
+				this.offset.click.left, item.left + ( item.width / 2 ), item.width ),
+			verticalDirection = this._getDragVerticalDirection(),
+			horizontalDirection = this._getDragHorizontalDirection();
+
+		if ( this.floating && horizontalDirection ) {
+			return ( ( horizontalDirection === "right" && isOverRightHalf ) ||
+				( horizontalDirection === "left" && !isOverRightHalf ) );
+		} else {
+			return verticalDirection && ( ( verticalDirection === "down" && isOverBottomHalf ) ||
+				( verticalDirection === "up" && !isOverBottomHalf ) );
+		}
+
+	},
+
+	_getDragVerticalDirection: function() {
+		var delta = this.positionAbs.top - this.lastPositionAbs.top;
+		return delta !== 0 && ( delta > 0 ? "down" : "up" );
+	},
+
+	_getDragHorizontalDirection: function() {
+		var delta = this.positionAbs.left - this.lastPositionAbs.left;
+		return delta !== 0 && ( delta > 0 ? "right" : "left" );
+	},
+
+	refresh: function( event ) {
+		this._refreshItems( event );
+		this._setHandleClassName();
+		this.refreshPositions();
+		return this;
+	},
+
+	_connectWith: function() {
+		var options = this.options;
+		return options.connectWith.constructor === String ?
+			[ options.connectWith ] :
+			options.connectWith;
+	},
+
+	_getItemsAsjQuery: function( connected ) {
+
+		var i, j, cur, inst,
+			items = [],
+			queries = [],
+			connectWith = this._connectWith();
+
+		if ( connectWith && connected ) {
+			for ( i = connectWith.length - 1; i >= 0; i-- ) {
+				cur = $( connectWith[ i ], this.document[ 0 ] );
+				for ( j = cur.length - 1; j >= 0; j-- ) {
+					inst = $.data( cur[ j ], this.widgetFullName );
+					if ( inst && inst !== this && !inst.options.disabled ) {
+						queries.push( [ $.isFunction( inst.options.items ) ?
+							inst.options.items.call( inst.element ) :
+							$( inst.options.items, inst.element )
+								.not( ".ui-sortable-helper" )
+								.not( ".ui-sortable-placeholder" ), inst ] );
+					}
+				}
+			}
+		}
+
+		queries.push( [ $.isFunction( this.options.items ) ?
+			this.options.items
+				.call( this.element, null, { options: this.options, item: this.currentItem } ) :
+			$( this.options.items, this.element )
+				.not( ".ui-sortable-helper" )
+				.not( ".ui-sortable-placeholder" ), this ] );
+
+		function addItems() {
+			items.push( this );
+		}
+		for ( i = queries.length - 1; i >= 0; i-- ) {
+			queries[ i ][ 0 ].each( addItems );
+		}
+
+		return $( items );
+
+	},
+
+	_removeCurrentsFromItems: function() {
+
+		var list = this.currentItem.find( ":data(" + this.widgetName + "-item)" );
+
+		this.items = $.grep( this.items, function( item ) {
+			for ( var j = 0; j < list.length; j++ ) {
+				if ( list[ j ] === item.item[ 0 ] ) {
+					return false;
+				}
+			}
+			return true;
+		} );
+
+	},
+
+	_refreshItems: function( event ) {
+
+		this.items = [];
+		this.containers = [ this ];
+
+		var i, j, cur, inst, targetData, _queries, item, queriesLength,
+			items = this.items,
+			queries = [ [ $.isFunction( this.options.items ) ?
+				this.options.items.call( this.element[ 0 ], event, { item: this.currentItem } ) :
+				$( this.options.items, this.element ), this ] ],
+			connectWith = this._connectWith();
+
+		//Shouldn't be run the first time through due to massive slow-down
+		if ( connectWith && this.ready ) {
+			for ( i = connectWith.length - 1; i >= 0; i-- ) {
+				cur = $( connectWith[ i ], this.document[ 0 ] );
+				for ( j = cur.length - 1; j >= 0; j-- ) {
+					inst = $.data( cur[ j ], this.widgetFullName );
+					if ( inst && inst !== this && !inst.options.disabled ) {
+						queries.push( [ $.isFunction( inst.options.items ) ?
+							inst.options.items
+								.call( inst.element[ 0 ], event, { item: this.currentItem } ) :
+							$( inst.options.items, inst.element ), inst ] );
+						this.containers.push( inst );
+					}
+				}
+			}
+		}
+
+		for ( i = queries.length - 1; i >= 0; i-- ) {
+			targetData = queries[ i ][ 1 ];
+			_queries = queries[ i ][ 0 ];
+
+			for ( j = 0, queriesLength = _queries.length; j < queriesLength; j++ ) {
+				item = $( _queries[ j ] );
+
+				// Data for target checking (mouse manager)
+				item.data( this.widgetName + "-item", targetData );
+
+				items.push( {
+					item: item,
+					instance: targetData,
+					width: 0, height: 0,
+					left: 0, top: 0
+				} );
+			}
+		}
+
+	},
+
+	refreshPositions: function( fast ) {
+
+		// Determine whether items are being displayed horizontally
+		this.floating = this.items.length ?
+			this.options.axis === "x" || this._isFloating( this.items[ 0 ].item ) :
+			false;
+
+		//This has to be redone because due to the item being moved out/into the offsetParent,
+		// the offsetParent's position will change
+		if ( this.offsetParent && this.helper ) {
+			this.offset.parent = this._getParentOffset();
+		}
+
+		var i, item, t, p;
+
+		for ( i = this.items.length - 1; i >= 0; i-- ) {
+			item = this.items[ i ];
+
+			//We ignore calculating positions of all connected containers when we're not over them
+			if ( item.instance !== this.currentContainer && this.currentContainer &&
+					item.item[ 0 ] !== this.currentItem[ 0 ] ) {
+				continue;
+			}
+
+			t = this.options.toleranceElement ?
+				$( this.options.toleranceElement, item.item ) :
+				item.item;
+
+			if ( !fast ) {
+				item.width = t.outerWidth();
+				item.height = t.outerHeight();
+			}
+
+			p = t.offset();
+			item.left = p.left;
+			item.top = p.top;
+		}
+
+		if ( this.options.custom && this.options.custom.refreshContainers ) {
+			this.options.custom.refreshContainers.call( this );
+		} else {
+			for ( i = this.containers.length - 1; i >= 0; i-- ) {
+				p = this.containers[ i ].element.offset();
+				this.containers[ i ].containerCache.left = p.left;
+				this.containers[ i ].containerCache.top = p.top;
+				this.containers[ i ].containerCache.width =
+					this.containers[ i ].element.outerWidth();
+				this.containers[ i ].containerCache.height =
+					this.containers[ i ].element.outerHeight();
+			}
+		}
+
+		return this;
+	},
+
+	_createPlaceholder: function( that ) {
+		that = that || this;
+		var className,
+			o = that.options;
+
+		if ( !o.placeholder || o.placeholder.constructor === String ) {
+			className = o.placeholder;
+			o.placeholder = {
+				element: function() {
+
+					var nodeName = that.currentItem[ 0 ].nodeName.toLowerCase(),
+						element = $( "<" + nodeName + ">", that.document[ 0 ] );
+
+						that._addClass( element, "ui-sortable-placeholder",
+								className || that.currentItem[ 0 ].className )
+							._removeClass( element, "ui-sortable-helper" );
+
+					if ( nodeName === "tbody" ) {
+						that._createTrPlaceholder(
+							that.currentItem.find( "tr" ).eq( 0 ),
+							$( "<tr>", that.document[ 0 ] ).appendTo( element )
+						);
+					} else if ( nodeName === "tr" ) {
+						that._createTrPlaceholder( that.currentItem, element );
+					} else if ( nodeName === "img" ) {
+						element.attr( "src", that.currentItem.attr( "src" ) );
+					}
+
+					if ( !className ) {
+						element.css( "visibility", "hidden" );
+					}
+
+					return element;
+				},
+				update: function( container, p ) {
+
+					// 1. If a className is set as 'placeholder option, we don't force sizes -
+					// the class is responsible for that
+					// 2. The option 'forcePlaceholderSize can be enabled to force it even if a
+					// class name is specified
+					if ( className && !o.forcePlaceholderSize ) {
+						return;
+					}
+
+					//If the element doesn't have a actual height by itself (without styles coming
+					// from a stylesheet), it receives the inline height from the dragged item
+					if ( !p.height() ) {
+						p.height(
+							that.currentItem.innerHeight() -
+							parseInt( that.currentItem.css( "paddingTop" ) || 0, 10 ) -
+							parseInt( that.currentItem.css( "paddingBottom" ) || 0, 10 ) );
+					}
+					if ( !p.width() ) {
+						p.width(
+							that.currentItem.innerWidth() -
+							parseInt( that.currentItem.css( "paddingLeft" ) || 0, 10 ) -
+							parseInt( that.currentItem.css( "paddingRight" ) || 0, 10 ) );
+					}
+				}
+			};
+		}
+
+		//Create the placeholder
+		that.placeholder = $( o.placeholder.element.call( that.element, that.currentItem ) );
+
+		//Append it after the actual current item
+		that.currentItem.after( that.placeholder );
+
+		//Update the size of the placeholder (TODO: Logic to fuzzy, see line 316/317)
+		o.placeholder.update( that, that.placeholder );
+
+	},
+
+	_createTrPlaceholder: function( sourceTr, targetTr ) {
+		var that = this;
+
+		sourceTr.children().each( function() {
+			$( "<td>&#160;</td>", that.document[ 0 ] )
+				.attr( "colspan", $( this ).attr( "colspan" ) || 1 )
+				.appendTo( targetTr );
+		} );
+	},
+
+	_contactContainers: function( event ) {
+		var i, j, dist, itemWithLeastDistance, posProperty, sizeProperty, cur, nearBottom,
+			floating, axis,
+			innermostContainer = null,
+			innermostIndex = null;
+
+		// Get innermost container that intersects with item
+		for ( i = this.containers.length - 1; i >= 0; i-- ) {
+
+			// Never consider a container that's located within the item itself
+			if ( $.contains( this.currentItem[ 0 ], this.containers[ i ].element[ 0 ] ) ) {
+				continue;
+			}
+
+			if ( this._intersectsWith( this.containers[ i ].containerCache ) ) {
+
+				// If we've already found a container and it's more "inner" than this, then continue
+				if ( innermostContainer &&
+						$.contains(
+							this.containers[ i ].element[ 0 ],
+							innermostContainer.element[ 0 ] ) ) {
+					continue;
+				}
+
+				innermostContainer = this.containers[ i ];
+				innermostIndex = i;
+
+			} else {
+
+				// container doesn't intersect. trigger "out" event if necessary
+				if ( this.containers[ i ].containerCache.over ) {
+					this.containers[ i ]._trigger( "out", event, this._uiHash( this ) );
+					this.containers[ i ].containerCache.over = 0;
+				}
+			}
+
+		}
+
+		// If no intersecting containers found, return
+		if ( !innermostContainer ) {
+			return;
+		}
+
+		// Move the item into the container if it's not there already
+		if ( this.containers.length === 1 ) {
+			if ( !this.containers[ innermostIndex ].containerCache.over ) {
+				this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash( this ) );
+				this.containers[ innermostIndex ].containerCache.over = 1;
+			}
+		} else {
+
+			// When entering a new container, we will find the item with the least distance and
+			// append our item near it
+			dist = 10000;
+			itemWithLeastDistance = null;
+			floating = innermostContainer.floating || this._isFloating( this.currentItem );
+			posProperty = floating ? "left" : "top";
+			sizeProperty = floating ? "width" : "height";
+			axis = floating ? "pageX" : "pageY";
+
+			for ( j = this.items.length - 1; j >= 0; j-- ) {
+				if ( !$.contains(
+						this.containers[ innermostIndex ].element[ 0 ], this.items[ j ].item[ 0 ] )
+				) {
+					continue;
+				}
+				if ( this.items[ j ].item[ 0 ] === this.currentItem[ 0 ] ) {
+					continue;
+				}
+
+				cur = this.items[ j ].item.offset()[ posProperty ];
+				nearBottom = false;
+				if ( event[ axis ] - cur > this.items[ j ][ sizeProperty ] / 2 ) {
+					nearBottom = true;
+				}
+
+				if ( Math.abs( event[ axis ] - cur ) < dist ) {
+					dist = Math.abs( event[ axis ] - cur );
+					itemWithLeastDistance = this.items[ j ];
+					this.direction = nearBottom ? "up" : "down";
+				}
+			}
+
+			//Check if dropOnEmpty is enabled
+			if ( !itemWithLeastDistance && !this.options.dropOnEmpty ) {
+				return;
+			}
+
+			if ( this.currentContainer === this.containers[ innermostIndex ] ) {
+				if ( !this.currentContainer.containerCache.over ) {
+					this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash() );
+					this.currentContainer.containerCache.over = 1;
+				}
+				return;
+			}
+
+			itemWithLeastDistance ?
+				this._rearrange( event, itemWithLeastDistance, null, true ) :
+				this._rearrange( event, null, this.containers[ innermostIndex ].element, true );
+			this._trigger( "change", event, this._uiHash() );
+			this.containers[ innermostIndex ]._trigger( "change", event, this._uiHash( this ) );
+			this.currentContainer = this.containers[ innermostIndex ];
+
+			//Update the placeholder
+			this.options.placeholder.update( this.currentContainer, this.placeholder );
+
+			this.containers[ innermostIndex ]._trigger( "over", event, this._uiHash( this ) );
+			this.containers[ innermostIndex ].containerCache.over = 1;
+		}
+
+	},
+
+	_createHelper: function( event ) {
+
+		var o = this.options,
+			helper = $.isFunction( o.helper ) ?
+				$( o.helper.apply( this.element[ 0 ], [ event, this.currentItem ] ) ) :
+				( o.helper === "clone" ? this.currentItem.clone() : this.currentItem );
+
+		//Add the helper to the DOM if that didn't happen already
+		if ( !helper.parents( "body" ).length ) {
+			$( o.appendTo !== "parent" ?
+				o.appendTo :
+				this.currentItem[ 0 ].parentNode )[ 0 ].appendChild( helper[ 0 ] );
+		}
+
+		if ( helper[ 0 ] === this.currentItem[ 0 ] ) {
+			this._storedCSS = {
+				width: this.currentItem[ 0 ].style.width,
+				height: this.currentItem[ 0 ].style.height,
+				position: this.currentItem.css( "position" ),
+				top: this.currentItem.css( "top" ),
+				left: this.currentItem.css( "left" )
+			};
+		}
+
+		if ( !helper[ 0 ].style.width || o.forceHelperSize ) {
+			helper.width( this.currentItem.width() );
+		}
+		if ( !helper[ 0 ].style.height || o.forceHelperSize ) {
+			helper.height( this.currentItem.height() );
+		}
+
+		return helper;
+
+	},
+
+	_adjustOffsetFromHelper: function( obj ) {
+		if ( typeof obj === "string" ) {
+			obj = obj.split( " " );
+		}
+		if ( $.isArray( obj ) ) {
+			obj = { left: +obj[ 0 ], top: +obj[ 1 ] || 0 };
+		}
+		if ( "left" in obj ) {
+			this.offset.click.left = obj.left + this.margins.left;
+		}
+		if ( "right" in obj ) {
+			this.offset.click.left = this.helperProportions.width - obj.right + this.margins.left;
+		}
+		if ( "top" in obj ) {
+			this.offset.click.top = obj.top + this.margins.top;
+		}
+		if ( "bottom" in obj ) {
+			this.offset.click.top = this.helperProportions.height - obj.bottom + this.margins.top;
+		}
+	},
+
+	_getParentOffset: function() {
+
+		//Get the offsetParent and cache its position
+		this.offsetParent = this.helper.offsetParent();
+		var po = this.offsetParent.offset();
+
+		// This is a special case where we need to modify a offset calculated on start, since the
+		// following happened:
+		// 1. The position of the helper is absolute, so it's position is calculated based on the
+		// next positioned parent
+		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't
+		// the document, which means that the scroll is included in the initial calculation of the
+		// offset of the parent, and never recalculated upon drag
+		if ( this.cssPosition === "absolute" && this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+				$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) {
+			po.left += this.scrollParent.scrollLeft();
+			po.top += this.scrollParent.scrollTop();
+		}
+
+		// This needs to be actually done for all browsers, since pageX/pageY includes this
+		// information with an ugly IE fix
+		if ( this.offsetParent[ 0 ] === this.document[ 0 ].body ||
+				( this.offsetParent[ 0 ].tagName &&
+				this.offsetParent[ 0 ].tagName.toLowerCase() === "html" && $.ui.ie ) ) {
+			po = { top: 0, left: 0 };
+		}
+
+		return {
+			top: po.top + ( parseInt( this.offsetParent.css( "borderTopWidth" ), 10 ) || 0 ),
+			left: po.left + ( parseInt( this.offsetParent.css( "borderLeftWidth" ), 10 ) || 0 )
+		};
+
+	},
+
+	_getRelativeOffset: function() {
+
+		if ( this.cssPosition === "relative" ) {
+			var p = this.currentItem.position();
+			return {
+				top: p.top - ( parseInt( this.helper.css( "top" ), 10 ) || 0 ) +
+					this.scrollParent.scrollTop(),
+				left: p.left - ( parseInt( this.helper.css( "left" ), 10 ) || 0 ) +
+					this.scrollParent.scrollLeft()
+			};
+		} else {
+			return { top: 0, left: 0 };
+		}
+
+	},
+
+	_cacheMargins: function() {
+		this.margins = {
+			left: ( parseInt( this.currentItem.css( "marginLeft" ), 10 ) || 0 ),
+			top: ( parseInt( this.currentItem.css( "marginTop" ), 10 ) || 0 )
+		};
+	},
+
+	_cacheHelperProportions: function() {
+		this.helperProportions = {
+			width: this.helper.outerWidth(),
+			height: this.helper.outerHeight()
+		};
+	},
+
+	_setContainment: function() {
+
+		var ce, co, over,
+			o = this.options;
+		if ( o.containment === "parent" ) {
+			o.containment = this.helper[ 0 ].parentNode;
+		}
+		if ( o.containment === "document" || o.containment === "window" ) {
+			this.containment = [
+				0 - this.offset.relative.left - this.offset.parent.left,
+				0 - this.offset.relative.top - this.offset.parent.top,
+				o.containment === "document" ?
+					this.document.width() :
+					this.window.width() - this.helperProportions.width - this.margins.left,
+				( o.containment === "document" ?
+					( this.document.height() || document.body.parentNode.scrollHeight ) :
+					this.window.height() || this.document[ 0 ].body.parentNode.scrollHeight
+				) - this.helperProportions.height - this.margins.top
+			];
+		}
+
+		if ( !( /^(document|window|parent)$/ ).test( o.containment ) ) {
+			ce = $( o.containment )[ 0 ];
+			co = $( o.containment ).offset();
+			over = ( $( ce ).css( "overflow" ) !== "hidden" );
+
+			this.containment = [
+				co.left + ( parseInt( $( ce ).css( "borderLeftWidth" ), 10 ) || 0 ) +
+					( parseInt( $( ce ).css( "paddingLeft" ), 10 ) || 0 ) - this.margins.left,
+				co.top + ( parseInt( $( ce ).css( "borderTopWidth" ), 10 ) || 0 ) +
+					( parseInt( $( ce ).css( "paddingTop" ), 10 ) || 0 ) - this.margins.top,
+				co.left + ( over ? Math.max( ce.scrollWidth, ce.offsetWidth ) : ce.offsetWidth ) -
+					( parseInt( $( ce ).css( "borderLeftWidth" ), 10 ) || 0 ) -
+					( parseInt( $( ce ).css( "paddingRight" ), 10 ) || 0 ) -
+					this.helperProportions.width - this.margins.left,
+				co.top + ( over ? Math.max( ce.scrollHeight, ce.offsetHeight ) : ce.offsetHeight ) -
+					( parseInt( $( ce ).css( "borderTopWidth" ), 10 ) || 0 ) -
+					( parseInt( $( ce ).css( "paddingBottom" ), 10 ) || 0 ) -
+					this.helperProportions.height - this.margins.top
+			];
+		}
+
+	},
+
+	_convertPositionTo: function( d, pos ) {
+
+		if ( !pos ) {
+			pos = this.position;
+		}
+		var mod = d === "absolute" ? 1 : -1,
+			scroll = this.cssPosition === "absolute" &&
+				!( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+				$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ?
+					this.offsetParent :
+					this.scrollParent,
+			scrollIsRootNode = ( /(html|body)/i ).test( scroll[ 0 ].tagName );
+
+		return {
+			top: (
+
+				// The absolute mouse position
+				pos.top	+
+
+				// Only for relative positioned nodes: Relative offset from element to offset parent
+				this.offset.relative.top * mod +
+
+				// The offsetParent's offset without borders (offset + border)
+				this.offset.parent.top * mod -
+				( ( this.cssPosition === "fixed" ?
+					-this.scrollParent.scrollTop() :
+					( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod )
+			),
+			left: (
+
+				// The absolute mouse position
+				pos.left +
+
+				// Only for relative positioned nodes: Relative offset from element to offset parent
+				this.offset.relative.left * mod +
+
+				// The offsetParent's offset without borders (offset + border)
+				this.offset.parent.left * mod	-
+				( ( this.cssPosition === "fixed" ?
+					-this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 :
+					scroll.scrollLeft() ) * mod )
+			)
+		};
+
+	},
+
+	_generatePosition: function( event ) {
+
+		var top, left,
+			o = this.options,
+			pageX = event.pageX,
+			pageY = event.pageY,
+			scroll = this.cssPosition === "absolute" &&
+				!( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+				$.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ?
+					this.offsetParent :
+					this.scrollParent,
+				scrollIsRootNode = ( /(html|body)/i ).test( scroll[ 0 ].tagName );
+
+		// This is another very weird special case that only happens for relative elements:
+		// 1. If the css position is relative
+		// 2. and the scroll parent is the document or similar to the offset parent
+		// we have to refresh the relative offset during the scroll so there are no jumps
+		if ( this.cssPosition === "relative" && !( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
+				this.scrollParent[ 0 ] !== this.offsetParent[ 0 ] ) ) {
+			this.offset.relative = this._getRelativeOffset();
+		}
+
+		/*
+		 * - Position constraining -
+		 * Constrain the position to a mix of grid, containment.
+		 */
+
+		if ( this.originalPosition ) { //If we are not dragging yet, we won't check for options
+
+			if ( this.containment ) {
+				if ( event.pageX - this.offset.click.left < this.containment[ 0 ] ) {
+					pageX = this.containment[ 0 ] + this.offset.click.left;
+				}
+				if ( event.pageY - this.offset.click.top < this.containment[ 1 ] ) {
+					pageY = this.containment[ 1 ] + this.offset.click.top;
+				}
+				if ( event.pageX - this.offset.click.left > this.containment[ 2 ] ) {
+					pageX = this.containment[ 2 ] + this.offset.click.left;
+				}
+				if ( event.pageY - this.offset.click.top > this.containment[ 3 ] ) {
+					pageY = this.containment[ 3 ] + this.offset.click.top;
+				}
+			}
+
+			if ( o.grid ) {
+				top = this.originalPageY + Math.round( ( pageY - this.originalPageY ) /
+					o.grid[ 1 ] ) * o.grid[ 1 ];
+				pageY = this.containment ?
+					( ( top - this.offset.click.top >= this.containment[ 1 ] &&
+						top - this.offset.click.top <= this.containment[ 3 ] ) ?
+							top :
+							( ( top - this.offset.click.top >= this.containment[ 1 ] ) ?
+								top - o.grid[ 1 ] : top + o.grid[ 1 ] ) ) :
+								top;
+
+				left = this.originalPageX + Math.round( ( pageX - this.originalPageX ) /
+					o.grid[ 0 ] ) * o.grid[ 0 ];
+				pageX = this.containment ?
+					( ( left - this.offset.click.left >= this.containment[ 0 ] &&
+						left - this.offset.click.left <= this.containment[ 2 ] ) ?
+							left :
+							( ( left - this.offset.click.left >= this.containment[ 0 ] ) ?
+								left - o.grid[ 0 ] : left + o.grid[ 0 ] ) ) :
+								left;
+			}
+
+		}
+
+		return {
+			top: (
+
+				// The absolute mouse position
+				pageY -
+
+				// Click offset (relative to the element)
+				this.offset.click.top -
+
+				// Only for relative positioned nodes: Relative offset from element to offset parent
+				this.offset.relative.top -
+
+				// The offsetParent's offset without borders (offset + border)
+				this.offset.parent.top +
+				( ( this.cssPosition === "fixed" ?
+					-this.scrollParent.scrollTop() :
+					( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) )
+			),
+			left: (
+
+				// The absolute mouse position
+				pageX -
+
+				// Click offset (relative to the element)
+				this.offset.click.left -
+
+				// Only for relative positioned nodes: Relative offset from element to offset parent
+				this.offset.relative.left -
+
+				// The offsetParent's offset without borders (offset + border)
+				this.offset.parent.left +
+				( ( this.cssPosition === "fixed" ?
+					-this.scrollParent.scrollLeft() :
+					scrollIsRootNode ? 0 : scroll.scrollLeft() ) )
+			)
+		};
+
+	},
+
+	_rearrange: function( event, i, a, hardRefresh ) {
+
+		a ? a[ 0 ].appendChild( this.placeholder[ 0 ] ) :
+			i.item[ 0 ].parentNode.insertBefore( this.placeholder[ 0 ],
+				( this.direction === "down" ? i.item[ 0 ] : i.item[ 0 ].nextSibling ) );
+
+		//Various things done here to improve the performance:
+		// 1. we create a setTimeout, that calls refreshPositions
+		// 2. on the instance, we have a counter variable, that get's higher after every append
+		// 3. on the local scope, we copy the counter variable, and check in the timeout,
+		// if it's still the same
+		// 4. this lets only the last addition to the timeout stack through
+		this.counter = this.counter ? ++this.counter : 1;
+		var counter = this.counter;
+
+		this._delay( function() {
+			if ( counter === this.counter ) {
+
+				//Precompute after each DOM insertion, NOT on mousemove
+				this.refreshPositions( !hardRefresh );
+			}
+		} );
+
+	},
+
+	_clear: function( event, noPropagation ) {
+
+		this.reverting = false;
+
+		// We delay all events that have to be triggered to after the point where the placeholder
+		// has been removed and everything else normalized again
+		var i,
+			delayedTriggers = [];
+
+		// We first have to update the dom position of the actual currentItem
+		// Note: don't do it if the current item is already removed (by a user), or it gets
+		// reappended (see #4088)
+		if ( !this._noFinalSort && this.currentItem.parent().length ) {
+			this.placeholder.before( this.currentItem );
+		}
+		this._noFinalSort = null;
+
+		if ( this.helper[ 0 ] === this.currentItem[ 0 ] ) {
+			for ( i in this._storedCSS ) {
+				if ( this._storedCSS[ i ] === "auto" || this._storedCSS[ i ] === "static" ) {
+					this._storedCSS[ i ] = "";
+				}
+			}
+			this.currentItem.css( this._storedCSS );
+			this._removeClass( this.currentItem, "ui-sortable-helper" );
+		} else {
+			this.currentItem.show();
+		}
+
+		if ( this.fromOutside && !noPropagation ) {
+			delayedTriggers.push( function( event ) {
+				this._trigger( "receive", event, this._uiHash( this.fromOutside ) );
+			} );
+		}
+		if ( ( this.fromOutside ||
+				this.domPosition.prev !==
+				this.currentItem.prev().not( ".ui-sortable-helper" )[ 0 ] ||
+				this.domPosition.parent !== this.currentItem.parent()[ 0 ] ) && !noPropagation ) {
+
+			// Trigger update callback if the DOM position has changed
+			delayedTriggers.push( function( event ) {
+				this._trigger( "update", event, this._uiHash() );
+			} );
+		}
+
+		// Check if the items Container has Changed and trigger appropriate
+		// events.
+		if ( this !== this.currentContainer ) {
+			if ( !noPropagation ) {
+				delayedTriggers.push( function( event ) {
+					this._trigger( "remove", event, this._uiHash() );
+				} );
+				delayedTriggers.push( ( function( c ) {
+					return function( event ) {
+						c._trigger( "receive", event, this._uiHash( this ) );
+					};
+				} ).call( this, this.currentContainer ) );
+				delayedTriggers.push( ( function( c ) {
+					return function( event ) {
+						c._trigger( "update", event, this._uiHash( this ) );
+					};
+				} ).call( this, this.currentContainer ) );
+			}
+		}
+
+		//Post events to containers
+		function delayEvent( type, instance, container ) {
+			return function( event ) {
+				container._trigger( type, event, instance._uiHash( instance ) );
+			};
+		}
+		for ( i = this.containers.length - 1; i >= 0; i-- ) {
+			if ( !noPropagation ) {
+				delayedTriggers.push( delayEvent( "deactivate", this, this.containers[ i ] ) );
+			}
+			if ( this.containers[ i ].containerCache.over ) {
+				delayedTriggers.push( delayEvent( "out", this, this.containers[ i ] ) );
+				this.containers[ i ].containerCache.over = 0;
+			}
+		}
+
+		//Do what was originally in plugins
+		if ( this.storedCursor ) {
+			this.document.find( "body" ).css( "cursor", this.storedCursor );
+			this.storedStylesheet.remove();
+		}
+		if ( this._storedOpacity ) {
+			this.helper.css( "opacity", this._storedOpacity );
+		}
+		if ( this._storedZIndex ) {
+			this.helper.css( "zIndex", this._storedZIndex === "auto" ? "" : this._storedZIndex );
+		}
+
+		this.dragging = false;
+
+		if ( !noPropagation ) {
+			this._trigger( "beforeStop", event, this._uiHash() );
+		}
+
+		//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately,
+		// it unbinds ALL events from the original node!
+		this.placeholder[ 0 ].parentNode.removeChild( this.placeholder[ 0 ] );
+
+		if ( !this.cancelHelperRemoval ) {
+			if ( this.helper[ 0 ] !== this.currentItem[ 0 ] ) {
+				this.helper.remove();
+			}
+			this.helper = null;
+		}
+
+		if ( !noPropagation ) {
+			for ( i = 0; i < delayedTriggers.length; i++ ) {
+
+				// Trigger all delayed events
+				delayedTriggers[ i ].call( this, event );
+			}
+			this._trigger( "stop", event, this._uiHash() );
+		}
+
+		this.fromOutside = false;
+		return !this.cancelHelperRemoval;
+
+	},
+
+	_trigger: function() {
+		if ( $.Widget.prototype._trigger.apply( this, arguments ) === false ) {
+			this.cancel();
+		}
+	},
+
+	_uiHash: function( _inst ) {
+		var inst = _inst || this;
+		return {
+			helper: inst.helper,
+			placeholder: inst.placeholder || $( [] ),
+			position: inst.position,
+			originalPosition: inst.originalPosition,
+			offset: inst.positionAbs,
+			item: inst.currentItem,
+			sender: _inst ? _inst.element : null
+		};
+	}
+
+} );
+
+} ) );
+
+
+/***/ }),
+/* 245 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(246);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(165)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../css-loader/index.js!./core.css", function() {
+			var newContent = require("!!../../../css-loader/index.js!./core.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 246 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(164)(false);
+// imports
+
+
+// module
+exports.push([module.i, "/*!\n * jQuery UI CSS Framework 1.12.1\n * http://jqueryui.com\n *\n * Copyright jQuery Foundation and other contributors\n * Released under the MIT license.\n * http://jquery.org/license\n *\n * http://api.jqueryui.com/category/theming/\n */\n\n/* Layout helpers\n----------------------------------*/\n.ui-helper-hidden {\n\tdisplay: none;\n}\n.ui-helper-hidden-accessible {\n\tborder: 0;\n\tclip: rect(0 0 0 0);\n\theight: 1px;\n\tmargin: -1px;\n\toverflow: hidden;\n\tpadding: 0;\n\tposition: absolute;\n\twidth: 1px;\n}\n.ui-helper-reset {\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\toutline: 0;\n\tline-height: 1.3;\n\ttext-decoration: none;\n\tfont-size: 100%;\n\tlist-style: none;\n}\n.ui-helper-clearfix:before,\n.ui-helper-clearfix:after {\n\tcontent: \"\";\n\tdisplay: table;\n\tborder-collapse: collapse;\n}\n.ui-helper-clearfix:after {\n\tclear: both;\n}\n.ui-helper-zfix {\n\twidth: 100%;\n\theight: 100%;\n\ttop: 0;\n\tleft: 0;\n\tposition: absolute;\n\topacity: 0;\n\tfilter:Alpha(Opacity=0); /* support: IE8 */\n}\n\n.ui-front {\n\tz-index: 100;\n}\n\n\n/* Interaction Cues\n----------------------------------*/\n.ui-state-disabled {\n\tcursor: default !important;\n\tpointer-events: none;\n}\n\n\n/* Icons\n----------------------------------*/\n.ui-icon {\n\tdisplay: inline-block;\n\tvertical-align: middle;\n\tmargin-top: -.25em;\n\tposition: relative;\n\ttext-indent: -99999px;\n\toverflow: hidden;\n\tbackground-repeat: no-repeat;\n}\n\n.ui-widget-icon-block {\n\tleft: 50%;\n\tmargin-left: -8px;\n\tdisplay: block;\n}\n\n/* Misc visuals\n----------------------------------*/\n\n/* Overlays */\n.ui-widget-overlay {\n\tposition: fixed;\n\ttop: 0;\n\tleft: 0;\n\twidth: 100%;\n\theight: 100%;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 247 */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
+
+/***/ }),
+/* 248 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(249);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(165)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../css-loader/index.js!./sortable.css", function() {
+			var newContent = require("!!../../../css-loader/index.js!./sortable.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 249 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(164)(false);
+// imports
+
+
+// module
+exports.push([module.i, "/*!\n * jQuery UI Sortable 1.12.1\n * http://jqueryui.com\n *\n * Copyright jQuery Foundation and other contributors\n * Released under the MIT license.\n * http://jquery.org/license\n */\n.ui-sortable-handle {\n\t-ms-touch-action: none;\n\ttouch-action: none;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 250 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(251);
+__webpack_require__(252);
+__webpack_require__(253);
+
+/***/ }),
+/* 251 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+$.behavior = function (target, refineSelector) {
+  if (refineSelector) {
+    return $('[data-behavior~=' + target + ']:' + refineSelector);
+  } else {
+    return $('[data-behavior~=' + target + ']');
+  }
+};
+
+$.registerBehavior = function (dataBehavior, event, callback) {
+  callback();
+  $.behavior(dataBehavior).on(event, function () {
+    return callback();
+  });
+};
+
+$.fn.extend({
+  disable: function disable() {
+    this.each(function () {
+      $(this).addClass('disabled').prop('disabled', true);
+    });
+  },
+
+  enable: function enable() {
+    this.each(function () {
+      $(this).removeClass('disabled').prop('disabled', false);
+    });
+  },
+
+  exists: function exists() {
+    return this.length > 0;
+  },
+
+  isBlank: function isBlank() {
+    return this.val() === '';
+  },
+
+  uncheck: function uncheck() {
+    this.each(function () {
+      $(this).prop('checked', false).removeClass('checked');
+    }); // the checked class is for ie8
+  }
+});
+
+$.fn.exists = function () {
+  return this.length > 0;
+};
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 252 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+$.isCSSFeatureSupported = function (cssFeature) {
+  var supported = false;
+  var domPrefixes = 'Webkit Moz ms O'.split(' ');
+  var elm = document.createElement('div');
+  var cssFeatureUpperCase = null;
+
+  cssFeature = cssFeature.toLowerCase();
+
+  if (elm.style[cssFeature] !== undefined) {
+    supported = true;
+  }
+
+  if (supported === false) {
+    cssFeatureUpperCase = cssFeature.charAt(0).toUpperCase() + cssFeature.substr(1);
+
+    for (var i = 0, end = domPrefixes.length, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
+      if (elm.style[domPrefixes[i] + cssFeatureUpperCase] !== undefined) {
+        supported = true;
+        break;
+      }
+    }
+  }
+
+  return supported;
+};
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 253 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $) {
+
+// handle clicks on elements with data-behavior='clickable'.
+// these elements need a data-href attribute.
+
+// there is a hack to allow clicks on links inside 'clickable'
+// elements to be handled normally.
+
+UI.click('[data-behavior~=clickable]', function (e, el) {
+  // el is the 'clickable' element, clicked_element is the thing
+  // that actually got clicked, which could be a child
+  var clicked_element = $(e.target);
+  if (clicked_element.is('a') || clicked_element.parents('a').length !== 0) {
+    e.stopPropagation();
+    return true;
+  }
+  var href = $(el).data('href');
+  if (href) window.location.href = href;
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
+
+/***/ }),
+/* 254 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $) {
+
+// click-to-toggle links with arrows
+
+UI.click('.js-arrow-toggle', function (e, el) {
+  var target = $(el.data('target'));
+  if (target.exists()) {
+    el.toggleClass('selected');
+    target.slideToggle();
+  }
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
+
+/***/ }),
+/* 255 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(UI, $) {
+
+// ----------------------------------------
+// Extra behavior for jq-dropdowns. main
+// behavior is in jquery.dropdown.min.js
+// ----------------------------------------
+
+// auto-focus search field in dropdown when dropdown is shown
+UI.load(function () {
+  var dropdowns = $('.jq-dropdown');
+  dropdowns.on('show', function (e, dropdownData) {
+
+    var dropdown = $(e.currentTarget);
+    var link = $('[data-jq-dropdown=\'#' + dropdown.attr('id') + '\']');
+
+    var searchField = dropdown.find('.menu-search-field');
+    if (searchField.exists()) {
+      searchField.focus();
+    }
+
+    if (dropdown.hasClass('jq-dropdown-anchor-left')) {
+      var dropdownWidth = dropdown.children().first().width();
+      var linkWidth = link.outerWidth();
+      var left = parseInt(dropdown.css('left'));
+      var offset = left - dropdownWidth + linkWidth;
+
+      dropdown.css('left', offset + 'px');
+    }
+  });
+});
+
+// search within dropdown items
+UI.on('keyup', '.jq-dropdown .menu-search-field', function (e, el) {
+  var input = el;
+  var options = input.parent().siblings('li');
+  var selection = __guard__(input.val(), function (x) {
+    return x.toLowerCase();
+  });
+  if (selection) {
+    options.each(function () {
+      var text = $(this).find('.item-text').text().toLowerCase();
+      if (text.indexOf(selection) > -1) {
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    });
+  } else {
+    options.show();
+  }
+});
+
+// close the dropdown whenever you click a link
+UI.click('.jq-dropdown li a', function (e, el) {
+  el.closest('.jq-dropdown').hide();
+  return true;
+});
+
+// FIXME - check need for input.val()?, if not needed remove this function, replace line 34 with input.val().toLowerCase()
+function __guard__(value, transform) {
+  return typeof value !== 'undefined' && value !== null ? transform(value) : undefined;
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1)))
+
+/***/ }),
 /* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -72136,197 +72337,6 @@ function identifierForContextKey(key) {
     }
 }
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9wYWNrYWdlcy9Ac3RpbXVsdXMvd2VicGFjay1oZWxwZXJzL2luZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQU9BLE1BQU0saUNBQWlDLE9BQTBDO0lBQy9FLE1BQU0sQ0FBQyxPQUFPLENBQUMsSUFBSSxFQUFFO1NBQ2xCLEdBQUcsQ0FBQyxVQUFBLEdBQUcsSUFBSSxPQUFBLG9DQUFvQyxDQUFDLE9BQU8sRUFBRSxHQUFHLENBQUMsRUFBbEQsQ0FBa0QsQ0FBQztTQUM5RCxNQUFNLENBQUMsVUFBQSxLQUFLLElBQUksT0FBQSxLQUFLLEVBQUwsQ0FBSyxDQUFpQixDQUFBO0FBQzNDLENBQUM7QUFFRCw4Q0FBOEMsT0FBMEMsRUFBRSxHQUFXO0lBQ25HLElBQU0sVUFBVSxHQUFHLHVCQUF1QixDQUFDLEdBQUcsQ0FBQyxDQUFBO0lBQy9DLEVBQUUsQ0FBQyxDQUFDLFVBQVUsQ0FBQyxDQUFDLENBQUM7UUFDZixNQUFNLENBQUMsZ0NBQWdDLENBQUMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxFQUFFLFVBQVUsQ0FBQyxDQUFBO0lBQ25FLENBQUM7QUFDSCxDQUFDO0FBRUQsMENBQTBDLE1BQXdCLEVBQUUsVUFBa0I7SUFDcEYsSUFBTSxxQkFBcUIsR0FBRyxNQUFNLENBQUMsT0FBTyxDQUFBO0lBQzVDLEVBQUUsQ0FBQyxDQUFDLE9BQU8scUJBQXFCLElBQUksVUFBVSxDQUFDLENBQUMsQ0FBQztRQUMvQyxNQUFNLENBQUMsRUFBRSxVQUFVLFlBQUEsRUFBRSxxQkFBcUIsdUJBQUEsRUFBRSxDQUFBO0lBQzlDLENBQUM7QUFDSCxDQUFDO0FBRUQsTUFBTSxrQ0FBa0MsR0FBVztJQUNqRCxJQUFNLFdBQVcsR0FBRyxDQUFDLEdBQUcsQ0FBQyxLQUFLLENBQUMsd0NBQXdDLENBQUMsSUFBSSxFQUFFLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQTtJQUNsRixFQUFFLENBQUMsQ0FBQyxXQUFXLENBQUMsQ0FBQyxDQUFDO1FBQ2hCLE1BQU0sQ0FBQyxXQUFXLENBQUMsT0FBTyxDQUFDLElBQUksRUFBRSxHQUFHLENBQUMsQ0FBQyxPQUFPLENBQUMsS0FBSyxFQUFFLElBQUksQ0FBQyxDQUFBO0lBQzVELENBQUM7QUFDSCxDQUFDIn0=
-
-/***/ }),
-/* 273 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _stimulus = __webpack_require__(6);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Dropzone = __webpack_require__(255);
-Dropzone.autoDiscover = false;
-
-var _class = function (_Controller) {
-  _inherits(_class, _Controller);
-
-  function _class() {
-    _classCallCheck(this, _class);
-
-    return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
-  }
-
-  _createClass(_class, [{
-    key: 'connect',
-    value: function connect() {
-      if (Dropzone.isBrowserSupported()) {
-        // dropzone callbacks
-        var dropSuccess = function dropSuccess(responseText) {
-          $(document).trigger('inline-spinner:hide', '.dropzone');
-          return eval(responseText); // Just redirects to the current page via Turbolinks
-        };
-
-        var dropError = function dropError(file, message, dropzone) {
-          dropzone.removeFile(file);
-          alert(message);
-        };
-
-        var onProgress = function onProgress(file, progress, bytesSent) {
-          if (progress >= 100) {
-            // reset the progressbar and show the spinner while the image is processing
-            $('[data-dz-uploadprogress]').css('width', 0);
-            $('.dz-progress').css('transition', 'none');
-            $('.dz-progress').css('opacity', 0);
-            $('.dz-filename').addClass('processing');
-            $(document).trigger('inline-spinner:show', '.dropzone');
-          }
-        };
-
-        // override Dropzone's default image sizer for thumbnail previews
-        var onResize = function onResize(file) {
-          var thmbHeight = 0;
-          var thmbWidth = 0;
-          var previewHeight = parseInt($('.dropzone.dropzone-image-form').css('height'), 10);
-          var previewWidth = parseInt($('.dropzone.dropzone-image-form').css('width'), 10);
-
-          if (file.height >= file.width) {
-            if (file.height > previewHeight) {
-              thmbHeight = previewHeight;
-              thmbWidth = previewHeight * file.width / file.height;
-            } else {
-              thmbHeight = this.options.thumbnailHeight;
-              thmbWidth = parseInt(this.options.thumbnailHeight * file.width / file.height);
-            }
-          } else {
-            if (file.width > previewWidth) {
-              thmbHeight = previewWidth * file.height / file.width;
-              thmbWidth = previewWidth;
-            } else {
-              thmbHeight = parseInt(this.options.thumbnailWidth * file.height / file.width);
-              thmbWidth = this.options.thumbnailWidth;
-            }
-          }
-
-          return {
-            srcX: 0,
-            srcY: 0,
-            srcWidth: file.width,
-            srcHeight: file.height,
-            trgX: 0,
-            trgY: 0,
-            trgWidth: thmbWidth,
-            trgHeight: thmbHeight
-          };
-        };
-
-        // find image form elements that need dropzones
-        $('.dropzone-image-form').each(function () {
-          var dzForm = $(this);
-          var param = dzForm.data('dropzone-param');
-          // instantiate image uploaders
-          var dropzone = new Dropzone('.dropzone-image-form', {
-            headers: { "Accept": "text/javascript" },
-            paramName: param,
-            acceptedFiles: "image/*",
-            uploadMultiple: false,
-            clickable: true,
-            maxFiles: 1,
-            maxFilesize: 5,
-            resize: onResize
-          });
-
-          // event handlers
-          dropzone.on('success', function (file, responseText) {
-            return dropSuccess(responseText);
-          });
-
-          dropzone.on('error', function (file, message, test) {
-            dropError(file, message, this);
-          });
-
-          return dropzone.on('uploadprogress', function (file, progress, byesSent) {
-            return onProgress(file, progress, byesSent);
-          });
-        });
-
-        // find csv form elements that need dropzones
-        $('.dropzone-csv-form').each(function () {
-          var dzForm = $(this);
-          var param = dzForm.data('dropzone-param');
-          // instantiate csv uploaders
-          var dropzone = new Dropzone('.dropzone-csv-form', {
-            headers: { "Accept": "text/javascript" },
-            paramName: param,
-            acceptedFiles: "text/csv,.csv",
-            uploadMultiple: false,
-            clickable: true,
-            maxFiles: 1
-          });
-
-          // event handlers
-          dropzone.on('success', function (file, responseText) {
-            return dropSuccess(responseText);
-          });
-
-          dropzone.on('uploadprogress', function (file, progress, byesSent) {
-            return onProgress(file, progress, byesSent);
-          });
-
-          dropzone.on('error', function (file, message) {
-            dropError(file, message, this);
-          });
-        });
-
-        // find PO file form elements that need dropzones
-        $('.dropzone-po-form').each(function () {
-          var dzForm = $(this);
-          var param = dzForm.data('dropzone-param');
-          // instantiate csv uploaders
-          var dropzone = new Dropzone('.dropzone-po-form', {
-            headers: { "Accept": "text/javascript" },
-            paramName: param,
-            acceptedFiles: "text/x-gettext-translation, application/x-po, text/x-po, application/octet-stream, .po",
-            uploadMultiple: false,
-            clickable: true,
-            maxFiles: 1
-          });
-
-          // event handlers
-          dropzone.on('success', function (file, responseText) {
-            return dropSuccess(responseText);
-          });
-
-          dropzone.on('uploadprogress', function (file, progress, byesSent) {
-            return onProgress(file, progress, byesSent);
-          });
-
-          dropzone.on('error', function (file, message) {
-            dropError(file, message, this);
-          });
-        });
-      }
-    }
-  }]);
-
-  return _class;
-}(_stimulus.Controller);
-
-exports.default = _class;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ })
 /******/ ]);

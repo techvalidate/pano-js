@@ -22,8 +22,13 @@ export default class extends Controller {
       <div class='tooltip-body' />
     `
   }
+
   get content() {
-    return this.data.get('content')
+    return this._content
+  }
+
+  set content(content) {
+    this._content = content
   }
 
   get tooltip() {
@@ -32,12 +37,11 @@ export default class extends Controller {
 
   setContent() {
     if (this.element.hasAttribute('title')) {
-      this.data.set('content', this.element.getAttribute('title'))
-      this.element.removeAttribute('title') // remove title so it won't be shown by browser.
+      this.content = this.element.getAttribute('title')
     }
 
     if (this.targets.has('template')) {
-      this.data.set('content', $(this.templateTarget).html())
+      this.content =  $(this.templateTarget).html()
     }
   }
 
@@ -50,17 +54,26 @@ export default class extends Controller {
     const y = $element.offset().top
     const centerX = x + ($element.width() / 2)
     const maxWidth = 250
+
     const style = {
       position: 'absolute',
       'max-width': `${maxWidth}px`,
       'z-index': 1002,
       'pointer-events': 'none'
     }
+
+    if (this.hoverTarget.classList.contains('tooltip-white')) {
+      this.tooltip.addClass('tooltip-white')
+    } else {
+      this.tooltip.removeClass('tooltip-white')
+    }
+
     // Replace body content with title text or template content
     if (this.targets.has('template')) {
       this.tooltip
-        .html(this.content)
         .css(style)
+        .find('.tooltip-body')
+        .html(this.content)
     } else {
       this.tooltip
         .css(style)

@@ -1,3 +1,5 @@
+import Turbolinks from 'turbolinks'
+
 // =====================================================
 // UI
 //
@@ -22,6 +24,7 @@
 // supported, we wire your callback up to $(document).ready().
 
 export function load(callback) {
+
   if ((typeof Turbolinks !== 'undefined' && Turbolinks !== null) && Turbolinks.supported) {
     document.addEventListener('turbolinks:load', () => {
       callback()

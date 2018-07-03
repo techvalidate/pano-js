@@ -1,6 +1,7 @@
 import 'jquery-minicolors'
+import { load } from '../utils/ui'
 
-UI.load(() =>
+load(() =>
   // =====================================================
   // color pickers
   // =====================================================

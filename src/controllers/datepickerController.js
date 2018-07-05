@@ -5,28 +5,59 @@ const moment = rome.moment
 
 // TODO - Fork Rome to fix option issues.
 export default class DatePickerController extends Controller {
-  static targets = ['startCalendar', 'finishCalendar', 'start', 'finish', 'form']
+  static targets = ['startCalendar', 'finishCalendar', 'start', 'finish', 'form', 'submit']
 
   get startCalendar() {
     return this.startCalendarTarget
   }
+
   get finishCalendar() {
     return this.finishCalendarTarget
   }
+
   get startDate() {
     return moment(new Date(this.startTarget.value))
   }
+
   set startDate(date) {
     if (date.isValid()) {
       this.startTarget.value = date.format('MMM D, YYYY')
+      this.startTarget.parentNode.classList.remove('form-group-error')
+      this.submitTarget.classList.remove('disabled')
     }
   }
+
   get finishDate() {
     return moment(new Date(this.finishTarget.value))
   }
+
   set finishDate(date) {
     if (date.isValid()) {
       this.finishTarget.value = date.format('MMM D, YYYY')
+      this.finishTarget.parentNode.classList.remove('form-group-error')
+      this.submitTarget.classList.remove('disabled')
+    }
+  }
+
+  setStartCal(e) {
+    const date = moment(new Date(e.target.value), true)
+    const cal = rome(this.startCalendar)
+    if (date.isValid() && date.isBefore(this.finishDate)) {
+      cal.setValue(date)
+    } else {
+      this.startTarget.parentNode.classList.add('form-group-error')
+      this.submitTarget.classList.add('disabled')
+    }
+  }
+
+  setFinishCal(e) {
+    const date = moment(new Date(e.target.value), true)
+    const cal = rome(this.finishCalendar)
+    if (date.isValid() && date.isBefore(this.finishDate)) {
+      cal.setValue(date)
+    } else {
+      this.finishTarget.parentNode.classList.add('form-group-error')
+      this.submitTarget.classList.add('disabled')
     }
   }
 

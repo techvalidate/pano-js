@@ -51358,6 +51358,30 @@ var DatePickerController = function (_Controller) {
   }
 
   _createClass(DatePickerController, [{
+    key: 'setStartCal',
+    value: function setStartCal(e) {
+      var date = moment(new Date(e.target.value), true);
+      var cal = (0, _rome2.default)(this.startCalendar);
+      if (date.isValid() && date.isBefore(this.finishDate)) {
+        cal.setValue(date);
+      } else {
+        this.startTarget.parentNode.classList.add('form-group-error');
+        this.submitTarget.classList.add('disabled');
+      }
+    }
+  }, {
+    key: 'setFinishCal',
+    value: function setFinishCal(e) {
+      var date = moment(new Date(e.target.value), true);
+      var cal = (0, _rome2.default)(this.finishCalendar);
+      if (date.isValid() && date.isBefore(this.finishDate)) {
+        cal.setValue(date);
+      } else {
+        this.finishTarget.parentNode.classList.add('form-group-error');
+        this.submitTarget.classList.add('disabled');
+      }
+    }
+  }, {
     key: 'setSelectionRange',
     value: function setSelectionRange() {
       var _this2 = this;
@@ -51425,6 +51449,8 @@ var DatePickerController = function (_Controller) {
     set: function set(date) {
       if (date.isValid()) {
         this.startTarget.value = date.format('MMM D, YYYY');
+        this.startTarget.parentNode.classList.remove('form-group-error');
+        this.submitTarget.classList.remove('disabled');
       }
     }
   }, {
@@ -51435,6 +51461,8 @@ var DatePickerController = function (_Controller) {
     set: function set(date) {
       if (date.isValid()) {
         this.finishTarget.value = date.format('MMM D, YYYY');
+        this.finishTarget.parentNode.classList.remove('form-group-error');
+        this.submitTarget.classList.remove('disabled');
       }
     }
   }]);
@@ -51442,7 +51470,7 @@ var DatePickerController = function (_Controller) {
   return DatePickerController;
 }(_stimulus.Controller);
 
-DatePickerController.targets = ['startCalendar', 'finishCalendar', 'start', 'finish', 'form'];
+DatePickerController.targets = ['startCalendar', 'finishCalendar', 'start', 'finish', 'form', 'submit'];
 exports.default = DatePickerController;
 
 

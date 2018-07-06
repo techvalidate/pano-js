@@ -73,6 +73,9 @@ export default class DatePickerController extends Controller {
     const controller = this
     const { startCalendar, finishCalendar} = this
 
+    this.startDate = this.startDate
+    this.finishDate = this.finishDate
+
     rome(this.startCalendar, {
       dateValidator: rome.val.beforeEq(this.finishCalendar),
       time: false,

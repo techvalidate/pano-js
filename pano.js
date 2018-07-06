@@ -56045,6 +56045,9 @@ var DatePickerController = function (_Controller) {
           finishCalendar = this.finishCalendar;
 
 
+      this.startDate = this.startDate;
+      this.finishDate = this.finishDate;
+
       (0, _rome2.default)(this.startCalendar, {
         dateValidator: _rome2.default.val.beforeEq(this.finishCalendar),
         time: false,

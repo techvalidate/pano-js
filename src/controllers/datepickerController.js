@@ -3,7 +3,6 @@ import rome from 'rome'
 
 const moment = rome.moment
 
-// TODO - Fork Rome to fix option issues.
 export default class DatePickerController extends Controller {
   static targets = ['startCalendar', 'finishCalendar', 'start', 'finish', 'form', 'submit']
 
@@ -61,18 +60,18 @@ export default class DatePickerController extends Controller {
     }
   }
 
-  setSelectionRange() {
-    const calendars = [this.startCalendar, this.finishCalendar]
+  setSelectionRange(calendar) {
+    const cal = rome.find(calendar)
+    const { startDate, finishDate } = this
+    const startCalId = rome.find(this.startCalendar).id
+    const finishCalId = rome.find(this.finishCalendar).id
 
-    calendars.forEach((calendar, index) => {
-      findRangeAndToggle(calendar, this.startDate, this.finishDate, index)
-    })
+    findRangeAndToggle(cal, startDate, finishDate, startCalId, finishCalId)
   }
 
   setCalendars() {
     const controller = this
-    this.startDate = this.startDate
-    this.finishDate = this.finishDate
+    const { startCalendar, finishCalendar} = this
 
     rome(this.startCalendar, {
       dateValidator: rome.val.beforeEq(this.finishCalendar),
@@ -80,7 +79,15 @@ export default class DatePickerController extends Controller {
       initialValue: this.startDate
     }).on('data', (data) => {
       controller.startDate = moment(data)
-      controller.setSelectionRange()
+      controller.setSelectionRange(startCalendar)
+    })
+    .on('afterRefresh', () => {
+      // Rome's inline calendars refresh the other bound calendar after
+      // new data, so we need to set the selection range again.
+      controller.setSelectionRange(startCalendar)
+    })
+    .on('ready', () => {
+      controller.setSelectionRange(startCalendar)
     })
 
     rome(this.finishCalendar, {
@@ -89,8 +96,13 @@ export default class DatePickerController extends Controller {
       initialValue: this.finishDate
     }).on('data', (data) => {
       controller.finishDate = moment(data)
-      this.setCalendars()
-      controller.setSelectionRange()
+      controller.setSelectionRange(finishCalendar)
+    })
+    .on('afterRefresh', () => {
+      controller.setSelectionRange(finishCalendar)
+    })
+    .on('ready', () => {
+      controller.setSelectionRange(finishCalendar)
     })
   }
 
@@ -100,20 +112,57 @@ export default class DatePickerController extends Controller {
 
   connect() {
     this.setCalendars()
-    this.setSelectionRange()
   }
 }
 
-function findRangeAndToggle(calendar, startDate, finishDate, index) {
-  calendar.querySelectorAll('.rd-day-body:not(.rd-day-prev-month):not(.rd-day-disabled)').forEach((column, i) => {
-    const columnIndex = i + 1
-    column.classList.remove('in-range')
-    const cal = rome.find(calendar)
 
-    if (index === 0) {
-      if (columnIndex > startDate.date()) column.classList.add('in-range')
-    } else {
-      if (columnIndex < finishDate.date()) column.classList.add('in-range')
+function findRangeAndToggle(calendar, startDate, finishDate, startCalId, finishCalId) {
+  // Disable Next and Prev Month buttons if out of range
+  toggleForwardBackBtns(calendar, startDate, finishDate, startCalId, finishCalId)
+
+  calendar.associated.querySelectorAll('.rd-day-body:not(.rd-day-prev-month)').forEach((column, i) => {
+    const dayNumber = i + 1
+
+    column.classList.remove('in-range')
+
+    // If start and finish calendar are same month limit to the days in range
+    if (startDate.month() === finishDate.month()) {
+      if (dayNumber >= startDate.date() && dayNumber <= finishDate.date()) {
+        column.classList.add('in-range')
+      }
+      return
+    }
+
+    // In case of month-spanning calendars: highlight days greater than start
+    // date for start calendar, and opposite for finish calendar
+
+    if (calendar.id === startCalId && dayNumber > startDate.date()) {
+      column.classList.add('in-range')
+    }
+
+    if (calendar.id === finishCalId && dayNumber < finishDate.date()) {
+      column.classList.add('in-range')
     }
   })
+}
+
+function toggleForwardBackBtns(calendar, startDate, finishDate, startCalId, finishCalId) {
+  const backBtn = calendar.associated.querySelector('.rd-back')
+  const nextBtn = calendar.associated.querySelector('.rd-next')
+
+  if (calendar.id === startCalId) {
+    if (startDate.month() >= finishDate.month()) {
+      nextBtn.classList.add('disabled')
+    } else {
+      nextBtn.classList.remove('disabled')
+    }
+  }
+
+  if (calendar.id === finishCalId) {
+    if (finishDate.month() <= startDate.month()) {
+      backBtn.classList.add('disabled')
+    } else {
+      backBtn.classList.remove('disabled')
+    }
+  }
 }

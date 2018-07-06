@@ -33,7 +33,7 @@
     "jstz": "^1.0.10",
     "lodash": "^4.17.5",
     "moment": "^2.22.1",
-    "rome": "2.1.20",
+    "rome": "https://github.com/techvalidate/rome#master",
     "sticky-kit": "^1.1.3",
     "stimulus": "^1.0.1",
     "switchery": "^0.0.2",

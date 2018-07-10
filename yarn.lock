@@ -1805,6 +1805,12 @@ delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
 
+delegated-events@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/delegated-events/-/delegated-events-1.0.7.tgz#27dd43a720bd8b5d5a34b026d2a3b487972366c8"
+  dependencies:
+    selector-set "^1.1.2"
+
 delegates@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
@@ -4441,6 +4447,10 @@ seleccion@2.0.0:
 select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
+
+selector-set@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/selector-set/-/selector-set-1.1.2.tgz#17a09a8723e7610f57997e531f15a028655f742f"
 
 selfsigned@^1.9.1:
   version "1.10.2"

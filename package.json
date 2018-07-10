@@ -23,6 +23,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "contra": "^1.9.4",
+    "delegated-events": "^1.0.7",
     "dropzone": "^5.4.0",
     "fullpage.js": "^2.9.6",
     "jquery-dropdown": "https://github.com/soundasleep/jquery-dropdown#master",

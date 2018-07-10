@@ -1,3 +1,4 @@
+import { fire } from 'delegated-events'
 // =====================================================
 // links that submit containing form on click
 // =====================================================
@@ -13,9 +14,10 @@ UI.click('form .js-submit-on-click', function(e, el) {
 UI.click('form .js-submit-on-click-with-propagation', function(e, el) {
   let f;
   if (f = el.closest('form')) {
+    fire(f[0], 'submit')
     f.submit();
   }
-  return true;
+  return true
 });
 
 // =====================================================

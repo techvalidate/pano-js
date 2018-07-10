@@ -14,6 +14,7 @@ UI.click('form .js-submit-on-click', function(e, el) {
 UI.click('form .js-submit-on-click-with-propagation', function(e, el) {
   let f;
   if (f = el.closest('form')) {
+    // Fire native submit on form element for RailsUjs to capture
     fire(f[0], 'submit')
     f.submit();
   }

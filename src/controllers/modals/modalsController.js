@@ -4,7 +4,7 @@ import Velocity from 'velocity-animate'
 export default class extends Controller {
   open(e) {
     const $target = $(e.currentTarget)
-    const modalUri = $target.attr('href')
+    const modalUri = $target.attr('href') || $target.data('modal')
 
     e.preventDefault();
 

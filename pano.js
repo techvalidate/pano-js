@@ -27750,7 +27750,7 @@ var _class = function (_Controller) {
     key: 'connect',
     value: function connect() {
       $(this.element).find('form').on('ajax:success', _.bind(this.close, this));
-      if (this.data.get('autoload')) {
+      if (this.data.get('autoload') == 'true') {
         this.open();
       }
     }

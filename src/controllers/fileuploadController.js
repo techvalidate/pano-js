@@ -6,8 +6,10 @@ export default class extends Controller {
   connect() {
     if (Dropzone.isBrowserSupported()) {
       // dropzone callbacks
+      const form = this.element
       const dropSuccess = function(responseText) {
         $(document).trigger('inline-spinner:hide', '.dropzone');
+        form.dispatchEvent(new CustomEvent('upload:success'))
         return eval(responseText); // Just redirects to the current page via Turbolinks
       };
 

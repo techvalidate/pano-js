@@ -27750,7 +27750,7 @@ var _class = function (_Controller) {
     key: 'connect',
     value: function connect() {
       $(this.element).find('form').on('ajax:success', _.bind(this.close, this));
-      if (this.data.get('autoload') == 'true') {
+      if (this.data.get('autoload')) {
         this.open();
       }
     }
@@ -58669,8 +58669,10 @@ var _class = function (_Controller) {
     value: function connect() {
       if (Dropzone.isBrowserSupported()) {
         // dropzone callbacks
+        var form = this.element;
         var dropSuccess = function dropSuccess(responseText) {
           $(document).trigger('inline-spinner:hide', '.dropzone');
+          form.dispatchEvent(new CustomEvent('upload:success'));
           return eval(responseText); // Just redirects to the current page via Turbolinks
         };
 

@@ -17,7 +17,7 @@ export default class extends Controller {
 
   connect() {
     $(this.element).find('form').on('ajax:success', _.bind(this.close, this))
-    if (this.data.get('autoload') == 'true') {
+    if (this.data.get('autoload')) {
       this.open()
     }
   }

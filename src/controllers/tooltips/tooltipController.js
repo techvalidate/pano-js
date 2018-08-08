@@ -38,6 +38,7 @@ export default class extends Controller {
   setContent() {
     if (this.element.hasAttribute('title')) {
       this.content = this.element.getAttribute('title')
+      this.element.removeAttribute('title')
     }
 
     if (this.targets.has('template')) {

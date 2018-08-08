@@ -70617,17 +70617,15 @@ $.bindFormValidation = function (html) {
 
       if (!f.hasClass('js-novalidate')) {
         return f.validate({
-          invalidHandler: function invalidHandler(e, validator) {
-            var errors = validator.numberOfInvalids();
-            if (errors) {
-              validator.currentElements.each(function (i, el) {
-                return $(el).parent().addClass('form-group-error');
-              });
-            }
+          errorClass: 'form-group-error',
+          highlight: function highlight(el, errorClass) {
+            $(el).parent().addClass(errorClass);
+            $(el).parent().siblings('.form-helper-text').hide();
           },
           unhighlight: function unhighlight(el, errorClass, validClass) {
             $(el).removeClass(errorClass).addClass(validClass);
-            $(el).parent().removeClass('form-group-error');
+            $(el).parent().removeClass(errorClass);
+            $(el).parent().siblings('.form-helper-text').show();
           }
         });
       }

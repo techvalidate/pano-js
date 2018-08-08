@@ -42,22 +42,19 @@ $.bindFormValidation = html =>
 
     if (!f.hasClass('js-novalidate')) {
       return f.validate({
-        invalidHandler: (e, validator) => {
-          const errors = validator.numberOfInvalids();
-          if (errors) {
-            validator.currentElements.each((i, el) => $(el).parent().addClass('form-group-error'))
-          }
+        errorClass: 'form-group-error',
+        highlight: (el, errorClass) => {
+          $(el).parent().addClass(errorClass)
+          $(el).parent().siblings('.form-helper-text').hide()
         },
         unhighlight: function(el, errorClass, validClass) {
           $(el).removeClass(errorClass).addClass(validClass)
-          $(el).parent().removeClass('form-group-error')
+          $(el).parent().removeClass(errorClass)
+          $(el).parent().siblings('.form-helper-text').show()
         }
       });
     }
   })
-;
-
-
 
 // =====================================================
 // for custom password validation message display

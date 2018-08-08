@@ -28280,6 +28280,7 @@ var _class = function (_Controller) {
     value: function setContent() {
       if (this.element.hasAttribute('title')) {
         this.content = this.element.getAttribute('title');
+        this.element.removeAttribute('title');
       }
 
       if (this.targets.has('template')) {

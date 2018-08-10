@@ -20,7 +20,7 @@ export default class DatePickerController extends Controller {
 
   set startDate(date) {
     if (date.isValid()) {
-      this.startTarget.value = date.format('MMM D, YYYY')
+      this.startTarget.value = date.toString()
       this.startTarget.parentNode.classList.remove('form-group-error')
       this.submitTarget.classList.remove('disabled')
     }
@@ -32,7 +32,7 @@ export default class DatePickerController extends Controller {
 
   set finishDate(date) {
     if (date.isValid()) {
-      this.finishTarget.value = date.format('MMM D, YYYY')
+      this.finishTarget.value = date.toString()
       this.finishTarget.parentNode.classList.remove('form-group-error')
       this.submitTarget.classList.remove('disabled')
     }
@@ -52,7 +52,7 @@ export default class DatePickerController extends Controller {
   setFinishCal(e) {
     const date = moment(new Date(e.target.value), true)
     const cal = rome(this.finishCalendar)
-    if (date.isValid() && date.isBefore(this.finishDate)) {
+    if (date.isValid() && date.isAfter(this.startDate)) {
       cal.setValue(date)
     } else {
       this.finishTarget.parentNode.classList.add('form-group-error')
@@ -114,7 +114,11 @@ export default class DatePickerController extends Controller {
   }
 
   connect() {
-    this.setCalendars()
+    // handle for mysteriously connecting before dom loads when custom element is present
+    setTimeout(() => {
+      this.setCalendars()
+    }, 10)
+
   }
 }
 

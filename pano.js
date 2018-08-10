@@ -86474,6 +86474,7 @@ var _class = function (_withComponent) {
     _this.addEventListener('focus', bind(_this.onEdit, _this));
     _this.addEventListener('blur', bind(_this.onBlur, _this));
     _this.addEventListener('change', bind(_this.updateValue, _this));
+    _this.addEventListener('update', bind(_this.setState, _this));
     return _this;
   }
 
@@ -86523,10 +86524,19 @@ var _class = function (_withComponent) {
   }, {
     key: 'updateValue',
     value: function updateValue(e) {
+
       this.value = (0, _moment2.default)(this.value).set({ month: this.month - 1, date: this.day, year: this.year }).toString();
       if (this.nextSibling.getAttribute('type') === 'hidden') {
         this.nextSibling.value = this.value;
       }
+    }
+  }, {
+    key: 'setState',
+    value: function setState() {
+      console.log('setstate');
+      this.month = (0, _moment2.default)(this.value).format('MM');
+      this.day = (0, _moment2.default)(this.value).format('DD');
+      this.year = (0, _moment2.default)(this.value).year();
     }
   }, {
     key: 'focus',
@@ -86548,9 +86558,16 @@ var _class = function (_withComponent) {
   }, {
     key: 'connected',
     value: function connected() {
-      this.month = (0, _moment2.default)(this.value).format('MM');
-      this.day = (0, _moment2.default)(this.value).format('DD');
-      this.year = (0, _moment2.default)(this.value).year();
+      this.setState();
+    }
+  }, {
+    key: 'shouldUpdate',
+    value: function shouldUpdate(prevProps) {
+      if (prevProps.value !== this.value) {
+        (0, _skatejs.emit)(this, 'update');
+      }
+
+      return true;
     }
   }, {
     key: 'render',

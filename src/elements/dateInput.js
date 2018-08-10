@@ -29,6 +29,7 @@ export default class extends withComponent(withPreact()) {
     this.addEventListener('focus', bind(this.onEdit, this))
     this.addEventListener('blur', bind(this.onBlur, this))
     this.addEventListener('change', bind(this.updateValue, this))
+    this.addEventListener('update', bind(this.setState, this))
   }
 
  formattedDate(value, format) {
@@ -119,13 +120,21 @@ export default class extends withComponent(withPreact()) {
        break
     }
   }
+
   updateValue(e) {
+
     this.value = moment(this.value).set({month: this.month - 1, date: this.day, year: this.year}).toString()
     if (this.nextSibling.getAttribute('type') === 'hidden') {
       this.nextSibling.value = this.value
     }
   }
 
+  setState() {
+    console.log('setstate')
+    this.month = moment(this.value).format('MM')
+    this.day = moment(this.value).format('DD')
+    this.year = moment(this.value).year()
+  }
   focus(eventOrNode) {
     let target
 
@@ -141,11 +150,16 @@ export default class extends withComponent(withPreact()) {
   }
 
   connected() {
-    this.month = moment(this.value).format('MM')
-    this.day = moment(this.value).format('DD')
-    this.year = moment(this.value).year()
+    this.setState()
   }
 
+  shouldUpdate(prevProps) {
+    if (prevProps.value !== this.value) {
+      emit(this, 'update')
+    }
+
+    return true
+  }
   render({ month, day, year, editing, value, format }) {
     const formattedDate= this.formattedDate(value, format)
     return (

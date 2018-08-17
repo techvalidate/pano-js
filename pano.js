@@ -56041,13 +56041,15 @@ var DatePickerController = function (_Controller) {
   }, {
     key: 'setCalendars',
     value: function setCalendars() {
+      this.startDate = this.startDate;
+      this.finishDate = this.finishDate;
+
       var controller = this;
       var startCalendar = this.startCalendar,
           finishCalendar = this.finishCalendar;
 
-
-      this.startDate = this.startDate;
-      this.finishDate = this.finishDate;
+      var startDate = this.startDate;
+      var finishDate = this.finishDate;
 
       (0, _rome2.default)(this.startCalendar, {
         dateValidator: _rome2.default.val.beforeEq(this.finishCalendar),
@@ -56066,7 +56068,10 @@ var DatePickerController = function (_Controller) {
 
       (0, _rome2.default)(this.finishCalendar, {
         dateValidator: function dateValidator(date) {
-          return _rome2.default.val.afterEq(new Date())(date) && _rome2.default.val.beforeEq(this.startCalendar)(date);
+          var beforeOrOnToday = _rome2.default.val.afterEq(new Date())(date);
+          var beforeLaunchOn = _rome2.default.val.beforeEq(this.startCalendar)(date);
+          var lessThan3DaysAfterLaunch = date >= moment(startDate).add(3, 'days');
+          return beforeOrOnToday && beforeLaunchOn && lessThan3DaysAfterLaunch;
         },
         time: false,
         initialValue: this.finishDate

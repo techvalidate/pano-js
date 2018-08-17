@@ -70,11 +70,13 @@ export default class DatePickerController extends Controller {
   }
 
   setCalendars() {
-    const controller = this
-    const { startCalendar, finishCalendar} = this
-
     this.startDate = this.startDate
     this.finishDate = this.finishDate
+
+    const controller = this
+    const { startCalendar, finishCalendar} = this
+    const startDate = this.startDate
+    const finishDate = this.finishDate
 
     rome(this.startCalendar, {
       dateValidator: rome.val.beforeEq(this.finishCalendar),
@@ -95,7 +97,10 @@ export default class DatePickerController extends Controller {
 
     rome(this.finishCalendar, {
       dateValidator: function(date) {
-        return rome.val.afterEq(new Date())(date) && rome.val.beforeEq(this.startCalendar)(date)
+        const beforeOrOnToday = rome.val.afterEq(new Date())(date)
+        const beforeLaunchOn = rome.val.beforeEq(this.startCalendar)(date)
+        const lessThan3DaysAfterLaunch = date >= moment(startDate).add(3, 'days')
+        return  beforeOrOnToday && beforeLaunchOn && lessThan3DaysAfterLaunch
       },
       time: false,
       initialValue: this.finishDate

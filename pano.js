@@ -56065,7 +56065,9 @@ var DatePickerController = function (_Controller) {
       });
 
       (0, _rome2.default)(this.finishCalendar, {
-        dateValidator: _rome2.default.val.afterEq(this.startCalendar),
+        dateValidator: function dateValidator(date) {
+          return _rome2.default.val.afterEq(new Date())(date) && _rome2.default.val.beforeEq(this.startCalendar)(date);
+        },
         time: false,
         initialValue: this.finishDate
       }).on('data', function (data) {

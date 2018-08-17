@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/Cellar/node/9.5.0/bin/node /usr/local/bin/yarn remove babel-plugin-transform-react-jsx --dev
+  /usr/local/Cellar/node/9.5.0/bin/node /usr/local/bin/yarn add .
 
 PATH: 
-  /Users/mattl/.rvm/gems/ruby-2.3.1/bin:/Users/mattl/.rvm/gems/ruby-2.3.1@global/bin:/Users/mattl/.rvm/rubies/ruby-2.3.1/bin:/Users/mattl/Downloads/google-cloud-sdk/bin:/Users/mattl/cmus/bin:/Users/mattl/.yarn/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/mattl/.rvm/gems/ruby-2.3.1/bin:/Users/mattl/.rvm/gems/ruby-2.3.1@global/bin:/Users/mattl/.rvm/rubies/ruby-2.3.1/bin:/Users/mattl/Downloads/google-cloud-sdk/bin:/Users/mattl/cmus/bin:/Users/mattl/.yarn/bin:/Users/mattl/.rvm/bin:/usr/local/bin/elasticsearch:/usr/bin/java:/usr/local/opt/mysql/bin:/Users/mattl/.fzf/bin:/Users/mattl/.rvm/bin:/usr/local/bin/elasticsearch:/usr/bin/java:/usr/local/opt/mysql/bin
+  /Users/mattl/.rvm/gems/ruby-2.3.1/bin:/Users/mattl/.rvm/gems/ruby-2.3.1@global/bin:/Users/mattl/.rvm/rubies/ruby-2.3.1/bin:/Users/mattl/Downloads/google-cloud-sdk/bin:/Users/mattl/cmus/bin:/Users/mattl/.yarn/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/mattl/Downloads/google-cloud-sdk/bin:/Users/mattl/cmus/bin:/Users/mattl/.yarn/bin:/usr/local/bin/elasticsearch:/usr/bin/java:/usr/local/opt/mysql/bin:/Users/mattl/.fzf/bin:/usr/local/bin/elasticsearch:/usr/bin/java:/usr/local/opt/mysql/bin:/Users/mattl/.rvm/bin
 
 Yarn version: 
   1.5.1
@@ -33,6 +33,7 @@ npm manifest:
       "babel-core": "^6.26.0",
       "babel-env": "^2.4.1",
       "babel-loader": "^7.1.4",
+      "babel-plugin-syntax-jsx": "^6.18.0",
       "babel-plugin-transform-class-properties": "^6.24.1",
       "babel-plugin-transform-decorators": "^6.24.1",
       "babel-plugin-transform-react-constant-elements": "^6.23.0",
@@ -66,6 +67,7 @@ npm manifest:
       "jquery": "^3.2.1"
     },
     "devDependencies": {
+      "babel-plugin-transform-react-jsx": "^6.24.1",
       "expose-loader": "^0.7.5",
       "webpack": "3.11.0",
       "webpack-dev-server": "2.11.1"
@@ -619,7 +621,7 @@ Lockfile:
     version "6.13.0"
     resolved "https://registry.yarnpkg.com/babel-plugin-syntax-function-bind/-/babel-plugin-syntax-function-bind-6.13.0.tgz#48c495f177bdf31a981e732f55adc0bdd2601f46"
   
-  babel-plugin-syntax-jsx@^6.3.13, babel-plugin-syntax-jsx@^6.8.0:
+  babel-plugin-syntax-jsx@^6.18.0, babel-plugin-syntax-jsx@^6.3.13, babel-plugin-syntax-jsx@^6.8.0:
     version "6.18.0"
     resolved "https://registry.yarnpkg.com/babel-plugin-syntax-jsx/-/babel-plugin-syntax-jsx-6.18.0.tgz#0af32a9a6e13ca7a3fd5069e62d7b0f58d0d8946"
   
@@ -5522,10 +5524,14 @@ Lockfile:
       window-size "0.1.0"
 
 Trace: 
-  Error: This module isn't specified in a manifest.
+  Error: Received malformed response from registry for undefined. The registry may be down.
       at new MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
-      at Object.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:60445:15)
+      at Function.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:51419:15)
       at Generator.next (<anonymous>)
       at step (/usr/local/lib/node_modules/yarn/lib/cli.js:98:30)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:109:13
-      at <anonymous>
+      at /usr/local/lib/node_modules/yarn/lib/cli.js:116:14
+      at new Promise (<anonymous>)
+      at new F (/usr/local/lib/node_modules/yarn/lib/cli.js:23451:28)
+      at Function.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:95:12)
+      at Function.findVersionInRegistryResponse (/usr/local/lib/node_modules/yarn/lib/cli.js:51461:19)
+      at NpmResolver.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:51479:28)

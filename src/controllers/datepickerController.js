@@ -94,7 +94,9 @@ export default class DatePickerController extends Controller {
     })
 
     rome(this.finishCalendar, {
-      dateValidator: rome.val.afterEq(this.startCalendar),
+      dateValidator: function(date) {
+        return rome.val.afterEq(new Date())(date) && rome.val.beforeEq(this.startCalendar)(date)
+      },
       time: false,
       initialValue: this.finishDate
     }).on('data', (data) => {

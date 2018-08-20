@@ -56052,11 +56052,18 @@ var DatePickerController = function (_Controller) {
 
 
       (0, _rome2.default)(this.startCalendar, {
-        dateValidator: _rome2.default.val.beforeEq(this.finishCalendar),
+        dateValidator: function (controller) {
+          return function (date) {
+            var beforeCloseOn = _rome2.default.val.beforeEq(controller.finishDate)(date);
+            var atLeast2DaysAfterLaunch = date <= moment(controller.finishDate).subtract(2, 'days');
+            return beforeCloseOn && atLeast2DaysAfterLaunch;
+          };
+        }(controller),
         time: false,
         initialValue: this.startDate
       }).on('data', function (data) {
         controller.startDate = moment(data);
+        (0, _rome2.default)(finishCalendar).refresh();
         controller.setSelectionRange(startCalendar);
       }).on('afterRefresh', function () {
         // Rome's inline calendars refresh the other bound calendar after
@@ -56070,17 +56077,17 @@ var DatePickerController = function (_Controller) {
         dateValidator: function (controller) {
           return function (date) {
             var beforeOrOnToday = _rome2.default.val.afterEq(new Date())(date);
-            var beforeLaunchOn = _rome2.default.val.afterEq(controller.startDate)(date);
-            var lessThan3DaysAfterLaunch = date >= moment(controller.startDate).add(3, 'days');
-            return beforeOrOnToday && beforeLaunchOn && lessThan3DaysAfterLaunch;
+            var afterLaunchOn = _rome2.default.val.afterEq(controller.startDate)(date);
+            var lessThan3DaysAfterLaunch = date >= moment(controller.startDate).add(2, 'days');
+            return beforeOrOnToday && afterLaunchOn && lessThan3DaysAfterLaunch;
           };
         }(controller),
         time: false,
         initialValue: this.finishDate
       }).on('data', function (data) {
-        controller.startDate = controller.startDate;
         controller.finishDate = moment(data);
         controller.setSelectionRange(finishCalendar);
+        (0, _rome2.default)(controller.startCalendar).refresh();
       }).on('afterRefresh', function () {
         controller.setSelectionRange(finishCalendar);
       }).on('ready', function () {

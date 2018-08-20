@@ -77,17 +77,25 @@ export default class DatePickerController extends Controller {
     const { startCalendar, finishCalendar, startDate, finishDate } = controller
 
     rome(this.startCalendar, {
-      dateValidator: rome.val.beforeEq(this.finishCalendar),
+      dateValidator: function(controller) {
+        return function(date) {
+          const beforeCloseOn = rome.val.beforeEq(controller.finishDate)(date)
+          const atLeast2DaysAfterLaunch = date <= moment(controller.finishDate).subtract(2, 'days')
+          return beforeCloseOn && atLeast2DaysAfterLaunch
+        }
+      }(controller),
       time: false,
       initialValue: this.startDate
     }).on('data', (data) => {
       controller.startDate = moment(data)
+      rome(finishCalendar).refresh()
       controller.setSelectionRange(startCalendar)
     })
     .on('afterRefresh', () => {
       // Rome's inline calendars refresh the other bound calendar after
       // new data, so we need to set the selection range again.
       controller.setSelectionRange(startCalendar)
+
     })
     .on('ready', () => {
       controller.setSelectionRange(startCalendar)
@@ -97,17 +105,17 @@ export default class DatePickerController extends Controller {
       dateValidator: function(controller) {
         return function(date) {
           const beforeOrOnToday = rome.val.afterEq(new Date())(date)
-          const beforeLaunchOn = rome.val.afterEq(controller.startDate)(date)
-          const lessThan3DaysAfterLaunch = date >= moment(controller.startDate).add(3, 'days')
-          return  beforeOrOnToday && beforeLaunchOn && lessThan3DaysAfterLaunch
+          const afterLaunchOn = rome.val.afterEq(controller.startDate)(date)
+          const lessThan3DaysAfterLaunch = date >= moment(controller.startDate).add(2, 'days')
+          return  beforeOrOnToday && afterLaunchOn && lessThan3DaysAfterLaunch
         }
       }(controller),
       time: false,
       initialValue: this.finishDate
     }).on('data', (data) => {
-      controller.startDate = controller.startDate
       controller.finishDate = moment(data)
       controller.setSelectionRange(finishCalendar)
+      rome(startCalendar).refresh()
     })
     .on('afterRefresh', () => {
       controller.setSelectionRange(finishCalendar)

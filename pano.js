@@ -56087,7 +56087,7 @@ var DatePickerController = function (_Controller) {
       }).on('data', function (data) {
         controller.finishDate = moment(data);
         controller.setSelectionRange(finishCalendar);
-        (0, _rome2.default)(controller.startCalendar).refresh();
+        (0, _rome2.default)(startCalendar).refresh();
       }).on('afterRefresh', function () {
         controller.setSelectionRange(finishCalendar);
       }).on('ready', function () {
@@ -70611,7 +70611,6 @@ UI.click('form .js-submit-on-click-with-propagation', function (e, el) {
   if (f = el.closest('form')) {
     // Fire native submit on form element for RailsUjs to capture
     (0, _delegatedEvents.fire)(f[0], 'submit');
-    f.submit();
   }
   return true;
 });

@@ -55460,11 +55460,18 @@ var _class = function (_Controller) {
   }, {
     key: 'close',
     value: function close() {
+      var removeTimeout = void 0;
       var modal = document.querySelector('.modal');
+
       document.querySelector('body').style.overflow = 'auto';
-      (0, _velocityAnimate2.default)(modal, 'fadeOut', function () {
+
+      (0, _velocityAnimate2.default)(modal, 'fadeOut', { duration: 200 });
+
+      clearTimeout(removeTimeout);
+
+      removeTimeout = setTimeout(function () {
         if (modal.classList.contains('js-ajax-modal')) modal.remove();
-      });
+      }, 300);
     }
   }, {
     key: 'getModal',

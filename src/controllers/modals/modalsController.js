@@ -26,6 +26,15 @@ export default class extends Controller {
     openTimeout = setTimeout((() => $(modal).addClass('open')), 300)
   }
 
+  close() {
+    const modal = document.querySelector('.modal')
+    document.querySelector('body').style.overflow = 'auto'
+    Velocity(modal, 'fadeOut', () => {
+      if (modal.classList.contains('js-ajax-modal')) modal.remove()
+    })
+
+  }
+
   getModal(url) {
     const controller = this
     fetch(url, {

@@ -55458,6 +55458,15 @@ var _class = function (_Controller) {
       }, 300);
     }
   }, {
+    key: 'close',
+    value: function close() {
+      var modal = document.querySelector('.modal');
+      document.querySelector('body').style.overflow = 'auto';
+      (0, _velocityAnimate2.default)(modal, 'fadeOut', function () {
+        if (modal.classList.contains('js-ajax-modal')) modal.remove();
+      });
+    }
+  }, {
     key: 'getModal',
     value: function getModal(url) {
       var controller = this;

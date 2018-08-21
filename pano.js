@@ -56027,7 +56027,7 @@ var DatePickerController = function (_Controller) {
         cal.setValue(date);
       } else {
         this.startTarget.parentNode.classList.add('form-group-error');
-        this.submitTarget.classList.add('disabled');
+        this.disableSubmit();
       }
     }
   }, {
@@ -56039,7 +56039,7 @@ var DatePickerController = function (_Controller) {
         cal.setValue(date);
       } else {
         this.finishTarget.parentNode.classList.add('form-group-error');
-        this.submitTarget.classList.add('disabled');
+        this.disableSubmit();
       }
     }
   }, {
@@ -56111,6 +56111,16 @@ var DatePickerController = function (_Controller) {
       });
     }
   }, {
+    key: 'disableSubmit',
+    value: function disableSubmit() {
+      this.submitTarget.classList.add('disabled');
+    }
+  }, {
+    key: 'enableSubmit',
+    value: function enableSubmit() {
+      this.submitTarget.classList.remove('disabled');
+    }
+  }, {
     key: 'apply',
     value: function apply() {
       this.formTarget.submit();
@@ -56144,7 +56154,7 @@ var DatePickerController = function (_Controller) {
       if (date.isValid()) {
         this.startTarget.value = date.toString();
         this.startTarget.parentNode.classList.remove('form-group-error');
-        this.submitTarget.classList.remove('disabled');
+        this.enableSubmit();
       }
     }
   }, {
@@ -56156,7 +56166,7 @@ var DatePickerController = function (_Controller) {
       if (date.isValid()) {
         this.finishTarget.value = date.toString();
         this.finishTarget.parentNode.classList.remove('form-group-error');
-        this.submitTarget.classList.remove('disabled');
+        this.enableSubmit();
       }
     }
   }]);

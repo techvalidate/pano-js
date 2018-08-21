@@ -22,7 +22,7 @@ export default class DatePickerController extends Controller {
     if (date.isValid()) {
       this.startTarget.value = date.toString()
       this.startTarget.parentNode.classList.remove('form-group-error')
-      this.submitTarget.classList.remove('disabled')
+      this.enableSubmit()
     }
   }
 
@@ -34,9 +34,10 @@ export default class DatePickerController extends Controller {
     if (date.isValid()) {
       this.finishTarget.value = date.toString()
       this.finishTarget.parentNode.classList.remove('form-group-error')
-      this.submitTarget.classList.remove('disabled')
+      this.enableSubmit()
     }
   }
+
 
   setStartCal(e) {
     const date = moment(new Date(e.target.value), true)
@@ -45,7 +46,7 @@ export default class DatePickerController extends Controller {
       cal.setValue(date)
     } else {
       this.startTarget.parentNode.classList.add('form-group-error')
-      this.submitTarget.classList.add('disabled')
+      this.disableSubmit()
     }
   }
 
@@ -56,7 +57,7 @@ export default class DatePickerController extends Controller {
       cal.setValue(date)
     } else {
       this.finishTarget.parentNode.classList.add('form-group-error')
-      this.submitTarget.classList.add('disabled')
+      this.disableSubmit()
     }
   }
 
@@ -123,6 +124,14 @@ export default class DatePickerController extends Controller {
     .on('ready', () => {
       controller.setSelectionRange(finishCalendar)
     })
+  }
+
+  disableSubmit() {
+    this.submitTarget.classList.add('disabled')
+  }
+
+  enableSubmit() {
+    this.submitTarget.classList.remove('disabled')
   }
 
   apply() {

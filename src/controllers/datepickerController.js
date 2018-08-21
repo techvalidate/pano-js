@@ -19,10 +19,12 @@ export default class DatePickerController extends Controller {
   }
 
   set startDate(date) {
+    const controller = this
     if (date.isValid()) {
       this.startTarget.value = date.toString()
       this.startTarget.parentNode.classList.remove('form-group-error')
-      this.enableSubmit()
+
+      setTimeout((() => controller.enableSubmit()), 100)
     }
   }
 
@@ -31,10 +33,12 @@ export default class DatePickerController extends Controller {
   }
 
   set finishDate(date) {
+    const controller = this
     if (date.isValid()) {
       this.finishTarget.value = date.toString()
       this.finishTarget.parentNode.classList.remove('form-group-error')
-      this.enableSubmit()
+
+      setTimeout((() => controller.enableSubmit()), 100)
     }
   }
 

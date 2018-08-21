@@ -56151,10 +56151,14 @@ var DatePickerController = function (_Controller) {
       return moment(new Date(this.startTarget.value));
     },
     set: function set(date) {
+      var controller = this;
       if (date.isValid()) {
         this.startTarget.value = date.toString();
         this.startTarget.parentNode.classList.remove('form-group-error');
-        this.enableSubmit();
+
+        setTimeout(function () {
+          return controller.enableSubmit();
+        }, 100);
       }
     }
   }, {
@@ -56163,10 +56167,14 @@ var DatePickerController = function (_Controller) {
       return moment(new Date(this.finishTarget.value));
     },
     set: function set(date) {
+      var controller = this;
       if (date.isValid()) {
         this.finishTarget.value = date.toString();
         this.finishTarget.parentNode.classList.remove('form-group-error');
-        this.enableSubmit();
+
+        setTimeout(function () {
+          return controller.enableSubmit();
+        }, 100);
       }
     }
   }]);

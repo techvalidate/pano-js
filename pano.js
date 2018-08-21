@@ -22090,7 +22090,7 @@ var ElementObserver = /** @class */ (function () {
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(jQuery) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! VelocityJS.org (1.5.0). (C) 2014 Julian Shapiro. MIT @license: en.wikipedia.org/wiki/MIT_License */
+/* WEBPACK VAR INJECTION */(function(jQuery) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! VelocityJS.org (1.5.2). (C) 2014 Julian Shapiro. MIT @license: en.wikipedia.org/wiki/MIT_License */
 
 /*************************
  Velocity jQuery Shim
@@ -22873,7 +22873,7 @@ var ElementObserver = /** @class */ (function () {
 			hook: null, /* Defined below. */
 			/* Velocity-wide animation time remapping for testing purposes. */
 			mock: false,
-			version: {major: 1, minor: 5, patch: 1},
+			version: {major: 1, minor: 5, patch: 2},
 			/* Set to 1 or 2 (most verbose) to output debug info to console. */
 			debug: false,
 			/* Use rAF high resolution timestamp when available */
@@ -24931,10 +24931,10 @@ var ElementObserver = /** @class */ (function () {
 										if (propertiesMap === "stop") {
 											/* Since "reverse" uses cached start values (the previous call's endValues), these values must be
 											 changed to reflect the final value that the elements were actually tweened to. */
-											/* Note: If only queue:false animations are currently running on an element, it won't have a tweensContainer
-											 object. Also, queue:false animations can't be reversed. */
+											/* Note: If only queue:false/queue:"custom" animations are currently running on an element, it won't have a tweensContainer
+											 object. Also, queue:false/queue:"custom" animations can't be reversed. */
 											var data = Data(element);
-											if (data && data.tweensContainer && queueName !== false) {
+											if (data && data.tweensContainer && (queueName === true || queueName === "")) {
 												$.each(data.tweensContainer, function(m, activeTween) {
 													activeTween.endValue = activeTween.currentValue;
 												});
@@ -55461,11 +55461,11 @@ var _class = function (_Controller) {
     key: 'close',
     value: function close() {
       var removeTimeout = void 0;
-      var modal = document.querySelector('.modal');
+      var modal = document.querySelector('.modal.open');
 
       document.querySelector('body').style.overflow = 'auto';
 
-      (0, _velocityAnimate2.default)(modal, 'fadeOut', { duration: 200 });
+      (0, _velocityAnimate2.default)($(modal), 'fadeOut');
 
       clearTimeout(removeTimeout);
 
@@ -56071,7 +56071,7 @@ var DatePickerController = function (_Controller) {
         dateValidator: function (controller) {
           return function (date) {
             var beforeCloseOn = _rome2.default.val.beforeEq(controller.finishDate)(date);
-            var atLeast2DaysAfterLaunch = date <= moment(controller.finishDate).subtract(2, 'days');
+            var atLeast2DaysAfterLaunch = date <= moment(controller.finishDate).subtract(3, 'days');
             return beforeCloseOn && atLeast2DaysAfterLaunch;
           };
         }(controller),
@@ -56094,7 +56094,7 @@ var DatePickerController = function (_Controller) {
           return function (date) {
             var beforeOrOnToday = _rome2.default.val.afterEq(new Date())(date);
             var afterLaunchOn = _rome2.default.val.afterEq(controller.startDate)(date);
-            var lessThan3DaysAfterLaunch = date >= moment(controller.startDate).add(2, 'days');
+            var lessThan3DaysAfterLaunch = date >= moment(controller.startDate).add(3, 'days');
             return beforeOrOnToday && afterLaunchOn && lessThan3DaysAfterLaunch;
           };
         }(controller),

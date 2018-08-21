@@ -80,7 +80,7 @@ export default class DatePickerController extends Controller {
       dateValidator: function(controller) {
         return function(date) {
           const beforeCloseOn = rome.val.beforeEq(controller.finishDate)(date)
-          const atLeast2DaysAfterLaunch = date <= moment(controller.finishDate).subtract(2, 'days')
+          const atLeast2DaysAfterLaunch = date <= moment(controller.finishDate).subtract(3, 'days')
           return beforeCloseOn && atLeast2DaysAfterLaunch
         }
       }(controller),
@@ -106,7 +106,7 @@ export default class DatePickerController extends Controller {
         return function(date) {
           const beforeOrOnToday = rome.val.afterEq(new Date())(date)
           const afterLaunchOn = rome.val.afterEq(controller.startDate)(date)
-          const lessThan3DaysAfterLaunch = date >= moment(controller.startDate).add(2, 'days')
+          const lessThan3DaysAfterLaunch = date >= moment(controller.startDate).add(3, 'days')
           return  beforeOrOnToday && afterLaunchOn && lessThan3DaysAfterLaunch
         }
       }(controller),

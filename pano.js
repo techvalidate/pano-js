@@ -55369,7 +55369,6 @@ var _class = function (_TooltipController) {
       var controller = this;
       this.element.addEventListener('mouseover', _.bind(this.show, this));
       this.element.addEventListener('mouseleave', function () {
-        console.log('mouseout');
         _.delay(_.bind(controller.hide, controller), 100);
       });
     }

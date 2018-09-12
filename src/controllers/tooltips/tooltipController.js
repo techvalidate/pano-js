@@ -55,7 +55,6 @@ export default class extends Controller {
     const y = $element.offset().top
     const centerX = x + ($element.width() / 2)
     const maxWidth = 250
-
     const style = {
       position: 'absolute',
       'max-width': `${maxWidth}px`,
@@ -63,10 +62,8 @@ export default class extends Controller {
       'pointer-events': 'none'
     }
 
-    if (this.hoverTarget.classList.contains('tooltip-white')) {
-      this.tooltip.addClass('tooltip-white')
-    } else {
-      this.tooltip.removeClass('tooltip-white')
+    if(this.data.get('type')) {
+      this.tooltip.addClass(`${this.data.get('type')}`)
     }
 
     // Replace body content with title text or template content
@@ -93,6 +90,9 @@ export default class extends Controller {
 
   hide() {
     this.tooltip.removeClass('visible')
+    if(this.data.get('type')) {
+      this.tooltip.removeClass(`${this.data.get('type')}`)
+    }
   }
 
   setTemplate() {

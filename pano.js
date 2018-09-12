@@ -28298,7 +28298,6 @@ var _class = function (_Controller) {
       var y = $element.offset().top;
       var centerX = x + $element.width() / 2;
       var maxWidth = 250;
-
       var style = {
         position: 'absolute',
         'max-width': maxWidth + 'px',
@@ -28306,10 +28305,8 @@ var _class = function (_Controller) {
         'pointer-events': 'none'
       };
 
-      if (this.hoverTarget.classList.contains('tooltip-white')) {
-        this.tooltip.addClass('tooltip-white');
-      } else {
-        this.tooltip.removeClass('tooltip-white');
+      if (this.data.get('type')) {
+        this.tooltip.addClass('' + this.data.get('type'));
       }
 
       // Replace body content with title text or template content
@@ -28330,6 +28327,9 @@ var _class = function (_Controller) {
     key: 'hide',
     value: function hide() {
       this.tooltip.removeClass('visible');
+      if (this.data.get('type')) {
+        this.tooltip.removeClass('' + this.data.get('type'));
+      }
     }
   }, {
     key: 'setTemplate',

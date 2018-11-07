@@ -6,8 +6,7 @@
     "Matt Lindeboom <mattl@surveymonkey.com>"
   ],
   "license": "MIT",
-  "main": "./pano.js",
-  "modules": "./index.js",
+  "main": "./pano.es6.js",
   "scripts": {
     "build": "yarn webpack",
     "watch": "yarn webpack -w"

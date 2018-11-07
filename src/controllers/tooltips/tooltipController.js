@@ -111,7 +111,7 @@ export default class extends Controller {
 
   connect() {
     const controller = this
-    if (!this.tooltip.exists()) {
+    if (!this.tooltip.length) {
       this.createTip()
     }
 

@@ -183,11 +183,11 @@ function findRangeAndToggle(calendar, startDate, finishDate, startCalId, finishC
 }
 
 function toggleForwardBackBtns(calendar, startDate, finishDate, startCalId, finishCalId) {
-  const backBtn = calendar.associated.querySelector('.rd-back')
-  const nextBtn = calendar.associated.querySelector('.rd-next')
+  const shouldDisableButtons = shouldDisableCalendarScrolling(startDate, finishDate)
 
   if (calendar.id === startCalId) {
-    if (startDate.month() >= finishDate.month()) {
+    const nextBtn = calendar.associated.querySelector('.rd-next')
+    if (shouldDisableButtons) {
       nextBtn.classList.add('disabled')
     } else {
       nextBtn.classList.remove('disabled')
@@ -195,10 +195,21 @@ function toggleForwardBackBtns(calendar, startDate, finishDate, startCalId, fini
   }
 
   if (calendar.id === finishCalId) {
-    if (finishDate.month() <= startDate.month()) {
+    const backBtn = calendar.associated.querySelector('.rd-back')
+    if (shouldDisableButtons) {
       backBtn.classList.add('disabled')
     } else {
       backBtn.classList.remove('disabled')
     }
   }
+}
+
+// Disable Next and Prev Month buttons if out of range
+function shouldDisableCalendarScrolling(startDate, finishDate) {
+  if (startDate.year() > finishDate.year()) {
+    return true
+  } else if (startDate.year() == finishDate.year() && startDate.month() >= finishDate.month()) {
+    return true
+  }
+  return false
 }

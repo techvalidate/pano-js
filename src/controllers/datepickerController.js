@@ -4,8 +4,8 @@ import rome from 'rome'
 const moment = rome.moment
 
 // finish calendar display, stored as {'year': x, 'month': y} where y = 0 for January
-var confirmedDisplayDate = undefined // last value confirmed to be the correct displayed date
-var temporaryDisplayDate = undefined // value assigned by data events triggered by calendar navigation or date input. Value is cleared by a back/next event following a data event
+let confirmedDisplayDate = undefined // last value confirmed to be the correct displayed date
+let temporaryDisplayDate = undefined // value assigned by data events triggered by calendar navigation or date input. Value is cleared by a back/next event following a data event
 // When a back/next event is fired, the order of events is: 1. data event, 2. setSelectionRange(), 3. back/next, 4. setSelectionRange()
 
 export default class DatePickerController extends Controller {
@@ -318,8 +318,8 @@ function convertToYearMonthMap(momentDate) {
 }
 
 function incrementOneMonth(yearMonthMap) {
-  var year = yearMonthMap.year
-  var month = yearMonthMap.month
+  let year = yearMonthMap.year
+  let month = yearMonthMap.month
   if (month === 11) {
     return {'year': year + 1, 'month': 0}
   }
@@ -327,8 +327,8 @@ function incrementOneMonth(yearMonthMap) {
 }
 
 function decrementOneMonth(yearMonthMap) {
-  var year = yearMonthMap.year
-  var month = yearMonthMap.month
+  let year = yearMonthMap.year
+  let month = yearMonthMap.month
   if (month === 0) {
     return {'year': year - 1, 'month': 11}
   }

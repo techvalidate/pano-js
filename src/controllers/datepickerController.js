@@ -318,8 +318,8 @@ function convertToYearMonthMap(momentDate) {
 }
 
 function incrementOneMonth(yearMonthMap) {
-  let year = yearMonthMap.year
-  let month = yearMonthMap.month
+  const year = yearMonthMap.year
+  const month = yearMonthMap.month
   if (month === 11) {
     return {'year': year + 1, 'month': 0}
   }
@@ -327,8 +327,8 @@ function incrementOneMonth(yearMonthMap) {
 }
 
 function decrementOneMonth(yearMonthMap) {
-  let year = yearMonthMap.year
-  let month = yearMonthMap.month
+  const year = yearMonthMap.year
+  const month = yearMonthMap.month
   if (month === 0) {
     return {'year': year - 1, 'month': 11}
   }

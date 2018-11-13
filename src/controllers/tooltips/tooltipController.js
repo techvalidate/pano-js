@@ -105,8 +105,8 @@ export default class extends Controller {
   }
 
   bindInteractions() {
-    this.element.addEventListener('mouseover', _.bind(this.show, this))
-    this.element.addEventListener('mouseout', _.bind(this.hide, this))
+    this.element.addEventListener('mouseenter', _.bind(this.show, this))
+    this.element.addEventListener('mouseleave', _.bind(this.hide, this))
   }
 
   connect() {

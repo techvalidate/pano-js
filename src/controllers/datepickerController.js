@@ -202,18 +202,17 @@ function findRangeAndToggle(calendar, startDate, finishDate, startCalId, finishC
 
       // start date month < (finish date month === finish calendar month)
       // (because the finish date cannot be before the start date)
-      if (calendar.id === startCalId && dayNumber > startDate.date()) {
+      if (calendar.id === startCalId && dayNumber >= startDate.date()) {
         // Highlight days after the start date for start calendar
         column.classList.add('in-range')
       }
-      if (calendar.id === finishCalId && dayNumber < finishDate.date()) {
+      if (calendar.id === finishCalId && dayNumber <= finishDate.date()) {
         // Highlight days before the finish date for finish calendar
           column.classList.add('in-range')
       }
       return
-    } else {
-      // finish calendar month < finish date month
-      // finish calendar month cannot be after the finish date month
+    } else if (compareMonths(finishDisplayMonthYearMap.year, finishDisplayMonthYearMap.month, finishDate.year(), finishDate.month()) === 1) {
+      // finish calendar month < finish date month (typical case)
 
       // (start date month === finish calendar month) < finish date month
       // current finish calendar contains the start date but not finish date; highlight everything after the start date
@@ -226,7 +225,7 @@ function findRangeAndToggle(calendar, startDate, finishDate, startCalId, finishC
 
       // start date month < finish calendar month < finish date month
       if (compareMonths(startDate.year(), startDate.month(), finishDisplayMonthYearMap.year, finishDisplayMonthYearMap.month) === 1) {
-        if (calendar.id === startCalId && dayNumber > startDate.date()) {
+        if (calendar.id === startCalId && dayNumber >= startDate.date()) {
         // Highlight days after the start date for start calendar
         column.classList.add('in-range')
         }
@@ -249,12 +248,38 @@ function findRangeAndToggle(calendar, startDate, finishDate, startCalId, finishC
 
       // finish calendar month < start date month < finish date month
       // assume finish calendar month cannot be after the finish date month
-      if (calendar.id === startCalId && dayNumber > startDate.date()) {
+      if (calendar.id === startCalId && dayNumber >= startDate.date()) {
         // Highlight days after the start date for start calendar
         column.classList.add('in-range')
         return
       }
       // highlight none of the dates in the finish calendar
+
+    } else {
+      // finish date month < finish calendar month
+
+      // start date month < finish date month < finish calendar month
+      // ex. A paused calendar has start date 3 months before today, and finish date 2 months before today.
+      // Scrolling right in the finish calendar results in the finish date still unchanged, but the displayed calendar date is 1 month before today.
+      if (compareMonths(startDate.year(), startDate.month(), finishDate.year(), finishDate.month()) === 1) {
+        if (calendar.id === startCalId && dayNumber >= startDate.date()) {
+          // Highlight days after the start date for start calendar
+          column.classList.add('in-range')
+        }
+        // highlight none of the dates in the finish calendar
+        return
+      }
+
+      // (start date month === finish date month) < finish calendar month
+      // OR finish calendar month < (start date month === finish date month)
+      if (compareMonths(startDate.year(), startDate.month(), finishDate.year(), finishDate.month()) === 0) {
+        if (calendar.id === startCalId && dayNumber >= startDate.date() && dayNumber <= finishDate.date()) {
+          // Highlight days between start date and finish date in the start calendar
+          column.classList.add('in-range')
+        }
+        // highlight none of the dates in the finish calendar
+        return
+      }
     }
   })
 }

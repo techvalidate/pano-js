@@ -36,12 +36,14 @@
         numberOfColumns: 2,
         singleDate: true,
         autoclose: true,
+        hideCloseButton: false,
         repick: false,
         startDate: null,
         endDate: null,
         minDate: null,
         maxDate: null,
         disableDates: null,
+        isValidRangeSelection: null, // function(startDate, endDate); startDate and endDate can be undefined
         selectForward: false,
         selectBackward: false,
         minDays: null,
@@ -87,7 +89,7 @@
             + ''
             + '<button type="button" class="lightpick__previous-action" data-view-mode="' + viewMode + '">' + opts.locale.buttons.prev + '</button>'
             + '<button type="button" class="lightpick__next-action" data-view-mode="' + viewMode + '">' + opts.locale.buttons.next + '</button>'
-            + (!opts.autoclose ? '<button type="button" class="lightpick__close-action">' + opts.locale.buttons.close + '</button>'  : '')
+            + (!opts.autoclose && !opts.hideCloseButton ? '<button type="button" class="lightpick__close-action">' + opts.locale.buttons.close + '</button>'  : '')
             + '</div>';
     },
 
@@ -214,6 +216,25 @@
 
         if (opts.disableWeekends && (date.isoWeekday() == 6 || date.isoWeekday() == 7)) {
             day.className.push('is-disabled');
+        }
+
+        // checks using opts.isValidRangeSelection()
+        if (typeof opts.isValidRangeSelection === 'function' && !opts.singleDate && !opts.repick) {
+          if (opts.startDate && !opts.endDate) { // selecting an end date (or start date before a start/end date switch)
+            if (date.isBefore(opts.startDate)) { // date could be a startDate and opts.startDate becomes the endDate with a swap
+              if (!opts.isValidRangeSelection(date, opts.startDate)) {
+                day.className.push('is-disabled');
+              }
+            } else { // date could be an endDate
+              if (!opts.isValidRangeSelection(opts.startDate, date)) {
+                day.className.push('is-disabled');
+              }
+            }
+          } else { // date could be a startDate
+            if (!opts.isValidRangeSelection(date)) {
+              day.className.push('is-disabled');
+            }
+          }
         }
 
         day.className = day.className.filter(function(value, index, self) {
@@ -1021,6 +1042,9 @@
             if (!preventOnSelect && typeof this._opts.onSelect === 'function') {
                 this._opts.onSelect.call(this, this.getStartDate(), this.getEndDate());
             }
+            if (this.isShowing) {
+                updateDates(this.el, this._opts);
+            }
         },
 
         setEndDate: function(date, preventOnSelect)
@@ -1051,6 +1075,9 @@
 
             if (!preventOnSelect && typeof this._opts.onSelect === 'function') {
                 this._opts.onSelect.call(this, this.getStartDate(), this.getEndDate());
+            }
+            if (this.isShowing) {
+                updateDates(this.el, this._opts);
             }
         },
 

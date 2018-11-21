@@ -43,7 +43,7 @@
         minDate: null,
         maxDate: null,
         disableDates: null,
-        isValidRangeSelection: null, // function(startDate, endDate); startDate and endDate can be undefined
+        isValidRangeSelection: null, // function(startDate, endDate); startDate and endDate can be undefined. Disables buttons, but not prevent invalid dates from being selected
         selectForward: false,
         selectBackward: false,
         minDays: null,
@@ -221,12 +221,12 @@
         // checks using opts.isValidRangeSelection()
         if (typeof opts.isValidRangeSelection === 'function' && !opts.singleDate && !opts.repick) {
           if (opts.startDate && !opts.endDate) { // selecting an end date (or start date before a start/end date switch)
-            if (date.isBefore(opts.startDate)) { // date could be a startDate and opts.startDate becomes the endDate with a swap
-              if (!opts.isValidRangeSelection(date, opts.startDate)) {
+            if (date.isBefore(opts.startDate, 'date')) { // date could be a startDate and opts.startDate becomes the endDate with a swap
+              if (!opts.isValidRangeSelection(date, moment(opts.startDate))) {
                 day.className.push('is-disabled');
               }
             } else { // date could be an endDate
-              if (!opts.isValidRangeSelection(opts.startDate, date)) {
+              if (!opts.isValidRangeSelection(moment(opts.startDate), date)) {
                 day.className.push('is-disabled');
               }
             }

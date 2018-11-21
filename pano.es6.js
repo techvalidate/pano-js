@@ -53298,6 +53298,7 @@ var _class = function (_Controller) {
   }, {
     key: 'hide',
     value: function hide() {
+      console.log('hide');
       this.tooltip.removeClass('visible');
       if (this.data.get('type')) {
         this.tooltip.removeClass('' + this.data.get('type'));
@@ -53317,8 +53318,8 @@ var _class = function (_Controller) {
   }, {
     key: 'bindInteractions',
     value: function bindInteractions() {
-      this.element.addEventListener('mouseover', _.bind(this.show, this));
-      this.element.addEventListener('mouseout', _.bind(this.hide, this));
+      this.element.addEventListener('mouseenter', _.bind(this.show, this));
+      this.element.addEventListener('mouseleave', _.bind(this.hide, this));
     }
   }, {
     key: 'connect',

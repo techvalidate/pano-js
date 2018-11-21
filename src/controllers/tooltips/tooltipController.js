@@ -89,6 +89,7 @@ export default class extends Controller {
   }
 
   hide() {
+    console.log('hide')
     this.tooltip.removeClass('visible')
     if(this.data.get('type')) {
       this.tooltip.removeClass(`${this.data.get('type')}`)

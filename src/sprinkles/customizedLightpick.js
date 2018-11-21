@@ -27,6 +27,8 @@
     defaults = {
         field: null,
         secondField: null,
+        onFieldInputChange: null, // function(newStartDate, startDate, endDate); dates are all moments
+        onSecondFieldInputChange: null, // function(newEndDate, startDate, endDate); dates are all moments
         firstDay: 1,
         parentEl: 'body',
         lang: 'auto',
@@ -756,6 +758,20 @@
             }
         };
 
+        self._onFieldInputChange = function(e) {
+          if (typeof self._opts.onFieldInputChange === 'function') {
+            self._opts.onFieldInputChange(moment(opts.field.value), moment(self._opts.startDate), moment(self._opts.endDate));
+          }
+          self._onInputChange(e);
+        }
+
+        self._onSecondFieldInputChange = function(e) {
+          if (typeof self._opts.onSecondFieldInputChange === 'function') {
+            self._opts.onSecondFieldInputChange(moment(opts.secondField.value), moment(self._opts.startDate), moment(self._opts.endDate));
+          }
+          self._onInputChange(e);
+        }
+
         self._onInputFocus = function(e)
         {
             var target = e.target || e.srcElement;
@@ -828,12 +844,12 @@
 
         self.hide();
 
-        opts.field.addEventListener('change', self._onInputChange);
+        opts.field.addEventListener('change', self._onFieldInputChange);
         opts.field.addEventListener('click', self._onInputClick);
         opts.field.addEventListener('focus', self._onInputFocus);
 
         if (opts.secondField) {
-            opts.secondField.addEventListener('change', self._onInputChange);
+            opts.secondField.addEventListener('change', self._onSecondFieldInputChange);
             opts.secondField.addEventListener('click', self._onInputClick);
             opts.secondField.addEventListener('focus', self._onInputFocus);
         }
@@ -1211,12 +1227,12 @@
             this.el.removeEventListener('touchend', this._onMouseDown, true);
             this.el.removeEventListener('change', this._onChange, true);
 
-            opts.field.removeEventListener('change', this._onInputChange);
+            opts.field.removeEventListener('change', this._onFieldInputChange);
             opts.field.removeEventListener('click', this._onInputClick);
             opts.field.removeEventListener('focus', this._onInputFocus);
 
             if (opts.secondField) {
-                opts.secondField.removeEventListener('change', this._onInputChange);
+                opts.secondField.removeEventListener('change', this._onSecondFieldInputChange);
                 opts.secondField.removeEventListener('click', this._onInputClick);
                 opts.secondField.removeEventListener('focus', this._onInputFocus);
             }

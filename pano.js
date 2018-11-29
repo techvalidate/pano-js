@@ -53365,8 +53365,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         lang: 'auto',
         format: 'DD/MM/YYYY',
         separator: ' - ',
-        numberOfMonths: 1,
-        numberOfColumns: 2,
+        numberOfMonths: 1, // IE11 only supports up to 2 months
+        numberOfColumns: 2, // IE11 only supports up to 2 columns
         moveCalendarToNewDate: false, // move calendar display month to show new date
         singleDate: true,
         autoclose: true,

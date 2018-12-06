@@ -6,5 +6,3 @@ require('jquery-validation')
 require('js-cookie')
 require('rome')
 require('webpack-jquery-ui/sortable')
-
-

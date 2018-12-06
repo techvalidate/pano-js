@@ -1,3 +1,4 @@
+import { submit, on, load } from '../utils/ui'
 // =====================================================
 // Show a loading spinner overlay on successful form
 // submission and during AJAX events.
@@ -8,7 +9,7 @@
 
 // Spinner won't be shown in Safari on submit, due to the way JavaScript is handled on POST
 // TODO: find a better workaround than click handling and event.preventDefault() on submit.
-UI.submit('form', function(e, el) {
+submit('form', function(e, el) {
   if ($(el).valid() && !$(el).data('remote')) {
     showLoadingSpinner();
     return true;
@@ -18,7 +19,7 @@ UI.submit('form', function(e, el) {
 //----------------------------------------
 // Ajax Events
 
-UI.on('ajax:send', document, (e, el) => showLoadingSpinner());
+on('ajax:send', document, (e, el) => showLoadingSpinner());
 
 //----------------------------------------
 // Times we need to hide the spinner
@@ -35,7 +36,7 @@ $(window).bind('pageshow', function(evt) {
   }
 });
 
-UI.load(function() {
+load(function() {
   // handle browsers that don't use transitions. Ahem, IE8/9
   createFallbackLoadingSpinner();
 

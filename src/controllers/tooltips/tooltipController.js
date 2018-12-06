@@ -1,5 +1,5 @@
 import { Controller } from 'stimulus'
-
+import { bind } from 'lodash-es'
 /**
  * TooltipController
  * - templateTarget - defines template content, defaults to title attribute
@@ -89,6 +89,7 @@ export default class extends Controller {
   }
 
   hide() {
+    console.log('hide')
     this.tooltip.removeClass('visible')
     if(this.data.get('type')) {
       this.tooltip.removeClass(`${this.data.get('type')}`)
@@ -105,13 +106,13 @@ export default class extends Controller {
   }
 
   bindInteractions() {
-    this.element.addEventListener('mouseover', _.bind(this.show, this))
-    this.element.addEventListener('mouseout', _.bind(this.hide, this))
+    this.element.addEventListener('mouseenter', bind(this.show, this))
+    this.element.addEventListener('mouseleave', bind(this.hide, this))
   }
 
   connect() {
     const controller = this
-    if (!this.tooltip.exists()) {
+    if (!this.tooltip.length) {
       this.createTip()
     }
 

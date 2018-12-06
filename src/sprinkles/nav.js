@@ -1,4 +1,5 @@
-import 'sticky-kit'
+import 'sticky-kit/dist/sticky-kit.js'
+import { click, load } from '../utils/ui'
 // ===================================================
 // show/hide the mobile dropdown menu
 // ===================================================
@@ -27,7 +28,7 @@ const hideMobileNav = function() {
 };
 
 // open/close the menu when the menu trigger is clicked
-UI.click('#mobile-nav-trigger', function(e, el) {
+click('#mobile-nav-trigger', function(e, el) {
   if ($('#mobile-nav').hasClass('visible')) {
     hideMobileNav();
   } else {
@@ -63,7 +64,7 @@ var hideCurUserDropdown = function() {
 };
 
 // open/close the menu when the menu trigger is clicked
-UI.click('#cur-user-dropdown-trigger', function(e, el) {
+click('#cur-user-dropdown-trigger', function(e, el) {
   if ($('#cur-user-dropdown').hasClass('visible')) {
     hideCurUserDropdown();
   } else {
@@ -75,4 +76,4 @@ UI.click('#cur-user-dropdown-trigger', function(e, el) {
 // sticky version of subnavs
 // ===================================================
 
-UI.load(() => $("#subnav.sticky-subnav").stick_in_parent({bottoming: false, offset_top: $('#nav').height()}));
+load(() => $("#subnav.sticky-subnav").stick_in_parent({bottoming: false, offset_top: $('#nav').height()}));

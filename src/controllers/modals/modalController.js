@@ -1,5 +1,6 @@
 import { Controller } from 'stimulus'
 import Velocity from 'velocity-animate'
+import { bind } from 'lodash-es'
 
 export default class extends Controller {
   close() {
@@ -16,7 +17,7 @@ export default class extends Controller {
   }
 
   connect() {
-    $(this.element).find('form').on('ajax:success', _.bind(this.close, this))
+    $(this.element).find('form').on('ajax:success', bind(this.close, this))
     if (this.data.get('autoload')) {
       this.open()
     }

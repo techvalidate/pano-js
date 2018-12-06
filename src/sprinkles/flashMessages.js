@@ -1,8 +1,10 @@
+import { click, load } from '../utils/ui'
+
 // click on flash messages to dismiss them
-UI.click('.flash', (e, msg) => hideFlashMessage(msg));
+click('.flash', (e, msg) => hideFlashMessage(msg));
 
 // after a while, flash notice messages fade out automatically
-UI.load(function() {
+load(function() {
   const msg = $('.flash-notice');
   if (msg.exists()) {
     setTimeout((() => hideFlashMessage(msg)), 5000);

@@ -1,10 +1,11 @@
+import { click, load, on } from '../utils/ui'
 // ----------------------------------------
 // Extra behavior for jq-dropdowns. main
 // behavior is in jquery.dropdown.min.js
 // ----------------------------------------
 
 // auto-focus search field in dropdown when dropdown is shown
-UI.load(function() {
+load(function() {
   const dropdowns = $('.jq-dropdown');
   dropdowns.on('show', function(e, dropdownData) {
 
@@ -26,7 +27,7 @@ UI.load(function() {
 });
 
 // search within dropdown items
-UI.on('keyup', '.jq-dropdown .menu-search-field', function(e, el) {
+on('keyup', '.jq-dropdown .menu-search-field', function(e, el) {
   const input = el;
   const options = input.parent().siblings('li');
   const selection = __guard__(input.val(), x => x.toLowerCase());
@@ -45,7 +46,7 @@ UI.on('keyup', '.jq-dropdown .menu-search-field', function(e, el) {
 });
 
 // close the dropdown whenever you click a link
-UI.click('.jq-dropdown li a', function(e, el) {
+click('.jq-dropdown li a', function(e, el) {
   el.closest('.jq-dropdown').hide();
   return true;
 });

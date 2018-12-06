@@ -1,9 +1,11 @@
 import { fire } from 'delegated-events'
+import { click, load } from '../utils/ui'
+import $ from 'jquery'
 // =====================================================
 // links that submit containing form on click
 // =====================================================
 
-UI.click('form .js-submit-on-click', function(e, el) {
+click('form .js-submit-on-click', function(e, el) {
   let f;
   if (f = el.closest('form')) {
     e.stopPropagation();
@@ -11,7 +13,7 @@ UI.click('form .js-submit-on-click', function(e, el) {
   }
 });
 
-UI.click('form .js-submit-on-click-with-propagation', function(e, el) {
+click('form .js-submit-on-click-with-propagation', function(e, el) {
   let f;
   if (f = el.closest('form')) {
     // Fire native submit on form element for RailsUjs to capture
@@ -24,14 +26,14 @@ UI.click('form .js-submit-on-click-with-propagation', function(e, el) {
 // fields that auto-focus on page load
 // =====================================================
 
-UI.load(() => $('input.js-focus-on-load').focus());
+load(() => $('input.js-focus-on-load').focus());
 
 
 // =====================================================
 // validate all forms with jquery validation plugin.
 // =====================================================
 
-UI.load(() => $.bindFormValidation($('body')));
+load(() => $.bindFormValidation($('body')));
 
 
 $.bindFormValidation = html =>

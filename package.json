@@ -1,13 +1,12 @@
 {
   "name": "pano-js",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "repository": "git@github.com:techvalidate/pano.git",
   "contributors": [
     "Matt Lindeboom <mattl@surveymonkey.com>"
   ],
   "license": "MIT",
-  "main": "./pano.js",
-  "modules": "./index.js",
+  "main": "./pano.es6.js",
   "scripts": {
     "build": "yarn webpack",
     "watch": "yarn webpack -w"
@@ -34,7 +33,7 @@
     "jquery-validation": "^1.17.0",
     "js-cookie": "^2.2.0",
     "jstz": "^1.0.10",
-    "lodash": "^4.17.5",
+    "lodash-es": "^4.17.11",
     "moment": "^2.22.1",
     "preact": "^8.3.0",
     "rome": "https://github.com/techvalidate/rome#master",

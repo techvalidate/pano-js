@@ -1,5 +1,7 @@
+import $ from 'jquery'
 import 'jquery-minicolors'
 import { load } from '../utils/ui'
+
 
 load(() =>
   // =====================================================

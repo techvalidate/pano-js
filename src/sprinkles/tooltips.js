@@ -1,4 +1,7 @@
-UI.load(function() {
+import $ from 'jquery'
+import { load } from '../utils/ui'
+
+load(function() {
   // setup powertips options for the tooltips
   const tooltipOptions = {
     placement: 'n',

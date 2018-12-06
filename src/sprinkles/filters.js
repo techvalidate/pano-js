@@ -1,4 +1,5 @@
-import 'sticky-kit'
+import { load, click, ujsSuccess } from '../utils/ui'
+import 'sticky-kit/dist/sticky-kit.js'
 
 const updateFilters = function() {
   if ($('#filter-bar').exists()) {
@@ -7,11 +8,11 @@ const updateFilters = function() {
   }
 };
 
-UI.load(() => updateFilters());
+load(() => updateFilters());
 
-UI.click('#show-filters-btn', function(e, el) {
+click('#show-filters-btn', function(e, el) {
   $('#filters').toggleClass('show');
   return updateFilters();
 });
 
-UI.ujsSuccess(() => updateFilters());
+ujsSuccess(() => updateFilters());

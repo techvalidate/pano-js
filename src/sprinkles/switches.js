@@ -1,8 +1,10 @@
+import { load } from '../utils/ui'
+
 const settings = {
   color: '#23D385',
 };
 
-UI.load(function() {
+load(function() {
   // elem = document.querySelector('.js-switch')
   // new Switchery(elem, settings)
   const switches = $('.js-switch');

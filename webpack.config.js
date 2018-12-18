@@ -1,6 +1,8 @@
 const webpack = require('webpack')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
+const CircularDependencyPlugin = require('circular-dependency-plugin')
+
 module.exports = [{
   name: 'es5',
   entry: {
@@ -59,9 +61,17 @@ module.exports = [{
       {
         test: /\.css$/,
         loaders: ["style-loader","css-loader"]
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
       }
     ]
   },
+
   resolve: {
     alias: {
       UI: path.resolve('./src/utils/ui')
@@ -78,7 +88,15 @@ module.exports = [{
     library: 'Pano',
     libraryTarget: 'umd'
   },
+  mode: 'development',
   devtool: 'source-map',
+  plugins: [
+    new CircularDependencyPlugin({
+      exclude: /node_modules/,
+      failOnError: true,
+      cwd: process.cwd()
+    })
+  ],
   module: {
     rules: [{
       test: require.resolve('jquery'),
@@ -99,5 +117,9 @@ module.exports = [{
     use: {
       loader: 'babel-loader'
     }
+  }, {
+    test: /\.sass$/,
+    exclude: /node_modules/,
+    loaders: ["css-loader", "sass-loader"]
   }]}
 }]

@@ -1,13 +1,23 @@
 {
   "presets": [
-    "env",
-    "react",
-    "stage-0"
+    ["@babel/preset-env", {
+      "modules": false,
+      "targets": {
+        "browsers": ["last 2 versions"]
+      },
+      "useBuiltIns": "entry"
+    }],
+    "@babel/preset-react"
   ],
   "plugins": [
-    "transform-class-properties",
-    "transform-decorators",
-    "transform-react-constant-elements",
-    "transform-react-inline-elements"
+    "@babel/plugin-proposal-class-properties",
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
+    ],
+    ["@babel/plugin-transform-react-jsx", { "pragma": "h"}],
+    "@babel/plugin-syntax-jsx"
   ]
 }

@@ -1,7 +1,6 @@
 import { Controller } from 'stimulus'
-import rome from 'rome'
 import moment from 'moment'
-import Lightpick from '../sprinkles/customizedLightpick'
+import Lightpick from 'lightpick'
 
 /*
  * keep validation in sync with survey.rb validation ensure_time_window 

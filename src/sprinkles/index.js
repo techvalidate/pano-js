@@ -21,4 +21,3 @@ require('./scrollTo.js')
 require('./switches.js')
 require('./timezone.js');
 require('./tooltips.js');
-require('./customizedLightpick.js')

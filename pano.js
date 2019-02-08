@@ -72908,8 +72908,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
 
         getCalendarDisplayedMonths: function()
         {
-          let displayedMonths = [];
-          for (let i = 0; i < this._opts.numberOfMonths; i++) {
+          var displayedMonths = [];
+          for (var i = 0; i < this._opts.numberOfMonths; i++) {
             displayedMonths.push(this._opts.calendar[0].clone().add(i, 'month'));
           }
           return displayedMonths;
@@ -72921,26 +72921,26 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
             return false;
           }
 
-           let displayedMonths = this.getCalendarDisplayedMonths();
-          for (let i = 0; i < displayedMonths.length; i++) {
+           var displayedMonths = this.getCalendarDisplayedMonths();
+          for (var i = 0; i < displayedMonths.length; i++) {
             if (date.isSame(displayedMonths[i], 'month')) {
               return true;
             }
           }
 
            // check if date is part of the visible dates from the previous month
-          let displayedPreviousMonthDates = this.el.querySelectorAll('.is-previous-month');
-          for (let i = 0; i < displayedPreviousMonthDates.length; i++) {
-            let calendarDay = moment(parseInt(displayedPreviousMonthDates[i].getAttribute('data-time')));
+          var displayedPreviousMonthDates = this.el.querySelectorAll('.is-previous-month');
+          for (var i = 0; i < displayedPreviousMonthDates.length; i++) {
+            var calendarDay = moment(parseInt(displayedPreviousMonthDates[i].getAttribute('data-time')));
             if (date.isSame(calendarDay, 'day')) {
               return true;
             }
           }
 
            // check if date is part of the visible dates from the next month
-          let displayedNextMonthDates = this.el.querySelectorAll('.is-next-month');
-          for (let i = 0; i < displayedNextMonthDates.length; i++) {
-            let calendarDay = moment(parseInt(displayedNextMonthDates[i].getAttribute('data-time')));
+          var displayedNextMonthDates = this.el.querySelectorAll('.is-next-month');
+          for (var i = 0; i < displayedNextMonthDates.length; i++) {
+            var calendarDay = moment(parseInt(displayedNextMonthDates[i].getAttribute('data-time')));
             if (date.isSame(calendarDay, 'day')) {
               return true;
             }

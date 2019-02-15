@@ -66355,7 +66355,8 @@ var _class = function (_TooltipController) {
   }, {
     key: 'container',
     get: function get() {
-      return '\n        <div id="' + this.id + '" class="popover">\n        </div>';
+      var klass = this.element.getAttribute('data-container-class') || '';
+      return '\n        <div id="' + this.id + '" class="popover ' + klass + '">\n        </div>';
     }
   }, {
     key: 'bodyTemplate',

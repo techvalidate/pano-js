@@ -5,8 +5,9 @@ export default class extends TooltipController {
   type = 'popover'
 
   get container() {
+    const klass = this.element.getAttribute('data-container-class') || ''
     return `
-        <div id="${this.id}" class="popover">
+        <div id="${this.id}" class="popover ${klass}">
         </div>`
   }
 

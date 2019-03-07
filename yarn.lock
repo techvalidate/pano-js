@@ -3085,7 +3085,7 @@ lcid@^1.0.0:
 
 "lightpick@https://github.com/techvalidate/Lightpick#master":
   version "1.2.9"
-  resolved "https://github.com/techvalidate/Lightpick#e87721a276ae2ab17080154371380c9b72eb3b96"
+  resolved "https://github.com/techvalidate/Lightpick#addd41de3a534cafaf75e7578c6fa261b35d9ace"
   dependencies:
     moment "^2.22.2"
 

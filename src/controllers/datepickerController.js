@@ -71,6 +71,7 @@ export default class DatePickerController extends Controller {
       onFieldInputChange: this.onStartInputChange.bind(this),
       onSecondFieldInputChange: this.onEndInputChange.bind(this),
       parentEl: '.calendar-parent',
+      replaceContent: true,
       format: moment.defaultFormat,
       singleDate: false,
       numberOfMonths: 2,

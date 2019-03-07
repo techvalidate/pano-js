@@ -67078,6 +67078,7 @@ var DatePickerController = function (_Controller) {
         onFieldInputChange: this.onStartInputChange.bind(this),
         onSecondFieldInputChange: this.onEndInputChange.bind(this),
         parentEl: '.calendar-parent',
+        replaceContent: true,
         format: _moment2.default.defaultFormat,
         singleDate: false,
         numberOfMonths: 2,
@@ -71961,6 +71962,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
         onSecondFieldInputChange: null, // function(newEndDate, startDate, endDate); dates are all moments
         firstDay: 1,
         parentEl: 'body',
+        replaceContent: false, // Allow parentEl to only have one calendar at at time
         lang: 'auto',
         format: 'DD/MM/YYYY',
         separator: ' - ',
@@ -72381,7 +72383,11 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
 
         self.el.innerHTML = html;
 
-        document.querySelector(opts.parentEl).appendChild(self.el);
+        var parent = document.querySelector(opts.parentEl);
+        if (opts.replaceContent) {
+            while (parent.firstChild && !parent.firstChild.remove());
+        }
+        parent.appendChild(self.el);
 
         self._onMouseDown = function(e)
         {

@@ -1,4 +1,3 @@
-import { identifierForContextKey } from '@stimulus/webpack-helpers'
 /**
  * registerControllers - A helper function to register imported classes with your stimulus application.
  * @param {function} application - your stimulus application instance.

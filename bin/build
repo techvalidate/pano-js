@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo 'Building frontend javascript'
+yarn --cwd packages/frontend build
+cp packages/frontend/dist/frontend.js ./frontend.js
+
+echo 'Build legacy javascript'
+yarn --cwd packages/legacy build
+cp packages/legacy/dist/legacy.js ./legacy.js
+
+echo 'Stage Build'
+git add .
+git commit -v

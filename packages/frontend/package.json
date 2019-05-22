@@ -1,0 +1,54 @@
+{
+  "name": "@pano/frontend",
+  "version": "1.0.0",
+  "repository": "git@github.com:techvalidate/pano.git",
+  "contributors": [
+    "Matt Lindeboom <mattl@surveymonkey.com>"
+  ],
+  "license": "MIT",
+  "main": "./pano.js",
+  "modules": "./index.js",
+  "scripts": {
+    "build": "yarn webpack --config webpack.config.js --mode production",
+    "build:dev": "webpack --config webpack.config.js --mode development",
+    "watch": "webpack --config webpack.config.js --mode development --watch"
+  },
+  "dependencies": {
+    "@skatejs/renderer-preact": "^0.3.3",
+    "babel-core": "^6.26.0",
+    "babel-env": "^2.4.1",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators": "^6.24.1",
+    "babel-plugin-transform-react-constant-elements": "^6.23.0",
+    "babel-plugin-transform-react-inline-elements": "^6.22.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "contra": "^1.9.4",
+    "deep-extend": "^0.5.1",
+    "delegated-events": "^1.0.7",
+    "js-cookie": "^2.2.0",
+    "jstz": "^1.0.10",
+    "lodash": "^4.17.5",
+    "moment": "^2.22.1",
+    "moment-locales-webpack-plugin": "^1.0.7",
+    "preact": "^8.3.0",
+    "skatejs": "^5.1.1",
+    "stimulus": "^1.0.1",
+    "turbolinks": "^5.1.1",
+    "velocity-animate": "1.5.2",
+    "whatwg-fetch": "^2.0.4"
+  },
+  "peerDependencies": {
+    "jquery": "^3.2.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "expose-loader": "^0.7.5",
+    "uglify-js-plugin": "^0.0.6",
+    "webpack": "^4.0.0",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.0.0"
+  }
+}

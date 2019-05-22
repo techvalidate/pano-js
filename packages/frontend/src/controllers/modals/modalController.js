@@ -1,6 +1,7 @@
 import { Controller } from 'stimulus'
 import Velocity from 'velocity-animate'
 import { bind } from 'lodash-es'
+import $ from 'jquery'
 
 export default class extends Controller {
   close() {

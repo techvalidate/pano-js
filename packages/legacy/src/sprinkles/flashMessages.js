@@ -4,7 +4,7 @@ UI.click('.flash', (e, msg) => hideFlashMessage(msg));
 // after a while, flash notice messages fade out automatically
 UI.load(function() {
   const msg = $('.flash-notice');
-  if (msg.exists()) {
+  if (msg.length) {
     setTimeout((() => hideFlashMessage(msg)), 5000);
   }
 });

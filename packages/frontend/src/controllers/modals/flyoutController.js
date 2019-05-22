@@ -1,5 +1,6 @@
 import ModalController from './modalController'
 import { bind } from 'lodash-es'
+import $ from 'jquery'
 
 export default class extends ModalController {
   connect() {
@@ -25,7 +26,7 @@ export default class extends ModalController {
     const $content = $(this.element).find('.modal-content')
     const navHeight = 48
 
-    if ($footer.exists()) {
+    if ($footer.length) {
       $content.css({ 'max-height': `${($(window).height() - navHeight) - $footer.outerHeight() }px` })
     }
   }

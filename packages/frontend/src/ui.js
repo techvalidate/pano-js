@@ -1,5 +1,5 @@
 import Turbolinks from 'turbolinks'
-
+import $ from 'jquery'
 // =====================================================
 // UI
 //

@@ -67,11 +67,6 @@ module.exports = (env, argv) => {
     },
 
     devtool: isProd ? false : 'cheap-module-eval-source-map',
-    performance: {
-      maxAssetSize: 23000,
-      hints: isProd ? 'warning' : false
-    },
-
     module: {
       rules: [
         {

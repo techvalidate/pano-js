@@ -1,5 +1,7 @@
 import { Controller } from 'stimulus'
 import { bind } from 'lodash-es'
+import $ from 'jquery'
+
 /**
  * TooltipController
  * - templateTarget - defines template content, defaults to title attribute
@@ -111,7 +113,7 @@ export default class extends Controller {
 
   connect() {
     const controller = this
-    if (!this.tooltip.exists()) {
+    if (!this.tooltip.length) {
       this.createTip()
     }
 

@@ -1,7 +1,7 @@
 import 'sticky-kit'
 
 const updateFilters = function() {
-  if ($('#filter-bar').exists()) {
+  if ($('#filter-bar').length) {
     $("#filter-bar").stick_in_parent({parent: '#main', offset_top: 88});
     return $(document.body).trigger("sticky_kit:recalc");
   }

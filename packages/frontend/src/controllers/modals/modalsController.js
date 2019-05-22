@@ -1,6 +1,7 @@
 import 'whatwg-fetch' // fetch polyfill
 import { Controller } from 'stimulus'
 import Velocity from 'velocity-animate'
+import $ from 'jquery'
 
 export default class extends Controller {
   open(e) {

@@ -1,5 +1,6 @@
 import TooltipController from './tooltipController'
 import { delay, bind } from 'lodash-es'
+import $ from 'jquery'
 
 export default class extends TooltipController {
   id = 'pano-popover'

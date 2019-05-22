@@ -12,7 +12,7 @@ UI.load(function() {
     const link = $(`[data-jq-dropdown='#${dropdown.attr('id')}']`);
 
     const searchField = dropdown.find('.menu-search-field');
-    if (searchField.exists()) { searchField.focus(); }
+    if (searchField.length) { searchField.focus(); }
 
     if (dropdown.hasClass('jq-dropdown-anchor-left')) {
       const dropdownWidth = dropdown.children().first().width();

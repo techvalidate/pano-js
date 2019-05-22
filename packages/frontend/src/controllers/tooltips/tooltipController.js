@@ -1,5 +1,5 @@
 import { Controller } from 'stimulus'
-
+import { bind } from 'lodash-es'
 /**
  * TooltipController
  * - templateTarget - defines template content, defaults to title attribute
@@ -105,8 +105,8 @@ export default class extends Controller {
   }
 
   bindInteractions() {
-    this.element.addEventListener('mouseover', _.bind(this.show, this))
-    this.element.addEventListener('mouseout', _.bind(this.hide, this))
+    this.element.addEventListener('mouseover', bind(this.show, this))
+    this.element.addEventListener('mouseout', bind(this.hide, this))
   }
 
   connect() {

@@ -6,8 +6,6 @@
     "Matt Lindeboom <mattl@surveymonkey.com>"
   ],
   "license": "MIT",
-  "main": "./pano.js",
-  "modules": "./index.js",
   "scripts": {
     "build": "yarn webpack --config webpack.config.js --mode production",
     "build:dev": "webpack --config webpack.config.js --mode development",
@@ -30,7 +28,7 @@
     "delegated-events": "^1.0.7",
     "js-cookie": "^2.2.0",
     "jstz": "^1.0.10",
-    "lodash": "^4.17.5",
+    "lodash-es": "^4.17.11",
     "moment": "^2.22.1",
     "moment-locales-webpack-plugin": "^1.0.7",
     "preact": "^8.3.0",

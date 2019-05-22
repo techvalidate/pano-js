@@ -1,4 +1,5 @@
 import TooltipController from './tooltipController'
+import { delay, bind } from 'lodash-es'
 
 export default class extends TooltipController {
   id = 'pano-popover'
@@ -73,9 +74,9 @@ export default class extends TooltipController {
 
   bindInteractions() {
     const controller = this
-    this.element.addEventListener('mouseover', _.bind(this.show, this))
+    this.element.addEventListener('mouseover', bind(this.show, this))
     this.element.addEventListener('mouseleave', () => {
-      _.delay(_.bind(controller.hide, controller), 100)
+      delay(bind(controller.hide, controller), 100)
     })
   }
 }

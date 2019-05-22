@@ -1,4 +1,5 @@
 import ModalController from './modalController'
+import { bind } from 'lodash-es'
 
 export default class extends ModalController {
   connect() {
@@ -7,7 +8,7 @@ export default class extends ModalController {
 
     this.element.classList.add('open')
 
-    $(window).on('resize', _.bind(this.setHeight, this))
+    $(window).on('resize', bind(this.setHeight, this))
 
     setTimeout(() => {
       controller.setHeight()

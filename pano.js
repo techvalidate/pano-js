@@ -23645,7 +23645,10 @@ var _class = function (_Controller) {
     key: 'setContent',
     value: function setContent() {
       if (this.element.hasAttribute('title')) {
-        this.content = this.element.getAttribute('title');
+        var title = this.element.getAttribute('title');
+        this.content = title;
+        // Add back the title attribute in disconnect(), so the title is present when navigating browser hsitory.
+        this.title = title;
         this.element.removeAttribute('title');
       }
 
@@ -23730,6 +23733,15 @@ var _class = function (_Controller) {
       }
     }
   }, {
+    key: 'disconnect',
+    value: function disconnect() {
+      // reset the element title navigating back/forward in the browser history will show the inital title
+      var title = this.title;
+      if (this.title) {
+        this.element.setAttribute('title', title);
+      }
+    }
+  }, {
     key: 'container',
     get: function get() {
       return '\n        <div id="' + this.id + '" class="tooltip">\n        </div>';
@@ -23751,6 +23763,14 @@ var _class = function (_Controller) {
     key: 'tooltip',
     get: function get() {
       return $('#' + this.id);
+    }
+  }, {
+    key: 'title',
+    get: function get() {
+      return this._title;
+    },
+    set: function set(title) {
+      this._title = title;
     }
   }]);
 

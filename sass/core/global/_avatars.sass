@@ -1,0 +1,54 @@
+=avatar
+  display: inline-block
+  width: 32px
+  height: 32px
+  line-height: 32px
+  text-align: center
+  font-size: 14px
+  color: white
+  font-weight: 300
+  border-radius: 50%
+  background-size: 100%
+  vertical-align: middle
+
+.avatar, .user-avatar
+  +avatar
+
+  &.small-avatar
+    width: 24px
+    height: 24px
+    line-height: 24px
+    font-size: 12px
+
+    .second-initial
+      display: none
+
+  &.tiny-avatar
+    width: 20px
+    height: 20px
+    line-height: 20px
+    font-size: 10px
+
+    .second-initial
+      display: none
+  &.avatar-medium
+    width: 48px
+    height: 48px
+    font-size: 24px
+    font-family: $heading-font-stack
+    font-weight: bold
+    line-height: 48px
+  &.large-avatar, &.avatar-large
+    font-family: $heading-font-stack
+    width: 56px
+    height: 56px
+    line-height: 56px
+    font-size: 28px
+    font-weight: bold
+
+
+
+.user-avatar-link
+  display: inline-block
+  span.user-name
+    margin-left: 4px

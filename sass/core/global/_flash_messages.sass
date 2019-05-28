@@ -1,0 +1,106 @@
+
+.flash
+  z-index: 198
+  position: fixed
+  width: 100%
+  bottom: 32px
+  right: 32px
+
+.flash:not(.flash-notice)
+  margin: 0
+  border-radius: 0
+
+.flash:not(.flash-notice)
+  margin: 0
+  border-radius: 0
+
+.flash
+  overflow: hidden
+  z-index: 198
+  position: fixed
+  width: 100%
+  right: 96px
+  width: 350px
+  padding: 16px
+  border-radius: 3px
+  color: white
+  text-align: left
+  font-size: 15px
+  line-height: 20px
+  font-weight: normal
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3)
+  +accelerated-transforms-base
+  transition: all 0.2s ease-in-out
+  background: rgba(10,80,139,0.8)
+  background: $charcoal
+  color: #fff
+  +mobile
+    font-size: 13px
+
+  p
+    color: #fff
+  &:hover
+    cursor: pointer
+    .close-icon
+      color: white
+
+  animation-name: slideDown
+  animation-iteration-count: 1
+  animation-fill-mode: forwards
+  animation-timing-function: ease-in-out
+  animation-duration: 0.2s
+
+  &.hiding
+    animation-name: slideUp
+
+  .close-icon
+    font-size: 24px
+    position: absolute
+    right: 8px
+    top: 8px
+    color: rgba(255,255,255,0.5)
+
+  .flash-icon
+    font-size: 18px
+    color: $sabeus
+    line-height: 24px
+  // flash-alert and flash-error are the same thing.
+  // keeping both because people will use either, and
+  // expect it to work, and not check in the browser that
+  // the message actually renders properly.
+
+  &.flash-error, &.flash-alert, &.flash-error
+    .flash-icon
+      color: $bengal
+
+@keyframes slideDown
+  0%
+    transform: translateY(-50px)
+    opacity: 0
+  100%
+    transform: translateY(0)
+    opacity: 1
+
+@keyframes slideUp
+  0%
+    transform: translateY(0)
+    opacity: 1
+  100%
+    transform: translateY(-50px)
+    opacity: 0
+
+@keyframes noticeSlideUp
+  0%
+    transform: translateY(100px)
+    opacity: 0
+  100%
+    transform: translateY(0)
+    opacity: 1
+
+@keyframes noticeFadeOut
+  0%
+    opacity: 1
+  100%
+    opacity: 0
+    visibility: hidden
+    pointer-events: none

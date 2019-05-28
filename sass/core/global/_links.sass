@@ -1,0 +1,28 @@
+// ------------------------------------------
+// links
+// ------------------------------------------
+
+a
+  color: $link-color
+  text-decoration: none
+  &:hover
+    text-decoration: underline
+
+  &.plain
+    &:hover
+      text-decoration: none
+
+// ------------------------------------------
+// clickable elements
+// ------------------------------------------
+
+[data-behavior~=clickable]
+  cursor: pointer
+
+.box[data-behavior~=clickable], .card[data-behavior~=clickable]
+  +transition(all, 0.2s)
+  +accelerated-transforms-base
+  transform: translate3d(0,0,0)
+  &:hover
+    transform: translate3d(0,0,0)
+    transform: scale(1.05)

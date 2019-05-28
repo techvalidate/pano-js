@@ -1,0 +1,167 @@
+// ------------------------------------------
+// dropzone-based file upload forms
+// ------------------------------------------
+
+@import "../../vendor/dropzone"
+
+.dropzone
+  margin-top: 32px
+  padding: 0
+  min-height: 0
+  +dashed-border
+  text-align: center
+  transition: all, 0.2s
+
+  .dz-message
+    padding: 32px
+    margin: 0
+
+  .material-icons
+    font-size: 32px
+    color: $light-gray
+
+  &:hover
+    background: lighten($link-color, 43%)
+    border-color: $link-color
+    cursor: pointer
+
+  &.dz-started
+    .dz-message
+      display: none !important
+
+  &.dz-drag-hover
+    background: lighten($link-color, 43%)
+    +dashed-border
+    border-color: $link-color
+
+    .dz-message
+      opacity: 0.5
+
+// drag-and-drop file upload boxes
+.upload-form-container
+  position: relative
+  width: 544px
+  text-align: center
+  margin: 64px auto
+
+.dropzone.dropzone-upload-form, .dropzone.dropzone-image-form, .dropzone.dropzone-csv-form
+  position: relative
+  height: 128px
+
+  .dz-progress
+    width: 188px
+    height: 8px
+    left: calc(50% - 94px)
+    bottom: 12px
+    top: auto
+    position: absolute
+    margin: 0 auto
+
+    // Fix for chrome bug: https://code.google.com/p/chromium/issues/detail?id=157218
+    -webkit-transform: scale(1)
+
+    .dz-upload
+      background: $blue
+      background: linear-gradient(to bottom, $blue, darken($blue, 10%))
+
+.dropzone.dropzone-image-form, .dropzone.dropzone-csv-form
+
+  .dz-preview
+    min-height: 1px
+    margin: 0
+    position: relative
+    height: 100%
+    width: 100%
+
+    &:hover
+      .dz-image
+        img
+          transform: none
+          filter: none
+
+  .dz-image
+    max-height: 50%
+    max-width: 50%
+    min-height: 1px
+    top: 10px
+    display: block
+    margin: 0 auto
+    border-radius: 0
+
+    img
+      max-height: 100%
+      max-width: 100%
+      margin: 0 auto
+
+  .dz-details
+    bottom: 24px
+    top: auto
+    opacity: 1
+    padding: 0
+
+    .dz-filename
+      font-weight: bold
+      max-width: 188px
+      margin: 0 auto
+
+      &:before
+        content: 'Uploading'
+        font-weight: normal
+        color: #ccc
+
+      &.processing:before
+        content: 'Processing'
+
+      &:hover
+        overflow: hidden
+        text-overflow: ellipsis
+
+        span
+          border: 1px solid transparent
+          background: none
+
+    .dz-size
+      display: none
+
+  .dz-success, .dz-error
+    display: none
+
+.dropzone.dropzone-csv-form
+  .dz-message
+    display: block
+
+  &.dz-started
+    .dz-message
+      .material-icons
+        color: $blue
+
+      .t
+        display: none
+
+  .dz-image
+    display: none
+
+  .dz-preview
+    top: 50%
+    height: auto
+    vertical-align: bottom
+    min-height: 0
+
+    .dz-filename
+      max-width: none
+
+
+.dropzone.dropzone-upload-form
+  padding: 32px
+  border: dashed 2px $green
+  border-radius: 8px
+  +transition(background-color, 0.2s)
+  &:hover
+    background: lighten($green, 46%)
+    cursor: pointer
+
+.dz-browser-not-supported
+  .dz-message
+    display: none
+  &:hover
+    background: #fff !important

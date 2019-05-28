@@ -1,0 +1,31 @@
+// =========================================================
+// shadow mixins
+// =========================================================
+
+=no-shadow
+  box-shadow: none
+
+=thin-shadow
+  box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.07)
+
+=thick-shadow
+  box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.2)
+
+=mega-shadow
+  box-shadow: 0px 4px 24px 0px rgba(0,0,0,0.3)
+
+// =========================================================
+// shadow css classes
+// =========================================================
+
+.no-shadow
+  box-shadow: none !important
+
+.thin-shadow
+  +thin-shadow
+
+.thick-shadow
+  +thick-shadow
+
+.mega-shadow
+  +mega-shadow

@@ -1,0 +1,97 @@
+
+// ------------------------------------------
+// helpful mixins
+// ------------------------------------------
+
+=bordered-item
+  padding: 16px
+  margin: 0
+  border-bottom: 1px solid $pebble
+  color: $slate
+  &:first-child
+    border-top: 1px solid $pebble
+
+=hoverable-item
+  &:hover
+    background: $canvas
+    cursor: pointer
+
+=plain-list
+  padding-left: 0
+  li
+    margin: 0
+    list-style-type: none
+
+// ------------------------------------------
+// default list styles
+// ------------------------------------------
+
+ul, ol
+  margin: 0
+  padding-left: 32px
+  li
+    margin: $p-spacing 0 0 0
+  &:first-child
+    li:first-child
+      margin-top: 0
+
+// ------------------------------------------
+// Display list and accordian styles
+// ------------------------------------------
+
+ul.list
+  margin: 0
+  padding-left: 0
+  list-style-type: none
+  li
+    +bordered-item
+  &.list-hoverable
+    li
+      +hoverable-item
+  &.list-display
+    li
+      padding: 24px 16px
+
+ul.accordian
+  margin: 0
+  padding-left: 0
+  list-style-type: none
+  li
+    margin: 0
+    &:last-child .item-label
+      border-bottom: 1px solid $pebble
+
+  .item-label
+    +bordered-item
+    +hoverable-item
+    position: relative
+    text-transform: uppercase
+    border-top: 1px solid $pebble
+    border-bottom: 0
+    &:after
+      display: inline-block
+      position: absolute
+      right: 16px
+      font-family: 'Material Icons'
+      content: '\e313'
+      font-size: 18px
+      vertical-align: middle
+      transition: all 0.2s
+
+  .item-content
+    display: none
+    padding: 16px
+    p
+      line-height: 24px
+
+  li.item-open
+    .item-label
+      background: $canvas
+      &:after
+        transform: rotate(180deg)
+  &.accordian-display
+    li .item-label
+      padding: 24px 16px
+
+ol.plain, ul.plain
+  +plain-list

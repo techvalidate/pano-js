@@ -1,0 +1,156 @@
+
+// WORK IN PROGRESS
+
+// todo: is this only going to be used for surveys? if so, change name and move out of Pano.
+#subnav-header
+  height: 80px
+  +border-bottom
+  background: white
+
+  .header-contents
+    +page-width
+    height: 80px
+    position: relative
+
+    h1
+      font-size: 20px
+      margin-top: 2px
+      display: inline-block
+
+    .status-badge
+      display: inline-block
+      vertical-align: text-top
+      margin-left: 8px
+
+  .subnav-header-title
+    padding-top: 16px
+
+    &.with-dropdown
+      +mobile
+        h1
+          max-width: 330px
+  .jq-dropdown-link
+    display: inline-block
+    float: none
+    padding: 0
+    color: $blue
+    text-overflow: ellipsis
+    &:after
+      position: relative
+      top: 4px
+      font-size: 20px
+
+
+  .subnav-header-tabs
+    position: absolute
+    height: 80px
+    top: 0
+    right: 0
+    a
+      height: 80px
+      line-height: 80px
+      &.selected
+        background: $bg-gray
+
+  +mobile
+    .header-contents
+      h1
+        white-space: nowrap
+        max-width: 400px
+        text-overflow: ellipsis
+        overflow: hidden
+        font-size: 15px
+        max-width: 220px
+      .status-badge
+        display: none
+
+    .subnav-header-title
+      padding-top: 20px
+
+    .subnav-header-tabs
+      a
+        font-size: 12px
+        padding: 0 4px
+
+
+#subnav
+  position: fixed
+  z-index: 199
+  left: 0
+  width: 100vw
+  color: white
+  padding: 0 16px
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.1)
+  background: white
+  &.sticky-subnav
+    position: static
+    width: 100%
+
+
+  #subnav-contents
+    .tabs
+      border-bottom: none
+      .dropdown-btn-group
+        margin-top: 8px
+        font-size: 10px
+        i
+          vertical-align: middle
+        a
+          margin-left: 8px
+
+        .jq-dropdown-menu
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+          a
+            border-bottom: none
+            width: 100%
+            margin-left: 0
+
+    .cf
+      position: relative
+
+  a.subnav-link
+    height: 40px
+    line-height: 24px
+    padding-top: 8px
+    padding-bottom: 8px
+    color: $dark-blue
+    position: relative
+    +less-than-widescreen
+      font-size: 11px
+    &.selected
+      color: $sabeus
+    &.with-right-arrow
+      &:after
+        content: '\E5CC'
+        position: absolute
+        margin-left: 8px
+        font-size: 18px
+        pointer-events: none
+        font-family: 'Material Icons'
+        color: $gray
+    span
+      display: inline-block
+
+  #show-filters-btn
+    padding: 8px
+    &:hover
+      text-decoration: none
+      background: $lighter-gray
+
++mobile
+  #subnav
+    white-space: nowrap
+    overflow-x: auto
+    overflow-y: hidden
+    .tabs
+      a
+        float: none
+        display: inline-block
+        font-size: 11px
+        padding: 8px
+      a.with-right-arrow
+        &:after
+          margin-left: 1px
+
+#subnav-shim
+  height: 40px

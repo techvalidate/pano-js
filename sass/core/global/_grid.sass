@@ -1,0 +1,111 @@
+// =========================================================
+// Grid System
+//
+// Put all columns in a .grid element.
+// By default, grids don't have outer gutters. If you want
+// outer gutters, apply .outer-gutters to your grid.
+//
+// Columns: .col-1...col-12 to make columns 1-12 units wide.
+//
+// =========================================================
+
+// =========================================================
+// functions and mixins for defining grids
+// =========================================================
+
+// use this to define a column grid
+=columnGrid($gutterWidth, $totalColumns: 12)
+  +clearfix
+
+  @for $i from 1 through ($totalColumns - 1)
+    .col-#{$i}
+      +column($i, $gutterWidth, $totalColumns)
+    .shift-#{$i}
+      +shiftColumns($i, $gutterWidth, $totalColumns)
+
+  &.outer-gutters
+    margin-left: $gutterWidth
+    margin-right: $gutterWidth
+
+@function columnRatio($columnUnits, $totalColumns)
+  @return $columnUnits / $totalColumns
+
+@function gutterAdjustment($columnUnits, $gutterWidth, $totalColumns)
+  @return $gutterWidth - ($gutterWidth * columnRatio($columnUnits, $totalColumns))
+
+@function columnWidth($columnUnits, $gutterWidth, $totalColumns)
+  @return unquote("#{floor(percentage(columnRatio($columnUnits, $totalColumns)))} - #{floor(gutterAdjustment($columnUnits, $gutterWidth, $totalColumns))}")
+
+=column($columnUnits, $gutterWidth, $totalColumns)
+  float: left
+  display: block
+  width: calc(#{columnWidth($columnUnits, $gutterWidth, $totalColumns)})
+  margin-right: $gutterWidth
+  &:last-child
+    margin-right: 0
+
+=shiftColumns($columnUnits, $gutterWidth, $totalColumns)
+  margin-left: calc(#{percentage(columnRatio($columnUnits, $totalColumns))} + #{$gutterWidth - gutterAdjustment($columnUnits, $gutterWidth, $totalColumns)})
+
+=stackColumns($topMargin: 32px, $totalColumns: 12)
+  // make all columns stack rather than float
+  @for $i from 1 through ($totalColumns - 1)
+    .col-#{$i}
+      float: none
+      width: 100%
+      margin-left: 0
+      margin-top: $topMargin
+      &:first-child
+        margin-top: 0
+    .shift-#{$i}
+      margin-left: 0
+  // remove any outer gutters
+  &.outer-gutters
+    margin-left: 0
+    margin-right: 0
+
+
+// =========================================================
+// grids with different width gutters (32px is default)
+// =========================================================
+
+.grid
+  +columnGrid(32px)
+
+  &.no-gutters
+    +columnGrid(0px)
+
+  &.g-8
+    +columnGrid(8px)
+
+  &.g-16
+    +columnGrid(16px)
+
+  &.g-48
+    +columnGrid(48px)
+
+  &.g-64
+    +columnGrid(64px)
+
+  &.m-stack
+    +mobile
+      +stackColumns
+
+  &.t-stack
+    +tablet
+      +stackColumns
+
+// =========================================================
+// Tables
+//
+// Grid-aligned table cells 1-12 units wide. no gutters.
+// =========================================================
+
+table.grid
+  width: 100%
+  @for $i from 1 through 11
+    .col-#{$i}
+      float: none
+      display: table-cell
+      margin: 0
+      width: columnRatio($i, 12) * 100%

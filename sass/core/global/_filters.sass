@@ -1,0 +1,134 @@
+$height-with-subnav: calc(100% - 48px)
+
+#new-filters
+  position: relative
+  width: 262px
+  height: 100vh
+  .filters-container
+    position: fixed
+    width: 262px
+    top: 48px
+    bottom: 0
+    padding: 24px 0 150px // bottom padding to encourage overflow scroll on long filter lists
+    background: #fff
+    overflow: hidden
+    .filters-header
+      padding: 0 16px
+      max-height: 150px
+      .delete
+        font-size: 12px
+        font-weight: 500
+        float: right
+    .active-filters
+      max-width: 262px
+      .tag
+        display: inline-block
+        margin: 0 4px 4px 0
+        line-height: 24px
+        max-width: 49%
+        .tag-label
+          display: inline-block
+          max-width: 77%
+          white-space: nowrap
+          overflow: hidden
+          text-overflow: ellipsis
+          line-height: inherit
+        .material-icons
+          line-height: inherit
+          vertical-align: top
+    .available-filters, .filter-options
+      height: 100%
+      overflow-x: hidden
+      overflow-y: auto
+      li
+        a
+          color: $charcoal
+          &:hover
+            text-decoration: none
+        &:hover
+          background: $pebble
+          cursor: pointer
+        .active-filter
+          color: #ffffff
+          margin-top: 8px
+    .available-filters
+      transition: all 0.2s
+      opacity: 1
+      li
+        a
+          text-transform: uppercase
+          .material-icons
+            float: right
+            color: $slate
+      .switch-toggle
+        width: 100%
+        a
+          display: flex
+          justify-content: space-between
+      &.fade
+        opacity: 0
+    .filter-views
+      .filter-view
+        position: absolute
+        top: 0
+        bottom: 0
+        transform: translateX(50%)
+        visibility: hidden
+        opacity: 0
+        background: #fff
+        padding: 24px 0 150px
+        width: 262px
+        transition: all 0.2s
+        transition-timing-function: ease-out
+        z-index: 1
+        h3
+          position: relative
+          color: $slate
+          margin-bottom: 16px
+          a.filters-home
+            position: relative
+            color: $charcoal
+            .material-icons
+              font-size: 20px
+              margin-right: 8px
+              color: $slate
+            &:hover
+              text-decoration: none
+          .loading-dots
+            position: absolute
+            right: -24px
+            top: 12px
+            visibility: hidden
+            opacity: 0
+            transition: all 0.2s
+          .clear-filter
+            transition: all 0.2s
+
+        .filter-options
+          @extend .list
+          padding-left: 0
+          .checkbox
+            margin-top: 0
+        .filter-footer
+          text-align: right
+
+
+        &.selected
+          transform: translateX(0)
+          opacity: 1
+          visibility: visible
+          transition-timing-function: ease-in
+        &.pending
+          .loading-dots
+            visibility: visible
+            opacity: 1
+          h3 .clear-filter
+            visibility: hidden
+            opacity: 0
+          li
+            pointer-events: none
+            opacity: 0.5
+.with-subnav
+  #new-filters
+    .filters-container
+      top: 87px

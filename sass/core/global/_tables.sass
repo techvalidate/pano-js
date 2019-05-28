@@ -1,0 +1,95 @@
+//-----------------------------------
+// basic table styles
+//-----------------------------------
+table
+  width: 100%
+  margin-top: 24px
+  th, td
+    text-align: left
+    padding: 16px
+
+.table
+  width: 100%
+  margin-top: 24px
+  th, td
+    text-align: left
+    padding: 24px
+    +border-bottom
+  th
+    +label
+  tr.title-row
+    .table-title
+      color: #fff
+  tr.row-hover:hover
+    background: $canvas
+    cursor: pointer
+  tr:last-child
+    th, td
+      border-bottom: none
+
+  .narrow
+    white-space: nowrap
+    width: 1%
+  .flush-left
+    padding-left: 0
+  .flush-right
+    padding-right: 0
+  td.date
+    text-transform: uppercase
+  td.avatar
+    width: 32px
+
+//-----------------------------------
+// divided tables (gridlines on all sides)
+//-----------------------------------
+
+table.divided
+  th, td
+    +border-right
+  tr:first-child
+    th, td
+      +border-top
+  th:first-child, td:first-child
+    +border-left
+  tr:last-child
+    th, td
+      +border-bottom
+
+//-----------------------------------
+// alternating tables (striped)
+//-----------------------------------
+
+table.alternating
+  tr:nth-child(even)
+    th, td
+      background: $bg-gray
+
+//-----------------------------------
+// tables without lines
+//-----------------------------------
+
+table.plain
+  th, td
+    border: none
+
+//-----------------------------------
+// tables without padding
+//-----------------------------------
+
+table.p-0
+  th, td
+    padding: 0
+
+//-----------------------------------
+// table filters
+//-----------------------------------
+.table-filters
+  position: relative
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+
+  p
+    display: flex
+    flex-direction: column
+    justify-content: center

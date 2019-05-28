@@ -1,0 +1,307 @@
+=tip-arrow($size)
+  content: ""
+  position: absolute
+  height: #{$size}px
+  width: #{$size}px
+  content: ''
+
+//----------------
+// Tooltips & Popovers
+//----------------
+
+.tooltip, .popover
+  min-width: 165px
+  position: relative
+  padding: 0
+  border-radius: 3px
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2)
+  background: $charcoal
+  color: #fff
+  font-size: 13px
+  padding: 24px
+  z-index: 100
+  visibility: hidden
+  position: absolute
+  opacity: 0
+  transition: opacity 0.2s
+  &.visible
+    opacity: 1
+    visibility: visible
+  .tooltip-body
+    z-index: 3
+    min-width: 150px
+    color: #fff
+  &:before
+      +tip-arrow(15)
+      left: 0
+      right: 0
+      bottom: -7px
+      margin: auto
+      background: $charcoal
+      transform: rotate(45deg)
+      z-index: 2
+  &:after
+    +tip-arrow(15)
+    left: 0
+    right: 0
+    bottom: -8px
+    margin: auto
+    background: transparent
+    transform: rotate(45deg)
+    /* Prefixes... */
+    border: 1px solid rgba(0, 0, 0, 0.1)
+    z-index: 0
+  &.tooltip-white
+    background: #fff
+    .tooltip-body
+      color: $charcoal
+      p
+        color: $charcoal
+    &:after, &:before
+      background: #fff
+  &.align-right
+    .tooltip-body
+    &:before
+      right: auto
+      bottom: 0
+      top: 0
+      left: -8px
+      background: #fff
+      transform: rotate(135deg)
+    &:after
+      right: auto
+      bottom: 0
+      top: 0
+      left: -9px
+      background: #cecece
+      transform: rotate(135deg)
+
+.tooltip .tooltip-header
+  text-align: left
+  margin-bottom: 8px
+  color: #fff
+  h1, h2, h3, h4, h5, h6, p
+    color: #fff
+
+.tooltip .tooltip-body, .popover.popover-body
+  position: relative
+  z-index: 2
+  color: #fff
+  text-align: left
+  line-height: 18px
+  p
+    color: #fff
+    line-height: 18px
+
+
+.tooltip ul
+  list-style-type: none
+  padding: 0
+  margin: 0
+  li
+    margin: 0
+    span
+      display: inline-block
+      position: relative
+      top: 0px
+      margin-right: 5px
+      width: 8px
+      height: 8px
+      border-radius: 50%
+      /* FIXME - Remove application specific styles*/
+      &[data-color="detractors"]
+        border: 2px solid $detractor-color
+      &[data-color="passives"]
+        border: 2px solid $passive-color
+      &[data-color="promoters"], &[data-color="unfiltered"]
+        border: 2px solid $promoter-color
+      &[data-color="total"], &[data-color="nps"]
+        border: 2px solid $blue
+
+.info-tip-toggle
+  .material-icons
+    color: $flint
+  &:hover
+    .material-icons
+      color: $sabeus
+.tooltip-template
+  display: none
+
+// Tooltip Types
+
+.tooltip.tooltip-simple
+  min-width: 10px
+  padding: 4px 6px
+  box-shadow: none
+  .tooltip-body
+    min-width: 10px
+    font-size: 12px
+  &:before
+    +tip-arrow(8)
+    bottom: -3px
+    box-shadow: none
+  &:after
+    display: none
+  &.edge-right
+    border-bottom-right-radius: 2px
+    &:before
+      left: auto
+      right: 2px
+  &.edge-left
+    border-radius-bottom-left: 2px
+    &:before
+      right: auto
+      left: 2px
+
+
+//----------------
+// Popovers
+//----------------
+
+.popover
+  background: white
+  padding: 24px
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.14)
+  .popover-header
+    .material-icons, img
+      margin-bottom: 16px
+    h3
+      margin-top: 0
+  .popover-body, .popover-footer
+    margin-top: 16px
+  .popover-body
+    position: relative
+    color: $charcoal
+  .popover-footer
+    .btn
+      width: 100%
+      text-transform: uppercase
+  &:before, &:after
+    +tip-arrow(15)
+    right: auto
+    bottom: 0
+    top: 0
+    margin: auto
+    background: #fff
+    transform: rotate(135deg)
+  &:before
+    left: -8px
+    z-index: 2
+  &:after
+    left: -9px
+    background: rgba(0, 0, 0, 0.05)
+    border: 0
+
+
+//----------------
+// 3.x
+//----------------
+
+
+.plot.tooltip
+  margin-top: 25px
+  &:before
+    display: none
+  &:after
+    display: none
+
+.drivers-tooltip
+  min-width: 145px
+  display: none
+  position: absolute
+  left: 0
+  right: 0
+  margin: auto
+  width: auto
+  text-align: center
+  &.show
+    display: block
+
+
+#content-tooltip
+  position: absolute
+  display: none
+  background: #3c4a59
+  border-radius: 4px
+  font-size: 12px
+  color: #fff
+  padding: 8px 12px
+  z-index: 2147483647
+
+  &:before
+    content: ""
+    position: absolute
+
+  &.n:before, &.s:before
+    border-right: 8px solid transparent
+    border-left: 8px solid transparent
+    left: 50%
+    margin-left: -8px
+
+  &.e:before, &.w:before
+    border-bottom: 8px solid transparent
+    border-top: 8px solid transparent
+    margin-top: -8px
+    top: 50%
+
+  &.n:before
+    border-top: 8px solid #3c4a59
+    bottom: -8px
+
+  &.e:before
+    border-right: 8px solid #3c4a59
+    left: -8px
+
+  &.s:before
+    border-bottom: 8px solid #3c4a59
+    top: -8px
+
+  &.w:before
+    border-left: 8px solid #3c4a59
+    right: -8px
+
+  &.ne:before, &.se:before
+    border-right: 8px solid transparent
+    border-left: 0
+    left: 8px
+
+  &.nw:before, &.sw:before
+    border-left: 8px solid transparent
+    border-right: 0
+    right: 8px
+
+  &.ne:before, &.nw:before
+    border-top: 8px solid #3c4a59
+    bottom: -8px
+
+  &.se:before, &.sw:before
+    border-bottom: 8px solid #3c4a59
+    top: -8px
+
+  &.nw-alt:before, &.ne-alt:before,
+  &.sw-alt:before, &.se-alt:before
+    border-top: 8px solid #3c4a59
+    bottom: -8px
+    border-left: 8px solid transparent
+    border-right: 8px solid transparent
+    left: 8px
+
+  &.ne-alt:before
+    left: auto
+    right: 8px
+
+  &.sw-alt:before, &.se-alt:before
+    border-top: none
+    border-bottom: 8px solid #3c4a59
+    bottom: auto
+    top: -8px
+
+  &.se-alt:before
+    left: auto
+    right: 10px
+
+
+.tooltip._biome-tooltip, .tooltip.n
+  visibility: visible
+
+

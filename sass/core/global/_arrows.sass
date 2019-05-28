@@ -1,0 +1,27 @@
+// =========================================================
+// arrows on elements
+// =========================================================
+
+=arrow($direction, $size, $color)
+  width: 0px
+  height: 0px
+  @if $direction == up
+    border-left: $size solid transparent
+    border-right: $size solid transparent
+    border-bottom: $size solid $color
+  @else if $direction == down
+    border-left: $size solid transparent
+    border-right: $size solid transparent
+    border-top: $size solid $color
+  @else if $direction == right
+    width: 0px
+    height: 0px
+    border-top: $size solid transparent
+    border-bottom: $size solid transparent
+    border-left: $size solid $color
+  @else if $direction == left
+    width: 0px
+    height: 0px
+    border-top: $size solid transparent
+    border-bottom: $size solid transparent
+    border-right: $size solid $color

@@ -1,0 +1,28 @@
+// -----------------------------------------------
+// page sections
+// -----------------------------------------------
+#main
+  section
+    margin: 40px 0 0
+    .section-header
+      position: relative
+      margin-bottom: 24px
+
+      .section-header-action
+        position: absolute
+        right: 0
+        top: 0
+        text-align: right
+        line-height: 28px
+        vertical-align: middle
+
+      h5
+        margin: 0
+    .section-header + div, .section-header + p, .table-filters + div
+      margin-top: 0
+    > div
+      margin-top: 32px
+      &:first-child
+        margin-top: 0
+    +mobile
+      margin: 16px 0

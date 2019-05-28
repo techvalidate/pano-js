@@ -1,0 +1,106 @@
+.date-picker
+  .date-picker-header
+    display: table
+    width: 100%
+    margin: 8px 0 16px
+    text-align: left
+    h2
+      display: inline-block
+      margin-top: 12px
+      text-align: left
+    .date-picker-range
+      text-align: right
+      input, date-input
+        width: 120px
+        display: inline-block
+      hr
+        position: relative
+        display: inline-block
+        top: -3px
+        width: 10px
+        border-color: $slate
+        margin: 0 8px
+    +mobile
+      .date-picker-range
+        text-align: left
+
+  .date-picker-footer
+    margin-top: 24px
+    text-align: right
+
+  .calendars
+    position: relative
+    padding: 16px
+    border: 1px solid $pebble
+    text-align: center
+
+    .calendars-seperator
+      position: absolute
+      left: 0
+      right: 0
+      bottom: 16px
+      margin: auto
+      width: 1px
+      border-right: 1px solid $pebble
+      height: 224px
+      +mobile
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        width: calc(100% - 32px)
+        height: 1px
+        border-right: 0
+        border-bottom: 1px solid $pebble
+    .rd-container
+      text-align: center
+    .rd-next, .rd-back
+      position: relative
+      margin: 0
+      &:after
+        position: absolute
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        margin: auto
+        font-family: 'Material Icons'
+        font-size: 18px
+    .rd-next
+      float: right
+
+      &:after
+        font-family: 'Material Icons'
+        content: '\e315'
+    .rd-back
+      float: left
+      &:after
+        content: '\e314'
+    .rd-month-label
+      display: inline-block
+      font-size: 14px
+      margin: 8px 0 12px
+    table.rd-days
+      display: block
+      margin-top: 8px
+      th
+        font-size: 12px
+        color: $stone
+        font-weight: normal
+      td
+        padding: 12px
+        font-size: 14px
+        color: $charcoal
+
+      .rd-day-body:not(.rd-day-prev-month):not(.rd-day-next-month)
+        cursor: pointer
+        &.rd-day-disabled
+          opacity: 0.5
+          cursor: not-allowed
+      .in-range
+        background: rgba($sabeus, 0.5)
+      .rd-day-selected
+        background: $sabeus
+        color: #fff
+    .rd-day-prev-month, .rd-day-next-month
+      visibility: hidden

@@ -1,0 +1,61 @@
+$offset: 187
+$duration: 1.4s
+
+@keyframes loading-spinner-rotator
+  from
+    transform: rotateZ(0deg)
+  to
+    transform: rotateZ(360deg)
+
+#loading-overlay
+  position: fixed
+  left: 0
+  top: 0
+  right: 0
+  bottom: 0
+  background: rgba(255,255,255,0.2)
+  z-index: 10000
+  visibility: hidden
+  opacity: 0
+  &.visible
+    visibility: visible
+    opacity: 1
+    transition: visibility 0.3s, opacity 0.3s linear
+
+.loading-spinner
+  width: 48px
+  height: 48px
+  animation: loading-spinner-rotator $duration linear infinite
+  position: absolute
+  left: 50%
+  top: 50%
+  margin-left: -24px
+  margin-top: -24px
+  z-index: 1
+
+.fallback-spinner
+  width: 48px
+  height: 48px
+  background: url('~images/spinners/spinner.gif')
+  position: absolute
+  left: 50%
+  top: 50%
+  margin-left: -24px
+  margin-top: -24px
+  z-index: 1
+
+
+#inline-progress
+  position: absolute
+  left: 0
+  top: 0
+  right: 0
+  bottom: 0
+  background: rgba(255,255,255,0.2)
+  z-index: 10000
+  visibility: hidden
+  opacity: 0
+  &.visible
+    visibility: visible
+    opacity: 1
+    transition: visibility 0.3s, opacity 0.3s linear

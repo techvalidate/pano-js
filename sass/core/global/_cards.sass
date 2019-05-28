@@ -1,0 +1,104 @@
+@card-padding: 32px
+=card
+  margin-top: 32px
+  padding: 32px
+  background: #fff
+  border-radius: 2px
+  background-clip: border-box
+  border: 1px solid $pebble
+  +clearfix
+  +mobile
+    padding: 16px
+    margin-top: 16px
+
+.card
+  +card
+  &:first-child
+    margin-top: 0
+  .card-header
+    position: relative
+    margin-bottom: 16px
+    .card-icon
+      display: block
+      width: 32px
+    .card-title
+      display: inline-block
+    .card-header-action
+      position: absolute
+      right: 0
+      top: 0
+      text-align: right
+
+  .card-footer
+    margin-top: 24px
+    text-align: right
+
+.card.card-small
+  padding: 24px 32px
+  .card-title-small
+    font-size: 12px
+
+.card.card-divided
+  padding: 0
+  .card-header, .card-body, .card-footer
+    padding: 8px 24px
+    position: relative
+  .card-header
+    display: flex
+    align-items: center
+    border-bottom: 1px solid $pebble
+    margin-bottom: 0
+    .card-header-action
+      margin-left: auto
+      order: 2
+      position: relative
+
+  .card-footer
+    border-top: 1px solid $pebble
+
+.settings-cards-container
+  max-width: 1056px
+  margin: 32px auto
+  +clearfix
+  @media all and (max-width: 1056px)
+    max-width: 682px
+
+// TODO - 3.x Card, do we still need?
+.settings-card
+  padding: 40px 32px 16px 32px
+  text-align: center
+  width: 309px
+  min-height: 240px
+  float: left
+  margin: 16px
+  position: relative
+  .card-icon
+    margin-bottom: 8px
+    img
+      width: 48px
+      height: 48px
+  .user-avatar
+    width: 48px
+    height: 48px
+    line-height: 48px
+    font-size: 20px
+  .logo
+    max-height: 48px
+    width: auto
+    max-width: none
+  .card-title
+    margin-top: 0
+  .card-text
+    margin-top: 8px
+  +widescreen
+    width: 320px
+  +mobile
+    float: none
+    margin: 16px 0
+    padding: 16px
+    width: auto
+    min-height: 0
+    .card-icon
+      img
+        width: 40px
+        height: 40px

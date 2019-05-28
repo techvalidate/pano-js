@@ -1,0 +1,36 @@
+
+// =========================================================
+// this mixin centers an element, with max width of 1280px for the content area
+// and 16px of padding on the side. use on the container around your page content
+// or anything that you want to constrain to the same width as the main content
+// area of your page
+
+=page-width
+  margin: 0 auto
+  padding: 0
+  transition: max-width 0.2s ease-in-out
+  max-width: 1024px
+  +tablet
+    max-width: 100%
+  +mobile
+    padding: 0 8px
+
+// css class for when you just want to apply this behavior to an element
+
+.page-width
+  +page-width
+
+
+// =========================================================
+// Max-width classes. Every 100px and every 64px up to 1024px.
+// Use in conjunction with .centered if you want the element centered.
+//
+// available max widths: 64 100 128 192 200 256 300 320 384 400 448 500 512 576 600 640 700 704 768 800 832 896 900 960 1000 1024
+
+@for $x from 1 through 10
+  .max-width-#{$x * 100}
+    max-width: #{$x * 100}px !important
+
+@for $x from 1 through 16
+  .max-width-#{$x * 64}
+    max-width: #{$x * 64}px !important

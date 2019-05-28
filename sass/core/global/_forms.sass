@@ -1,0 +1,492 @@
+// ------------------------------------------
+// Normalize form controls
+// ------------------------------------------
+
+=input-base
+  display: block
+  width: 100%
+  padding: 6px 8px
+  font-size: 14px
+  line-height: 40px
+  height: 40px
+  color: $charcoal
+  background: white
+  border: 1px solid $flint
+  border-radius: 2px
+  font-weight: normal
+  box-sizing : border-box
+  +transition(all ease-in-out 0.15s)
+
+  &:disabled
+    cursor: not-allowed
+
+  &:focus
+    background: #fff
+    border: 1px solid $arctic
+    outline: none
+
+  &::placeholder
+    color: $slate
+    font-weight: normal
+
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+date-input,
+  +input-base
+
+label
+  cursor: pointer
+
+// ------------------------------------------
+// text inputs
+// ------------------------------------------
+
+textarea
+  height: auto
+  min-height: 96px
+
+
+date-input
+  padding: 0
+// ------------------------------------------
+// search fields
+// ------------------------------------------
+
+.search-field-container
+  position: relative
+  width: 250px
+  input[type="search"]
+    display: block
+    line-height: 32px
+    height: 32px
+    font-size: 14px
+    text-align: left
+    background: transparent
+    border: 0
+    border-radius: 0
+    // prevent search input from hiding behind search icon
+    padding-right: 34px
+    &.selected, &:focus, &:active
+      background: #fff
+      color: $charcoal
+      border-bottom: 1px solid $pebble
+
+  // Hide x clear button for IE11
+  input[type="search"]::-ms-clear
+    display: none
+
+  button[type="submit"], a.submit
+    position: absolute
+    bottom: 0
+    right: 0
+    background: transparent
+    border: 0
+    margin: 0
+    padding: 0
+    width: 32px
+    height: 32px
+    line-height: 32px
+    text-align: center
+    i
+      position: static
+      font-size: 16px
+      font-weight: 600
+      line-height: 30px
+      height: 32px
+      width: 32px
+      border: 0
+      margin: 0
+      padding: 0
+      color: $stone
+
+  &:hover
+    button[type="submit"], a.submit
+      i
+        background: $pebble
+
+
+
+
+
+// ------------------------------------------
+// date and time fields
+//
+// since we use :before content on these inputs we have
+// to wrap them in a span -- can't do :before on an input directly.
+// ------------------------------------------
+
+div.date-picker-wrapper, div.time-picker-wrapper
+  position: relative
+  display: block
+  max-width: 280px
+  input
+    padding-left: 32px
+
+span.time-picker-wrapper
+
+
+
+// ------------------------------------------
+// select tags
+// ------------------------------------------
+
+select
+  position: relative
+  height: 40px
+  border-radius: 2px
+
+
+
+// ------------------------------------------
+// inline input fields and select tags
+// ------------------------------------------
+
+select.inline, input.inline
+  display: inline-block
+  width: auto
+  margin-left: 4px
+  margin-right: 4px
+
+
+
+// ------------------------------------------
+// radio buttons and checkboxes
+// ------------------------------------------
+
+// Indent the labels to position radios/checkboxes as hanging controls.
+.radio,
+.checkbox
+  display: block
+  min-height: $line-height // clear the floating input if there is no label text
+  margin-top: 16px
+  margin-bottom: 16px
+  label
+    margin-bottom: 0
+    font-weight: normal
+    cursor: pointer
+
+  &:last-child
+    margin-bottom: 0
+
+.radio input[type="radio"],
+.checkbox input[type="checkbox"]
+  cursor: pointer
+  position: absolute
+  z-index: 2
+  opacity: 0
+  left: 3px
+  top: -2px
+  height: 18px
+
+
+input[type="radio"],
+input[type="checkbox"],
+.radio,
+.checkbox
+  &[disabled],
+  fieldset[disabled] &
+    cursor: not-allowed
+
+.radio
+  position: relative
+  padding-left: 24px
+  line-height: 18px
+  vertical-align: middle
+  label:before
+    position: absolute
+    display: inline-block
+    content: ''
+    left: 0
+    width: 18px
+    height: 18px
+    border: 2px solid $flint
+    background: white
+    border-radius: 50%
+    vertical-align: middle
+  input[type="radio"]:checked + label:before
+    border: 5px solid $sabeus
+
+.checkbox
+  position: relative
+  padding-left: 24px
+  line-height: 18px
+  vertical-align: middle
+  label:before
+    position: absolute
+    display: inline-block
+    content: ''
+    left: 0
+    width: 18px
+    height: 18px
+    border: 2px solid $flint
+    background: white
+    border-radius: 2px
+    vertical-align: middle
+  &.disabled.appear-checked label:before, input[type="checkbox"]:checked + label:before
+    /* .disabled.appear-checked makes the label appear checked even if the input itself is not */
+    font-family: 'Material Icons'
+    content: '\e876'
+    background-color: $sabeus
+    border: none
+    font-size: 18px
+    line-height: 18px
+    color: white
+    text-align: center
+
+
+
+// ------------------------------------------
+// form groups
+// ------------------------------------------
+
+.form-group
+  position: relative
+  margin-top: 24px
+
+  &:first-child
+    margin-top: 0
+
+  label, input, select, textarea, date-input
+    margin-top: 4px
+  label
+    margin-right: 8px
+  input
+    display: inline-block
+
+  .material-icons
+    position: absolute
+    font-size: 20px
+    left: 10px
+    top: 32px
+    color: $slate
+    pointer-events: none
+    z-index: 5
+
+    & + input,
+    & + input + date-input,
+    & + .field_with_errors input,
+    & + select,
+    & + .field_with_errors select
+      padding-left: 32px
+
+// ------------------------------------------
+// form group states
+// ------------------------------------------
+
+.form-group-focus
+  input, select
+    border: 1px solid $arctic
+    &:focus
+      outline: none
+
+.form-group-success
+  label, input, .form-helper-text
+    color: $success-color
+  input
+    border-color: $success-color
+
+.form-group-error
+  label, input, textarea, .form-helper-text, select, date-input
+    color: $error-color
+  input, select, date-input
+    border-color: $error-color
+
+.form-group-disabled
+  opacity: 0.5
+  label
+    cursor: not-allowed
+
+
+.form-group-optional
+  .form-helper-text
+    margin-right: 8px
+  &:after
+    display: inline-block
+    content: 'Optional'
+    font-size: $small-font-size
+    color: $flint
+    margin-top: 4px
+
+// ------------------------------------------
+// Help text
+//
+// Apply to any element you wish to create light text for placement immediately
+// below a form control. Use for general help, formatting, or instructional text.
+// ------------------------------------------
+
+.form-helper-text
+  display: inline-block
+  margin-top: 4px
+  font-size: $small-font-size
+
+
+
+// ------------------------------------------
+// form footers
+// ------------------------------------------
+
+.form-footer
+  margin-top: 24px
+  padding-top: 24px
+  text-align: right
+  +border-top
+  +clearfix
+  .btn, .btn-primary, input[type="submit"]
+    margin-right: 8px
+    min-width: 128px
+
+
+// ------------------------------------------
+// file inputs (note: should be obsoleted by dropzone uploads)
+// ------------------------------------------
+
+// Set the height of file controls to match text inputs
+input[type="file"]
+  display: block
+  padding: 16px
+
+
+// ------------------------------------------
+// Charcounter -- for fields with character length limits
+// ------------------------------------------
+
+.charcounter
+  position: absolute
+  z-index: 1
+  font-size: 15px
+  display: none
+  margin-top: 8px
+  color: $green
+  background: white
+  padding: 4px 8px
+  border-radius: 4px
+  border: solid 1px #ddd
+  box-shadow: 0 1px 3px rgba(black, 0.2)
+
+.charcounter:after, .charcounter:before
+  bottom: 100%
+  left: 50%
+  border: solid transparent
+  content: " "
+  height: 0
+  width: 0
+  position: absolute
+  pointer-events: none
+
+.charcounter:after
+  border-color: rgba(255, 255, 255, 0)
+  border-bottom-color: #ffffff
+  border-width: 8px
+  margin-left: -8px
+
+.charcounter:before
+  border-color: rgba(221, 221, 221, 0)
+  border-bottom-color: #ccc
+  border-width: 9px
+  margin-left: -9px
+
+input:focus + .charcounter
+  display: block
+
+textarea:focus + .charcounter
+  display: block
+
+
+// ------------------------------------------
+// password validation component, displays password validation
+// ------------------------------------------
+.password-validation
+  width: 100%
+  padding-top: 24px
+  vertical-align: middle
+  line-height: 16px
+  font-size: 12px
+  color: $light-gray
+  +clearfix
+
+  div
+    width: 33%
+    float: left
+    text-align: left
+    color: $light-gray
+
+    i:after
+      content: '\E15D'
+
+    &.valid
+      color: $green
+
+      i:after
+        content: '\E86C'
+    +mobile
+      float: none
+      text-align: center
+      white-space: nowrap
+      width: 100%
+      margin: 0 auto 8px auto
+
+  .min-letters
+    float: right
+    text-align: right
+
+  .material-icons
+    display: inline
+    line-height: 16px
+    font-size: 16px
+
+
+// ------------------------------------------
+// divide big forms up into sections
+// ------------------------------------------
+
+.form-section
+  +clearfix
+  margin-top: 48px
+  .section-info
+    float: left
+    width: calc(50% - 24px)
+    p
+      color: $slate
+  .section-fields
+    float: right
+    width: calc(50% - 24px)
+  .box
+    margin-top: 0
+    .form-group:first-of-type // this shouldn't work, but it does in Chrome...
+      margin-top: 0
+    .form-group:last-of-type // this shouldn't work, but it does in Chrome...
+      margin-bottom: 8px
+
+  +tablet
+    .section-info
+      width: calc(40% - 16px)
+    .section-fields
+      width: calc(60% - 16px)
+
+  +mobile
+    margin-top: 32px
+    .section-info, .section-fields
+      float: none
+      width: auto
+    .section-info
+      p:first-of-type
+        margin-top: 0
+    .box
+      margin-top: 16px
+
+

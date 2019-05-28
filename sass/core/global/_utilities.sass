@@ -1,0 +1,118 @@
+// ------------------------------------------
+// _utilities.sass: common utility classes
+// ------------------------------------------
+
+// ------------------------------------------
+// display
+// ------------------------------------------
+
+.hidden
+  display: none
+
+.block
+  display: block
+
+.inline-block
+  display: inline-block
+
+.relative
+  position: relative
+
+.absolute
+  position: absolute
+
+// ------------------------------------------
+// floats
+// ------------------------------------------
+
+// The double-colon notation used by the Bourbon clearfix
+// mixin doesn't work on IE8, so overriding it here.
+=clearfix
+  &:after
+    clear: both
+    content: ''
+    display: table
+
+.cf
+  +clearfix
+
+.fl
+  float: left !important
+
+.fr
+  float: right !important
+
+// ------------------------------------------
+// horizontal centering
+// ------------------------------------------
+
+=centered
+  margin-left: auto
+  margin-right: auto
+
+.centered
+  +centered
+
+// ------------------------------------------
+// padding
+// ------------------------------------------
+
+.p-0
+  padding: 0 !important
+
+.p-s
+  padding: 8px !important
+
+.p-m
+  padding: 16px !important
+
+.p-l
+  padding: 24px 32px !important
+  +mobile
+    padding: 16px !important
+
+.p-xl
+  padding: 32px 48px !important
+  +mobile
+    padding: 16px !important
+
+.p-xxl
+  padding: 40px 64px !important
+  +mobile
+    padding: 16px !important
+
+// ------------------------------------------
+// margins
+// ------------------------------------------
+
+.mt-0
+  margin-top: 0 !important
+
+.mt-s
+  margin-top: 8px !important
+.mr-s
+  margin-right: 8px !important
+
+.mt-m
+  margin-top: 16px !important
+
+.mr-m
+  margin-right: 16px !important
+
+.mt-l
+  margin-top: 32px !important
+
+.mr-l
+  margin-right: 32px !important
+  // +mobile
+  //   margin-top: 16px !important
+
+.mt-xl
+  margin-top: 48px !important
+  +mobile
+    margin-top: 32px !important
+
+.mt-xxl
+  margin-top: 64px !important
+  +mobile
+    margin-top: 32px !important

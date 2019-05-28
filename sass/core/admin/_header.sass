@@ -1,0 +1,32 @@
+// -----------------------------------------------
+// header: fixed position header at top contains
+// the name of the current area you're in.
+// based on the old CX left-nav code.
+// -----------------------------------------------
+
+#header
+  position: fixed
+  min-width: 800px
+  z-index: 100
+  left: 160px
+  top: 0
+  right: 0
+  background: white
+  min-height: 56px
+  box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.05)
+  padding: 12px 32px
+  +clearfix
+
+  h1
+    margin: 0
+    float: left
+    font-size: 20px
+    line-height: 32px
+    color: #444
+    font-weight: 300
+    i
+      font-size: 20px
+
+  #cur-user
+    float: right
+    line-height: 32px

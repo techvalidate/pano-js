@@ -1,0 +1,249 @@
+
+// ------------------------------------------
+// global top nav
+// ------------------------------------------
+
+#app-top-nav
+  position: fixed
+  z-index: 300
+  left: 0
+  top: 0
+  width: 100vw
+  height: 48px
+  color: white
+  background: $nav-blue
+
+  #nav-container
+    +clearfix
+    margin: 0
+    position: relative
+    padding: 0 32px
+
+  a.nav-link
+    position: relative
+    display: block
+    float: left
+    height: 48px
+    padding: 0 16px
+    font-size: 16px
+    line-height: 48px
+    color: rgba(255,255,255,0.52)
+    letter-spacing: 0.4px
+    font-weight: 400
+    +transition(all 0.2s ease-in-out)
+
+    +tablet
+      padding: 0 12px
+
+    &:hover
+      text-decoration: none
+      color: white
+
+    &.selected
+      color: white
+
+  // override this in your client application to render the correct
+  // logo via a background image. the image should be 25px tall on desktop
+  // and 20px tall on mobile
+  #nav-logo
+    display: block
+    float: left
+    width: 96px
+    height: 48px
+    position: relative
+    z-index: 10
+    +transition(all 0.2s ease-in-out)
+
+    a
+      text-align: center
+      display: block
+      height: 100%
+      line-height: 48px
+      +transition(all 0.2s ease-in-out)
+      img
+        vertical-align: middle
+
+  #mobile-nav-trigger
+    display: none
+
+
+  #nav-right-links
+    position: absolute
+    top: 0
+    right: 16px
+    +clearfix
+
+  a.right-icon-link
+    float: right
+    width: 48px
+    padding: 0
+    text-align: center
+
+  #cur-user-dropdown-trigger
+    float: right
+    position: relative
+    max-width: 200px
+    height: 48px
+    top: 0
+    right: 0
+    padding: 0 60px 0 8px
+    cursor: pointer
+    .user-name
+      display: block
+      max-width: 130px
+      text-align: right
+      color: white
+      font-size: 11px
+      line-height: 11px
+      margin-top: 12px
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+    .org-name
+      display: block
+      max-width: 130px
+      text-align: right
+      font-size: 11px
+      line-height: 11px
+      margin-top: 3px
+      color: rgba(255,255,255,0.5)
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+    .user-avatar
+      width: 32px
+      position: absolute
+      right: 18px
+      top: 8px
+    &:after
+      content: ''
+      position: absolute
+      right: 4px
+      top: 21px
+      +arrow(down, 5px, white)
+    &:hover
+      background: rgba(0,0,0,0.05)
+    &.open
+      background: rgba(0,0,0,0.05)
+      &:after
+        +arrow(up, 5px, white)
+        border-top: none
+
+  .nav-dropdown
+    position: absolute
+    z-index: 199
+    background: white
+    top: 48px
+    width: 240px
+    +mega-shadow
+    border-bottom-left-radius: 3px
+    border-bottom-right-radius: 3px
+    background-clip: border-box
+    overflow: hidden
+    font-size: 13px
+    +accelerated-transforms-base
+    +transition(all 0.2s ease-in-out)
+    transform: translateY(-24px) scale(0.9)
+    pointer-events: none
+    opacity: 0
+    &.visible
+      pointer-events: auto
+      opacity: 1
+      transform: translateY(0px) scale(1)
+    a
+      display: block
+      height: 40px
+      line-height: 20px
+      padding: 10px 16px
+      color: $slate
+      background: white
+      +transition(all 0.2s ease-in-out)
+      &:hover
+        color: $link-color
+        background-color: $bg-gray
+        text-decoration: none
+      i
+        margin-right: 6px
+      &.separated
+        border-top: solid 1px $border-color
+
+  #cur-user-dropdown
+    right: 0
+
+#app-top-nav-shim
+  height: 48px
+
+
++mobile
+
+  #app-top-nav
+    height: 40px
+
+    // override this in your client application to render the correct
+    // logo via a background image. the image should be 24px tall on desktop
+    // and 20px tall on mobile
+    #nav-logo
+      float: none
+      width: 66px
+      height: 40px
+      margin: 0 auto
+
+    #mobile-nav-trigger
+      display: block
+      position: absolute
+      top: 0
+      left: 0
+      width: 40px
+      height: 40px
+      line-height: 38px
+      color: rgba(255,255,255,0.7)
+      +transition(all 0.2s ease-in-out)
+      text-align: center
+      &:hover
+        color: white
+        background: rgba(0,0,0,0.05)
+
+    #mobile-nav
+      left: 0
+      a.nav-link
+        float: none
+        &.selected
+          background: $bg-gray
+          color: $body-paragraph-color
+          font-weight: bold
+
+    .nav-dropdown
+      top: 40px
+
+    #nav-links
+      display: none
+
+    #nav-shim
+      height: 40px
+
+    #nav-right-links
+      right: 0
+
+    a.right-icon-link
+      height: 40px
+      line-height: 40px
+
+    #cur-user-dropdown-trigger
+      max-width: 40px
+      height: 40px
+      padding-right: 40px
+      .user-name
+        display: none
+      .org-name
+        display: none
+      .user-avatar
+        right: 18px
+        top: 4px
+      &:after
+        top: 18px
+
+    #cur-user-dropdown
+      right: 0
+
+  #app-top-nav-shim
+    height: 40px

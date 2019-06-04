@@ -23731,6 +23731,10 @@ var _class = function (_Controller) {
       if (!this.targets.has('hover')) {
         this.element.setAttribute('data-target', this.type + '.hover');
       }
+
+      if (this.data.get('color')) {
+        this.tooltip.addClass(this.data.get('color'));
+      }
     }
   }, {
     key: 'disconnect',

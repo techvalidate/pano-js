@@ -9,7 +9,7 @@
   "main": "./pano.js",
   "modules": "./index.js",
   "scripts": {
-    "build": "yarn webpack",
+    "build": "yarn webpack && cp -r ./src/controllers ./",
     "watch": "yarn webpack -w"
   },
   "dependencies": {

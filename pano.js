@@ -23603,7 +23603,7 @@ var defaultSchema = {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($, _) {
+
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -23612,6 +23612,16 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _stimulus = __webpack_require__(3);
+
+var _lodash = __webpack_require__(5);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _jquery = __webpack_require__(0);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -23653,7 +23663,7 @@ var _class = function (_Controller) {
       }
 
       if (this.targets.has('template')) {
-        this.content = $(this.templateTarget).html();
+        this.content = (0, _jquery2.default)(this.templateTarget).html();
       }
     }
   }, {
@@ -23662,7 +23672,7 @@ var _class = function (_Controller) {
       this.setTemplate();
       this.setContent();
 
-      var $element = $(this.hoverTarget);
+      var $element = (0, _jquery2.default)(this.hoverTarget);
       var x = $element.offset().left;
       var y = $element.offset().top;
       var centerX = x + $element.width() / 2;
@@ -23708,20 +23718,20 @@ var _class = function (_Controller) {
   }, {
     key: 'createTip',
     value: function createTip() {
-      $('body').append(this.container);
+      (0, _jquery2.default)('body').append(this.container);
       this.setTemplate();
     }
   }, {
     key: 'bindInteractions',
     value: function bindInteractions() {
-      this.element.addEventListener('mouseover', _.bind(this.show, this));
-      this.element.addEventListener('mouseout', _.bind(this.hide, this));
+      this.element.addEventListener('mouseover', _lodash2.default.bind(this.show, this));
+      this.element.addEventListener('mouseout', _lodash2.default.bind(this.hide, this));
     }
   }, {
     key: 'connect',
     value: function connect() {
       var controller = this;
-      if (!this.tooltip.exists()) {
+      if (!this.tooltip.length) {
         this.createTip();
       }
 
@@ -23766,7 +23776,7 @@ var _class = function (_Controller) {
   }, {
     key: 'tooltip',
     get: function get() {
-      return $('#' + this.id);
+      return (0, _jquery2.default)('#' + this.id);
     }
   }, {
     key: 'title',
@@ -23783,7 +23793,6 @@ var _class = function (_Controller) {
 
 _class.targets = ['hover', 'template'];
 exports.default = _class;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(5)))
 
 /***/ }),
 /* 21 */
@@ -46561,11 +46570,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * jQuery Validation Plugin v1.17.0
+ * jQuery Validation Plugin v1.18.0
  *
  * https://jqueryvalidation.org/
  *
- * Copyright (c) 2017 Jörn Zaefferer
+ * Copyright (c) 2018 Jörn Zaefferer
  * Released under the MIT license
  */
 (function( factory ) {
@@ -46632,6 +46641,7 @@ $.extend( $.fn, {
 					// Prevent form submit to be able to see console output
 					event.preventDefault();
 				}
+
 				function handle() {
 					var hidden, result;
 
@@ -46647,7 +46657,7 @@ $.extend( $.fn, {
 							.appendTo( validator.currentForm );
 					}
 
-					if ( validator.settings.submitHandler ) {
+					if ( validator.settings.submitHandler && !validator.settings.debug ) {
 						result = validator.settings.submitHandler.call( validator, validator.currentForm, event );
 						if ( hidden ) {
 
@@ -46714,7 +46724,7 @@ $.extend( $.fn, {
 			return;
 		}
 
-		if ( !element.form && element.hasAttribute( "contenteditable" ) ) {
+		if ( !element.form && element.isContentEditable ) {
 			element.form = this.closest( "form" )[ 0 ];
 			element.name = this.attr( "name" );
 		}
@@ -46958,7 +46968,8 @@ $.extend( $.validator, {
 			this.invalid = {};
 			this.reset();
 
-			var groups = ( this.groups = {} ),
+			var currentForm = this.currentForm,
+				groups = ( this.groups = {} ),
 				rules;
 			$.each( this.settings.groups, function( key, value ) {
 				if ( typeof value === "string" ) {
@@ -46976,9 +46987,15 @@ $.extend( $.validator, {
 			function delegate( event ) {
 
 				// Set form expando on contenteditable
-				if ( !this.form && this.hasAttribute( "contenteditable" ) ) {
+				if ( !this.form && this.isContentEditable ) {
 					this.form = $( this ).closest( "form" )[ 0 ];
 					this.name = $( this ).attr( "name" );
+				}
+
+				// Ignore the element if it belongs to another form. This will happen mainly
+				// when setting the `form` attribute of an input to the id of another form.
+				if ( currentForm !== this.form ) {
+					return;
 				}
 
 				var validator = $.data( this.form, "validator" ),
@@ -47209,9 +47226,14 @@ $.extend( $.validator, {
 				}
 
 				// Set form expando on contenteditable
-				if ( this.hasAttribute( "contenteditable" ) ) {
+				if ( this.isContentEditable ) {
 					this.form = $( this ).closest( "form" )[ 0 ];
 					this.name = name;
+				}
+
+				// Ignore elements that belong to other/nested forms
+				if ( this.form !== validator.currentForm ) {
+					return false;
 				}
 
 				// Select only the first element for each name, and only those with rules specified
@@ -47267,7 +47289,7 @@ $.extend( $.validator, {
 				return element.validity.badInput ? "NaN" : $element.val();
 			}
 
-			if ( element.hasAttribute( "contenteditable" ) ) {
+			if ( element.isContentEditable ) {
 				val = $element.text();
 			} else {
 				val = $element.val();
@@ -47327,10 +47349,6 @@ $.extend( $.validator, {
 			// Note that `this` in the normalizer is `element`.
 			if ( normalizer ) {
 				val = normalizer.call( element, val );
-
-				if ( typeof val !== "string" ) {
-					throw new TypeError( "The normalizer should return a string value." );
-				}
 
 				// Delete the normalizer from rules to avoid treating it as a pre-defined method.
 				delete rules.normalizer;
@@ -47707,7 +47725,19 @@ $.extend( $.validator, {
 				.removeData( "validator" )
 				.find( ".validate-equalTo-blur" )
 					.off( ".validate-equalTo" )
-					.removeClass( "validate-equalTo-blur" );
+					.removeClass( "validate-equalTo-blur" )
+				.find( ".validate-lessThan-blur" )
+					.off( ".validate-lessThan" )
+					.removeClass( "validate-lessThan-blur" )
+				.find( ".validate-lessThanEqual-blur" )
+					.off( ".validate-lessThanEqual" )
+					.removeClass( "validate-lessThanEqual-blur" )
+				.find( ".validate-greaterThanEqual-blur" )
+					.off( ".validate-greaterThanEqual" )
+					.removeClass( "validate-greaterThanEqual-blur" )
+				.find( ".validate-greaterThan-blur" )
+					.off( ".validate-greaterThan" )
+					.removeClass( "validate-greaterThan-blur" );
 		}
 
 	},
@@ -47811,6 +47841,12 @@ $.extend( $.validator, {
 
 		for ( method in $.validator.methods ) {
 			value = $element.data( "rule" + method.charAt( 0 ).toUpperCase() + method.substring( 1 ).toLowerCase() );
+
+			// Cast empty attributes like `data-rule-required` to `true`
+			if ( value === "" ) {
+				value = true;
+			}
+
 			this.normalizeAttributeRule( rules, type, method, value );
 		}
 		return rules;
@@ -47936,7 +47972,7 @@ $.extend( $.validator, {
 			if ( this.checkable( element ) ) {
 				return this.getLength( value, element ) > 0;
 			}
-			return value.length > 0;
+			return value !== undefined && value !== null && value.length > 0;
 		},
 
 		// https://jqueryvalidation.org/email-method/
@@ -47960,9 +47996,26 @@ $.extend( $.validator, {
 		},
 
 		// https://jqueryvalidation.org/date-method/
-		date: function( value, element ) {
-			return this.optional( element ) || !/Invalid|NaN/.test( new Date( value ).toString() );
-		},
+		date: ( function() {
+			var called = false;
+
+			return function( value, element ) {
+				if ( !called ) {
+					called = true;
+					if ( this.settings.debug && window.console ) {
+						console.warn(
+							"The `date` method is deprecated and will be removed in version '2.0.0'.\n" +
+							"Please don't use it, since it relies on the Date constructor, which\n" +
+							"behaves very differently across browsers and locales. Use `dateISO`\n" +
+							"instead or one of the locale specific methods in `localizations/`\n" +
+							"and `additional-methods.js`."
+						);
+					}
+				}
+
+				return this.optional( element ) || !/Invalid|NaN/.test( new Date( value ).toString() );
+			};
+		}() ),
 
 		// https://jqueryvalidation.org/dateISO-method/
 		dateISO: function( value, element ) {

@@ -31,34 +31,6 @@ module.exports = (env, argv) => {
     },
 
     plugins,
-
-    optimization: {
-      minimizer: isProd ? [
-        new UglifyJsPlugin({
-          uglifyOptions: {
-            cache: true,
-            parallel: true,
-            beautify: false,
-            compress: {
-              warnings: false,
-              conditionals: true,
-              unused: true,
-              comparisons: true,
-              sequences: true,
-              dead_code: true,
-              evaluate: true,
-              join_vars: true,
-              if_return: true,
-            },
-            output: {
-              comments: false,
-            },
-          },
-          sourceMap: false,
-        })
-      ] : []
-    },
-
     devtool: isProd ? false : 'cheap-module-eval-source-map',
     module: {
       rules: [

@@ -1,8 +1,8 @@
 {
   "license": "UNLICENSED",
-  "name": "pano",
+  "name": "pano-monorepo",
   "version": "1.0.0",
-  "repository": "git@github.com:techvalidate/pano.git",
+  "repository": "git@github.com:techvalidate/pano-js.git",
   "contributors": [
     "Matt Lindeboom <mattl@surveymonkey.com>"
   ],

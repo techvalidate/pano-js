@@ -1,4 +1,6 @@
 import { Controller } from 'stimulus'
+import $ from 'jquery'
+
 const Dropzone = require('dropzone/dist/dropzone-amd-module')
 Dropzone.autoDiscover = false
 

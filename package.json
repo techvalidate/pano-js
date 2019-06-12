@@ -1,6 +1,6 @@
 {
   "license": "UNLICENSED",
-  "name": "pano-monorepo",
+  "name": "pano",
   "version": "1.0.0",
   "repository": "git@github.com:techvalidate/pano.git",
   "contributors": [

@@ -32,6 +32,22 @@ module.exports = (env, argv) => {
 
     plugins,
 
+    optimization: {
+      minimizer: isProd ? [
+        new UglifyJsPlugin({
+          uglifyOptions: {
+            cache: true,
+            parallel: true,
+            beautify: false,
+            output: {
+              comments: false,
+            },
+          },
+          sourceMap: false,
+        })
+      ] : []
+    },
+
     devtool: isProd ? false : 'cheap-module-eval-source-map',
     module: {
       rules: [

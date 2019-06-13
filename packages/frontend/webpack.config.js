@@ -4,7 +4,7 @@ const UglifyJsPlugin = require('uglify-js-plugin')
 const path = require('path')
 
 const entries = {
-  frontend: ['whatwg-fetch', './src/index.js']
+  frontend: './src/index.js'
 }
 
 module.exports = (env, argv) => {

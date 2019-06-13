@@ -4,7 +4,7 @@ const UglifyJsPlugin = require('uglify-js-plugin')
 const path = require('path')
 
 const entries = {
-  frontend: './src/index.js'
+  frontend: ['babel-polyfill', './src/index.js']
 }
 
 module.exports = (env, argv) => {

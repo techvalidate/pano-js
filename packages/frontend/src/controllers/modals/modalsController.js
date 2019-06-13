@@ -1,3 +1,4 @@
+import 'es6-promise'
 import 'whatwg-fetch' // fetch polyfill
 import { Controller } from 'stimulus'
 import Velocity from 'velocity-animate'

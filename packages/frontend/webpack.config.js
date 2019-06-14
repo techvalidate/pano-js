@@ -1,6 +1,6 @@
 const webpack = require('webpack')
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
-const UglifyJsPlugin = require('uglify-js-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
 
 const entries = {

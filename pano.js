@@ -23638,7 +23638,7 @@ var _class = function (_Controller) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = _class.__proto__ || Object.getPrototypeOf(_class)).call.apply(_ref, [this].concat(args))), _this), _this.id = 'pano-tooltip', _this.type = 'tooltip', _temp), _possibleConstructorReturn(_this, _ret);
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = _class.__proto__ || Object.getPrototypeOf(_class)).call.apply(_ref, [this].concat(args))), _this), _this.id = 'pano-tooltip', _this.type = 'tooltip', _this.className = 'tooltip', _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(_class, [{
@@ -23720,6 +23720,12 @@ var _class = function (_Controller) {
   }, {
     key: 'connect',
     value: function connect() {
+      // Hide any leftover tooltips from browser redirects and history changes.
+      var t = document.getElementsByClassName(this.className);
+      for (var i = 0; i < t.length; i++) {
+        t[i].classList.remove('visible');
+      }
+
       var controller = this;
       if (!this.tooltip.exists()) {
         this.createTip();
@@ -23744,7 +23750,7 @@ var _class = function (_Controller) {
   }, {
     key: 'container',
     get: function get() {
-      return '\n        <div id="' + this.id + '" class="tooltip">\n        </div>';
+      return '\n        <div id="' + this.id + '" class="' + this.className + '"">\n        </div>';
     }
   }, {
     key: 'bodyTemplate',
@@ -37646,7 +37652,7 @@ var _class = function (_TooltipController) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = _class.__proto__ || Object.getPrototypeOf(_class)).call.apply(_ref, [this].concat(args))), _this), _this.id = 'pano-popover', _this.type = 'popover', _temp), _possibleConstructorReturn(_this, _ret);
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = _class.__proto__ || Object.getPrototypeOf(_class)).call.apply(_ref, [this].concat(args))), _this), _this.id = 'pano-popover', _this.type = 'popover', _this.className = 'popover', _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(_class, [{
@@ -37712,7 +37718,7 @@ var _class = function (_TooltipController) {
     key: 'container',
     get: function get() {
       var klass = this.element.getAttribute('data-container-class') || '';
-      return '\n        <div id="' + this.id + '" class="popover ' + klass + '">\n        </div>';
+      return '\n        <div id="' + this.id + '" class="' + this.className + ' ' + klass + '">\n        </div>';
     }
   }, {
     key: 'bodyTemplate',

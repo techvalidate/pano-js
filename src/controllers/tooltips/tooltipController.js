@@ -10,10 +10,11 @@ export default class extends Controller {
 
   id = 'pano-tooltip'
   type = 'tooltip'
+  className = 'tooltip'
 
   get container() {
     return `
-        <div id="${this.id}" class="tooltip">
+        <div id="${this.id}" class="${this.className}"">
         </div>`
   }
 
@@ -121,6 +122,12 @@ export default class extends Controller {
   }
 
   connect() {
+    // Hide any leftover tooltips from browser redirects and history changes.
+    const t = document.getElementsByClassName(this.className)
+    for (let i = 0; i < t.length; i++) {
+      t[i].classList.remove('visible')
+    }
+
     const controller = this
     if (!this.tooltip.exists()) {
       this.createTip()

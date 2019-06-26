@@ -3,11 +3,12 @@ import TooltipController from './tooltipController'
 export default class extends TooltipController {
   id = 'pano-popover'
   type = 'popover'
+  className = 'popover'
 
   get container() {
     const klass = this.element.getAttribute('data-container-class') || ''
     return `
-        <div id="${this.id}" class="popover ${klass}">
+        <div id="${this.id}" class="${this.className} ${klass}">
         </div>`
   }
 

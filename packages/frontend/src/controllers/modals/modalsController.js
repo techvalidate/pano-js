@@ -1,5 +1,4 @@
-
-import { fetch as fetchPolyfill } from 'whatwg-fetch' // fetch polyfill
+import 'whatwg-fetch' // fetch polyfill
 import { Controller } from 'stimulus'
 import Velocity from 'velocity-animate'
 import $ from 'jquery'
@@ -46,7 +45,7 @@ export default class extends Controller {
 
   getModal(url) {
     const controller = this
-    fetchPolyfill(url, {
+    fetch(url, {
       credentials: 'same-origin',
       redirect: 'follow'
     })

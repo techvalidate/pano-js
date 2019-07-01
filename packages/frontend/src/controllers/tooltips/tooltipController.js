@@ -12,10 +12,11 @@ export default class extends Controller {
 
   id = 'pano-tooltip'
   type = 'tooltip'
+  className = 'tooltip'
 
   get container() {
     return `
-        <div id="${this.id}" class="tooltip">
+        <div id="${this.id}" class="${this.className}"">
         </div>`
   }
 
@@ -37,9 +38,20 @@ export default class extends Controller {
     return $(`#${this.id}`)
   }
 
+  get title() {
+    return this._title
+  }
+
+  set title(title) {
+    this._title = title
+  }
+
   setContent() {
     if (this.element.hasAttribute('title')) {
-      this.content = this.element.getAttribute('title')
+      const title = this.element.getAttribute('title')
+      this.content = title
+      // Add back the title attribute in disconnect(), so the title is present when navigating browser hsitory.
+      this.title = title
       this.element.removeAttribute('title')
     }
 
@@ -112,6 +124,12 @@ export default class extends Controller {
   }
 
   connect() {
+    // Hide any leftover tooltips from browser redirects and history changes.
+    const t = document.getElementsByClassName(this.className)
+    for (let i = 0; i < t.length; i++) {
+      t[i].classList.remove('visible')
+    }
+
     const controller = this
     if (!this.tooltip.length) {
       this.createTip()
@@ -122,6 +140,14 @@ export default class extends Controller {
     // default hover target to the element
     if (!this.targets.has('hover')) {
       this.element.setAttribute('data-target', `${this.type}.hover`)
+    }
+  }
+
+  disconnect() {
+    // reset the element title navigating back/forward in the browser history will show the inital title
+    const title = this.title
+    if (this.title) {
+      this.element.setAttribute('title', title)
     }
   }
 }

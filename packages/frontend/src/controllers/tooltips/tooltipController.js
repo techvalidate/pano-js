@@ -13,10 +13,11 @@ export default class extends Controller {
   id = 'pano-tooltip'
   type = 'tooltip'
   className = 'tooltip'
+  controllerClass = 'tooltip-controller'
 
   get container() {
     return `
-        <div id="${this.id}" class="${this.className}"">
+        <div id="${this.id}" class="${this.className} ${this.controllerClass}">
         </div>`
   }
 
@@ -124,8 +125,8 @@ export default class extends Controller {
   }
 
   connect() {
-    // Hide any leftover tooltips from browser redirects and history changes.
-    const t = document.getElementsByClassName(this.className)
+    // Hide any tooltips (setup by the tooltip controller) leftover from browser history changes.
+    const t = document.getElementsByClassName(this.controllerClass)
     for (let i = 0; i < t.length; i++) {
       t[i].classList.remove('visible')
     }

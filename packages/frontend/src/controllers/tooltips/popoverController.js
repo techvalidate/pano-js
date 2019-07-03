@@ -10,7 +10,7 @@ export default class extends TooltipController {
   get container() {
     const klass = this.element.getAttribute('data-container-class') || ''
     return `
-        <div id="${this.id}" class="${this.className} ${klass}">
+        <div id="${this.id}" class="${this.className} ${this.controllerClass} ${klass}">
         </div>`
   }
 

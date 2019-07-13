@@ -6,6 +6,7 @@ export default class extends TooltipController {
   id = 'pano-popover'
   type = 'popover'
   className = 'popover'
+  keepOpen = 'keep-open'
 
   get container() {
     const klass = this.element.getAttribute('data-container-class') || ''
@@ -55,7 +56,6 @@ export default class extends TooltipController {
   }
 
   hide() {
-    if (this.keepOpen) return
     this.tooltip.removeClass('visible')
   }
 
@@ -67,11 +67,11 @@ export default class extends TooltipController {
   bindTipInteractions() {
     const controller = this
     this.tooltip.on('mouseenter', function() {
-      controller.keepOpen = true
+      controller.tooltip.addClass(controller.keepOpen)
     })
 
     this.tooltip.on('mouseleave', function() {
-      controller.keepOpen = false
+      controller.tooltip.removeClass(controller.keepOpen)
       controller.hide()
     })
   }

@@ -13,6 +13,7 @@ export default class extends Controller {
   id = 'pano-tooltip'
   type = 'tooltip'
   className = 'tooltip'
+  keepOpen = 'keep-open' // visible
 
   get container() {
     return `
@@ -130,6 +131,7 @@ export default class extends Controller {
   connect() {
     // Hide any pre-existing tooltips setup by this controller. They may be leftover from browser history changes.
     this.tooltip.removeClass('visible')
+    this.tooltip.removeClass(this.keepOpen)
 
     if (this.tooltip.length) {
       this.resetTip()

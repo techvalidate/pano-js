@@ -6,7 +6,6 @@ export default class extends TooltipController {
   id = 'pano-popover'
   type = 'popover'
   className = 'popover'
-  keepOpen = 'keep-open'
 
   get container() {
     const klass = this.element.getAttribute('data-container-class') || ''

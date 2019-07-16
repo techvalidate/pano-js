@@ -10,7 +10,7 @@ export default class extends TooltipController {
   get container() {
     const klass = this.element.getAttribute('data-container-class') || ''
     return `
-        <div id="${this.id}" class="${this.className} ${this.controllerClass} ${klass}">
+        <div id="${this.id}" class="${this.className} ${klass}">
         </div>`
   }
 
@@ -55,23 +55,34 @@ export default class extends TooltipController {
   }
 
   hide() {
-    if (this.keepOpen) return
     this.tooltip.removeClass('visible')
   }
 
   createTip() {
     super.createTip()
+    this.bindTipInteractions()
+  }
 
+  bindTipInteractions() {
     const controller = this
-
     this.tooltip.on('mouseenter', function() {
-      controller.keepOpen = true
+      controller.tooltip.addClass(controller.keepOpen)
     })
 
     this.tooltip.on('mouseleave', function() {
-      controller.keepOpen = false
+      controller.tooltip.removeClass(controller.keepOpen)
       controller.hide()
     })
+  }
+
+  unbindTipInteractions() {
+    this.tooltip.off('mouseenter')
+    this.tooltip.off('mouseleave')
+  }
+
+  resetTip() {
+    this.unbindTipInteractions()
+    this.bindTipInteractions()
   }
 
   bindInteractions() {

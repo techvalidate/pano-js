@@ -13,11 +13,11 @@ export default class extends Controller {
   id = 'pano-tooltip'
   type = 'tooltip'
   className = 'tooltip'
-  controllerClass = 'tooltip-controller'
+  keepOpen = 'keep-open' // visible
 
   get container() {
     return `
-        <div id="${this.id}" class="${this.className} ${this.controllerClass}">
+        <div id="${this.id}" class="${this.className}">
         </div>`
   }
 
@@ -119,20 +119,23 @@ export default class extends Controller {
     this.setTemplate()
   }
 
+  // override
+  resetTip() {
+  }
+
   bindInteractions() {
     this.element.addEventListener('mouseover', bind(this.show, this))
     this.element.addEventListener('mouseout', bind(this.hide, this))
   }
 
   connect() {
-    // Hide any tooltips (setup by the tooltip controller) leftover from browser history changes.
-    const t = document.getElementsByClassName(this.controllerClass)
-    for (let i = 0; i < t.length; i++) {
-      t[i].classList.remove('visible')
-    }
+    // Hide any pre-existing tooltips setup by this controller. They may be leftover from browser history changes.
+    this.tooltip.removeClass('visible')
+    this.tooltip.removeClass(this.keepOpen)
 
-    const controller = this
-    if (!this.tooltip.length) {
+    if (this.tooltip.length) {
+      this.resetTip()
+    } else {
       this.createTip()
     }
 

@@ -9,15 +9,19 @@ require('../utils')
  * Load sprinkles
  */
 require('./arrowToggle.js')
+require('./calendar.js')
+require('./datePicker.js')
 require('./dropdown.js')
+require('./fileUploads.js')
 require('./filters.js')
-require('./flashMessages.js');
-require('./forms.js');
-require('./inlineSpinner');
-require('./loadingSpinner');
+require('./flashMessages.js')
+require('./forms.js')
+require('./inlineSpinner')
+require('./loadingSpinner')
 require('./minicolors.js')
-require('./nav.js');
+require('./modals.js')
+require('./nav.js')
 require('./scrollTo.js')
 require('./switches.js')
-require('./timezone.js');
-require('./tooltips.js');
+require('./timezone.js')
+require('./tooltips.js')

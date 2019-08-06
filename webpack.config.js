@@ -15,6 +15,9 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({
       _: 'lodash',
+      $: 'jquery',
+      jQuery: 'jquery',
+      jquery: 'jquery',
       UI: 'UI'
     }),
 

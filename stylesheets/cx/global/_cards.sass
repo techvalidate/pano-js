@@ -1,0 +1,49 @@
+.card
+  +box
+
+
+.settings-cards-container
+  max-width: 1056px
+  margin: 32px auto
+  +clearfix
+  @media all and (max-width: 1056px)
+    max-width: 682px
+
+.settings-card
+  padding: 40px 32px 16px 32px
+  text-align: center
+  width: 309px
+  min-height: 240px
+  float: left
+  margin: 16px
+  position: relative
+  .card-icon
+    margin-bottom: 8px
+    img
+      width: 48px
+      height: 48px
+  .user-avatar
+    width: 48px
+    height: 48px
+    line-height: 48px
+    font-size: 20px
+  .logo
+    max-height: 48px
+    width: auto
+    max-width: none
+  .card-title
+    margin-top: 0
+  .card-text
+    margin-top: 8px
+  +widescreen
+    width: 320px
+  +mobile
+    float: none
+    margin: 16px 0
+    padding: 16px
+    width: auto
+    min-height: 0
+    .card-icon
+      img
+        width: 40px
+        height: 40px

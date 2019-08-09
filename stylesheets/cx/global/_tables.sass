@@ -1,0 +1,85 @@
+//-----------------------------------
+// basic table styles
+//-----------------------------------
+
+table
+  width: 100%
+  margin-top: 24px
+
+  th, td
+    text-align: left
+    padding: 16px
+    +border-bottom
+  th
+    font-weight: normal
+    font-size: $tiny-font-size
+    line-height: 130%
+    color: $gray
+    text-transform: uppercase
+
+  th:first-child, td:first-child
+    padding-left: 0
+  th:last-child, td:last-child
+    padding-right: 0
+
+  tr:last-child
+    th, td
+      border-bottom: none
+
+  .narrow
+    white-space: nowrap
+    width: 1%
+  .flush-left
+    padding-left: 0
+  .flush-right
+    padding-right: 0
+  td.date
+    font-size: 11px
+    color: $slate
+  td.avatar
+    width: 32px
+
+//-----------------------------------
+// divided tables (gridlines on all sides)
+//-----------------------------------
+
+table.divided
+  th, td
+    padding: 16px !important
+    +border-right
+  tr:first-child
+    th, td
+      +border-top
+  th:first-child, td:first-child
+    padding-left: 12px
+    +border-left
+  tr:last-child
+    th, td
+      +border-bottom
+
+//-----------------------------------
+// alternating tables (striped)
+//-----------------------------------
+
+table.alternating
+  th, td
+    padding: 12px !important
+  tr:nth-child(even)
+    th, td
+      background: $bg-gray
+
+//-----------------------------------
+// tables without lines
+//-----------------------------------
+
+table.plain
+  th, td
+    border: none
+
+//-----------------------------------
+// tables without padding
+//-----------------------------------
+
+table.p-0
+  th, td
+    padding: 0

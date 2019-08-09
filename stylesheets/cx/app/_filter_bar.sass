@@ -1,0 +1,132 @@
+
+//-------------------------------------------------------------
+//  Filter Bar. Designed to stick under a fixed-position subnav
+//-------------------------------------------------------------
+
+#filters
+  display: none
+  position: relative
+  width: 100%
+
+  &.show
+    display: block
+    width: 100%
+
+  #filter-bar
+    width: 100%
+    position: relative
+    background: $bg-gray
+    position: relative
+    box-shadow: none
+    +border
+    border-bottom-left-radius: 3px
+    border-bottom-right-radius: 3px
+    font-size: 12px
+    z-index: 198
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1)
+    +clearfix
+
+    &:before
+      display: block
+      content: ''
+      position: absolute
+      right: 24px
+      top: -11px
+      +arrow(up, 10px, $border-color)
+    &:after
+      display: block
+      content: ''
+      position: absolute
+      right: 24px
+      top: -10px
+      +arrow(up, 10px, $bg-gray)
+
+    .jq-dropdown-link
+      display: block
+      float: left
+
+    .available-filters
+      +clearfix
+
+    .clear-filters-btn
+      padding: 3px 10px
+      line-height: 22px
+      margin-top: 4px
+
+    .active-filters
+      position: relative
+      border-top: solid 1px $border-color
+      padding: 8px 16px
+      +clearfix
+
+      .active-filters-list
+        margin-left: 90px
+
+      .label
+        float: left
+        width: 90px
+        margin-top: 4px
+        color: $dark-blue
+        font-weight: 500
+
+      a
+        float: left
+        margin-right: 4px
+        i
+          line-height: 14px
+
+      a.active-filter
+        padding: 3px 4px 3px 8px
+        border-radius: 3px
+        background: $blue
+        color: #fff
+        line-height: 20px
+        transition: background 0.2s ease-in-out
+        &:hover
+          background: darken($blue, 10%)
+          text-decoration: none
+
+      .delete
+        line-height: 20px
+        float: right
+        color: $red
+        padding: 3px 8px 3px 4px
+        border-radius: 3px
+        line-height: 20px
+        transition: background 0.2s ease-in-out
+        &:hover
+          background: $lighter-gray
+          text-decoration: none
+
+
+// todo: clean this up
+.search-form
+  float: right
+  position: relative
+  input[type="search"]
+    display: inline-block
+    margin: 0
+    height: 30px
+    padding: 0 16px 0 28px
+    font-size: 15px
+    &::placeholder
+      color: #aaa
+  input[type="search"]::-ms-clear
+    display: none
+  .clear-search
+    position: absolute
+    top: 4px
+    right: 4px
+    line-height: 20px
+    width: 20px
+    height: 20px
+  &:before
+    content: '\e8b6'
+    font-family: 'Material Icons'
+    font-style: normal
+    font-weight: normal
+    font-size: 16px
+    color: $gray
+    position: absolute
+    margin-left: 8px
+    margin-top: 0

@@ -1,0 +1,418 @@
+// ------------------------------------------
+// form groups
+// ------------------------------------------
+
+.form-group
+  position: relative
+  margin-top: 24px
+
+  &:first-child
+    margin-top: 0
+
+  .material-icons
+    position: absolute
+    left: 10px
+    top: 36px
+    color: #999
+    pointer-events: none
+    z-index: 5
+
+    & + input,
+    & + .field_with_errors input,
+    & + select,
+    & + .field_with_errors select
+      padding-left: 32px
+
+  label.group-label
+    display: block
+    margin-bottom: 4px
+    font-weight: 600
+
+    &.optional:after
+      content: 'Optional'
+      margin-left: 8px
+      margin-top: 1px
+      color: $gray
+      font-size: $small-font-size
+      font-weight: 300
+
+
+
+// ------------------------------------------
+// Help text
+//
+// Apply to any element you wish to create light text for placement immediately
+// below a form control. Use for general help, formatting, or instructional text.
+// ------------------------------------------
+
+.help-block
+  display: block
+  margin-top: 4px
+  margin-bottom: 16px
+  color: $gray
+  font-weight: 300
+  font-size: $small-font-size
+
+
+
+// ------------------------------------------
+// form footers
+// ------------------------------------------
+
+.form-footer
+  margin-top: 24px
+  padding-top: 24px
+  text-align: right
+  +border-top
+  +clearfix
+  .btn, .btn-primary, input[type="submit"]
+    margin-right: 8px
+    min-width: 128px
+
+
+
+// ------------------------------------------
+// Normalize form controls
+// ------------------------------------------
+
+=input-base
+  display: block
+  width: 100%
+  padding: 6px 8px
+  font-size: 14px
+  line-height: 24px
+  background: #fafafa
+  // border: none
+  // box-shadow: 0 0 1px 0 rgba(0,0,0,0.3), inset 0 0 3px 0 rgba(0,0,0,0.1)
+  border: 1px solid rgba(0, 0, 0, .12)
+  box-shadow: inset 0 0 3px 0 rgba(0,0,0,0.1)
+  border-radius: 3px
+  +transition(all ease-in-out 0.15s)
+
+  &[disabled]
+    cursor: not-allowed
+    opacity: 0.5 !important
+
+  &:focus
+    background: #fff
+    box-shadow: 0 0 4px 0 rgba(0,168,255,0.5), inset 0 0 3px 0 rgba(0,0,0,0.1)
+    border: 1px solid $blue
+    outline: none
+
+  ::placeholder
+    color: #aaa
+
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"]
+  +input-base
+
+label
+  cursor: pointer
+
+// ------------------------------------------
+// text inputs
+// ------------------------------------------
+
+textarea
+  height: auto
+  min-height: 96px
+
+
+
+// ------------------------------------------
+// search fields
+// ------------------------------------------
+
+// search icons inside search fields. the container is because we can't
+// use :before or :after on an input element
+.search-field-container
+  position: relative
+
+  input[type="search"]
+    padding-left: 32px
+
+  &:before
+    content: '\e8b6'
+    position: absolute
+    margin-left: 11px
+    margin-top: 3px
+    font-size: 18px
+    pointer-events: none
+    font-family: 'Material Icons'
+    color: $gray
+
+input[type="search"]
+  -webkit-appearance: none
+  +box-sizing(border-box)
+  border-radius: 48px
+  background: #fff
+  border: solid 1px #ccc
+  padding: 4px 12px
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.15)
+  outline: none
+  transition: all 0.30s ease-in-out
+
+  &.selected
+    box-shadow: inset 0 0 3px rgba(0,0,0,0.2), 0 0 5px $link-color
+    border: 1px solid $green
+
+
+
+// ------------------------------------------
+// date and time fields
+//
+// since we use :before content on these inputs we have
+// to wrap them in a span -- can't do :before on an input directly.
+// ------------------------------------------
+
+div.date-picker-wrapper, div.time-picker-wrapper
+  position: relative
+  display: block
+  max-width: 280px
+  input
+    padding-left: 32px
+
+span.time-picker-wrapper
+
+
+
+// ------------------------------------------
+// select tags
+// ------------------------------------------
+
+select
+  height: 36px
+  box-shadow: 0 0 1px rgba(0,0,0,0.3)
+
+
+
+// ------------------------------------------
+// inline input fields and select tags
+// ------------------------------------------
+
+select.inline, input.inline
+  display: inline-block
+  width: auto
+  margin-left: 4px
+  margin-right: 4px
+
+
+
+// ------------------------------------------
+// radio buttons and checkboxes
+// ------------------------------------------
+
+// Indent the labels to position radios/checkboxes as hanging controls.
+.radio,
+.checkbox
+  display: block
+  min-height: $line-height // clear the floating input if there is no label text
+  margin-top: 16px
+  margin-bottom: 16px
+  padding-left: 24px
+  label
+    margin-bottom: 0
+    font-weight: normal
+    cursor: pointer
+
+  &:last-child
+    margin-bottom: 0
+
+.radio input[type="radio"],
+.checkbox input[type="checkbox"]
+  float: left
+  margin: 6px 12px 0 -8px
+  line-height: normal
+
+.radio + .radio,
+.checkbox + .checkbox
+  margin-top: -5px // Move up sibling radios or checkboxes for tighter spacing
+
+input[type="radio"],
+input[type="checkbox"],
+.radio,
+.checkbox
+  &[disabled],
+  fieldset[disabled] &
+    cursor: not-allowed
+
+
+
+// ------------------------------------------
+// file inputs (note: should be obsoleted by dropzone uploads)
+// ------------------------------------------
+
+// Set the height of file controls to match text inputs
+input[type="file"]
+  display: block
+  padding: 16px
+
+
+
+// ------------------------------------------
+// error states
+// ------------------------------------------
+
+input.error, textarea.error
+  outline: none
+  box-shadow: 0 0 4px 0 $error-color, inset 0 0 5px 0 rgba(255,0,0,0.10) !important
+
+  &:focus
+    border: 1px solid $error-color
+
+
+label.error
+  position: absolute
+  text-align: right
+  right: 0
+  margin-top: 4px
+  font-size: 12px
+  line-height: 14px
+  color: $error-color
+  display: block
+  font-weight: normal
+
+
+
+// ------------------------------------------
+// Charcounter -- for fields with character length limits
+// ------------------------------------------
+
+.charcounter
+  position: absolute
+  z-index: 1
+  font-size: 15px
+  display: none
+  margin-top: 8px
+  color: $green
+  background: white
+  padding: 4px 8px
+  border-radius: 4px
+  border: solid 1px #ddd
+  box-shadow: 0 1px 3px rgba(black, 0.2)
+
+.charcounter:after, .charcounter:before
+  bottom: 100%
+  left: 50%
+  border: solid transparent
+  content: " "
+  height: 0
+  width: 0
+  position: absolute
+  pointer-events: none
+
+.charcounter:after
+  border-color: rgba(255, 255, 255, 0)
+  border-bottom-color: #ffffff
+  border-width: 8px
+  margin-left: -8px
+
+.charcounter:before
+  border-color: rgba(221, 221, 221, 0)
+  border-bottom-color: #ccc
+  border-width: 9px
+  margin-left: -9px
+
+input:focus + .charcounter
+  display: block
+
+textarea:focus + .charcounter
+  display: block
+
+
+// ------------------------------------------
+// password validation component, displays password validation
+// ------------------------------------------
+.password-validation
+  width: 100%
+  padding-top: 24px
+  vertical-align: middle
+  line-height: 16px
+  font-size: 12px
+  color: $light-gray
+  +clearfix
+
+  div
+    width: 33%
+    float: left
+    text-align: left
+    color: $light-gray
+
+    i:after
+      content: '\E15D'
+
+    &.valid
+      color: $green
+
+      i:after
+        content: '\E86C'
+    +mobile
+      float: none
+      text-align: center
+      white-space: nowrap
+      width: 100%
+      margin: 0 auto 8px auto
+
+  .min-letters
+    float: right
+    text-align: right
+
+  .material-icons
+    display: inline
+    line-height: 16px
+    font-size: 16px
+
+
+// ------------------------------------------
+// divide big forms up into sections
+// ------------------------------------------
+
+.form-section
+  +clearfix
+  margin-top: 48px
+  .section-info
+    float: left
+    width: calc(50% - 24px)
+    p
+      color: $slate
+  .section-fields
+    float: right
+    width: calc(50% - 24px)
+  .box
+    margin-top: 0
+    .form-group:first-of-type // this shouldn't work, but it does in Chrome...
+      margin-top: 0
+    .form-group:last-of-type // this shouldn't work, but it does in Chrome...
+      margin-bottom: 8px
+
+  +tablet
+    .section-info
+      width: calc(40% - 16px)
+    .section-fields
+      width: calc(60% - 16px)
+
+  +mobile
+    margin-top: 32px
+    .section-info, .section-fields
+      float: none
+      width: auto
+    .section-info
+      p:first-of-type
+        margin-top: 0
+    .box
+      margin-top: 16px

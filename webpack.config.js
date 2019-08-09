@@ -1,6 +1,6 @@
 const webpack = require('webpack')
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
-const UglifyJsPlugin = require('uglify-js-plugin')
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const path = require('path')
 
 module.exports = (env, argv) => {
@@ -17,16 +17,19 @@ module.exports = (env, argv) => {
     })
   ]
 
+
+  console.warn( 'Current mode is set to ' + argv.mode)
   /**
    * WEBPACK CONFIG
    */
   return {
     context: path.resolve(__dirname),
+    mode: isProd ? 'production' : 'development',
+    devtool: isProd ? '' : 'eval-source-map',
 
     entry: {
       pano: './index.js'
     },
-    devtool: '',
     output: {
       filename: '[name].js',
       path: path.resolve('./'),
@@ -44,7 +47,6 @@ module.exports = (env, argv) => {
             parallel: true,
             beautify: false,
             compress: {
-              warnings: false,
               conditionals: true,
               unused: true,
               comparisons: true,
@@ -52,18 +54,17 @@ module.exports = (env, argv) => {
               dead_code: true,
               evaluate: true,
               join_vars: true,
-              if_return: true,
+              if_return: true
             },
             output: {
-              comments: false,
+              comments: false
             },
           },
-          sourceMap: false,
+          sourceMap: true
         })
       ] : []
     },
 
-    // devtool: isProd ? false : 'cheap-module-eval-source-map',
     module: {
       rules: [
         {
@@ -79,7 +80,8 @@ module.exports = (env, argv) => {
             }, {
               loader: 'expose-loader',
               options: 'jquery'
-            }
+
+          }
           ]
         },
         {

@@ -9,8 +9,8 @@
   "main": "./pano.js",
   "modules": "./index.js",
   "scripts": {
-    "build": "yarn webpack && cp -r ./",
-    "watch": "yarn webpack -w"
+    "build": "yarn webpack --mode production",
+    "watch": "yarn webpack --mode development -w"
   },
   "dependencies": {
     "@claviska/jquery-dropdown": "https://github.com/soundasleep/jquery-dropdown#master",
@@ -46,8 +46,6 @@
     "stimulus": "^1.1.1",
     "switchery": "^0.0.2",
     "turbolinks": "^5.2.0",
-    "uglify-js-plugin": "^0.0.6",
-    "uglifyjs-webpack-plugin": "^2.2.0",
     "velocity-animate": "1.5.2",
     "webpack-jquery-ui": "^2.0.1",
     "whatwg-fetch": "^2.0.4"
@@ -55,6 +53,8 @@
   "devDependencies": {
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "expose-loader": "^0.7.5",
+    "uglify-js-plugin": "^0.0.6",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "4.39.0",
     "webpack-bundle-analyzer": "^3.4.1",
     "webpack-cli": "^3.3.6",

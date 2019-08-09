@@ -26,7 +26,7 @@ module.exports = (env, argv) => {
     entry: {
       pano: './index.js'
     },
-    devtool: 'sourcemap',
+    devtool: '',
     output: {
       filename: '[name].js',
       path: path.resolve('./'),

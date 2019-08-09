@@ -22,7 +22,12 @@ UI.on('ajax:send', document, (e, el) => showLoadingSpinner());
 
 //----------------------------------------
 // Times we need to hide the spinner
+
+$(document).ajaxStop(() => hideLoadingSpinner())
 UI.on('ajax:complete', document, (e, el) => hideLoadingSpinner())
+UI.on('ajax:error', document, (e) => {
+  console.warn(e)
+})
 
 // this is for a firefox "feature"
 $(window).on('unload', e => hideLoadingSpinner());

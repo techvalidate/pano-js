@@ -1,0 +1,431 @@
+
+// WORK IN PROGRESS
+
+// ------------------------------------------
+// global top nav
+// ------------------------------------------
+
+#nav
+  position: fixed
+  display: relative
+  z-index: 300
+  left: 0
+  top: 0
+  width: 100vw
+  height: 48px
+  color: white
+  // box-shadow: 0 1px 4px 0 rgba(0,0,0,0.05)
+  background: $dark-blue
+  background-image: linear-gradient(to right, rgba(20,121,214,0.5), rgba(29,73,127,0.5))
+
+  #nav-container
+    position: relative
+    height: 40px
+    +page-width
+
+  a.nav-link
+    position: relative
+    display: block
+    float: left
+    height: 48px
+    padding: 0 16px
+    font-size: 12px
+    line-height: 48px
+    color: rgba(255,255,255,0.7)
+    letter-spacing: 0.4px
+    +transition(all 0.2s ease-in-out)
+
+    +tablet
+      padding: 0 12px
+
+    &:hover
+      text-decoration: none
+      color: white
+      background: rgba(0,0,0,0.05)
+
+    &.selected
+      color: white
+
+  // add a white triangle to selected nav link when subnav is present
+  &.with-subnav
+    a.nav-link.selected
+      &:after
+        content: ''
+        position: absolute
+        top: 40px
+        left: calc(50% - 8px)
+        +arrow(up, 8px, white)
+
+  #nav-logo
+    display: block
+    float: left
+    width: 96px
+    height: 48px
+    position: relative
+    z-index: 10
+    background: url('~images/logos/cx-logo-white.svg') no-repeat 0 12px
+    background-size: 79px 24px
+    +transition(all 0.2s ease-in-out)
+
+    a
+      text-indent: -1000px
+      display: block
+      height: 100%
+      +transition(all 0.2s ease-in-out)
+      &:hover
+        background: rgba(0,0,0,0.05)
+
+  #mobile-nav-trigger
+    display: none
+
+
+  #nav-right-links
+    position: absolute
+    top: 0
+    right: 16px
+    +clearfix
+
+  a.right-icon-link
+    float: right
+    width: 48px
+    padding: 0
+    text-align: center
+
+  #cur-user-dropdown-trigger
+    float: right
+    position: relative
+    max-width: 200px
+    height: 48px
+    top: 0
+    right: 0
+    padding: 0 60px 0 8px
+    cursor: pointer
+    .user-name
+      display: block
+      max-width: 130px
+      text-align: right
+      color: white
+      font-size: 11px
+      line-height: 11px
+      margin-top: 12px
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+    .org-name
+      display: block
+      max-width: 130px
+      text-align: right
+      font-size: 11px
+      line-height: 11px
+      margin-top: 3px
+      color: rgba(255,255,255,0.5)
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+    .user-avatar
+      width: 32px
+      position: absolute
+      right: 18px
+      top: 8px
+    &:after
+      content: ''
+      position: absolute
+      right: 4px
+      top: 21px
+      +arrow(down, 5px, white)
+    &:hover
+      background: rgba(0,0,0,0.05)
+    &.open
+      background: rgba(0,0,0,0.05)
+      &:after
+        +arrow(up, 5px, white)
+        border-top: none
+
+  .nav-dropdown
+    position: absolute
+    z-index: 199
+    background: white
+    top: 48px
+    width: 240px
+    +mega-shadow
+    border-bottom-left-radius: 3px
+    border-bottom-right-radius: 3px
+    background-clip: border-box
+    overflow: hidden
+    font-size: $font-size
+    +accelerated-transforms-base
+    +transition(all 0.2s ease-in-out)
+    transform: translateY(-24px) scale(0.9)
+    pointer-events: none
+    opacity: 0
+    &.visible
+      pointer-events: auto
+      opacity: 1
+      transform: translateY(0px) scale(1)
+    a
+      display: block
+      height: 40px
+      line-height: 20px
+      padding: 10px 16px
+      color: $slate
+      background: white
+      +transition(all 0.2s ease-in-out)
+      &:hover
+        color: $link-color
+        background-color: $bg-gray
+        text-decoration: none
+    .text-icon-link
+      i
+        margin-right: 6px
+    hr
+      margin-top: 0
+
+  #cur-user-dropdown
+    right: 16px
+
+#nav-shim
+  height: 48px
+
+
++mobile
+
+  #nav
+    height: 40px
+
+    #nav-logo
+      float: none
+      width: 66px
+      height: 40px
+      margin: 0 auto
+      background: url('~images/logos/cx-logo-white.svg') no-repeat 0 10px
+      background-size: 66px 20px
+
+    #mobile-nav-trigger
+      display: block
+      position: absolute
+      top: 0
+      left: 0
+      width: 40px
+      height: 40px
+      line-height: 38px
+      color: rgba(255,255,255,0.7)
+      +transition(all 0.2s ease-in-out)
+      text-align: center
+      &:hover
+        color: white
+        background: rgba(0,0,0,0.05)
+
+    #mobile-nav
+      left: 0
+      a.nav-link
+        float: none
+        &.selected
+          background: $bg-gray
+          color: $text-color
+          font-weight: bold
+
+    .nav-dropdown
+      top: 40px
+
+    #nav-links
+      display: none
+
+    #nav-shim
+      height: 40px
+
+    #nav-right-links
+      right: 0
+
+    a.right-icon-link
+      height: 40px
+      line-height: 40px
+
+    #cur-user-dropdown-trigger
+      max-width: 40px
+      height: 40px
+      padding-right: 40px
+      .user-name
+        display: none
+      .org-name
+        display: none
+      .user-avatar
+        right: 18px
+        top: 4px
+      &:after
+        top: 18px
+
+    #cur-user-dropdown
+      right: 0
+
+  #nav-shim
+    height: 40px
+
+
+// // ------------------------------------------
+// // global left nav bar
+// // ------------------------------------------
+//
+// #nav
+//   position: fixed
+//   z-index: 200
+//   left: 0
+//   top: 0
+//   bottom: 0
+//   width: 160px
+//   overflow-x: hidden
+//   overflow-y: auto
+//   box-shadow: 0 0 5px rgba(0,0,0,0.4)
+//   background: #063870
+//   background-image: linear-gradient(#0A518C, #063870)
+//   +accelerated-transforms-base
+//   transform: translateX(-160px)
+//   transition: all 0.2s ease-in-out
+//   color: white
+//   font-size: $small-font-size
+//   white-space: nowrap
+//
+//   a
+//     overflow: visible
+//     display: block
+//     min-height: 56px
+//     padding: 0 20px
+//     font-size: 12px
+//     line-height: 56px
+//     color: rgba(255,255,255,0.75)
+//
+//     &:hover
+//       text-decoration: none
+//       color: white
+//       background-color: rgba(255,255,255,0.1)
+//
+//     &.selected
+//       color: white
+//       background-color: rgba(0,0,0,0.05)
+//
+//     span
+//       display: inline-block
+//       overflow: visible
+//
+//   i
+//     margin-right: 20px
+//
+//   #nav-logo
+//     position: relative
+//     z-index: 10
+//     margin-bottom: 32px
+//     text-indent: -1000px
+//     background: url('~images/logos/cx-only-logo-white.svg') no-repeat 8px 17px
+//     background-size: 40px 22px
+//
+//     &:hover
+//       background-color: rgba(255,255,255,0.1)
+//
+//   .nav-trigger
+//     color: #fff
+//     background: transparent
+//     width: 56px
+//     padding: 0
+//
+//     &:hover
+//       background-color: rgba(255,255,255,0.1)
+//
+//   #nav-footer
+//     position: absolute
+//     bottom: 0
+//     left: 0
+//     right: 0
+//
+//     #cur-user
+//       position: relative
+//       width: 160px
+//       padding-left: 12px
+//       white-space: nowrap
+//       overflow: hidden
+//       text-overflow: ellipsis
+//
+//       .user-avatar
+//         margin-right: 12px
+//
+//       i
+//         position: absolute
+//         top: 20px
+//         left: 140px
+//
+//     #cur-user-options
+//       display: none
+//       position: absolute
+//       bottom: 56px
+//       left: 8px
+//       width: 144px
+//       box-shadow: 0 0 5px rgba(0,0,0,0.4)
+//       background: white
+//
+//       a
+//         display: block
+//         min-height: 32px
+//         line-height: 32px
+//         padding: 0 12px
+//         color: $gray
+//         text-decoration: none
+//         i
+//           margin-right: 12px
+//         &:hover
+//           color: $link-color
+//           transition: color 0.2s ease-in-out
+//
+//     #cur-user-options:after, #cur-user-options:before
+//       top: 100%
+//       left: 50%
+//       border: solid transparent
+//       content: " "
+//       height: 0
+//       width: 0
+//       position: absolute
+//       pointer-events: none
+//
+//     #cur-user-options:after
+//       border-color: rgba(255, 255, 255, 0)
+//       border-top-color: #fff
+//       border-width: 8px
+//       margin-left: -8px
+//
+//     #cur-user-options:before
+//       border-color: rgba(102, 102, 102, 0)
+//       border-top-color: #666
+//       border-width: 9px
+//       margin-left: -9px
+//
+//   &.with-subnav
+//     width: 56px
+//
+//     #cur-user-options
+//       visibility: hidden
+//
+//     &:hover
+//       width: 160px
+//
+//       #cur-user-options
+//         visibility: visible
+//
+//   &.with-demo-banner
+//     top: $demo-banner-height
+//
+//   +widescreen
+//     transform: translateX(0px)
+//
+//     #nav-logo
+//       margin-left: 0 !important
+//
+//     .nav-trigger
+//       opacity: 0 !important
+//       z-index: 0 !important
+//
+//   &.slide-out
+//     transform: translateX(0px)
+//     width: 56px
+//
+//     &:hover
+//       width: 160px
+//
+//     + #subnav
+//       display: block

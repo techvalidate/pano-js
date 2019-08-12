@@ -1,0 +1,44 @@
+// =========================================================
+// Mixins for defining styles at different viewport widths.
+//
+//  mobile: under 768px wide
+//  tablet: under 1024px wide
+//  large:  >= 1312px wide (1280px + 16px gutter on each side)
+//
+// =========================================================
+
+// this is a compile-time flag to force mobile styles. it's
+// useful for previewing mobile surveys.
+$force-mobile: false
+
+=mobile
+  @if $force-mobile
+    @content
+  @else
+    @media all and (max-width: 767px)
+      @content
+
+=tablet
+  @media all and (max-width: 1023px)
+    @content
+
+=widescreen
+  @media all and (min-width: 1312px)
+    @content
+
+=less-than-widescreen
+  @media all and (max-width: 1311px)
+    @content
+
+
+// =========================================================
+// hide-show on desktop/mobile
+
+.hide-on-mobile
+  +mobile
+    display: none
+
+.hide-unless-mobile
+  display: none
+  +mobile
+    display: block

@@ -6,8 +6,8 @@ In your package.json:
 `"pano-js": "git+ssh://git@github.com:techvalidate/pano-js"`
 
 ## Build
-- `yarn build`
-- `yarn watch`
+- `yarn build` for production
+- `yarn watch` for development
 
 ## Usage
 In your webpack application.js pack:

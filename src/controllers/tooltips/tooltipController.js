@@ -1,6 +1,5 @@
 import { Controller } from 'stimulus'
 import _ from 'lodash'
-import $ from 'jquery'
 /**
  * TooltipController
  * - templateTarget - defines template content, defaults to title attribute

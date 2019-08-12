@@ -1,0 +1,35 @@
+// -----------------------------------------------
+// demo banner that pushes everything else down if it's there.
+// -----------------------------------------------
+
+#demo-banner
+  position: fixed
+  z-index: 500
+  bottom: 0
+  left: 0
+  width: 100vw
+  height: 64px
+  padding: 20px 0
+  // border-top: solid 2px $yellow
+  // -webkit-border-image: linear-gradient(to right, $green 0%, $blue 50%, $purple 100%)
+  // background: white
+  border-image-slice: 1
+  background: linear-gradient(to left, $green, darken($green, 5%))
+  color: white
+  // box-shadow: 0 0 4px rgba(0,0,0,0.4)
+  p, a
+    color: white
+  // a
+  //   text-decoration: underline
+
+  // .buttons
+  //   margin-top: 8px
+
+  +mobile
+    height: 48px
+    padding: 12px 0
+
+#demo-banner-shim
+  height: 64px
+  +mobile
+    height: 48px

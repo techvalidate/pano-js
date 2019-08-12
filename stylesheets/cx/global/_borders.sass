@@ -1,0 +1,53 @@
+// =========================================================
+// border mixins. note overrideable colors and widths
+// =========================================================
+
+=border($width: 1px, $color: $border-color)
+  border: solid $width $color
+
+=border-left($width: 1px, $color: $border-color)
+  border-left: solid $width $color
+
+=border-top($width: 1px, $color: $border-color)
+  border-top: solid $width $color
+
+=border-right($width: 1px, $color: $border-color)
+  border-right: solid $width $color
+
+=border-bottom($width: 1px, $color: $border-color)
+  border-bottom: solid $width $color
+
+=dashed-border($width: 2px, $color: $border-color)
+  border: dashed $width $color
+  border-radius: 10px
+
+=rounded($width: 8px)
+  border-radius: $width !important
+
+// =========================================================
+// css classes based on mixins
+// =========================================================
+
+.border
+  +border
+
+.border-left
+  +border-left
+
+.border-top
+  +border-top
+
+.border-right
+  +border-right
+
+.border-bottom
+  +border-bottom
+
+.dashed-border
+  +dashed-border
+
+.rounded
+  +rounded
+
+.slightly-rounded
+  +rounded(3px)

@@ -1,7 +1,6 @@
 /**
  * Load sprinkle dependencies
  */
-
 require('../jquery-plugins')
 require('../utils')
 

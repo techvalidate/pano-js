@@ -1,0 +1,113 @@
+
+.flash
+  position: relative
+  overflow: hidden
+  padding: 10px 40px 10px 16px
+  margin-bottom: 32px
+  border-radius: 3px
+  color: white
+  text-align: left
+  font-size: 15px
+  line-height: 20px
+  font-weight: normal
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3)
+  +accelerated-transforms-base
+  transition: all 0.2s ease-in-out
+  background: rgba(10,80,139,0.8)
+
+  +mobile
+    font-size: 13px
+
+  &:hover
+    background: rgba(10,80,139,1.0)
+    cursor: pointer
+    .close-icon
+      color: white
+
+  animation-name: slideDown
+  animation-iteration-count: 1
+  animation-fill-mode: forwards
+  animation-timing-function: ease-in-out
+  animation-duration: 0.2s
+
+  &.hiding
+    animation-name: slideUp
+
+  .close-icon
+    font-size: 24px
+    position: absolute
+    right: 8px
+    top: 8px
+    color: rgba(255,255,255,0.5)
+
+  // flash-alert and flash-error are the same thing.
+  // keeping both because people will use either, and
+  // expect it to work, and not check in the browser that
+  // the message actually renders properly.
+  &.flash-alert
+    font-size: 14px
+    background: rgba(192,11,40,0.9)
+    &:hover
+      background: rgba(192,11,40,1.0)
+
+  &.flash-error
+    font-size: 14px
+    background: rgba(192,11,40,0.9)
+    &:hover
+      background: rgba(192,11,40,1.0)
+
+  // yellow warning messages
+  &.flash-warning
+    background: rgba(220,179,0,0.9)
+    &:hover
+      background: rgba(220,179,0,1.0)
+
+  // notice messages are fixed-position and fade out automatically.
+  // other messages are at the top of the page and do not fade out
+  // automatically.
+  &.flash-notice
+    position: fixed
+    z-index: 120
+    right: 24px
+    bottom: 24px
+    margin: 0
+    max-width: 440px
+    min-width: 240px
+    background: $green
+    &:hover
+      background: darken($green, 10%)
+    animation-name: noticeSlideUp
+    &.hiding
+      animation-name: noticeFadeOut
+
+@keyframes slideDown
+  0%
+    transform: translateY(-50px)
+    opacity: 0
+  100%
+    transform: translateY(0)
+    opacity: 1
+
+@keyframes slideUp
+  0%
+    transform: translateY(0)
+    opacity: 1
+  100%
+    transform: translateY(-50px)
+    opacity: 0
+
+@keyframes noticeSlideUp
+  0%
+    transform: translateY(100px)
+    opacity: 0
+  100%
+    transform: translateY(0)
+    opacity: 1
+
+@keyframes noticeFadeOut
+  0%
+    opacity: 1
+  100%
+    opacity: 0
+    visibility: hidden
+    pointer-events: none

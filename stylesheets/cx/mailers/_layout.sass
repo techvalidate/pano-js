@@ -1,0 +1,177 @@
+body
+  padding: 0 8px
+  text-align: center
+  font-family: $mailer-font-stack
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+a, a:visited
+  color: $link-color
+  text-decoration: none
+
+  &:active, &:focus, &:hover
+    color: darken($link-color, 7%)
+    text-decoration: none
+
+img
+  outline: none
+  -ms-interpolation-mode: bicubic
+
+.btn, .btn:visited
+  +btn
+  width: 218px
+  height: 18px
+  line-height: 18px
+  font-weight: normal
+
+.btn-gray, .btn-gray:visited
+  +btn-gray
+  height: 32px
+  width: 107px
+  line-height: 32px
+  font-weight: normal
+
+h1
+  margin: 0
+  padding: 0
+  font-family: $mailer-font-stack
+  font-size: 24px
+  font-weight: normal
+  color: #05467E
+
+  @media only screen and (max-width: 480px)
+    font-size: 18px !important
+
+h2
+  margin: 0
+  padding: 0
+  font-family: $mailer-font-stack
+  font-size: 20px
+  font-weight: normal
+  color: #05467E
+
+  @media only screen and (max-width: 480px)
+    font-size: 18px !important
+
+#content-wrapper
+  width: 100%
+
+#msg-body
+  width: 100%
+  max-width: 600px
+  margin: 0 auto
+  text-align: left
+
+  td
+    text-align: center
+
+  td.padding-top
+    padding-top: 40px
+
+    @media only screen and (max-width: 480px)
+      padding-top: 32px !important
+
+  td.padding-bottom
+    padding-bottom: 40px
+
+    @media only screen and (max-width: 480px)
+      padding-bottom: 32px !important
+
+  td.message-icon
+    padding-top: 48px
+
+#header td
+  width: 50%
+  padding: 16px 0
+  border-bottom: 1px solid $mailer-line-color
+  font-family: $mailer-font-stack
+  text-align: left
+
+#header #logo img
+  height: 24px
+  width: 82px
+
+  @media only screen and (max-width: 480px)
+    height: 20px !important
+    width: 68px !important
+
+#header #organization-logo
+  text-align: right
+  color: #666666
+  font-size: 13px
+
+  img
+    max-height: 37px
+    width: auto
+
+    @media only screen and (max-width: 480px)
+      max-height: 32px !important
+
+#content
+  font-family: $mailer-font-stack
+  text-align: center
+  font-size: 14px
+  font-weight: normal
+  color: #666
+
+  @media only screen and (max-width: 480px)
+    font-size: 13px !important
+
+  .message
+    padding: 0
+    font-weight: normal
+    line-height: 20px
+
+hr
+  width: 100%
+  height: 1px
+  margin: 0
+  padding: 0
+  background-color: $mailer-line-color
+  border: none
+  vertical-align: middle
+  color: $mailer-line-color
+
+#footer
+  padding-bottom: 40px
+  padding-top: 64px
+  font-family: $mailer-font-stack
+  line-height: 20px
+  text-align: center
+  font-size: 12px
+  color: #999
+
+  @media only screen and (max-width: 480px)
+    padding-top: 48px !important
+    padding-bottom: 32px !important
+
+  a
+    font-weight: bold
+    font-size: 12px
+
+#footer-header
+  width: 100%
+
+#footer-header td
+  padding-bottom: 24px
+
+#footer-header td.line
+  width: 40%
+
+#footer-header td.line hr
+  padding: 0
+
+#footer-image
+  height: 31px
+  vertical-align: middle
+
+#footer-nav
+  font-family: $mailer-font-stack
+  color: #ccc
+  width: auto
+
+  td
+    padding: 0 16px 24px 0
+
+  a
+    font-size: 12px

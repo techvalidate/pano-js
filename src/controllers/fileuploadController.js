@@ -1,5 +1,5 @@
 import { Controller } from 'stimulus'
-const Dropzone = require('dropzone/dist/dropzone-amd-module')
+const Dropzone = require('dropzone')
 Dropzone.autoDiscover = false
 
 export default class extends Controller {

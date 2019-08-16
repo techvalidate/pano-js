@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const path = require('path')
+const UglifyJsPlugin = require('uglify-js-plugin')
 module.exports = {
   entry: {
    pano: './index.js'
@@ -21,6 +22,34 @@ module.exports = {
     }),
 
   ],
+
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          cache: true,
+          parallel: true,
+          beautify: false,
+          compress: {
+            warnings: false,
+            conditionals: true,
+            unused: true,
+            comparisons: true,
+            sequences: true,
+            dead_code: true,
+            evaluate: true,
+            join_vars: true,
+            if_return: true,
+          },
+          output: {
+            comments: false,
+          },
+        },
+        sourceMap: false,
+      })
+    ]
+  },
+
   module: {
     rules: [
       {
@@ -57,7 +86,7 @@ module.exports = {
         query:{
           name:'[name].[ext]',
           outputPath:'images/'
-          //the images will be emmited to public/assets/images/ folder
+          //the images will be emitted to public/assets/images/ folder
           //the images will be put in the DOM <style> tag as eg. background: url(assets/images/image.png);
         }
       },

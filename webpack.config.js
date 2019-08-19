@@ -18,6 +18,7 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery',
       jquery: 'jquery',
+      rome: 'rome',
       UI: 'UI'
     }),
 

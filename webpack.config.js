@@ -11,7 +11,7 @@ module.exports = {
     library: 'Pano',
     libraryTarget: 'umd'
   },
-  devtool: 'source-map',
+  devtool: 'eval-source-map',
   plugins: [
     new webpack.ProvidePlugin({
       _: 'lodash',
@@ -46,12 +46,13 @@ module.exports = {
             comments: false,
           },
         },
-        sourceMap: false,
+        sourceMap: true,
       })
     ]
   },
 
   module: {
+    noParse: /switchery/,
     rules: [
       {
         test: require.resolve('jquery'),

@@ -1,4 +1,4 @@
-import 'jquery-minicolors'
+import '@claviska/jquery-minicolors'
 import { load } from '../utils/ui'
 
 load(() =>

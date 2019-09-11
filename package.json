@@ -13,7 +13,6 @@
     "watch": "yarn webpack -w"
   },
   "dependencies": {
-    "@claviska/jquery-dropdown": "^2.0.3",
     "@claviska/jquery-minicolors": "^2.3.4",
     "@skatejs/renderer-preact": "^0.3.3",
     "babel-core": "^6.26.0",

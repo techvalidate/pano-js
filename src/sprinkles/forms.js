@@ -42,7 +42,8 @@ $.bindFormValidation = html =>
     if (!f.hasClass('js-novalidate')) {
       return f.validate({
         errorClass: 'error',
-        highlight: (el, errorClass) => {
+        highlight: (el, errorClass, validClass) => {
+          $(el).removeClass(validClass).addClass(errorClass)
           $(el).parent().addClass(errorClass)
           $(el).parent().siblings('.form-helper-text').hide()
         },

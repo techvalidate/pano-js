@@ -1,3 +1,5 @@
+const Switchery = require('switchery-npm')
+
 const settings = {
   color: '#23D385',
 };

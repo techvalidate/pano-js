@@ -30,11 +30,15 @@
     "delegated-events": "^1.0.7",
     "dropzone": "^5.4.0",
     "fullpage.js": "2.9.7",
+    "jquery": "3.4.1",
     "jquery-powertip": "^1.3.0",
     "jquery-validation": "^1.19.1",
+    "jquery-ujs": "^1.2.2",
     "js-cookie": "^2.2.0",
     "jstz": "^1.0.10",
     "lodash": "^4.17.5",
+    "lodash-es": "^4.17.14",
+    "lodash-webpack-plugin": "^0.11.5",
     "moment": "^2.24.0",
     "preact": "^8.3.0",
     "rome": "^3.0.0",
@@ -60,7 +64,6 @@
     "webpack-dev-server": "^3.1.11"
   },
   "resolutions": {
-    "jquery-validation/**/jquery": "3.4.1",
-    "jquery-minicolors/**/jquery": "3.4.1"
+    "jquery-validation/**/jquery": "3.4.1"
   }
 }

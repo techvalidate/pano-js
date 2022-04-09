@@ -36,7 +36,7 @@
     "js-cookie": "^2.2.0",
     "jstz": "^1.0.10",
     "lodash": "^4.17.5",
-    "moment": "^2.22.1",
+    "moment": "^2.29.2",
     "preact": "^8.3.0",
     "skatejs": "^5.1.1",
     "sticky-kit": "^1.1.3",
